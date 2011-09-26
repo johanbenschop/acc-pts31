@@ -6,7 +6,7 @@ package air.traffic.control;
 
 /**
  *
- * @author Student
+ * @author PuHa
  */
 public class AirTrafficControl {
 
