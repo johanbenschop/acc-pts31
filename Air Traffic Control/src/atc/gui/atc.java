@@ -13,8 +13,6 @@ import javax.swing.JFrame;
  * @author johan
  */
 public class atc {
-    
-    
     /**
      * @param args the command line arguments
      */
