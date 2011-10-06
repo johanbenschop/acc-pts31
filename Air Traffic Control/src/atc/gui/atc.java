@@ -4,10 +4,15 @@
  */
 package atc.gui;
 
+import SysBar.*;
 import gov.nasa.worldwind.*;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -16,19 +21,32 @@ import javax.swing.JOptionPane;
 public class atc {
 
     private static final String AppName = "Airtraffic Control Centre";
-    
 
     private static class AppFrame extends javax.swing.JFrame {
 
+        private static MenuBar menuBar;
+
         public AppFrame() {
             WorldWindowGLCanvas wwd = new WorldWindowGLCanvas();
-            wwd.setPreferredSize(new java.awt.Dimension(1000, 800));
+            wwd.setPreferredSize(new java.awt.Dimension(1280, 720));
             this.getContentPane().add(wwd, java.awt.BorderLayout.CENTER);
             this.pack();
             this.setSize(1280, 720);
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.setTitle(AppName);
-            wwd.setModel(new BasicModel());
+            BasicModel bModel = new BasicModel();
+            wwd.setModel(bModel);
+            
+
+//            setLayout(new BorderLayout());
+//            GridBagLayout gridbag = new GridBagLayout();
+//            JPanel panel = new JPanel(gridbag);
+//            add(panel, BorderLayout.NORTH);
+//
+            //this.setLayout(new FlowLayout(FlowLayout.LEFT));
+            menuBar = new MenuBar();
+//            panel.add(menuBar);
+            this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
         }
     }
 
@@ -38,7 +56,7 @@ public class atc {
     public static void main(String[] args) {
         // TODO code application logic here
         Object[] options = {"Override", "Cancel"};
-        
+
         if (Configuration.isMacOS()) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", AppName);
         }
@@ -64,8 +82,7 @@ public class atc {
                         options[0]); // Default button title
                 if (n1 == 1) {
                     return;
-                }
-                else {
+                } else {
                     System.out.println("Overridden. Starting on 64 bit JVM. Stay safe.");
                 }
                 break;
@@ -83,8 +100,7 @@ public class atc {
                         options[0]); // Default button title
                 if (n2 == 1) {
                     return;
-                }
-                else {
+                } else {
                     System.out.println("Overridden. Stay safe.");
                 }
                 break;
