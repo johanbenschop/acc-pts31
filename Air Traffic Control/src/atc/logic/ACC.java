@@ -2,6 +2,10 @@ package atc.logic;
 
 import java.math.*;
 
+/**
+ * 
+ * @author Henk
+ */
 public class ACC {
 
     /**************Datafields***********/
@@ -48,7 +52,7 @@ public class ACC {
      * @return false is returned if the speed was above the planes maximum speed.
      */
     public boolean ChangeSpeed(double speed, Airplane a) {
-        if (speed < a.GetMaxSpeed) {
+        if (speed > GetMinSpeed() && speed < a.GetMaxSpeed()) {
             a.SetAimedSpeed(speed);
             return true;
         } else {
@@ -109,22 +113,14 @@ public class ACC {
 
     /**
      * Method to give the airplane the direction in wich it has to approach
-     * a runway or has to take off from it.
-     * 
-     * @param direction this is the direction in wich the airplane will take
-     * off or will use for its final approach to the runway.
+     * a runway.
      * 
      * @param r is the runway on wich the airplane has to land.
      * 
      * @param a is the airplane to wich this assignement is given.
      * 
-     * @param action what action the runway is given for to take off or to land.
-     * 
-     * @param height when the runway is given to take off the first height to
-     * wich the airplane should climb is given.
-     * 
-     * @param speed when the runway is given to take off the for wich the airplane
-     * should aim after takeoff is given.
+     * @param direction this is the direction in wich the airplane will take
+     * off or will use for its final approach to the runway.
      * 
      * Again this is placeholder method changes can still be made depending on
      * how we decide it will eventually have to work.
@@ -134,19 +130,44 @@ public class ACC {
      * @return true is given when the assignment has been succesfully transferred to the airplane.
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
-    public boolean GiveRunway(String action, Runway r, Airplane a, int direction, double height, double speed) {
+    public boolean GiveRunwayLand(Runway r, Airplane a, int direction) {
         if (r.CheckAvailability() == true) {
-            if (action.equalsIgnoreCase("Landing")) {
-                    r.ChangeAvailability(false);
-                    a.Landing(r, direction);
-                    return true;
-            } else if (action.equalsIgnoreCase("Take Off")) {
-                    r.ChangeAvailability(false);
-                    a.TakeOff(r, direction, height, speed);
-                    return true;
-            } else {
-                return false;
-            }
+            r.ChangeAvailability(false);
+            a.Landing(r, direction);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+        /**
+     * Method to give the airplane the direction, speed and height wich it has
+     * to use after its initial takeoff.
+     * 
+     * @param r is the runway on wich the airplane has to land.
+     * 
+     * @param a is the airplane to wich this assignement is given.
+     * 
+     * @param direction this is the direction in wich the airplane will take
+     * off or will use for its final approach to the runway.
+     * 
+     * @param height to wich the airplane has to climb right after its takeoff.
+     * 
+     * @param speed it has to maintain once it has taken off.
+     * 
+     * Again this is placeholder method changes can still be made depending on
+     * how we decide it will eventually have to work.
+     * 
+     * Question: Do we want to use a boolean or shall we create our own exception for these cases.
+     * 
+     * @return true is given when the assignment has been succesfully transferred to the airplane.
+     * @return false is given when the assignement wasnt succesfully given to the airplane.
+     */
+    public boolean GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) {
+        if (r.CheckAvailability() == true) {
+            r.ChangeAvailability(false);
+            a.TakeOff(r, direction, height, speed);
+            return true;
         } else {
             return false;
         }
