@@ -6,13 +6,17 @@ package atc.gui;
 
 import SysBar.*;
 import gov.nasa.worldwind.*;
+import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
+import gov.nasa.worldwind.render.BasicShapeAttributes;
+import gov.nasa.worldwind.render.Material;
+import gov.nasa.worldwind.render.Path;
+import gov.nasa.worldwind.render.ShapeAttributes;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -22,7 +26,7 @@ public class atc {
 
     private static final String AppName = "Airtraffic Control Centre";
 
-    private static class AppFrame extends javax.swing.JFrame {
+    private static class AppFrame extends javax.swing.JFrame implements ActionListener {
 
         private static MenuBar menuBar;
 
@@ -36,17 +40,28 @@ public class atc {
             this.setTitle(AppName);
             BasicModel bModel = new BasicModel();
             wwd.setModel(bModel);
-            
 
-//            setLayout(new BorderLayout());
-//            GridBagLayout gridbag = new GridBagLayout();
-//            JPanel panel = new JPanel(gridbag);
-//            add(panel, BorderLayout.NORTH);
-//
-            //this.setLayout(new FlowLayout(FlowLayout.LEFT));
             menuBar = new MenuBar();
-//            panel.add(menuBar);
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
+
+            // Testing items, to be removed!
+            menuBar.addItem(new Button("Start", Color.BLUE, 0, "F", MenuBar.Type.NORMAL)).addActionListener(this);
+            menuBar.addItem(new Button("Add Flight", Color.GREEN, 0, "", MenuBar.Type.NORMAL)).addActionListener(this);
+            menuBar.addItem(new Button("Crash Flight", Color.RED, 0, "", MenuBar.Type.NORMAL)).addActionListener(this);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Button menuItem = (Button) e.getSource();
+            switch (menuItem.getTitle()) {
+                case "Start":
+                    System.out.println("Start...");
+                    break;
+                case "Add Flight":
+                    break;
+                case "Crash Flight":
+                    break;
+            }
         }
     }
 

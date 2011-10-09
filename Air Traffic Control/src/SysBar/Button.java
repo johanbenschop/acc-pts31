@@ -4,22 +4,24 @@
  */
 package SysBar;
 
+import SysBar.MenuBar.Type;
+import com.sun.java.swing.plaf.motif.MotifBorders.ButtonBorder;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import javax.swing.JToolTip;
 
 /**
  *
@@ -31,41 +33,79 @@ public class Button extends JComponent implements MouseListener {
     private Color colour;
     private int weight;
     private Image icon;
-    private Event onClick;
     private final Dimension dimension;
     private final ArrayList<ActionListener> listeners = new ArrayList<>();
-    private boolean isMouseEntered;
+    private boolean active;
+    private Type type;
 
-    public Button(String title, Color colour, int weight, Image icon, Event onClick) {
+    public Color getColour() {
+        return colour;
+    }
+
+    public void setColour(Color colour) {
+        this.colour = colour;
+        this.repaint();
+    }
+
+    public Image getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Image icon) {
+        this.icon = icon;
+        this.repaint();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+        this.repaint();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+        this.repaint();
+    }
+    
+    public Button(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
         this.addMouseListener(this);
         this.title = title;
+        this.setToolTipText(title);
         if (colour == null) {
             this.colour = Color.RED;
         } else {
             this.colour = colour;
         }
+        this.type = type;
 
         this.weight = weight;
-        this.icon = icon;
-        this.onClick = onClick;
-        dimension = new Dimension(52, 52);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return dimension;
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        return dimension;
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        return dimension;
+        this.icon = Toolkit.getDefaultToolkit().getImage(icon);
+        dimension = new Dimension(54, 54);
     }
 
     public void addActionListener(ActionListener listener) {
@@ -84,57 +124,96 @@ public class Button extends JComponent implements MouseListener {
     }
 
     @Override
+    public Dimension getPreferredSize() {
+        return dimension;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return dimension;
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return dimension;
+    }
+
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // turn on anti-alias mode
+        // Turn on anti-alias mode
         Graphics2D antiAlias = (Graphics2D) g;
         antiAlias.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // draw white rectangle
-//        g.setColor(Color.WHITE);
-//        g.fillRect(0, 0, 54, 54);
-        
-        
         Image image;
-        // First we draw the background
-        image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
-        g.drawImage(image, 0, 0, this);
-        
+
+        if (active) {
+            // First we draw the background
+            image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
+            g.drawImage(image, 0, 0, this);
+            // Then the color overlay
+            g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), 120));
+            g.fillRoundRect(1, 1, 52, 52, 11, 11);
+        }
+
         // Then we draw the edge
         image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_edge_54.png");
         g.drawImage(image, 0, 0, this);
-        
+
         // Then we draw the very nice shine on it
         image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_shine_54.png");
         g.drawImage(image, 0, 0, this);
-        
+
         // Last but not least we draw our icon
         g.drawImage(icon, 0, 0, this);
+    }
 
-        if (isMouseEntered) {
-        }
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return new Point(67, 16);
+    }
+
+    @Override
+    public JToolTip createToolTip() {
+        JToolTip tip = new JToolTip();
+        tip.setBackground(new Color(0, 0, 0, 200));
+        tip.setForeground(Color.WHITE);
+        tip.setBorder(new ButtonBorder(colour, colour, colour, colour));
+        tip.setFont(new Font("Courier", Font.PLAIN, 13));
+        return tip;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        notifyListeners(e);
+
+        if (!active) {
+            active = true;
+            this.repaint();
+        } else {
+            active = false;
+            this.repaint();
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        //notifyListeners(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        //notifyListeners(e);
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        isMouseEntered = true;
+        //notifyListeners(e);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        isMouseEntered = false;
+        //notifyListeners(e);
     }
 }
