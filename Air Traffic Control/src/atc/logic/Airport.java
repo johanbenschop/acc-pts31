@@ -9,7 +9,16 @@ public class Airport {
 	private int ICAO;
 	private String Timezone;
 	private boolean DST;
-
+        
+        public Airport(int AirportID, String City, String Country, int ITATA_FAA, int ICAO, String Timezone, boolean DST) {
+            this.AirportID = AirportID;
+            this.City = City;
+            this.Country = Country;
+            this.IATA_FAA = ITATA_FAA;
+            this.ICAO = ICAO;
+            this.Timezone = Timezone;
+            this.DST = DST;
+        }
 	/**
 	 * 
 	 * @return 

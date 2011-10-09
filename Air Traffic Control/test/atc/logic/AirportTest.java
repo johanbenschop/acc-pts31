@@ -42,8 +42,6 @@ public class AirportTest {
     @Test
     public void testGetRunway() {
         System.out.println("getRunway");
-        Airport instance = new Airport();
-        instance.getRunway();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -54,8 +52,6 @@ public class AirportTest {
     @Test
     public void testCreateActiveAirplane() {
         System.out.println("CreateActiveAirplane");
-        Airport instance = new Airport();
-        instance.CreateActiveAirplane();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

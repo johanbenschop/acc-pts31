@@ -120,6 +120,12 @@ public class ACC {
      * 
      * @param action what action the runway is given for to take off or to land.
      * 
+     * @param height when the runway is given to take off the first height to
+     * wich the airplane should climb is given.
+     * 
+     * @param speed when the runway is given to take off the for wich the airplane
+     * should aim after takeoff is given.
+     * 
      * Again this is placeholder method changes can still be made depending on
      * how we decide it will eventually have to work.
      * 
@@ -129,19 +135,15 @@ public class ACC {
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
     public boolean GiveRunway(String action, Runway r, Airplane a, int direction, double height, double speed) {
-        if (action.equalsIgnoreCase("Landing")) {
-            if (GetAvailability(r) == true) {
-                r.ChangeAvailability(false);
-                a.Landing(r, direction);
-                return true;
-            } else {
-                return false;
-            }
-        } else if (action.equalsIgnoreCase("Take Off")) {
-            if (GetAvailability(r) == true) {
-                r.ChangeAvailability(false);
-                a.TakeOff(r, direction, height, speed);
-                return true;
+        if (r.CheckAvailability() == true) {
+            if (action.equalsIgnoreCase("Landing")) {
+                    r.ChangeAvailability(false);
+                    a.Landing(r, direction);
+                    return true;
+            } else if (action.equalsIgnoreCase("Take Off")) {
+                    r.ChangeAvailability(false);
+                    a.TakeOff(r, direction, height, speed);
+                    return true;
             } else {
                 return false;
             }
@@ -151,15 +153,7 @@ public class ACC {
     }
 
     /**
-     * 
-     * @return 
-     */
-    public boolean GetAvailability(Runway r) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 
+     * Whats the purpose of this method? Once i know ill add some code to it!
      * @return
      */
     public boolean CheckActivity() {
