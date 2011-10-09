@@ -4,23 +4,21 @@
  */
 
 /*
- * MainWindow.java
+ * jfSearchFlight.java
  *
- * Created on Oct 1, 2011, 6:39:49 PM
+ * Created on 6-okt-2011, 12:42:52
  */
 package atc.gui;
 
-
 /**
  *
- * @author johan
+ * @author Mateusz
  */
-public class MainWindow extends javax.swing.JFrame {
+public class jfSearchFlight extends javax.swing.JFrame {
 
-    /** Creates new form MainWindow */
-    public MainWindow() {
+    /** Creates new form jfSearchFlight */
+    public jfSearchFlight() {
         initComponents();
-        setTitle("Airtraffic Control Centre");
     }
 
     /** This method is called from within the constructor to
@@ -65,13 +63,13 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfSearchFlight.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfSearchFlight.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfSearchFlight.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfSearchFlight.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -79,7 +77,7 @@ public class MainWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new MainWindow().setVisible(true);
+                new jfSearchFlight().setVisible(true);
             }
         });
     }

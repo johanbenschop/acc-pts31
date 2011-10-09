@@ -67,7 +67,7 @@ public class atc {
             case "32":
                 System.out.println("Detecting a 32 bit Java virtual machine, all fine.");
                 break;
-            case "6444":
+            case "64":
                 System.out.println("Detecting a 64 bit Java virtual machine, oh oh!");
                 System.out.println("Please use a 32 bit JVM.");
                 int n1 = JOptionPane.showOptionDialog(null,
