@@ -42,8 +42,6 @@ public class CTATest {
     @Test
     public void testGetActiveAirplane() {
         System.out.println("GetActiveAirplane");
-        CTA instance = new CTA();
-        instance.GetActiveAirplane();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -54,8 +52,6 @@ public class CTATest {
     @Test
     public void testDetectAirplane() {
         System.out.println("DetectAirplane");
-        CTA instance = new CTA();
-        instance.DetectAirplane();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -66,8 +62,6 @@ public class CTATest {
     @Test
     public void testCollision() {
         System.out.println("Collision");
-        CTA instance = new CTA();
-        instance.Collision();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

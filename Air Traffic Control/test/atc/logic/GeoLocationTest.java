@@ -42,8 +42,6 @@ public class GeoLocationTest {
     @Test
     public void testToString() {
         System.out.println("ToString");
-        GeoLocation instance = new GeoLocation();
-        instance.ToString();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

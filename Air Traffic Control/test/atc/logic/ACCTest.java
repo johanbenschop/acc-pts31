@@ -42,8 +42,7 @@ public class ACCTest {
     @Test
     public void testGetCTA() {
         System.out.println("GetCTA");
-        ACC instance = new ACC();
-        instance.GetCTA();
+            // wat is eigelijk het nu van deze methode
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -54,8 +53,7 @@ public class ACCTest {
     @Test
     public void testChangeSpeed() {
         System.out.println("ChangeSpeed");
-        ACC instance = new ACC();
-        instance.ChangeSpeed();
+                
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -66,8 +64,6 @@ public class ACCTest {
     @Test
     public void testChangeDirection() {
         System.out.println("ChangeDirection");
-        ACC instance = new ACC();
-        instance.ChangeDirection();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -78,8 +74,6 @@ public class ACCTest {
     @Test
     public void testTakeOff() {
         System.out.println("TakeOff");
-        ACC instance = new ACC();
-        instance.TakeOff();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -90,8 +84,6 @@ public class ACCTest {
     @Test
     public void testLanding() {
         System.out.println("Landing");
-        ACC instance = new ACC();
-        instance.Landing();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
