@@ -97,7 +97,8 @@ public class ACC {
      * 
      * Question: I seem to recall that the height is being set by flightlevels (1,2 or 3)
      * does height represent the new flightlevel to wich the plane will climb or does it
-     * actually represent an amount in feet?
+     * actually represent an amount in feet? Height will be given in flightleven then
+     * recalculated to feet for the actual airplane.
      * 
      * @return true if the change in altitude has succesfully been done.
      * 
@@ -171,13 +172,5 @@ public class ACC {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Whats the purpose of this method? Once i know ill add some code to it!
-     * @return
-     */
-    public boolean CheckActivity() {
-        throw new UnsupportedOperationException();
     }
 }
