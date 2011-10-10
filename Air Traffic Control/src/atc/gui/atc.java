@@ -47,7 +47,7 @@ public class atc {
             // Testing items, to be removed!
             menuBar.addItem(new Button("Start", Color.BLUE, 0, "F", MenuBar.Type.NORMAL)).addActionListener(this);
             menuBar.addItem(new Button("Add Flight", Color.GREEN, 0, "", MenuBar.Type.NORMAL)).addActionListener(this);
-            menuBar.addItem(new Button("Crash Flight", Color.RED, 0, "", MenuBar.Type.NORMAL)).addActionListener(this);
+            menuBar.addItem(new Button("Crash Flight", Color.RED, 0, "", MenuBar.Type.ALERT)).addActionListener(this);
         }
 
         @Override

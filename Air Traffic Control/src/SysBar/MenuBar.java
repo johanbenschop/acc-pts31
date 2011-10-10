@@ -35,14 +35,14 @@ public final class MenuBar extends JPanel {
 
     public Button addItem(Button menuItem) {
         //menuItem.addActionListener(this);
-        this.add(menuItem);
+        this.add(menuItem, java.awt.BorderLayout.SOUTH);
         return menuItem;
     }
 
     public Button addItem(String title, Color colour, int weight, String icon, Type type) {
         Button menuItem = new Button(title, colour, weight, icon, type);
         //menuItem.addActionListener(this);
-        this.add(menuItem);
+        this.add(menuItem, java.awt.BorderLayout.SOUTH);
         return menuItem;
     }
 

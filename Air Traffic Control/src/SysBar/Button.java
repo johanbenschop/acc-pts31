@@ -40,13 +40,13 @@ public class Button extends JComponent implements MouseListener {
     private boolean active;
     private Type type;
     private Timer timer;
-    private byte alphaIntensity;
+    private int alphaIntensity;
 
-    public byte getAlphaIntensity() {
+    public int getAlphaIntensity() {
         return alphaIntensity;
     }
 
-    public void setAlphaIntensity(byte alphaIntensity) {
+    public void setAlphaIntensity(int alphaIntensity) {
         this.alphaIntensity = alphaIntensity;
     }
 
@@ -91,8 +91,7 @@ public class Button extends JComponent implements MouseListener {
 
     public void setActive(boolean active) {
         this.active = active;
-        timer.schedule(new pulseTask(this), 0, 1000);
-        //this.repaint();
+        this.repaint();
     }
 
     public Type getType() {
@@ -210,6 +209,8 @@ public class Button extends JComponent implements MouseListener {
             active = false;
             this.repaint();
         }
+        
+        timer.schedule(new pulseTask(this), 0, 50);
     }
 
     @Override
@@ -232,26 +233,27 @@ public class Button extends JComponent implements MouseListener {
         //notifyListeners(e);
     }
 
-    class pulseTask extends TimerTask {
+    static class pulseTask extends TimerTask {
         Button item;
-        Boolean high;
+        static double x;
+        int r;
         
         public pulseTask (Button item) {
             this.item = item;
         }
         
         public void run() {
-            System.out.println("OK, It's time to do something!");
-            //timer.cancel(); //Terminate the thread
-            if (high) {
-                high = false;
-                item.alphaIntensity = (byte) 150;
+            int a = (int) (150 + (50 * Math.sin(x)));
+            if (a == 150 || (int) a == 192) {
+                r++;
             }
-            else {
-                high = true;
-                item.alphaIntensity = (byte) 50;
-            }
+            item.alphaIntensity = a;
+            x = x + 0.2;
             item.repaint();
+            
+            if (r == 4) {
+                this.cancel();
+            }
         }
     }
 }
