@@ -33,7 +33,12 @@ public class Runway {
      * @return Availability
      */
     public void ChangeAvailability(boolean r) {
-        Availability = r;
+        // TODO maak een timer...
+        if (!r) {
+            Availability = r;
+        } else {
+            Availability = r;
+        }
         
     }
 }
