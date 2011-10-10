@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 
@@ -37,7 +39,18 @@ public class Button extends JComponent implements MouseListener {
     private final ArrayList<ActionListener> listeners = new ArrayList<>();
     private boolean active;
     private Type type;
+    private Timer timer;
+    private byte alphaIntensity;
 
+    public byte getAlphaIntensity() {
+        return alphaIntensity;
+    }
+
+    public void setAlphaIntensity(byte alphaIntensity) {
+        this.alphaIntensity = alphaIntensity;
+    }
+
+    
     public Color getColour() {
         return colour;
     }
@@ -78,7 +91,8 @@ public class Button extends JComponent implements MouseListener {
 
     public void setActive(boolean active) {
         this.active = active;
-        this.repaint();
+        timer.schedule(new pulseTask(this), 0, 1000);
+        //this.repaint();
     }
 
     public Type getType() {
@@ -89,7 +103,7 @@ public class Button extends JComponent implements MouseListener {
         this.type = type;
         this.repaint();
     }
-    
+
     public Button(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
@@ -106,6 +120,7 @@ public class Button extends JComponent implements MouseListener {
         this.weight = weight;
         this.icon = Toolkit.getDefaultToolkit().getImage(icon);
         dimension = new Dimension(54, 54);
+        timer = new Timer();
     }
 
     public void addActionListener(ActionListener listener) {
@@ -153,7 +168,7 @@ public class Button extends JComponent implements MouseListener {
             image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
             g.drawImage(image, 0, 0, this);
             // Then the color overlay
-            g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), 120));
+            g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), alphaIntensity));
             g.fillRoundRect(1, 1, 52, 52, 11, 11);
         }
 
@@ -215,5 +230,28 @@ public class Button extends JComponent implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         //notifyListeners(e);
+    }
+
+    class pulseTask extends TimerTask {
+        Button item;
+        Boolean high;
+        
+        public pulseTask (Button item) {
+            this.item = item;
+        }
+        
+        public void run() {
+            System.out.println("OK, It's time to do something!");
+            //timer.cancel(); //Terminate the thread
+            if (high) {
+                high = false;
+                item.alphaIntensity = (byte) 150;
+            }
+            else {
+                high = true;
+                item.alphaIntensity = (byte) 50;
+            }
+            item.repaint();
+        }
     }
 }
