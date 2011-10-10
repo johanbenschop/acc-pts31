@@ -29,15 +29,10 @@ public class Runway {
     }
 
     /**
-     * 
+     * @param r is what the availability should become after calling this method.
      * @return Availability
      */
-    public boolean ChangeAvailability() {
-        if (Availability) {
-            Availability = false;
-        } else {
-            Availability = true;
-        }
-        return Availability;
+    public void ChangeAvailability(boolean r) {
+        Availability = r;
     }
 }

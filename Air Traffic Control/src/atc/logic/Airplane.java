@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Airplane extends AirplaneFactory {
 
-	private int Direction;
+	private double Direction;
 	private double Speed;
 	private int MaxSpeed;
 	private int MinSpeed;
@@ -22,7 +22,7 @@ public class Airplane extends AirplaneFactory {
 
         
         public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer, 
-                int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude)
+                int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, double Direction, double Speed, int CurrentFuel, double Altitude)
         {
             super(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlaneWidth, PlaneLength, MaxFuel, FuelUsage);
             this.Direction = Direction;
@@ -35,7 +35,7 @@ public class Airplane extends AirplaneFactory {
 	 * 
 	 * @return 
 	 */
-	public void Fly(int direction, int speed, double altitude) {
+	public void Fly(double direction, int speed, double altitude) {
 		this.Direction = direction;
                 this.Speed = speed;
                 this.Altitude = altitude;
@@ -47,7 +47,7 @@ public class Airplane extends AirplaneFactory {
             this.Speed = speed;
         }
         
-        public void SetAimedDirection(int direction)
+        public void SetAimedDirection(double direction)
         {
             this.Direction = direction;
         }
@@ -71,7 +71,7 @@ public class Airplane extends AirplaneFactory {
         return CurrentFuel;
     }
 
-    public int getDirection() {
+    public double getDirection() {
         return Direction;
     }
 

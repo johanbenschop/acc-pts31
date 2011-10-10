@@ -52,7 +52,7 @@ public class ACC {
      * @return false is returned if the speed was above the planes maximum speed.
      */
     public boolean ChangeSpeed(double speed, Airplane a) {
-        if (speed > GetMinSpeed() && speed < a.GetMaxSpeed()) {
+        if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
             a.SetAimedSpeed(speed);
             return true;
         } else {
@@ -131,7 +131,7 @@ public class ACC {
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
     public boolean GiveRunwayLand(Runway r, Airplane a, int direction) {
-        if (r.CheckAvailability() == true) {
+        if (r.getAvailability() == true) {
             r.ChangeAvailability(false);
             a.Landing(r, direction);
             return true;
@@ -164,7 +164,7 @@ public class ACC {
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
     public boolean GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) {
-        if (r.CheckAvailability() == true) {
+        if (r.getAvailability() == true) {
             r.ChangeAvailability(false);
             a.TakeOff(r, direction, height, speed);
             return true;
