@@ -34,5 +34,6 @@ public class Runway {
      */
     public void ChangeAvailability(boolean r) {
         Availability = r;
+        
     }
 }
