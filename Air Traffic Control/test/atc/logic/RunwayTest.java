@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package atc.logic;
 
 import org.junit.After;
@@ -13,7 +9,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author johan
+ * @author Mateusz
  */
 public class RunwayTest {
     
@@ -42,7 +38,9 @@ public class RunwayTest {
     @Test
     public void testChangeAvailability() {
         System.out.println("ChangeAvailability");
-        Runway instance = new Runway();
+        int length = 30, direction = 2;
+        boolean availability = false;
+        Runway instance = new Runway(length, direction, availability);
         instance.ChangeAvailability();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
