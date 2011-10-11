@@ -51,12 +51,11 @@ public class ACC {
      * @return true is returned when the speed has succesfully been change.
      * @return false is returned if the speed was above the planes maximum speed.
      */
-    public boolean ChangeSpeed(double speed, Airplane a) {
+    public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
             a.SetAimedSpeed(speed);
-            return true;
         } else {
-            return false;
+            throw new AssignmentException("The Speed given is too low or high.");
         }
     }
 
@@ -77,14 +76,13 @@ public class ACC {
      * @return true is returned if the new direction has succesfully been set.
      * @return false is when it was not possible to set the new direction.
      */
-    public boolean ChangeDirection(int direction, Airplane a) {
+    public void ChangeDirection(int direction, Airplane a) throws AssignmentException {
         if (direction < 360) {
             double r;
             r = direction / 180 * Math.PI;
             a.SetAimedDirection(r);
-            return true;
         } else {
-            return false;
+        throw new AssignmentException("The given direction is not possible.");
         }
     }
 
@@ -107,9 +105,9 @@ public class ACC {
      * The further implementation of this method will need to wait till the answer has been given
      * to the question, current implementation is a placeholder.
      */
-    public boolean ChangeHeight(double altitude, Airplane a) {
+    public void ChangeHeight(double altitude, Airplane a) throws AssignmentException {
         a.SetAimedAltitude(altitude);
-        return true;
+        throw new AssignmentException();
     }
 
     /**
@@ -131,17 +129,16 @@ public class ACC {
      * @return true is given when the assignment has been succesfully transferred to the airplane.
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
-    public boolean GiveRunwayLand(Runway r, Airplane a, int direction) {
+    public void GiveRunwayLand(Runway r, Airplane a, int direction) throws AssignmentException {
         if (r.getAvailability() == true) {
             r.ChangeAvailability(false);
             a.Landing(r, direction);
-            return true;
         } else {
-            return false;
+            throw new AssignmentException("Runway is unavailable.");
         }
     }
 
-        /**
+    /**
      * Method to give the airplane the direction, speed and height wich it has
      * to use after its initial takeoff.
      * 
@@ -164,13 +161,12 @@ public class ACC {
      * @return true is given when the assignment has been succesfully transferred to the airplane.
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
-    public boolean GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) {
+    public void GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) throws AssignmentException {
         if (r.getAvailability() == true) {
             r.ChangeAvailability(false);
             a.TakeOff(r, direction, height, speed);
-            return true;
         } else {
-            return false;
+            throw new AssignmentException("Runway is not available.");
         }
     }
 }
