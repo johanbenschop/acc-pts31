@@ -10,7 +10,7 @@ public class Runway {
     private int Direction;
     private boolean Availability;
 
-    Runway(int length, int direction, boolean availability) {
+    public Runway(int length, int direction, boolean availability) {
         this.Length = length;
         this.Direction = direction;
         this.Availability = availability;
