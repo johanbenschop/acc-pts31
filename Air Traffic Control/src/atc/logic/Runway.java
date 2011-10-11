@@ -38,7 +38,7 @@ public class Runway {
      */
     public void ChangeAvailability(boolean r) {
         if (r) {
-            timer.schedule(new tim(r), 180000);
+            timer.schedule(new tim(r), 180000); //180,000 milliseconds = 3 minutes
         } else {
             Availability = r;
         }
