@@ -1,8 +1,13 @@
 package atc.logic;
 
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Airplane extends AirplaneFactory {
+/**
+ * @author Paul
+ */
+
+public class Airplane extends AirplaneFactory implements Runnable{
 
         /**************Datafields***********/
     private int Direction;
@@ -11,7 +16,6 @@ public class Airplane extends AirplaneFactory {
     private int CurrentFuel;
     private int FuelUsage;
     private double Altitude;
-    private ArrayList<Runway> Runways;
     private double AimedSpeed;
     private double AimedDirection;
     private double AimedAltitude;
@@ -51,21 +55,52 @@ public class Airplane extends AirplaneFactory {
 
     
     
-    public void Fly(int direction, int speed, double altitude) {
+    @Override
+    public void run() {
+        try {
+            Fly();
+            Thread.sleep(20);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public void Fly() {
         ChangeSpeed();
         ChangeDirection();
         ChangeAltitude();
-        this.Direction = direction;
-        this.Speed = speed;
-        this.Altitude = altitude;
     }
 
-    void Landing(Runway r, int direction) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    void Landing(Runway r, double direction) 
+    {
+            if(RequestRunwayFree(r))
+            {
+                SetAimedDirection(direction);
+                SetAimedDirection(0);
+                SetAimedSpeed(0);
+            }
     }
 
-    void TakeOff(Runway r, int direction, double height, double speed) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    void TakeOff(Runway r, double direction, double altitude, double speed) {
+        if(RequestRunwayFree(r))
+        {
+            SetAimedDirection(direction);
+            SetAimedAltitude(altitude);
+            SetAimedSpeed(speed);
+        }
+    }
+    
+    public boolean RequestRunwayFree(Runway r)
+    {
+        if(r.getAvailability())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     
@@ -78,8 +113,7 @@ public class Airplane extends AirplaneFactory {
                 this.Speed++;
             }
         }
-    }
-        
+    }    
 
     public void ChangeDirection() {
         if (AimedDirection != this.Direction) {
