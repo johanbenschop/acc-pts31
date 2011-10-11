@@ -6,23 +6,20 @@ import java.util.logging.Logger;
 /**
  * @author Paul
  */
+public class Airplane extends AirplaneFactory implements Runnable {
 
-public class Airplane extends AirplaneFactory implements Runnable{
+    /**************Datafields***********/
+    private int Direction; // Degree's
+    private double Speed; // Kilomithers per hour
+    private int MaxFuel;  // Gallons
+    private int CurrentFuel; // Gallons
+    private int FuelUsage; // Gallons
+    private double Altitude; // Kilomithers
+    private double AimedSpeed; // Kilomithers per hour
+    private double AimedDirection; // Degree's (could be changed)
+    private double AimedAltitude; // Kilomithers
 
-        /**************Datafields***********/
-    private int Direction;
-    private double Speed;
-    private int MaxFuel;
-    private int CurrentFuel;
-    private int FuelUsage;
-    private double Altitude;
-    private double AimedSpeed;
-    private double AimedDirection;
-    private double AimedAltitude;
-
-       
-    
-        /***************Constructor**********/
+    /***************Constructor**********/
     /**
      * An Airplane is made with its own maximum speed, minimum speed, weight,
      * type, manufacturer, planeheight, planewidth, planelength, maximum fuel, 
@@ -51,10 +48,7 @@ public class Airplane extends AirplaneFactory implements Runnable{
         this.CurrentFuel = CurrentFuel;
         this.Altitude = Altitude;
     }
-    
 
-    
-    
     @Override
     public void run() {
         try {
@@ -64,46 +58,36 @@ public class Airplane extends AirplaneFactory implements Runnable{
             Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     public void Fly() {
         ChangeSpeed();
         ChangeDirection();
         ChangeAltitude();
     }
 
-    void Landing(Runway r, double direction) 
-    {
-            if(RequestRunwayFree(r))
-            {
-                SetAimedDirection(direction);
-                SetAimedDirection(0);
-                SetAimedSpeed(0);
-            }
+    void Landing(Runway r, double direction) {
+        if (RequestRunwayFree(r)) {
+            SetAimedDirection(direction);
+            SetAimedDirection(0);
+            SetAimedSpeed(0);
+        }
     }
 
     void TakeOff(Runway r, double direction, double altitude, double speed) {
-        if(RequestRunwayFree(r))
-        {
+        if (RequestRunwayFree(r)) {
             SetAimedDirection(direction);
             SetAimedAltitude(altitude);
             SetAimedSpeed(speed);
         }
     }
-    
-    public boolean RequestRunwayFree(Runway r)
-    {
-        if(r.getAvailability())
-        {
+
+    public boolean RequestRunwayFree(Runway r) {
+        if (r.getAvailability()) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-
-    
 
     public void ChangeSpeed() {
         if (AimedSpeed != this.Speed) {
@@ -113,7 +97,7 @@ public class Airplane extends AirplaneFactory implements Runnable{
                 this.Speed++;
             }
         }
-    }    
+    }
 
     public void ChangeDirection() {
         if (AimedDirection != this.Direction) {
