@@ -8,6 +8,7 @@ import java.util.TimerTask;
  * @author Mateusz
  */
 public class Runway {
+
     private int Length;
     private int Direction;
     private boolean Availability;
@@ -36,22 +37,21 @@ public class Runway {
      * @return Availability
      */
     public void ChangeAvailability(boolean r) {
-        if (!r) {
-            Availability = r;
+        if (r) {
             timer.schedule(new tim(r), 180000);
         } else {
             Availability = r;
-            
         }
     }
 
     private class tim extends TimerTask {
+
         boolean r;
-                
+
         private tim(boolean r) {
             this.r = r;
         }
-        
+
         @Override
         public void run() {
             Availability = r;
