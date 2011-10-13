@@ -163,7 +163,7 @@ public class ACC {
      */
     public void GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) throws AssignmentException {
         if (r.getAvailability() == true) {
-            r.ChangeAvailability(false);
+            r.ChangeAvailability(true);
             a.TakeOff(r, direction, height, speed);
         } else {
             throw new AssignmentException("Runway is not available.");
