@@ -4,7 +4,7 @@
  */
 package SysBar;
 
-import SysBar.MenuBar.Type;
+import SysBar.UnityBar.Type;
 import com.sun.java.swing.plaf.motif.MotifBorders.ButtonBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,7 +29,7 @@ import javax.swing.JToolTip;
  *
  * @author Johan Benschop
  */
-public class Button extends JComponent implements MouseListener {
+public class UnityItem extends JComponent implements MouseListener {
 
     private String title;
     private Color colour;
@@ -103,7 +103,7 @@ public class Button extends JComponent implements MouseListener {
         this.repaint();
     }
 
-    public Button(String title, Color colour, int weight, String icon, Type type) {
+    public UnityItem(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
         this.addMouseListener(this);
@@ -234,11 +234,11 @@ public class Button extends JComponent implements MouseListener {
     }
 
     static class pulseTask extends TimerTask {
-        Button item;
+        UnityItem item;
         static double x;
         int r;
         
-        public pulseTask (Button item) {
+        public pulseTask (UnityItem item) {
             this.item = item;
         }
         
