@@ -1,5 +1,9 @@
 package atc.logic;
 
+import java.sql.Time;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,6 +11,7 @@ import java.util.logging.Logger;
  * @author Paul
  */
 public class Airplane extends AirplaneFactory implements Runnable {
+
 
     /**************Datafields***********/
     private int Direction; // Degree's
@@ -18,6 +23,16 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double AimedSpeed; // Kilomithers per hour
     private double AimedDirection; // Degree's (could be changed)
     private double AimedAltitude; // Kilomithers
+    private Statusses Status;
+    //private Date SecondsBeforeRunning = new Date();
+    //private Date SecondsRunning = new Date();
+    private double takeOffAccelerationSpeed = 6.67; // Kilomithers per hour
+    
+    
+    public enum Statusses {
+
+        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING;
+    }
 
     /***************Constructor**********/
     /**
@@ -47,74 +62,113 @@ public class Airplane extends AirplaneFactory implements Runnable {
         this.Speed = Speed;
         this.CurrentFuel = CurrentFuel;
         this.Altitude = Altitude;
+
     }
 
     @Override
     public void run() {
+        
         try {
             Fly();
-            Thread.sleep(20);
+            Thread.sleep(1000);// er word telkens één seconde gewacht.
         } catch (InterruptedException ex) {
             Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * This will run the methods ChangeSpeed, ChangeDirection and ChangeAltitude,
+     * which change the speed, direction and altitude from an airplane.
+     */
     public void Fly() {
         ChangeSpeed();
         ChangeDirection();
         ChangeAltitude();
     }
 
+    /**
+     * This will make an airplane land on a runway.
+     * @param r : Runway
+     * @param direction : The direction of the runway
+     */
     void Landing(Runway r, double direction) {
-        if (RequestRunwayFree(r)) {
+            this.Status = Statusses.LANDING;
             SetAimedDirection(direction);
-            SetAimedDirection(0);
+            SetAimedAltitude(0);
             SetAimedSpeed(0);
-        }
     }
 
+    /**
+     * This will take off and airplane.
+     * @param r : runway
+     * @param direction : The direction in degrees
+     * @param altitude : The altitude in feet
+     * @param speed : The speed in km/h
+     */
     void TakeOff(Runway r, double direction, double altitude, double speed) {
-        if (RequestRunwayFree(r)) {
-            SetAimedDirection(direction);
-            SetAimedAltitude(altitude);
-            SetAimedSpeed(speed);
-        }
+        this.Status = Statusses.TAKINGOFF;
+        SetAimedDirection(direction);
+        SetAimedAltitude(altitude);
+        SetAimedSpeed(speed);
     }
 
-    public boolean RequestRunwayFree(Runway r) {
-        if (r.getAvailability()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
+    /**
+     * The speed at the takeoff will change with 6,67 km/h every second.
+     * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
+     */
     public void ChangeSpeed() {
-        if (AimedSpeed != this.Speed) {
-            if (this.Speed > AimedSpeed) {
-                this.Speed--;
-            } else if (this.Speed < AimedSpeed) {
-                this.Speed++;
+        if(this.Status == Statusses.TAKINGOFF)
+        {
+            if(this.Speed < 300)
+            {
+                this.Speed += takeOffAccelerationSpeed;
+                this.Status = Statusses.INFLIGHT;
+            }
+        }
+        else if (AimedSpeed != this.Speed) {
+            if (this.Speed - 10 > AimedSpeed) {
+                this.Speed -= 10;
+            } else if (this.Speed + 10 < AimedSpeed) {
+                this.Speed += 10;
+            }
+            else
+            {
+                this.Speed = AimedSpeed;
             }
         }
     }
 
+
+
+    /**
+     * The direction will increase or decrease every second with 3 degrees.
+     */
     public void ChangeDirection() {
         if (AimedDirection != this.Direction) {
             if (this.Direction > AimedDirection) {
-                this.Direction--;
+                this.Direction -= 3;
             } else if (this.Direction < AimedDirection) {
-                this.Direction++;
+                this.Direction +=3;
             }
         }
     }
 
+    
+    /**
+     * The altitude will increase or decrease with 20 feet every second.
+     */
     public void ChangeAltitude() {
+        double changeHeight = 20;
         if (AimedAltitude != this.Altitude) {
-            if (this.Altitude > AimedAltitude) {
-                this.Altitude--;
-            } else if (this.Altitude < AimedAltitude) {
-                this.Altitude++;
+            if (this.Altitude - changeHeight > AimedAltitude) {
+                this.Altitude -= changeHeight;
+            } else if (this.Altitude + changeHeight < AimedAltitude) {
+                this.Altitude += changeHeight;
+            }
+            else
+            {
+                this.Altitude = AimedAltitude;
             }
         }
     }
@@ -134,6 +188,10 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
     public void SetAimedAltitude(double altitude) {
         this.AimedAltitude = altitude;
+    }
+    
+        public void setStatus(Statusses Status) {
+        this.Status = Status;
     }
 
     //Getters
