@@ -28,7 +28,9 @@ public class GeoLocation {
      * 
      * @return 
      */
-    public void ToString() {
-        throw new UnsupportedOperationException();
+    public String ToString() {
+        String gegevens;
+        gegevens = "Longitude: " +Longitude+" , Latitude: "+Latitude+ " , Altitude" + Altitude;
+        return gegevens;
     }
 }
