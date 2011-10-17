@@ -26,7 +26,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private Statusses Status;
     //private Date SecondsBeforeRunning = new Date();
     //private Date SecondsRunning = new Date();
-    private double takeOffAccelerationSpeed = 6.67; // Kilomithers per hour
+    private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
     
     
     public enum Statusses {
@@ -70,7 +70,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
         
         try {
             Fly();
-            Thread.sleep(1000);// er word telkens één seconde gewacht.
+            Thread.sleep(100);// er word telkens één seconde gewacht.
         } catch (InterruptedException ex) {
             Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -127,10 +127,10 @@ public class Airplane extends AirplaneFactory implements Runnable {
             }
         }
         else if (AimedSpeed != this.Speed) {
-            if (this.Speed - 10 > AimedSpeed) {
-                this.Speed -= 10;
-            } else if (this.Speed + 10 < AimedSpeed) {
-                this.Speed += 10;
+            if (this.Speed - 1 > AimedSpeed) {
+                this.Speed -= 1;
+            } else if (this.Speed + 1 < AimedSpeed) {
+                this.Speed += 1;
             }
             else
             {
@@ -147,9 +147,9 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public void ChangeDirection() {
         if (AimedDirection != this.Direction) {
             if (this.Direction > AimedDirection) {
-                this.Direction -= 3;
+                this.Direction -= 0.3;
             } else if (this.Direction < AimedDirection) {
-                this.Direction +=3;
+                this.Direction += 0.3;
             }
         }
     }
@@ -159,7 +159,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * The altitude will increase or decrease with 20 feet every second.
      */
     public void ChangeAltitude() {
-        double changeHeight = 20;
+        double changeHeight = 2.0;
         if (AimedAltitude != this.Altitude) {
             if (this.Altitude - changeHeight > AimedAltitude) {
                 this.Altitude -= changeHeight;
