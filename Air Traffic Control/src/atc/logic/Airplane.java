@@ -1,9 +1,6 @@
 package atc.logic;
 
-import java.sql.Time;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +29,11 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public enum Statusses {
 
         TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING;
+    }
+
+    @Override
+    public String ToString() {
+        return super.ToString();
     }
 
     /***************Constructor**********/
@@ -176,6 +178,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
+    
 
     //Setters
     public void SetAimedSpeed(double speed) {
