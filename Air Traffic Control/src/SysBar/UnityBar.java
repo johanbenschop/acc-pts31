@@ -14,7 +14,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /**
@@ -39,11 +38,12 @@ public final class UnityBar extends JPanel {
         Bottom = new JPanel();
         Top.setOpaque(false);
         Bottom.setOpaque(false);
-        this.add(Top);
-        this.add(Bottom);
+        this.add(Top, java.awt.BorderLayout.NORTH);
+        this.add(Bottom, java.awt.BorderLayout.SOUTH);
     }
 
     public UnityItem addItem(UnityItem menuItem) {
+        // We check the type and then add it to the correct panel.
         switch (menuItem.getType()) {
             case NORMAL:
                 System.out.println("Adding a NORMAL one here!");
@@ -57,7 +57,19 @@ public final class UnityBar extends JPanel {
                 Bottom.add(menuItem);
                 break;
         }
-
+        
+        // We need to (re)calculate the height of the part of the bar.
+        int TopH = 0;
+        for (int i = 0; i < Top.getComponentCount(); i++) {
+            TopH = TopH + 60;
+        }
+        int BottomH = 0;
+        for (int i = 0; i < Bottom.getComponentCount(); i++) {
+            BottomH = BottomH + 60;
+        }
+        Top.setPreferredSize(new Dimension(65, TopH));
+        Bottom.setPreferredSize(new Dimension(65, BottomH));
+        
         return menuItem;
     }
 
