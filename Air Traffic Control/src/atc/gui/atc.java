@@ -83,7 +83,7 @@ public class atc {
         protected RenderableLayer renderLayer;
 
         public AppFrame() {
-            this.initialize(false, false, false);
+            this.initialize(true, true, false); // debug...
         }
 
         public AppFrame(boolean includeStatusBar, boolean includeLayerPanel, boolean includeStatsPanel) {
@@ -140,8 +140,9 @@ public class atc {
             renderLayer = new RenderableLayer();
             renderLayer.setName("Airplanes");
             insertBeforePlacenames(getWwd(), renderLayer);
+            Object n = getWwd();
             this.getLayerPanel().update(getWwd());
-            renderLayer.addRenderable(new rdAirplane(new Airplane(3000, 1000, 1000, "100P", "Boeing", 15, 500, 300, 400, 2, 5, 150, 50, 50)));
+            renderLayer.addRenderable(new rdAirplane(new Airplane(3000, 1000, 1000, "100P", "Boeing", 15, 500, 300, 400, 2, 5, 150, 50, 50)).getRender());
 
             // Create our custom made menu system bar thingy.
             UnityBar menuBar = new UnityBar();
