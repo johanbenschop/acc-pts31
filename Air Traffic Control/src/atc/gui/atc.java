@@ -80,6 +80,7 @@ public class atc {
         protected AppPanel wwjPanel;
         protected LayerPanel layerPanel;
         protected StatisticsPanel statsPanel;
+        protected RenderableLayer renderLayer;
 
         public AppFrame() {
             this.initialize(false, false, false);
@@ -136,8 +137,10 @@ public class atc {
                 }
             }
             
-            RenderableLayer renderLayer = new RenderableLayer();
-            this.wwjPanel.getWwd().getModel().getLayers().add(renderLayer);
+            renderLayer = new RenderableLayer();
+            renderLayer.setName("Airplanes");
+            insertBeforePlacenames(getWwd(), renderLayer);
+            this.getLayerPanel().update(getWwd());
             renderLayer.addRenderable(new rdAirplane(new Airplane(3000, 1000, 1000, "100P", "Boeing", 15, 500, 300, 400, 2, 5, 150, 50, 50)));
 
             // Create our custom made menu system bar thingy.
