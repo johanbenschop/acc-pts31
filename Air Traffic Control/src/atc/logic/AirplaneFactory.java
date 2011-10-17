@@ -1,8 +1,9 @@
 package atc.logic;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 
-public class AirplaneFactory {
+public class AirplaneFactory implements Serializable {
 
     //Properties
     
@@ -17,21 +18,30 @@ public class AirplaneFactory {
     private int MaxFuel;
     private int FuelUsage;
     private ArrayList<AirplaneFactory> AvailableAirplanes;
+    
+    
 
     
     //Constructor of AirplaneFactory.
     
-    public AirplaneFactory(int maxSpeed, int minSpeed, int weight, String type, String manucaturer, int planeHeight, int planeWidth, int planeLength, int maxFuel, int fuelUsage) {
+    public AirplaneFactory(int maxSpeed, int minSpeed, int weight, String type, String manufacturer, int planeHeight, int planeWidth, int planeLength, int maxFuel, int fuelUsage) {
         this.MaxSpeed = maxSpeed;
         this.MinSpeed = minSpeed;
         this.Weight = weight;
         this.Type = type;
-        this.Manufacturer = manucaturer;
+        this.Manufacturer = manufacturer;
         this.PlaneHeight = planeHeight;
         this.PlaneWidth = planeWidth;
         this.PlaneLength = planeLength;
         this.MaxFuel = maxFuel;
         this.FuelUsage = fuelUsage;
+    }
+    
+        public String ToString()
+    {
+        String gegevens;
+        gegevens = "Manufacturer"+this.getManufacturer()+" , type: " +this.getType();
+        return gegevens;
     }
  
     
