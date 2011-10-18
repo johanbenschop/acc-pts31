@@ -10,6 +10,9 @@
  */
 package atc.gui;
 
+import atc.logic.Airplane;
+import atc.logic.AirplaneFactory;
+
 /**
  *
  * @author Mateusz
@@ -182,22 +185,29 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirplaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplaneActionPerformed
         // TODO add your handling code here:
+        Airplane a;
+        a = null;
+        tfAirplane.setText("Airplane: ");// + a.ToString());
     }//GEN-LAST:event_btnSelectAirplaneActionPerformed
 
     private void btnSelectAirportDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportDepActionPerformed
         // TODO add your handling code here:
+        tfDepartureAirport.setText("Departure Airport: ");
     }//GEN-LAST:event_btnSelectAirportDepActionPerformed
 
     private void btnSelectAirportArrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportArrActionPerformed
         // TODO add your handling code here:
+        tfArrivalAirport.setText("Arrival Airport: ");        
     }//GEN-LAST:event_btnSelectAirportArrActionPerformed
 
     private void btnAddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnAddFlightActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
