@@ -119,6 +119,18 @@ public class UnityItem extends JComponent implements MouseListener {
         this.icon = Toolkit.getDefaultToolkit().getImage(icon);
         dimension = new Dimension(54, 54);
         timer = new Timer();
+
+        switch (this.type) {
+            case NORMAL:
+                break;
+            case NOTIFICATION:
+                timer.schedule(new pulseTask(this), 0, 50);
+                break;
+            case ALERT:
+                timer.schedule(new pulseTask(this), 0, 50);
+                break;
+        }
+
     }
 
     public void addActionListener(ActionListener listener) {
@@ -161,13 +173,27 @@ public class UnityItem extends JComponent implements MouseListener {
 
         Image image;
 
-        if (active) {
-            // First we draw the background
-            image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
-            g.drawImage(image, 0, 0, this);
-            // Then the color overlay
-            g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), alphaIntensity));
-            g.fillRoundRect(1, 1, 52, 52, 11, 11);
+        switch (this.type) {
+            case NORMAL:
+                if (active) {
+                    // First we draw the background
+                    image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
+                    g.drawImage(image, 0, 0, this);
+                    // Then the color overlay
+                    g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), alphaIntensity));
+                    g.fillRoundRect(1, 1, 52, 52, 11, 11);
+                }
+                break;
+            case NOTIFICATION:
+                break;
+            case ALERT:
+                // First we draw the background
+                image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_back_54.png");
+                g.drawImage(image, 0, 0, this);
+                // Then the color overlay
+                g.setColor(new Color(colour.getRed(), colour.getGreen(), colour.getBlue(), alphaIntensity));
+                g.fillRoundRect(1, 1, 52, 52, 11, 11);
+                break;
         }
 
         // Then we draw the edge
@@ -209,8 +235,17 @@ public class UnityItem extends JComponent implements MouseListener {
             active = false;
             this.repaint();
         }
-        
-        timer.schedule(new pulseTask(this), 0, 50);
+
+        switch (this.type) {
+            case NORMAL:
+                timer.schedule(new pulseTask(this), 0, 50);
+                break;
+            case NOTIFICATION:
+                break;
+            case ALERT:
+                break;
+        }
+
     }
 
     @Override
@@ -248,7 +283,7 @@ public class UnityItem extends JComponent implements MouseListener {
             x = x + 0.2;
             item.repaint();
 
-            if (r == 4) {
+            if (r == 4 && item.getType().equals(Type.NORMAL)) {
                 this.cancel();
             }
         }
