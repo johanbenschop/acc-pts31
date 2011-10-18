@@ -149,15 +149,26 @@ public class atc {
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
 
             // Testing items, to be removed or to be subsituted!
-            menuBar.addItem(new UnityItem("Start", Color.BLUE, 0, "F", UnityBar.Type.NORMAL)).addActionListener(
+            
+            menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            //throw new UnsupportedOperationException("Not supported yet.");
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new jfSettings(null, true).setVisible(true);
+                                }
+                            });
                         }
                     });
-            menuBar.addItem(new UnityItem("Go to Airport", Color.GREEN, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            
+            menuBar.addItem(new UnityItem("Go to airport", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -174,7 +185,89 @@ public class atc {
                             });
                         }
                     });
-            menuBar.addItem(new UnityItem("Colision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            
+            menuBar.addItem(new UnityItem("Go to flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new jfSelectFlight(null, true).setVisible(true);
+                                }
+                            });
+                        }
+                    });            
+            
+            menuBar.addItem(new UnityItem("Command flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new jfCommandFlight(null, true).setVisible(true);
+                                }
+                            });
+                        }
+                    });
+            
+            menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                           // TODO
+                        }
+                    });
+            
+            menuBar.addItem(new UnityItem("Show in-flight airplanes", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new jfSelectAirplane(null, true).setVisible(true);
+                                }
+                            });
+                        }
+                    });
+            
+            menuBar.addItem(new UnityItem("Add new flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new jfAddFlight(null, true).setVisible(true);
+                                }
+                            });
+                        }
+                    });
+                        
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -182,7 +275,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Colision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -190,7 +283,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Colision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -198,7 +291,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Colision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
