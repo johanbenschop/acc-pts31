@@ -1,6 +1,6 @@
 package atc.logic;
 
-import java.math.*;
+import java.util.*;
 
 /**
  * 
@@ -76,11 +76,9 @@ public class ACC {
      * @return true is returned if the new direction has succesfully been set.
      * @return false is when it was not possible to set the new direction.
      */
-    public void ChangeDirection(int direction, Airplane a) throws AssignmentException {
+    public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
         if (direction < 360) {
-            double r;
-            r = direction / 180 * Math.PI;
-            a.SetAimedDirection(r);
+            a.SetAimedDirection(direction);
         } else {
         throw new AssignmentException("The given direction is not possible.");
         }
@@ -105,9 +103,19 @@ public class ACC {
      * The further implementation of this method will need to wait till the answer has been given
      * to the question, current implementation is a placeholder.
      */
-    public void ChangeHeight(double altitude, Airplane a) throws AssignmentException {
-        a.SetAimedAltitude(altitude);
+    public void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException {
+        if (flightlevel == 1) {
+            a.SetAimedAltitude(300);
+        }
+        else if (flightlevel == 2) {
+            a.SetAimedAltitude(600);
+        }
+        else if (flightlevel == 3) {
+            a.SetAimedAltitude(900);
+        }
+        else {        
         throw new AssignmentException();
+        }
     }
 
     /**
@@ -133,6 +141,7 @@ public class ACC {
         if (r.getAvailability() == true) {
             r.ChangeAvailability(false);
             a.Landing(r, direction);
+            a.setStatus(Airplane.Statusses.LANDING);
         } else {
             throw new AssignmentException("Runway is unavailable.");
         }
@@ -165,8 +174,23 @@ public class ACC {
         if (r.getAvailability() == true) {
             r.ChangeAvailability(true);
             a.TakeOff(r, direction, height, speed);
+            a.setStatus(Airplane.Statusses.TAKINGOFF);
         } else {
             throw new AssignmentException("Runway is not available.");
         }
+    }
+    
+    /**
+     * Method has to be called when assignmentexception is given on the
+     * GiveLandingRunway method incase the runway is not unavailable.
+     * 
+     * @param a is the airplane that as to start circling the airport.
+     */
+    public void CircleAirplane(Airplane a) {
+        a.setStatus(Airplane.Statusses.INLANDINGQUEUE);
+    }
+    
+    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber){
+        
     }
 }

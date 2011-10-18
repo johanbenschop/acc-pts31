@@ -9,13 +9,15 @@ public class Flightplan {
     private int Flightnumber;
     private GregorianCalendar DepartureDate;
     private GregorianCalendar ArrivalDate;
-
-    public Flightplan(Airport destination, Airport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival) {
+    private Airplane airplane;
+    
+    public Flightplan(Airport destination, Airport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, Airplane airplane) {
         destinationAirport = destination;
         takeoffAirport = takeOff;
         this.Flightnumber = Flightnumber;
         DepartureDate = departure;
         ArrivalDate = arrival;
+        this.airplane = airplane;
     }
 
     public GregorianCalendar getArrivalDate() {
