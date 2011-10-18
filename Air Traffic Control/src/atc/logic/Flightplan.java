@@ -36,6 +36,10 @@ public class Flightplan {
         return destinationAirport;
     }
 
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
     public Airport getTakeoffAirport() {
         return takeoffAirport;
     }
