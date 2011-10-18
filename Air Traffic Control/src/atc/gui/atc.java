@@ -150,7 +150,7 @@ public class atc {
 
             // Testing items, to be removed or to be subsituted!
             
-            menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/SETTINGS.png", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -186,7 +186,7 @@ public class atc {
                         }
                     });
             
-            menuBar.addItem(new UnityItem("Go to flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            menuBar.addItem(new UnityItem("Go to flight", Color.BLUE, 0, "src/atc/gui/resources/airplane_icon.gif", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -222,7 +222,7 @@ public class atc {
                         }
                     });
             
-            menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "src/atc/gui/resources/airplane_land.gif", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -249,7 +249,7 @@ public class atc {
                         }
                     });
             
-            menuBar.addItem(new UnityItem("Add new flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            menuBar.addItem(new UnityItem("Add new flight", Color.BLUE, 0, "src/atc/gui/resources/add_airplane.gif", UnityBar.Type.NORMAL)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -267,7 +267,7 @@ public class atc {
                         }
                     });
                         
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -275,7 +275,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -283,7 +283,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -291,7 +291,7 @@ public class atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
