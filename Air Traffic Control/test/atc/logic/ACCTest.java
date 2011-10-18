@@ -4,6 +4,7 @@
  */
 package atc.logic;
 
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,12 +18,13 @@ import static org.junit.Assert.*;
  */
 public class ACCTest {
     
-    private CTA cta;
-    private GeoLocation loc;
-    private ACC acc;
-    private Airplane ap;
-    private Runway ra;
-    private Runway ru;
+    private CTA cta; //cta Thats being used for the test
+    private GeoLocation loc; // Location of the CTA
+    private ACC acc; //ACC thats being used for this test
+    private Airplane apa; //Airplane thats in flight
+    private Airplane apt; //Airplane thats ready for takeoff
+    private Runway ra; //available runway
+    private Runway ru; //unavailable runway
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -41,9 +43,10 @@ public class ACCTest {
         loc = new GeoLocation(1,1,1);
         cta = new CTA(loc, 1,1);
         acc = new ACC(1, cta);
-        ap = new Airplane();
-        ra = new Runway();
-        ru = new Runway();
+        apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100);
+        apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100);
+        ra = new Runway(300, 180, true);
+        ru = new Runway(300, 270, false);
     }
     
     @After
@@ -54,40 +57,44 @@ public class ACCTest {
      * Test of ChangeSpeed method, of class ACC.
      * Currently Airplane does not yet have a constructor. I will update the constructor and tests once this is done.
      */
-    @Test
-    public void testChangeSpeed() {
+    @Test (expected = AssignmentException.class)
+    public void testChangeSpeed() throws AssignmentException {
         System.out.println("ChangeSpeed");
-        boolean passed = acc.ChangeSpeed(100, ap);
-        assertFalse("Is below minimum speed", passed);
-        passed = acc.ChangeSpeed(100000, ap);
-        assertFalse("Is above maximum speed", passed);
-        passed = acc.ChangeSpeed(400, ap);
-        assertTrue("Is a possible speed", passed);
+        acc.ChangeSpeed(200, apa);
+        fail("AssignementException was expected");
+        
+        acc.ChangeSpeed(400, apa);
+        Assert.assertEquals("Speed should have changed",400 , apa.getAimedSpeed());
+        
+        acc.ChangeSpeed(800, apa);
+        fail("AssignmentException was expected");
     }
 
     /**
      * Test of ChangeDirection method, of class ACC.
      */
-    @Test
-    public void testChangeDirection() {
+    @Test (expected = AssignmentException.class)
+    public void testChangeDirection() throws AssignmentException {
         System.out.println("ChangeDirection");
-        boolean passed = acc.ChangeDirection(370, ap);
-        assertFalse("370 graden is geen mogelijkheid", passed);
-        passed = acc.ChangeDirection(180, ap);
-        assertTrue("Possible direction", passed);
+        acc.ChangeDirection(400, apa);
+        fail("AssignmentException was expected");
+        
+        acc.ChangeDirection(90, apa);
+        Assert.assertEquals("Direction should have been changed", 90, apa.getAimedDirection());
     }
     
     /**
      * Test of ChangeHeight method, of class ACC.
      * Assumed that this is done in flightlevels rather then actual feet.
      */
-    @Test
-    public void testChangeHeight() {
+    @Test (expected = AssignmentException.class)
+    public void testChangeHeight() throws AssignmentException {
         System.out.println("ChangeHeight");
-        boolean passed = acc.ChangeHeight(5, ap);
-        assertFalse("Not a possible flightlevel", passed);
-        passed = acc.ChangeHeight(2, ap);
-        assertTrue("This is a possible flightlevel", passed);
+        acc.ChangeHeight(5, apa);
+        fail("AssignmentException was expected");
+        
+        acc.ChangeHeight(2, apa);
+        Assert.assertEquals("Height should have changed.", 600, apa.getAimedAltitude());
     }
 
     /**
@@ -96,10 +103,7 @@ public class ACCTest {
     @Test
     public void GiveRunwayLand() {
         System.out.println("GiveRunwayLand");
-        boolean passed = acc.GiveRunwayLand(ra, ap, 160);
-        assertTrue("runway is available", passed);
-        passed = acc.GiveRunwayLand(ra, ap, 270);
-        assertFalse("runway is unavailable", passed);
+        
     }
     
     /*
@@ -108,9 +112,6 @@ public class ACCTest {
     @Test
     public void GiveRunwayTakeOff() {
         System.out.println("GiveRunwayTakeOff");
-        boolean passed = acc.GiveRunwayTakeOff(ra, ap, 90, 2, 350);
-        assertTrue("runway is available", passed);
-        passed = acc.GiveRunwayTakeOff(ru, ap, 104, 3, 450);
-        assertFalse("runway is unavailable", passed);
+        
     }
 }

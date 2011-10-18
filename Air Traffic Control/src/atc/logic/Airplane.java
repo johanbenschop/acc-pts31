@@ -213,4 +213,18 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public double getSpeed() {
         return Speed;
     }
+
+    public double getAimedAltitude() {
+        return AimedAltitude;
+    }
+
+    public double getAimedDirection() {
+        return AimedDirection;
+    }
+
+    public double getAimedSpeed() {
+        return AimedSpeed;
+    }
+    
+    
 }

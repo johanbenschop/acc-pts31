@@ -42,9 +42,9 @@ public class AirplaneTest {
     @Test
     public void testFly() {
         System.out.println("Fly");
-        Airplane instance = new Airplane();
+       // Airplane instance = new Airplane();
         
-        instance.Fly();
+     //   instance.Fly();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
