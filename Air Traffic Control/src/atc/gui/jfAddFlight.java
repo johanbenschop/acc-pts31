@@ -14,10 +14,11 @@ package atc.gui;
  *
  * @author Mateusz
  */
-public class jfAddFlight extends javax.swing.JFrame {
+public class jfAddFlight extends javax.swing.JDialog {
 
     /** Creates new form jfAddFlight */
-    public jfAddFlight() {
+    public jfAddFlight(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -46,7 +47,7 @@ public class jfAddFlight extends javax.swing.JFrame {
         tfDepartureDate = new javax.swing.JTextField();
         tfArrivalDate = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Flight");
 
         btnAddFlight.setText("Add Flight");
@@ -127,10 +128,10 @@ public class jfAddFlight extends javax.swing.JFrame {
                             .addGap(292, 292, 292))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(lblDepartureTime)
-                            .addContainerGap(314, Short.MAX_VALUE))
+                            .addContainerGap(347, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(lblArrivalTime)
-                            .addContainerGap(344, Short.MAX_VALUE)))
+                            .addContainerGap(365, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -227,10 +228,18 @@ public class jfAddFlight extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+                java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new jfAddFlight().setVisible(true);
+                jfAddFlight dialog = new jfAddFlight(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

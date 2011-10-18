@@ -14,10 +14,11 @@ package atc.gui;
  *
  * @author Mateusz
  */
-public class jfCommandFlight extends javax.swing.JFrame {
+public class jfCommandFlight extends javax.swing.JDialog {
 
     /** Creates new form jfCommandFlight */
-    public jfCommandFlight() {
+    public jfCommandFlight(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -40,7 +41,7 @@ public class jfCommandFlight extends javax.swing.JFrame {
         lblChangeDirectionTo = new javax.swing.JLabel();
         txtChangeDirectionTo = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cbxFlight.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -141,10 +142,18 @@ public class jfCommandFlight extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+                java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new jfCommandFlight().setVisible(true);
+                jfCommandFlight dialog = new jfCommandFlight(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
