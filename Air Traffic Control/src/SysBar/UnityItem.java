@@ -102,7 +102,8 @@ public class UnityItem extends JComponent implements MouseListener {
         this.type = type;
         this.repaint();
     }
-
+    
+    
     public UnityItem(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
