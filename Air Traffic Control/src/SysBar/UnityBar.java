@@ -46,14 +46,12 @@ public final class UnityBar extends JPanel {
         // We check the type and then add it to the correct panel.
         switch (menuItem.getType()) {
             case NORMAL:
-                System.out.println("Adding a NORMAL one here!");
                 Top.add(menuItem);
                 break;
             case NOTIFICATION:
-                System.out.println("Adding a NOTIFICATION one here!");
+                Bottom.add(menuItem);
                 break;
             case ALERT:
-                System.out.println("Adding a ALERT one here!");
                 Bottom.add(menuItem);
                 break;
         }

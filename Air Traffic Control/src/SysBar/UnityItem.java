@@ -39,7 +39,7 @@ public class UnityItem extends JComponent implements MouseListener {
     private final ArrayList<ActionListener> listeners = new ArrayList<>();
     private boolean active;
     private Type type;
-    private Timer timer;
+    private static Timer timer;
     private int alphaIntensity;
 
     public int getAlphaIntensity() {
@@ -50,7 +50,6 @@ public class UnityItem extends JComponent implements MouseListener {
         this.alphaIntensity = alphaIntensity;
     }
 
-    
     public Color getColour() {
         return colour;
     }
@@ -102,8 +101,7 @@ public class UnityItem extends JComponent implements MouseListener {
         this.type = type;
         this.repaint();
     }
-    
-    
+
     public UnityItem(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
@@ -186,6 +184,7 @@ public class UnityItem extends JComponent implements MouseListener {
 
     @Override
     public Point getToolTipLocation(MouseEvent event) {
+        // We give the fixed relative position.
         return new Point(67, 16);
     }
 
@@ -216,33 +215,30 @@ public class UnityItem extends JComponent implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        //notifyListeners(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //notifyListeners(e);
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        //notifyListeners(e);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        //notifyListeners(e);
     }
 
     static class pulseTask extends TimerTask {
+
         UnityItem item;
         static double x;
         int r;
-        
-        public pulseTask (UnityItem item) {
+
+        public pulseTask(UnityItem item) {
             this.item = item;
         }
-        
+
         public void run() {
             int a = (int) (150 + (50 * Math.sin(x)));
             if (a == 150 || (int) a == 192) {
@@ -251,7 +247,7 @@ public class UnityItem extends JComponent implements MouseListener {
             item.alphaIntensity = a;
             x = x + 0.2;
             item.repaint();
-            
+
             if (r == 4) {
                 this.cancel();
             }
