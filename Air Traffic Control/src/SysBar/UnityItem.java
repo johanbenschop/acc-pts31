@@ -205,7 +205,8 @@ public class UnityItem extends JComponent implements MouseListener {
         g.drawImage(image, 0, 0, this);
 
         // Last but not least we draw our icon
-        g.drawImage(icon, 0, 0, this);
+        icon = icon.getScaledInstance(34, 34, 0);
+        g.drawImage(icon, 10, 10, this);
     }
 
     @Override
