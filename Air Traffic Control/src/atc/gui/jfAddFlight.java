@@ -12,6 +12,8 @@ package atc.gui;
 
 import atc.logic.Airplane;
 import atc.logic.AirplaneFactory;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -206,8 +208,8 @@ public class jfAddFlight extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAddFlightActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
-        
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
