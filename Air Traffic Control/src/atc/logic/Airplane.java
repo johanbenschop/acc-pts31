@@ -7,6 +7,10 @@ import java.util.logging.Logger;
 /**
  * @author Paul
  */
+// Airplane nummer nodig om het vliegtuig te kunnen herkennen in de lijst van
+// vliegtuigen in de CTA 
+// getter nodig van de status van het vliegtuig
+
 public class Airplane extends AirplaneFactory implements Runnable {
 
 
