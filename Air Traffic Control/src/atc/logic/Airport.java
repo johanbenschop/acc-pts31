@@ -26,13 +26,8 @@ public class Airport {
 	public void getRunway() {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * 
-	 * @return 
-	 */
-	public void CreateActiveAirplane() {
-		throw new UnsupportedOperationException();
-	}
-
+        
+        public int getAirportID(){
+            return AirportID;
+        }
 }
