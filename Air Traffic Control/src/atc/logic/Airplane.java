@@ -1,20 +1,15 @@
 package atc.logic;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Paul
  */
-// Airplane nummer nodig om het vliegtuig te kunnen herkennen in de lijst van
-// vliegtuigen in de CTA 
-// getter nodig van de status van het vliegtuig
-
 public class Airplane extends AirplaneFactory implements Runnable {
 
-
     /**************Datafields***********/
+    private int AirplaneNumber; //Number
     private int Direction; // Degree's
     private double Speed; // Kilomithers per hour
     private int MaxFuel;  // Gallons
@@ -28,8 +23,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     //private Date SecondsBeforeRunning = new Date();
     //private Date SecondsRunning = new Date();
     private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
-    
-    
+
     public enum Statusses {
 
         TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING;
@@ -73,7 +67,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
     @Override
     public void run() {
-        
+
         try {
             Fly();
             Thread.sleep(100);// er word telkens één seconde gewacht.
@@ -98,10 +92,10 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * @param direction : The direction of the runway
      */
     void Landing(Runway r, double direction) {
-            this.Status = Statusses.LANDING;
-            SetAimedDirection(direction);
-            SetAimedAltitude(0);
-            SetAimedSpeed(0);
+        this.Status = Statusses.LANDING;
+        SetAimedDirection(direction);
+        SetAimedAltitude(0);
+        SetAimedSpeed(0);
     }
 
     /**
@@ -118,34 +112,26 @@ public class Airplane extends AirplaneFactory implements Runnable {
         SetAimedSpeed(speed);
     }
 
-
     /**
      * The speed at the takeoff will change with 6,67 km/h every second.
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     public void ChangeSpeed() {
-        if(this.Status == Statusses.TAKINGOFF)
-        {
-            if(this.Speed < 300)
-            {
+        if (this.Status == Statusses.TAKINGOFF) {
+            if (this.Speed < 300) {
                 this.Speed += takeOffAccelerationSpeed;
                 this.Status = Statusses.INFLIGHT;
             }
-        }
-        else if (AimedSpeed != this.Speed) {
+        } else if (AimedSpeed != this.Speed) {
             if (this.Speed - 1 > AimedSpeed) {
                 this.Speed -= 1;
             } else if (this.Speed + 1 < AimedSpeed) {
                 this.Speed += 1;
-            }
-            else
-            {
+            } else {
                 this.Speed = AimedSpeed;
             }
         }
     }
-
-
 
     /**
      * The direction will increase or decrease every second with 3 degrees.
@@ -160,7 +146,6 @@ public class Airplane extends AirplaneFactory implements Runnable {
         }
     }
 
-    
     /**
      * The altitude will increase or decrease with 20 feet every second.
      */
@@ -171,9 +156,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
                 this.Altitude -= changeHeight;
             } else if (this.Altitude + changeHeight < AimedAltitude) {
                 this.Altitude += changeHeight;
-            }
-            else
-            {
+            } else {
                 this.Altitude = AimedAltitude;
             }
         }
@@ -182,9 +165,12 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
-    
 
     //Setters
+    public void SetAirplaneNumber(int airplaneNumber) {
+        this.AirplaneNumber = airplaneNumber;
+    }
+
     public void SetAimedSpeed(double speed) {
         this.AimedSpeed = speed;
     }
@@ -196,12 +182,16 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public void SetAimedAltitude(double altitude) {
         this.AimedAltitude = altitude;
     }
-    
-        public void setStatus(Statusses Status) {
+
+    public void setStatus(Statusses Status) {
         this.Status = Status;
     }
 
     //Getters
+    public int getAirplaneNumber() {
+        return AirplaneNumber;
+    }
+
     public double getAltitude() {
         return Altitude;
     }
@@ -229,6 +219,8 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public double getAimedSpeed() {
         return AimedSpeed;
     }
-    
-    
+
+    public Statusses getStatus() {
+        return Status;
+    }
 }
