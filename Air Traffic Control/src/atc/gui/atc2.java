@@ -2,9 +2,23 @@ package atc.gui;
 
 import SysBar.UnityBar;
 import SysBar.UnityItem;
+import atc.logic.Airport;
+import atc.logic.CTA;
+import gov.nasa.worldwind.View;
+import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.Layer;
+import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.render.AnnotationAttributes;
+import gov.nasa.worldwind.render.PatternFactory;
+import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -24,8 +38,8 @@ public final class atc2 extends atc {
             //this.getLayerPanel().add(menuBar, java.awt.BorderLayout.WEST);
 
             // Testing items, to be removed or to be subsituted!
-            final UnityItem ui = menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/SETTINGS.png", UnityBar.Type.NORMAL));
-            ui.addActionListener(
+            final UnityItem uiSettings = menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/settings.png", UnityBar.Type.NORMAL));
+            uiSettings.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -39,14 +53,14 @@ public final class atc2 extends atc {
                                 public void run() {
                                     menuBar.contains(3, 3);
                                     new jfSettings(null, true).setVisible(true);
-                                    ui.setActive(false);
+                                    uiSettings.setActive(false);
                                 }
                             });
                         }
                     });
 
-            final UnityItem ui2 = menuBar.addItem(new UnityItem("Go to airport", Color.BLUE, 0, "", UnityBar.Type.NORMAL));
-            ui2.addActionListener(
+            final UnityItem uiGoToAirport = menuBar.addItem(new UnityItem("Go to airport", Color.BLUE, 0, "src/atc/gui/resources/airport.png", UnityBar.Type.NORMAL));
+            uiGoToAirport.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -59,13 +73,15 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfSelectAirport(null, true).setVisible(true);
-                                    ui2.setActive(false);
+                                    
+                                    uiGoToAirport.setActive(false);
                                 }
                             });
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Go to flight", Color.BLUE, 0, "src/atc/gui/resources/airplane_icon.gif", UnityBar.Type.NORMAL)).addActionListener(
+            final UnityItem uiGoToFlight = menuBar.addItem(new UnityItem("Go to flight", Color.BLUE, 0, "src/atc/gui/resources/find_airplane.png", UnityBar.Type.NORMAL));
+            uiGoToFlight.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -78,12 +94,14 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfSelectFlight(null, true).setVisible(true);
+                                    uiGoToFlight.setActive(false);
                                 }
                             });
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Command flight", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            final UnityItem uiCommandFlight = menuBar.addItem(new UnityItem("Command flight", Color.BLUE, 0, "src/atc/gui/resources/command.png", UnityBar.Type.NORMAL));
+            uiCommandFlight.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -96,21 +114,25 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfCommandFlight(null, true).setVisible(true);
+                                    uiCommandFlight.setActive(false);
                                 }
                             });
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "src/atc/gui/resources/airplane_land.gif", UnityBar.Type.NORMAL)).addActionListener(
+            final UnityItem uiLandFlight = menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "src/atc/gui/resources/land.png", UnityBar.Type.NORMAL));
+            uiLandFlight.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             // TODO
+                            uiLandFlight.setActive(false);
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Show in-flight airplanes", Color.BLUE, 0, "", UnityBar.Type.NORMAL)).addActionListener(
+            final UnityItem uiInFlight = menuBar.addItem(new UnityItem("Show in-flight airplanes", Color.BLUE, 0, "", UnityBar.Type.NORMAL));
+            uiInFlight.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -123,12 +145,14 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfSelectAirplane(null, true).setVisible(true);
+                                    uiInFlight.setActive(false);
                                 }
                             });
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Add new flight", Color.BLUE, 0, "src/atc/gui/resources/add_airplane.gif", UnityBar.Type.NORMAL)).addActionListener(
+            final UnityItem uiNewFlight = menuBar.addItem(new UnityItem("Add new flight", Color.BLUE, 0, "src/atc/gui/resources/add_airplane.png", UnityBar.Type.NORMAL));
+            uiNewFlight.addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -141,12 +165,33 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfAddFlight(null, true).setVisible(true);
+                                    uiNewFlight.setActive(false);
                                 }
                             });
                         }
                     });
 
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
+
+            final View view = this.getWwd().getView();
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            //.goTo(Position position, double distance);
+                            // This object class we handle and we have an orbit view
+                            Position targetPos = Position.fromDegrees(52.09153109717759, 5.1381683349609375);
+                            
+                            // Use a PanToIterator to iterate view to target position
+                            if (view != null) {
+                                // The elevation component of 'targetPos' here is not the surface elevation,
+                                // so we ignore it when specifying the view center position.
+                                view.goTo(new Position(targetPos, 0),
+                                        targetPos.getElevation() + 20000); // 1000 = 100 meter
+                            }
+                        }
+                    });
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -154,7 +199,7 @@ public final class atc2 extends atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -162,7 +207,7 @@ public final class atc2 extends atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
+            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
                         @Override
@@ -170,18 +215,48 @@ public final class atc2 extends atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.gif", UnityBar.Type.ALERT)).addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //throw new UnsupportedOperationException("Not supported yet.");
-                        }
-                    });
+            
+            //buildAirportLayer(); // TODO unncomment to add airport to the planet
         }
 
         public LayerPanel getLayerPanel() {
             return this.layerPanel;
+        }
+        
+        private Layer buildAirportLayer() {
+            RenderableLayer layer = new RenderableLayer();
+            layer.setName("Airports");
+            
+            List<Airport> airports = null; // TODO import airports here
+            
+            for (Airport i : airports) {
+                addAirport(layer, i);
+            }
+            
+            return layer;
+        }
+        
+        private AnnotationAttributes apAttributes;
+        private void addAirport(RenderableLayer layer, Airport airport) {
+            if (apAttributes == null)
+            {
+                // Init default attributes for all eq
+                apAttributes = new AnnotationAttributes();
+                apAttributes.setLeader(AVKey.SHAPE_NONE);
+                apAttributes.setDrawOffset(new Point(0, -16));
+                apAttributes.setSize(new Dimension(32, 32));
+                apAttributes.setBorderWidth(0);
+                apAttributes.setCornerRadius(0);
+                apAttributes.setBackgroundColor(new Color(0, 0, 0, 0));
+            }
+            
+            apAnnotation ea = new apAnnotation(airport, apAttributes);
+            
+            ea.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLE, .8f, Color.BLUE));
+            ea.getAttributes().setTextColor(Color.BLUE);
+            ea.getAttributes().setScale(1);
+            
+            layer.addRenderable(ea);
         }
     }
 
