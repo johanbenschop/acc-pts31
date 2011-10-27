@@ -20,8 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.Timer;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
@@ -40,9 +39,8 @@ public class UnityItem extends JComponent implements MouseListener {
     private final ArrayList<ActionListener> listeners = new ArrayList<>();
     private boolean active;
     private Type type;
-    private static Timer timer;
+    private Timer timer;
     private int alphaIntensity;
-    
     private static int x;
 
     public int getAlphaIntensity() {
@@ -121,35 +119,29 @@ public class UnityItem extends JComponent implements MouseListener {
         this.weight = weight;
         this.icon = Toolkit.getDefaultToolkit().getImage(icon);
         dimension = new Dimension(54, 54);
-        timer = new Timer();
 
         switch (this.type) {
             case NORMAL:
                 break;
             case NOTIFICATION:
-                timer.schedule(new pulseTask(this), 0, 50);
                 break;
             case ALERT:
-                final ReentrantLock lock = new ReentrantLock();
-                Thread t = new Thread(new Runnable() {
-
-                    public void run() {
-                        while (true) {
-                            try {
-                                lock.lock();
-                                Thread.sleep(50);
-                                int a = (int) (150 + (50 * Math.sin(x)));
-                                setAlphaIntensity(a);
-                                x++;
-                                System.out.println("Whew..");
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                                lock.unlock();
-                            }
+                this.timer = new Timer(50, new ActionListener() {
+                    double x = 0;
+                    int r = 0;
+                    
+                    public void actionPerformed(ActionEvent event) {
+                        int a = (int) (150 + (50 * Math.sin(x)));
+                        if (a == 150 || (int) a == 192) {
+                            r++;
                         }
+                        
+                        setAlphaIntensity(a);
+                        x = x + 0.2;
+                        repaint();
                     }
                 });
-                t.start();
+                timer.start();
                 break;
         }
 
@@ -218,17 +210,17 @@ public class UnityItem extends JComponent implements MouseListener {
                 break;
         }
 
-        // Then we draw the edge
-        image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_edge_54.png");
-        g.drawImage(image, 0, 0, this);
-
         // Then we draw the very nice shine on it
         image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_shine_54.png");
         g.drawImage(image, 0, 0, this);
 
-        // Last but not least we draw our icon
+        // Then we draw our icon
         //icon = icon.getScaledInstance(34, 34, Image.SCALE_SMOOTH);
-        g.drawImage(icon, 10, 10, this);
+        g.drawImage(icon, 0, 0, this);
+
+        // And at last we draw the edge of the icon
+        image = Toolkit.getDefaultToolkit().getImage("src/SysBar/resources/launcher_icon_edge_54.png");
+        g.drawImage(image, 0, 0, this);
     }
 
     @Override
@@ -261,7 +253,22 @@ public class UnityItem extends JComponent implements MouseListener {
 
         switch (this.type) {
             case NORMAL:
-                timer.schedule(new pulseTask(this), 0, 50);
+                this.timer = new Timer(50, new ActionListener() {
+                    double x = 0;
+                    int r = 0;
+                    
+                    public void actionPerformed(ActionEvent event) {
+                        int a = (int) (150 + (50 * Math.sin(x)));
+                        if (a == 150 || (int) a == 192) {
+                            r++;
+                        }
+                        
+                        setAlphaIntensity(a);
+                        x = x + 0.2;
+                        repaint();
+                    }
+                });
+                timer.start();
                 break;
             case NOTIFICATION:
                 break;
@@ -285,30 +292,5 @@ public class UnityItem extends JComponent implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-    }
-
-    static class pulseTask extends TimerTask {
-
-        UnityItem item;
-        static double x;
-        int r;
-
-        public pulseTask(UnityItem item) {
-            this.item = item;
-        }
-
-        public void run() {
-            int a = (int) (150 + (50 * Math.sin(x)));
-            if (a == 150 || (int) a == 192) {
-                r++;
-            }
-            item.alphaIntensity = a;
-            x = x + 0.2;
-            item.repaint();
-//
-//            if (r == 4 && item.getType().equals(Type.NORMAL)) {
-//                this.cancel();
-//            }
-        }
     }
 }
