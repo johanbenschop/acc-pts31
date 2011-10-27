@@ -22,6 +22,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 
@@ -41,6 +42,8 @@ public class UnityItem extends JComponent implements MouseListener {
     private Type type;
     private static Timer timer;
     private int alphaIntensity;
+    
+    private static int x;
 
     public int getAlphaIntensity() {
         return alphaIntensity;
@@ -127,7 +130,26 @@ public class UnityItem extends JComponent implements MouseListener {
                 timer.schedule(new pulseTask(this), 0, 50);
                 break;
             case ALERT:
-                timer.schedule(new pulseTask(this), 0, 50);
+                final ReentrantLock lock = new ReentrantLock();
+                Thread t = new Thread(new Runnable() {
+
+                    public void run() {
+                        while (true) {
+                            try {
+                                lock.lock();
+                                Thread.sleep(50);
+                                int a = (int) (150 + (50 * Math.sin(x)));
+                                setAlphaIntensity(a);
+                                x++;
+                                System.out.println("Whew..");
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                                lock.unlock();
+                            }
+                        }
+                    }
+                });
+                t.start();
                 break;
         }
 
@@ -283,10 +305,10 @@ public class UnityItem extends JComponent implements MouseListener {
             item.alphaIntensity = a;
             x = x + 0.2;
             item.repaint();
-
-            if (r == 4 && item.getType().equals(Type.NORMAL)) {
-                this.cancel();
-            }
+//
+//            if (r == 4 && item.getType().equals(Type.NORMAL)) {
+//                this.cancel();
+//            }
         }
     }
 }
