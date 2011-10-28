@@ -2,23 +2,34 @@ package atc.gui;
 
 import SysBar.UnityBar;
 import SysBar.UnityItem;
+import atc.logic.ACC;
 import atc.logic.Airport;
 import atc.logic.CTA;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.avlist.AVList;
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.AirspaceLayer;
+import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.AnnotationAttributes;
+import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.Renderable;
+import gov.nasa.worldwind.render.airspaces.Airspace;
+import gov.nasa.worldwind.render.airspaces.Polygon;
+import gov.nasa.worldwind.util.WWUtil;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -28,14 +39,19 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Johan Benschop
  */
 public final class atc2 extends atc {
+    public static CTA cta = new CTA(null, 5, 4);
+    public static ACC acc = new ACC(343, cta);
 
     public static class AppFrame extends atc.AppFrame {
+        
+        protected AirspaceLayer airspaces;
+        
 
         public AppFrame() {
+            
             // Create our custom made menu system bar thingy.
             final UnityBar menuBar = new UnityBar();
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
-            //this.getLayerPanel().add(menuBar, java.awt.BorderLayout.WEST);
 
             // Testing items, to be removed or to be subsituted!
             final UnityItem uiSettings = menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/settings.png", UnityBar.Type.NORMAL));
@@ -52,7 +68,16 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     menuBar.contains(3, 3);
-                                    new jfSettings(null, true).setVisible(true);
+                                    LayerPanel layerPanel = new LayerPanel(wwjPanel.getWwd(), null);
+                                    
+//                                    JDialog jdSettings = new JDialog();
+//                                    jdSettings.getContentPane().add(layerPanel);
+//                                    jdSettings.setVisible(true);
+                                    
+                                    jfSettings settings = new jfSettings(null, false);
+                                    //settings.addLayerPanel(layerPanel);
+                                    settings.setWwd(wwjPanel.getWwd());
+                                    settings.setVisible(true);
                                     uiSettings.setActive(false);
                                 }
                             });
@@ -73,7 +98,7 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     new jfSelectAirport(null, true).setVisible(true);
-                                    
+
                                     uiGoToAirport.setActive(false);
                                 }
                             });
@@ -181,7 +206,7 @@ public final class atc2 extends atc {
                             //.goTo(Position position, double distance);
                             // This object class we handle and we have an orbit view
                             Position targetPos = Position.fromDegrees(52.09153109717759, 5.1381683349609375);
-                            
+
                             // Use a PanToIterator to iterate view to target position
                             if (view != null) {
                                 // The elevation component of 'targetPos' here is not the surface elevation,
@@ -216,30 +241,66 @@ public final class atc2 extends atc {
                         }
                     });
             
+            // Add the airport layer
             //buildAirportLayer(); // TODO unncomment to add airport to the planet
+            
+            // Add the airspace layer with our ACC in it
+            this.airspaces = new AirspaceLayer();
+            this.airspaces.setName("Airspaces");
+            this.airspaces.setEnableBatchPicking(false);
+            insertBeforePlacenames(this.getWwd(), this.airspaces);
+            buildAirspaceLayer();
+            
+            // Add the graticule layer
+            LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
+            insertBeforePlacenames(getWwd(), graticuleLayer);
         }
 
         public LayerPanel getLayerPanel() {
             return this.layerPanel;
         }
-        
+
+        private void buildAirspaceLayer() {
+            Polygon poly = new Polygon();
+            
+            poly.setLocations(Arrays.asList(
+                    LatLon.fromDegrees(60, -10),
+                    LatLon.fromDegrees(60, 10),
+                    LatLon.fromDegrees(40, 10),
+                    LatLon.fromDegrees(40, -10)
+                    ));
+            poly.setAltitudes(100000.0, 500000.0);
+            poly.setTerrainConforming(true, true);
+            poly.setValue(AVKey.DISPLAY_NAME, "CTA - Greater Europe");
+            this.setupDefaultMaterial(poly, Color.RED);
+            airspaces.addAirspace(poly);
+        }
+
+        protected void setupDefaultMaterial(Airspace a, Color color) {
+            a.getAttributes().setDrawOutline(true);
+            a.getAttributes().setMaterial(new Material(color));
+            a.getAttributes().setOutlineMaterial(new Material(WWUtil.makeColorBrighter(color)));
+            a.getAttributes().setOpacity(0.8);
+            a.getAttributes().setOutlineOpacity(0.9);
+            a.getAttributes().setOutlineWidth(3.0);
+        }
+
         private Layer buildAirportLayer() {
             RenderableLayer layer = new RenderableLayer();
             layer.setName("Airports");
-            
+
             List<Airport> airports = null; // TODO import airports here
-            
+
             for (Airport i : airports) {
                 addAirport(layer, i);
             }
-            
+
             return layer;
         }
-        
         private AnnotationAttributes apAttributes;
+
         private void addAirport(RenderableLayer layer, Airport airport) {
-            if (apAttributes == null)
-            {
+            if (apAttributes == null) {
                 // Init default attributes for all eq
                 apAttributes = new AnnotationAttributes();
                 apAttributes.setLeader(AVKey.SHAPE_NONE);
@@ -249,13 +310,13 @@ public final class atc2 extends atc {
                 apAttributes.setCornerRadius(0);
                 apAttributes.setBackgroundColor(new Color(0, 0, 0, 0));
             }
-            
+
             apAnnotation ea = new apAnnotation(airport, apAttributes);
-            
+
             ea.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLE, .8f, Color.BLUE));
             ea.getAttributes().setTextColor(Color.BLUE);
             ea.getAttributes().setScale(1);
-            
+
             layer.addRenderable(ea);
         }
     }

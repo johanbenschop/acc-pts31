@@ -33,11 +33,11 @@
                               <Component id="lblDepartureAirport" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="tfAirplane" alignment="0" pref="335" max="32767" attributes="1"/>
-                                      <Component id="tfDepartureAirport" alignment="0" pref="335" max="32767" attributes="1"/>
-                                      <Component id="tfArrivalAirport" alignment="0" pref="335" max="32767" attributes="0"/>
-                                      <Component id="tfDepartureDate" alignment="0" pref="335" max="32767" attributes="0"/>
-                                      <Component id="tfArrivalDate" alignment="0" pref="335" max="32767" attributes="0"/>
+                                      <Component id="tfAirplane" alignment="0" pref="368" max="32767" attributes="1"/>
+                                      <Component id="tfDepartureAirport" alignment="0" pref="368" max="32767" attributes="1"/>
+                                      <Component id="tfArrivalAirport" alignment="0" pref="368" max="32767" attributes="0"/>
+                                      <Component id="tfDepartureDate" alignment="0" pref="368" max="32767" attributes="0"/>
+                                      <Component id="tfArrivalDate" alignment="0" pref="368" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
@@ -59,7 +59,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="lblArrivalTime" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="365" max="32767" attributes="0"/>
+                          <EmptySpace pref="377" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">

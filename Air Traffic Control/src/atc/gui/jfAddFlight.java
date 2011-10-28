@@ -204,7 +204,7 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnAddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightActionPerformed
         // TODO add your handling code here:
-        
+        //atc2.acc.CreateFlight(evt, evt, evt, null, null, WIDTH);
     }//GEN-LAST:event_btnAddFlightActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
