@@ -1,21 +1,37 @@
 package atc.logic;
 
+/**
+ * @author Robbert
+ */
+
 public class Airport {
 
+   //ToDo: Change Strings to ints when the numbers can be correctly loaded into an int. 
+    
     private int AirportID;
+    private String AirportName;
     private String City;
     private String Country;
-    private int IATA_FAA;
-    private int ICAO;
-    private String Timezone;
-    private boolean DST;
+    private String IATA_FAA;
+    private String ICAO;
+    private String Latitude;
+    private String Longitude;
+    private String Altitude;
+    private int Timezone;
+    
+    //DST is a letter specifying the DST: E (Europe), A (US/Canada), S (South America), O (Australia), Z (New Zealand), N (None) or U (Unknown)
+    private String DST;
 
-    public Airport(int AirportID, String City, String Country, int ITATA_FAA, int ICAO, String Timezone, boolean DST) {
+    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, String Latitude, String Longitude, String Altitude,  int Timezone, String DST) {
         this.AirportID = AirportID;
+        this.AirportName = AirportName;
         this.City = City;
         this.Country = Country;
         this.IATA_FAA = ITATA_FAA;
         this.ICAO = ICAO;
+        this.Latitude = Latitude;
+        this.Longitude = Longitude;
+        this.Altitude = Altitude;
         this.Timezone = Timezone;
         this.DST = DST;
     }
@@ -31,6 +47,10 @@ public class Airport {
     public int getAirportID() {
         return AirportID;
     }
+    
+    public String getAirportName() {
+        return AirportName;
+    }
 
     public String getCity() {
         return City;
@@ -40,19 +60,19 @@ public class Airport {
         return Country;
     }
 
-    public int getIATA_FAA() {
+    public String getIATA_FAA() {
         return IATA_FAA;
     }
 
-    public int getICAO() {
+    public String getICAO() {
         return ICAO;
     }
 
-    public String getTimezone() {
+    public int getTimezone() {
         return Timezone;
     }
 
-    public boolean getDST() {
+    public String getDST() {
         return DST;
     }
 }

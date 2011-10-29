@@ -39,7 +39,6 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * An Airplane is made with its own maximum speed, minimum speed, weight,
      * type, manufacturer, planeheight, planewidth, planelength, maximum fuel, 
      * fuel usage, direction, speed, currentfuel and altitude.
-     * 
      * @param MaxSpeed: This is the maximum speed of the airplane.
      * @param MinSpeed: This is the minimum speed of the airplane.
      * @param Weight: This is they weight of the airplane.

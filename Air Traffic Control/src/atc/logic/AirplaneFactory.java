@@ -1,12 +1,13 @@
 package atc.logic;
+
 import java.io.Serializable;
 
-import java.util.ArrayList;
-
+/**
+ * @author Robbert
+ */ 
 public class AirplaneFactory implements Serializable {
 
     //Properties
-    
     private int MaxSpeed;
     private int MinSpeed;
     private int Weight;
@@ -17,7 +18,6 @@ public class AirplaneFactory implements Serializable {
     private int PlaneLength;
     private int MaxFuel;
     private int FuelUsage;
-    private ArrayList<AirplaneFactory> AvailableAirplanes;
     
     
 
@@ -45,8 +45,7 @@ public class AirplaneFactory implements Serializable {
     }
  
     
-    // Getters and setters of AirplaneFactory
-
+    // Getters and setters of AirplaneFactory    
     public int getMaxSpeed() {
         return MaxSpeed;
     }
@@ -87,7 +86,4 @@ public class AirplaneFactory implements Serializable {
         return FuelUsage;
     }
 
-    public ArrayList<AirplaneFactory> getAirplanes() {
-        return AvailableAirplanes;
-    }
 }
