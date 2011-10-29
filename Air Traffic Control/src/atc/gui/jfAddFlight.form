@@ -26,47 +26,84 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblAirplane" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblDepartureAirport" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="tfAirplane" alignment="0" pref="368" max="32767" attributes="1"/>
-                                      <Component id="tfDepartureAirport" alignment="0" pref="368" max="32767" attributes="1"/>
-                                      <Component id="tfArrivalAirport" alignment="0" pref="368" max="32767" attributes="0"/>
-                                      <Component id="tfDepartureDate" alignment="0" pref="368" max="32767" attributes="0"/>
-                                      <Component id="tfArrivalDate" alignment="0" pref="368" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="btnSelectAirportDep" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnSelectAirplane" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnSelectAirportArr" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblAirplane" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblDepartureAirport" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="tfAirplane" alignment="0" pref="362" max="32767" attributes="1"/>
+                                  <Component id="tfDepartureAirport" alignment="0" pref="362" max="32767" attributes="1"/>
+                                  <Component id="tfArrivalAirport" alignment="0" pref="362" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="dpDateDep" pref="159" max="32767" attributes="1"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="spHoursDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="spMinutesDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="spSecondsDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnSelectAirportDep" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSelectAirplane" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSelectAirportArr" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblArrivalAirport" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="292" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblDepartureTime" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="347" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblArrivalTime" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="377" max="32767" attributes="0"/>
-                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblArrivalAirport" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="292" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblDepartureTime" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="347" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnAddFlight" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="dpDateArr" pref="159" max="32767" attributes="1"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="spHoursArr" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="spMinutesArr" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="spSecondsArr" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblDepartureTime1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="237" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -97,19 +134,39 @@
                   <Component id="btnSelectAirportArr" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblDepartureTime" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblDepartureTime" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tfDepartureDate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="dpDateDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spSecondsDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spMinutesDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spHoursDep" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblArrivalTime" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblDepartureTime1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tfArrivalDate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="dpDateArr" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spSecondsArr" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spMinutesArr" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="spHoursArr" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnAddFlight" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -137,11 +194,6 @@
     <Component class="javax.swing.JLabel" name="lblArrivalAirport">
       <Properties>
         <Property name="text" type="java.lang.String" value="Arrival airport"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblArrivalTime">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Arrival time &amp; date"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblDepartureTime">
@@ -190,9 +242,79 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSelectAirportArrActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="tfDepartureDate">
+    <Component class="org.jdesktop.swingx.JXDatePicker" name="dpDateDep">
     </Component>
-    <Component class="javax.swing.JTextField" name="tfArrivalDate">
+    <Component class="javax.swing.JSpinner" name="spHoursDep">
+      <Properties>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Default Cursor"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(00, 00, 23, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spMinutesDep">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spSecondsDep">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hours"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Minutes"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Seconds"/>
+      </Properties>
+    </Component>
+    <Component class="org.jdesktop.swingx.JXDatePicker" name="dpDateArr">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblDepartureTime1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Arrival time &amp; date"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spHoursArr">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(00, 00, 23, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hours"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spMinutesArr">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Minutes"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spSecondsArr">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1))"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel6">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Seconds"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

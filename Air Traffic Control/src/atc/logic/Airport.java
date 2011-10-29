@@ -31,6 +31,7 @@ public class Airport {
         this.Altitude = Altitude;
         this.Timezone = Timezone;
         this.DST = DST;
+        this.location = location;
     }
     
     public String ToString()

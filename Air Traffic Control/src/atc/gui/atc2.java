@@ -8,6 +8,8 @@ import atc.logic.CTA;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.avlist.AVList;
+import gov.nasa.worldwind.event.SelectEvent;
+import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.AirspaceLayer;
@@ -15,20 +17,24 @@ import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.AnnotationAttributes;
+import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.airspaces.Airspace;
 import gov.nasa.worldwind.render.airspaces.Polygon;
 import gov.nasa.worldwind.util.WWUtil;
+import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -39,16 +45,19 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Johan Benschop
  */
 public final class atc2 extends atc {
-    public static CTA cta = new CTA(null, 5, 4);
+
+    private static CTA cta = new CTA(null, 5, 4);
     public static ACC acc = new ACC(343, cta);
 
     public static class AppFrame extends atc.AppFrame {
-        
-        protected AirspaceLayer airspaces;
-        
+
+        private apAnnotation mouseEq, latestEq;
+        protected AirspaceLayer airspaceLayer;
+        protected RenderableLayer airportLayer;
+        private GlobeAnnotation tooltipAnnotation;
 
         public AppFrame() {
-            
+
             // Create our custom made menu system bar thingy.
             final UnityBar menuBar = new UnityBar();
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
@@ -69,11 +78,11 @@ public final class atc2 extends atc {
                                 public void run() {
                                     menuBar.contains(3, 3);
                                     LayerPanel layerPanel = new LayerPanel(wwjPanel.getWwd(), null);
-                                    
+
 //                                    JDialog jdSettings = new JDialog();
 //                                    jdSettings.getContentPane().add(layerPanel);
 //                                    jdSettings.setVisible(true);
-                                    
+
                                     jfSettings settings = new jfSettings(null, false);
                                     //settings.addLayerPanel(layerPanel);
                                     settings.setWwd(wwjPanel.getWwd());
@@ -240,42 +249,54 @@ public final class atc2 extends atc {
                             //throw new UnsupportedOperationException("Not supported yet.");
                         }
                     });
-            
-            // Add the airport layer
-            //buildAirportLayer(); // TODO unncomment to add airport to the planet
-            
-            // Add the airspace layer with our ACC in it
-            this.airspaces = new AirspaceLayer();
-            this.airspaces.setName("Airspaces");
-            this.airspaces.setEnableBatchPicking(false);
-            insertBeforePlacenames(this.getWwd(), this.airspaces);
+
+            // Add the airport & airspace layers
+            buildAirportLayer();
             buildAirspaceLayer();
-            
+
             // Add the graticule layer
             LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
             insertBeforePlacenames(getWwd(), graticuleLayer);
         }
 
+        /**
+         * Returns the layer panel. This is the panel in wich you can enable and disable layers.
+         * @return the layer panel
+         */
         public LayerPanel getLayerPanel() {
             return this.layerPanel;
         }
-
+        
+        /**
+         * Build the airspace layer.
+         * TODO build the airspace according to the CTA and not directly as done.
+         */
         private void buildAirspaceLayer() {
-            Polygon poly = new Polygon();
+            // Add the airspace layer with our ACC in it
+            this.airspaceLayer = new AirspaceLayer();
+            this.airspaceLayer.setName("Airspaces");
+            this.airspaceLayer.setEnableBatchPicking(false);
+            insertBeforePlacenames(this.getWwd(), this.airspaceLayer);
             
+            Polygon poly = new Polygon();
+
             poly.setLocations(Arrays.asList(
                     LatLon.fromDegrees(60, -10),
                     LatLon.fromDegrees(60, 10),
                     LatLon.fromDegrees(40, 10),
-                    LatLon.fromDegrees(40, -10)
-                    ));
+                    LatLon.fromDegrees(40, -10)));
             poly.setAltitudes(100000.0, 500000.0);
             poly.setTerrainConforming(true, true);
             poly.setValue(AVKey.DISPLAY_NAME, "CTA - Greater Europe");
             this.setupDefaultMaterial(poly, Color.RED);
-            airspaces.addAirspace(poly);
+            airspaceLayer.addAirspace(poly);
         }
-
+        
+        /**
+         * Sets up default material.
+         * @param a Airspace
+         * @param color Colour
+         */
         protected void setupDefaultMaterial(Airspace a, Color color) {
             a.getAttributes().setDrawOutline(true);
             a.getAttributes().setMaterial(new Material(color));
@@ -285,26 +306,59 @@ public final class atc2 extends atc {
             a.getAttributes().setOutlineWidth(3.0);
         }
 
-        private Layer buildAirportLayer() {
-            RenderableLayer layer = new RenderableLayer();
-            layer.setName("Airports");
+        /**
+         * Builds the airport layer.
+         */
+        private void buildAirportLayer() {
+            // Add the airport layer
+            this.airportLayer = new RenderableLayer();
+            this.airportLayer.setName("Airports");
+            insertBeforePlacenames(this.getWwd(), this.airportLayer);
+            
+            // Init tooltip annotation
+            this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
+            Font font = Font.decode("Arial-Plain-16");
+            this.tooltipAnnotation.getAttributes().setFont(font);
+            this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
+            this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
+            this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
+            this.tooltipAnnotation.getAttributes().setVisible(false);
+            this.tooltipAnnotation.setAlwaysOnTop(true);
+            airportLayer.addRenderable(this.tooltipAnnotation);
 
-            List<Airport> airports = null; // TODO import airports here
+            // Add select listener for airport picking
+            this.getWwd().addSelectListener(new SelectListener() {
 
-            for (Airport i : airports) {
-                addAirport(layer, i);
+                public void selected(SelectEvent event) {
+                    if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                        highlight(event.getTopObject());
+                    }
+                }
+            });
+
+            // Add click-and-go select listener for airports
+            this.getWwd().addSelectListener(new ClickAndGoSelectListener(
+                    this.getWwd(), apAnnotation.class, 20000));
+            
+            ListIterator<Airport> litr = acc.GetCTA().GetAirports();
+
+            while (litr.hasNext()) {
+                addAirport(airportLayer, litr.next());
             }
-
-            return layer;
         }
         private AnnotationAttributes apAttributes;
 
+        /**
+         * Adds an airport to the airport layer.
+         * @param layer Airport Layer
+         * @param airport Airport
+         */
         private void addAirport(RenderableLayer layer, Airport airport) {
             if (apAttributes == null) {
                 // Init default attributes for all eq
                 apAttributes = new AnnotationAttributes();
                 apAttributes.setLeader(AVKey.SHAPE_NONE);
-                apAttributes.setDrawOffset(new Point(0, -16));
+                apAttributes.setDrawOffset(new Point(0, 0));
                 apAttributes.setSize(new Dimension(32, 32));
                 apAttributes.setBorderWidth(0);
                 apAttributes.setCornerRadius(0);
@@ -318,6 +372,30 @@ public final class atc2 extends atc {
             ea.getAttributes().setScale(1);
 
             layer.addRenderable(ea);
+        }
+        
+        /** 
+         * Shows the annotation of an airport when param o is indeed a apAnnotation.
+         * @param o Object under the mouse
+         */
+        private void highlight(Object o) {
+            if (this.mouseEq == o) {
+                return; // same thing selected
+            }
+            if (this.mouseEq != null) {
+                this.mouseEq.getAttributes().setHighlighted(false);
+                this.mouseEq = null;
+                this.tooltipAnnotation.getAttributes().setVisible(false);
+            }
+
+            if (o != null && o instanceof apAnnotation) {
+                this.mouseEq = (apAnnotation) o;
+                this.mouseEq.getAttributes().setHighlighted(true);
+                this.tooltipAnnotation.setText("<p><b>" + this.mouseEq.airport.getAirportName() + "</b></p>" + "<br />" + this.mouseEq.airport.ToString());
+                this.tooltipAnnotation.setPosition(this.mouseEq.airport.getLocation().toPosition());
+                this.tooltipAnnotation.getAttributes().setVisible(true);
+                this.getWwd().repaint();
+            }
         }
     }
 

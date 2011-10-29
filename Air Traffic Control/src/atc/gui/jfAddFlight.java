@@ -1,25 +1,28 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * jfAddFlight.java
  *
  * Created on 6-okt-2011, 12:39:16
  */
 package atc.gui;
 
-import atc.logic.Airplane;
-import atc.logic.AirplaneFactory;
+import atc.logic.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
  * @author Mateusz
  */
 public class jfAddFlight extends javax.swing.JDialog {
+
+    private AirplaneFactory airplane;
+    private Airport departureAirport;
+    private Airport arrivalAirport;
+    private GregorianCalendar arrivalDate;
+    private GregorianCalendar departureDate;
 
     /** Creates new form jfAddFlight */
     public jfAddFlight(java.awt.Frame parent, boolean modal) {
@@ -40,7 +43,6 @@ public class jfAddFlight extends javax.swing.JDialog {
         lblAirplane = new javax.swing.JLabel();
         lblDepartureAirport = new javax.swing.JLabel();
         lblArrivalAirport = new javax.swing.JLabel();
-        lblArrivalTime = new javax.swing.JLabel();
         lblDepartureTime = new javax.swing.JLabel();
         btnCancel = new javax.swing.JButton();
         tfAirplane = new javax.swing.JTextField();
@@ -49,8 +51,21 @@ public class jfAddFlight extends javax.swing.JDialog {
         tfArrivalAirport = new javax.swing.JTextField();
         btnSelectAirportDep = new javax.swing.JButton();
         btnSelectAirportArr = new javax.swing.JButton();
-        tfDepartureDate = new javax.swing.JTextField();
-        tfArrivalDate = new javax.swing.JTextField();
+        dpDateDep = new org.jdesktop.swingx.JXDatePicker();
+        spHoursDep = new javax.swing.JSpinner(new SpinnerNumberModel(00, 00, 23, 1));
+        spMinutesDep = new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1));
+        spSecondsDep = new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1));
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        dpDateArr = new org.jdesktop.swingx.JXDatePicker();
+        lblDepartureTime1 = new javax.swing.JLabel();
+        spHoursArr = new javax.swing.JSpinner(new SpinnerNumberModel(00, 00, 23, 1));
+        jLabel4 = new javax.swing.JLabel();
+        spMinutesArr = new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1));
+        jLabel5 = new javax.swing.JLabel();
+        spSecondsArr = new javax.swing.JSpinner(new SpinnerNumberModel(01, 01, 60, 1));
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Flight");
@@ -68,8 +83,6 @@ public class jfAddFlight extends javax.swing.JDialog {
         lblDepartureAirport.setText("Departure airport");
 
         lblArrivalAirport.setText("Arrival airport");
-
-        lblArrivalTime.setText("Arrival time & date");
 
         lblDepartureTime.setText("Departure time & date");
 
@@ -103,6 +116,22 @@ public class jfAddFlight extends javax.swing.JDialog {
             }
         });
 
+        spHoursDep.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLabel1.setText("Hours");
+
+        jLabel2.setText("Minutes");
+
+        jLabel3.setText("Seconds");
+
+        lblDepartureTime1.setText("Arrival time & date");
+
+        jLabel4.setText("Hours");
+
+        jLabel5.setText("Minutes");
+
+        jLabel6.setText("Seconds");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,38 +139,66 @@ public class jfAddFlight extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblAirplane)
-                                .addComponent(lblDepartureAirport)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(tfAirplane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                                        .addComponent(tfDepartureAirport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                                        .addComponent(tfArrivalAirport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                                        .addComponent(tfDepartureDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                                        .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(btnSelectAirportDep)
-                                        .addComponent(btnSelectAirplane)
-                                        .addComponent(btnSelectAirportArr))))
-                            .addContainerGap())
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblArrivalAirport)
-                            .addGap(292, 292, 292))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblDepartureTime)
-                            .addContainerGap(347, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblArrivalTime)
-                            .addContainerGap(365, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblAirplane)
+                            .addComponent(lblDepartureAirport)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfAirplane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                    .addComponent(tfDepartureAirport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                    .addComponent(tfArrivalAirport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(dpDateDep, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(spHoursDep, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel1))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(spMinutesDep, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(spSecondsDep, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnSelectAirportDep)
+                                    .addComponent(btnSelectAirplane)
+                                    .addComponent(btnSelectAirportArr))))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblArrivalAirport)
+                        .addGap(292, 292, 292))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDepartureTime)
+                        .addContainerGap(347, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddFlight)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dpDateArr, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(spHoursArr, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(spMinutesArr, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(spSecondsArr, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblDepartureTime1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(140, 140, 140))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnSelectAirplane, btnSelectAirportArr, btnSelectAirportDep});
@@ -168,18 +225,34 @@ public class jfAddFlight extends javax.swing.JDialog {
                     .addComponent(tfArrivalAirport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSelectAirportArr))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDepartureTime)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDepartureTime)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dpDateDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spSecondsDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spMinutesDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spHoursDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblArrivalTime)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDepartureTime1)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfArrivalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dpDateArr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spSecondsArr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spMinutesArr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spHoursArr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddFlight)
                     .addComponent(btnCancel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -187,24 +260,56 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirplaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplaneActionPerformed
         // TODO add your handling code here:
-        Airplane a;
-        a = null;
-        tfAirplane.setText("Airplane: ");// + a.ToString());
+        this.airplane = new jfSelectAirplane(null, true).getValue();
+        if (airplane != null) {
+            tfAirplane.setText(airplane.ToString());
+        } else {
+            tfAirplane.setText("No airplane selected!");
+        }
     }//GEN-LAST:event_btnSelectAirplaneActionPerformed
 
     private void btnSelectAirportDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportDepActionPerformed
         // TODO add your handling code here:
-        tfDepartureAirport.setText("Departure Airport: ");
+        this.departureAirport = new jfSelectAirport(null, true).getValue();
+        if (departureAirport != null) {
+            tfDepartureAirport.setText(departureAirport.ToString());
+        } else {
+            tfDepartureAirport.setText("No airport selected!");
+        }
     }//GEN-LAST:event_btnSelectAirportDepActionPerformed
 
     private void btnSelectAirportArrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportArrActionPerformed
         // TODO add your handling code here:
-        tfArrivalAirport.setText("Arrival Airport: ");        
+        this.arrivalAirport = new jfSelectAirport(null, true).getValue();
+        if (arrivalAirport != null) {
+            tfArrivalAirport.setText(arrivalAirport.ToString());
+        } else {
+            tfArrivalAirport.setText("No airport selected!");
+        }
     }//GEN-LAST:event_btnSelectAirportArrActionPerformed
 
     private void btnAddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightActionPerformed
         // TODO add your handling code here:
-        //atc2.acc.CreateFlight(evt, evt, evt, null, null, WIDTH);
+        int flightnumber = 0;
+        try {
+            this.arrivalDate = new GregorianCalendar(dpDateArr.getDate().getYear(),
+                    dpDateArr.getDate().getMonth(),
+                    dpDateArr.getDate().getDay(),
+                    (int) spHoursArr.getValue(),
+                    (int) spMinutesArr.getValue(),
+                    (int) spSecondsArr.getValue());
+
+            this.departureDate = new GregorianCalendar(dpDateDep.getDate().getYear(),
+                    dpDateDep.getDate().getMonth(),
+                    dpDateDep.getDate().getDay(),
+                    (int) spHoursDep.getValue(),
+                    (int) spMinutesDep.getValue(),
+                    (int) spSecondsDep.getValue());
+
+            atc2.acc.CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate, flightnumber);
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "Not all fields have been satisfied.");
+        }
     }//GEN-LAST:event_btnAddFlightActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -240,7 +345,7 @@ public class jfAddFlight extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the form */
-                java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 jfAddFlight dialog = new jfAddFlight(new javax.swing.JFrame(), true);
@@ -261,15 +366,27 @@ public class jfAddFlight extends javax.swing.JDialog {
     private javax.swing.JButton btnSelectAirplane;
     private javax.swing.JButton btnSelectAirportArr;
     private javax.swing.JButton btnSelectAirportDep;
+    private org.jdesktop.swingx.JXDatePicker dpDateArr;
+    private org.jdesktop.swingx.JXDatePicker dpDateDep;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblAirplane;
     private javax.swing.JLabel lblArrivalAirport;
-    private javax.swing.JLabel lblArrivalTime;
     private javax.swing.JLabel lblDepartureAirport;
     private javax.swing.JLabel lblDepartureTime;
+    private javax.swing.JLabel lblDepartureTime1;
+    private javax.swing.JSpinner spHoursArr;
+    private javax.swing.JSpinner spHoursDep;
+    private javax.swing.JSpinner spMinutesArr;
+    private javax.swing.JSpinner spMinutesDep;
+    private javax.swing.JSpinner spSecondsArr;
+    private javax.swing.JSpinner spSecondsDep;
     private javax.swing.JTextField tfAirplane;
     private javax.swing.JTextField tfArrivalAirport;
-    private javax.swing.JTextField tfArrivalDate;
     private javax.swing.JTextField tfDepartureAirport;
-    private javax.swing.JTextField tfDepartureDate;
     // End of variables declaration//GEN-END:variables
 }

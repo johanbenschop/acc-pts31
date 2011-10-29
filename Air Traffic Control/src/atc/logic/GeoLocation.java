@@ -42,7 +42,7 @@ public class GeoLocation {
         return LatLon.fromDegrees(Latitude, Longitude);
     }
     
-//    public Position toPosition() {
-//        //return Position.fromDegrees(Latitude, Latitude, Latitude)
-//    }
+    public Position toPosition() {
+        return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
+    }
 }
