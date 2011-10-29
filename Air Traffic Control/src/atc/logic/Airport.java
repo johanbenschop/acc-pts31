@@ -35,6 +35,13 @@ public class Airport {
         this.Timezone = Timezone;
         this.DST = DST;
     }
+    
+    public String ToString()
+    {
+        String gegevens;
+        gegevens = "AirportID: "+this.getAirportID()+" , Airport name: " +this.getAirportName()+" , City: " +this.getCity()+" , Country: "+this.getCountry();
+        return gegevens;
+    }
 
     /**
      * 
