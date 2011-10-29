@@ -10,6 +10,7 @@
  */
 package atc.gui;
 
+import atc.logic.AirplaneFactory;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 
@@ -18,7 +19,8 @@ import java.awt.event.WindowEvent;
  * @author johan
  */
 public class jfSelectAirplane extends javax.swing.JDialog {
-
+    private AirplaneFactory airplane;
+    
     /** Creates new form jfSelectAirplane */
     public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -191,6 +193,11 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnSelectActionPerformed
 
+    AirplaneFactory getValue() {
+        setVisible(true);
+        return airplane;
+    }
+    
     /**
      * @param args the command line arguments
      */

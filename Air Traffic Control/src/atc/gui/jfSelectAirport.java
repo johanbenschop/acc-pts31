@@ -10,6 +10,7 @@
  */
 package atc.gui;
 
+import atc.logic.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 
@@ -18,7 +19,9 @@ import java.awt.event.WindowEvent;
  * @author Mateusz
  */
 public class jfSelectAirport extends javax.swing.JDialog {
-
+    private Airport airport;
+            
+    
     /** Creates new form jfSearchAirport */
     public jfSelectAirport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -284,6 +287,11 @@ public class jfSelectAirport extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfSearchKeyTyped
 
+    Airport getValue() {
+        setVisible(true);
+        return airport;
+    }
+    
     /**
      * @param args the command line arguments
      */

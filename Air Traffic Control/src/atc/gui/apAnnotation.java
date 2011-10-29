@@ -15,8 +15,8 @@ public class apAnnotation extends GlobeAnnotation {
 
     public Airport airport;
 
-    public apAnnotation(Airport airport, AnnotationAttributes aa) {
-        super("", null, aa); // null should be airport.geoLocation.getLatLon() or something
+    public apAnnotation(Airport airport, AnnotationAttributes defaults) {
+        super("", airport.getLocation().toPosition(), defaults);
         this.airport = airport;
     }
 

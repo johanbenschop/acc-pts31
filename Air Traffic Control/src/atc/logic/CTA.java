@@ -117,7 +117,7 @@ public class CTA {
                 
                 GeoLocation location = new GeoLocation(longitude, latitude, altitude);
                 
-                //Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
                 } catch (NumberFormatException e) {
                     System.out.println("Corrupt data line...");
