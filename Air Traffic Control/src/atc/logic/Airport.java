@@ -14,8 +14,7 @@ public class Airport {
     private String Country;
     private String IATA_FAA;
     private String ICAO;
-    private String Latitude;
-    private String Longitude;
+    private GeoLocation location;
     private int Altitude;
     private double Timezone;
     
@@ -79,5 +78,9 @@ public class Airport {
 
     public String getDST() {
         return DST;
+    }
+    
+    public GeoLocation getLocation() {
+        return location;
     }
 }

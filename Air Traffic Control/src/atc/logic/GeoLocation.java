@@ -1,5 +1,9 @@
 package atc.logic;
 
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.LatLon;
+import gov.nasa.worldwind.geom.Position;
+
 public class GeoLocation {
 
     private double Longitude;
@@ -33,4 +37,12 @@ public class GeoLocation {
         gegevens = "Longitude: " + Longitude + " , Latitude: " + Latitude + " , Altitude" + Altitude;
         return gegevens;
     }
+    
+    public LatLon toLatLon() {
+        return LatLon.fromDegrees(Latitude, Longitude);
+    }
+    
+//    public Position toPosition() {
+//        //return Position.fromDegrees(Latitude, Latitude, Latitude)
+//    }
 }

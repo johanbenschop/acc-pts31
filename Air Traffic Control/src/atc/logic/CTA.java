@@ -102,22 +102,28 @@ public class CTA {
             Scanner lineScanner = new Scanner(line);
             lineScanner.useDelimiter(",");
             while (lineScanner.hasNext()) {
+                try {
                 int id = lineScanner.nextInt();
                 String name = lineScanner.next();
                 String city = lineScanner.next();
                 String country = lineScanner.next();
                 String iata_faa = lineScanner.next();
                 String icao = lineScanner.next();
-                double latitude = lineScanner.nextDouble();
-                double longitude = lineScanner.nextDouble();
+                double latitude = Double.parseDouble(lineScanner.next());
+                double longitude = Double.parseDouble(lineScanner.next());
                 int altitude = lineScanner.nextInt();
                 double timezone = lineScanner.nextDouble();
                 String dst = lineScanner.next();
                 
                 GeoLocation location = new GeoLocation(longitude, latitude, altitude);
                 
-                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                //Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
+                } catch (NumberFormatException e) {
+                    System.out.println("Corrupt data line...");
+                } catch (InputMismatchException e) {
+                    System.out.println("Corrupt data line...");
+                }
             }
             lineScanner.close();
         }
