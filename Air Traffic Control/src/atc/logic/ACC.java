@@ -82,7 +82,7 @@ public class ACC {
         if (direction < 360) {
             a.SetAimedDirection(direction);
         } else {
-        throw new AssignmentException("The given direction is not possible.");
+            throw new AssignmentException("The given direction is not possible.");
         }
     }
 
@@ -108,15 +108,12 @@ public class ACC {
     public void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException {
         if (flightlevel == 1) {
             a.SetAimedAltitude(300);
-        }
-        else if (flightlevel == 2) {
+        } else if (flightlevel == 2) {
             a.SetAimedAltitude(600);
-        }
-        else if (flightlevel == 3) {
+        } else if (flightlevel == 3) {
             a.SetAimedAltitude(900);
-        }
-        else {        
-        throw new AssignmentException();
+        } else {
+            throw new AssignmentException();
         }
     }
 
@@ -181,7 +178,7 @@ public class ACC {
             throw new AssignmentException("Runway is not available.");
         }
     }
-    
+
     /**
      * Method has to be called when assignmentexception is given on the
      * GiveLandingRunway method incase the runway is not unavailable.
@@ -191,9 +188,9 @@ public class ACC {
     public void CircleAirplane(Airplane a) {
         a.setStatus(Airplane.Statusses.INLANDINGQUEUE);
     }
-    
-    
-    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber){
+
+    // TODO DUCUMENTATION!!!
+    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0);
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));

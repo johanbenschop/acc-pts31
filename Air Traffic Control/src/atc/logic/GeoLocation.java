@@ -2,25 +2,25 @@ package atc.logic;
 
 public class GeoLocation {
 
-    private int Longitude;
-    private int Latitude;
-    private int Altitude;
+    private double Longitude;
+    private double Latitude;
+    private double Altitude;
 
-    public GeoLocation(int Longitude, int Latitude, int Altitude) {
+    public GeoLocation(double Longitude, double Latitude, double Altitude) {
         this.Longitude = Longitude;
         this.Latitude = Latitude;
         this.Altitude = Altitude;
     }
 
-    public int getAltitude() {
+    public double getAltitude() {
         return Altitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return Latitude;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return Longitude;
     }
 
@@ -30,7 +30,7 @@ public class GeoLocation {
      */
     public String ToString() {
         String gegevens;
-        gegevens = "Longitude: " +Longitude+" , Latitude: "+Latitude+ " , Altitude" + Altitude;
+        gegevens = "Longitude: " + Longitude + " , Latitude: " + Latitude + " , Altitude" + Altitude;
         return gegevens;
     }
 }
