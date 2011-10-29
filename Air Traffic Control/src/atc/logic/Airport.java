@@ -16,21 +16,19 @@ public class Airport {
     private String ICAO;
     private String Latitude;
     private String Longitude;
-    private String Altitude;
-    private int Timezone;
+    private int Altitude;
+    private double Timezone;
     
     //DST is a letter specifying the DST: E (Europe), A (US/Canada), S (South America), O (Australia), Z (New Zealand), N (None) or U (Unknown)
     private String DST;
 
-    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, String Latitude, String Longitude, String Altitude,  int Timezone, String DST) {
+    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, GeoLocation location, int Altitude, double Timezone, String DST) {
         this.AirportID = AirportID;
         this.AirportName = AirportName;
         this.City = City;
         this.Country = Country;
         this.IATA_FAA = ITATA_FAA;
         this.ICAO = ICAO;
-        this.Latitude = Latitude;
-        this.Longitude = Longitude;
         this.Altitude = Altitude;
         this.Timezone = Timezone;
         this.DST = DST;
@@ -75,7 +73,7 @@ public class Airport {
         return ICAO;
     }
 
-    public int getTimezone() {
+    public double getTimezone() {
         return Timezone;
     }
 

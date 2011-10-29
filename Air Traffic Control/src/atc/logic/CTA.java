@@ -11,19 +11,27 @@ public class CTA {
     private double length;
     private Airplane airplane;
     private Airport airport;
-    private List<Airplane> airplaneList;
-    private List<Airport> airportList;
-    private List<AirplaneFactory> AvailableAirplanes;
+    private ArrayList<Airplane> airplaneList;
+    private ArrayList<Airport> airportList;
+    private ArrayList<AirplaneFactory> AvailableAirplanes;
 
     public CTA(GeoLocation location, double width, double length) {
         this.location = location;
         this.width = width;
         this.length = length;
+
+        airportList = new ArrayList<>();
+
+        try {
+            loadAirportList();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
      * Returns airplane with the given airplaneNumber
-     * @return 
+     * @return
      */
     public void GetActiveAirplane(int AirplaneNumber) {
         for (Airplane a : airplaneList) {
@@ -41,17 +49,21 @@ public class CTA {
         }
     }
 
+    public ListIterator<Airport> GetAirports() {
+        return airportList.listIterator();
+    }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public void DetectAirplane() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public void Collision() {
         for (Airplane a : airplaneList) {
@@ -90,7 +102,21 @@ public class CTA {
             Scanner lineScanner = new Scanner(line);
             lineScanner.useDelimiter(",");
             while (lineScanner.hasNext()) {
-                Airport airport = new Airport(lineScanner.nextInt(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.next(), lineScanner.nextInt(), lineScanner.next());
+                int id = lineScanner.nextInt();
+                String name = lineScanner.next();
+                String city = lineScanner.next();
+                String country = lineScanner.next();
+                String iata_faa = lineScanner.next();
+                String icao = lineScanner.next();
+                double latitude = lineScanner.nextDouble();
+                double longitude = lineScanner.nextDouble();
+                int altitude = lineScanner.nextInt();
+                double timezone = lineScanner.nextDouble();
+                String dst = lineScanner.next();
+                
+                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+                
+                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
             }
             lineScanner.close();
@@ -98,7 +124,6 @@ public class CTA {
         s.close();
     }
 
-    
     //Loads available airplanes from the AvailableAirplanes.txt file
     public void loadAvailableAirplaneList() throws FileNotFoundException {
         Scanner s = new Scanner(new FileReader("AvailableAirplanes.txt"));
