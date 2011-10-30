@@ -23,6 +23,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     //private Date SecondsBeforeRunning = new Date();
     //private Date SecondsRunning = new Date();
     private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
+    private GeoLocation location;
 
     public enum Statusses {
 
@@ -222,4 +223,10 @@ public class Airplane extends AirplaneFactory implements Runnable {
     public Statusses getStatus() {
         return Status;
     }
+
+    public GeoLocation getLocation() {
+        return location;
+    }
+    
+    
 }
