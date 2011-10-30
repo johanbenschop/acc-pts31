@@ -195,4 +195,11 @@ public class ACC {
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0);
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
     }
+    
+    // READ ME! According to the class diagram the ACC does not have an direct relation to the Flightplan.
+    // However if you think that it was an wrong decision then please notify the rest of us :)....
+    
+    public ListIterator<Flightplan> getFlightplans() {
+        return fp.listIterator();
+    }
 }
