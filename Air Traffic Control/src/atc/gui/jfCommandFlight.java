@@ -54,6 +54,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         btChangeParameter.setText("Change parameter");
         btChangeParameter.setName(""); // NOI18N
+        btChangeParameter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btChangeParameterActionPerformed(evt);
+            }
+        });
 
         lblChangeSpeedTo.setText("Change Speed to: ");
 
@@ -61,14 +66,9 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         lblChangeHeightTo.setText("Change Height to: ");
 
-        txtChangeHeightTo.setText("-");
         txtChangeHeightTo.setToolTipText("");
 
-        txtChangeSpeedTo.setText("-");
-
         lblChangeDirectionTo.setText("Change Direction to: ");
-
-        txtChangeDirectionTo.setText("-");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,6 +120,23 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btChangeParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChangeParameterActionPerformed
+        if (txtChangeSpeedTo.getText() != null)
+        {
+            flightplan.getAirplane().ChangeSpeed(Integer.parseInt(txtChangeSpeedTo.getText()));
+        }
+        
+        if (txtChangeDirectionTo.getText() != null)
+        {
+            flightplan.getAirplane().ChangeDirection(Integer.parseInt(txtChangeDirectionTo.getText()));
+        }
+        
+        if (txtChangeHeightTo.getText() != null)
+        {
+            flightplan.getAirplane().ChangeAltitude(Integer.parseInt(txtChangeHeightTo.getText()));
+        }
+    }//GEN-LAST:event_btChangeParameterActionPerformed
 
     /**
      * @param args the command line arguments
