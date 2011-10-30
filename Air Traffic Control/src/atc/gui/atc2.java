@@ -13,6 +13,7 @@ import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.avlist.AVList;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.AirspaceLayer;
@@ -464,6 +465,7 @@ public final class atc2 extends atc {
             rend.setAttributes(attrs);
             rend.setVisible(true);
             rend.setValue(AVKey.DISPLAY_NAME, "Flight " + flightplan.getFlightnumber() + "");
+            rend.setHeading(Angle.fromDegrees(airplane.getDirection()));
             layer.addRenderable(rend);
         }
     }
