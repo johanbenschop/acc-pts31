@@ -10,9 +10,12 @@
  */
 package atc.gui;
 
+import java.awt.*;
+import java.awt.event.WindowEvent;
+
 /**
  *
- * @author Mateusz
+ * @author Johan & Mateusz
  */
 public class jfSelectFlight extends javax.swing.JDialog {
 
@@ -221,14 +224,18 @@ public class jfSelectFlight extends javax.swing.JDialog {
 
     private void btnSelectAirplameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplameActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnSelectAirplameActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);        
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**

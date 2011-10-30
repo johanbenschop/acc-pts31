@@ -24,7 +24,7 @@ import javax.swing.table.TableModel;
 
 /**
  *
- * @author Mateusz
+ * @author Johan & Mateusz
  */
 public class jfSelectAirport extends javax.swing.JDialog {
 

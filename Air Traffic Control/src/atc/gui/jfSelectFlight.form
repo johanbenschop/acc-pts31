@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Select Flight"/>
@@ -81,8 +81,8 @@
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="tfAirliner" pref="185" max="32767" attributes="0"/>
-                      <Component id="tfFlightnumber" alignment="0" pref="185" max="32767" attributes="0"/>
+                      <Component id="tfAirliner" pref="193" max="32767" attributes="0"/>
+                      <Component id="tfFlightnumber" alignment="0" pref="193" max="32767" attributes="0"/>
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -90,7 +90,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="tfDepartureDate" pref="176" max="32767" attributes="0"/>
+                                  <Component id="tfDepartureDate" pref="180" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -100,7 +100,7 @@
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="tfArrivalDate" alignment="1" pref="176" max="32767" attributes="0"/>
+                              <Component id="tfArrivalDate" alignment="1" pref="180" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -108,7 +108,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="tfAirplaneFlying" pref="242" max="32767" attributes="0"/>
+                                  <Component id="tfAirplaneFlying" pref="251" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnSelectAirplame" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -213,7 +213,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="561" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="565" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
