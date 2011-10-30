@@ -15,7 +15,7 @@ public class CTA {
     private ArrayList<Airport> airportList;
     private ArrayList<AirplaneFactory> AvailableAirplanes;
 
-    public CTA(GeoLocation location, double width, double length) throws IOException {
+    public CTA(GeoLocation location, double width, double length) {
         this.location = location;
         this.width = width;
         this.length = length;
@@ -24,7 +24,10 @@ public class CTA {
 
         try {
             loadAirportList();
+            loadAvailableAirplaneList();
         } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
@@ -41,12 +44,14 @@ public class CTA {
         }
     }
 
-    public void GetAirport(int AirportID) {
+    public Airport GetAirport(int AirportID) {
         for (Airport a : airportList) {
             if (a.getAirportID() == AirportID) {
                 airport = a;
+                return a;
             }
         }
+        return null;
     }
 
     public ListIterator<Airport> GetAirports() {
@@ -149,7 +154,7 @@ public class CTA {
         return airplane;
     }
 
-    public List<AirplaneFactory> getAvailableAirplanes() {
-        return AvailableAirplanes;
+    public ListIterator<AirplaneFactory> getAvailableAirplanes() {
+        return AvailableAirplanes.listIterator();
     }
 }
