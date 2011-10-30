@@ -10,16 +10,23 @@
  */
 package atc.gui;
 
+import atc.logic.Flightplan;
+
 /**
  *
  * @author Mateusz
  */
 public class jfCommandFlight extends javax.swing.JDialog {
-
+    private Flightplan flightplan;
+    
     /** Creates new form jfCommandFlight */
     public jfCommandFlight(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public void setFlightplan(Flightplan flightplan) {
+        this.flightplan = flightplan;
     }
 
     /** This method is called from within the constructor to
