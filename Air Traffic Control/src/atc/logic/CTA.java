@@ -2,7 +2,7 @@ package atc.logic;
 
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.io.FileReader;
+import java.io.*;
 
 public class CTA {
 
@@ -15,7 +15,7 @@ public class CTA {
     private ArrayList<Airport> airportList;
     private ArrayList<AirplaneFactory> AvailableAirplanes;
 
-    public CTA(GeoLocation location, double width, double length) {
+    public CTA(GeoLocation location, double width, double length) throws IOException {
         this.location = location;
         this.width = width;
         this.length = length;
@@ -95,39 +95,37 @@ public class CTA {
 
     //Loads airports from the airports.dat file
     //Todo : Deleting the "" in all strings gained from the aiport.dat file
-    public void loadAirportList() throws FileNotFoundException {
-        Scanner s = new Scanner(new FileReader("airports.dat"));
-        while (s.hasNext()) {
-            String line = s.nextLine();
-            Scanner lineScanner = new Scanner(line);
-            lineScanner.useDelimiter(",");
-            while (lineScanner.hasNext()) {
-                try {
-                int id = lineScanner.nextInt();
-                String name = lineScanner.next();
-                String city = lineScanner.next();
-                String country = lineScanner.next();
-                String iata_faa = lineScanner.next();
-                String icao = lineScanner.next();
-                double latitude = Double.parseDouble(lineScanner.next());
-                double longitude = Double.parseDouble(lineScanner.next());
-                int altitude = lineScanner.nextInt();
-                double timezone = lineScanner.nextDouble();
-                String dst = lineScanner.next();
+    public void loadAirportList() throws FileNotFoundException, IOException {
+            FileInputStream fstream = new FileInputStream("airports.dat");
+
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            String strline;
+            while((strline = br.readLine()) != null)
+            {
+             try {
+            String[] props = strline.split(",");
+                int id = Integer.parseInt(props[0]);
+                String name = props[1];
+                String city = props[2];
+                String country = props[3];
+                String iata_faa = props[4];
+                String icao = props[5];
+                double latitude = Double.parseDouble(props[6]);
+                double longitude = Double.parseDouble(props[7]);
+                int altitude = Integer.parseInt(props[8]);
+                double timezone = Double.parseDouble(props[9]);
+                String dst = props[10];
                 
                 GeoLocation location = new GeoLocation(longitude, latitude, altitude);
                 
                 Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                System.out.println(airport.getAirportID());
                 airportList.add(airport);
-                } catch (NumberFormatException e) {
+                }  catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Corrupt data line...");
-                } catch (InputMismatchException e) {
-                    System.out.println("Corrupt data line...");
-                }
-            }
-            lineScanner.close();
-        }
-        s.close();
+                }}
     }
 
     //Loads available airplanes from the AvailableAirplanes.txt file
