@@ -11,21 +11,45 @@
 package atc.gui;
 
 import atc.logic.*;
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Vector;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Mateusz
  */
 public class jfSelectAirport extends javax.swing.JDialog {
+
     private Airport airport;
-            
-    
+    private ListIterator<Airport> airports;
+    Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
+    Vector<Vector> data = new Vector<>();
+
     /** Creates new form jfSearchAirport */
     public jfSelectAirport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        airports = atc2.acc.GetCTA().GetAirports();
+
+        columnNames.addElement("Airport ID");
+        columnNames.addElement("Name");
+        columnNames.addElement("City");
+        columnNames.addElement("Country");
+        columnNames.addElement("IATA/FAA");
+        columnNames.addElement("ICAO");
+
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
+        //DefaultTableModel's setDataVector(Object[][] dataVector, Object[] columnIdentifiers) 
+
     }
 
     /** This method is called from within the constructor to
@@ -62,11 +86,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
         jPanelSearchFor.setBorder(javax.swing.BorderFactory.createTitledBorder(" Search for "));
         jPanelSearchFor.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanelSearchFor.setPreferredSize(new java.awt.Dimension(600, 150));
-        jPanelSearchFor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jPanelSearchForKeyTyped(evt);
-            }
-        });
 
         tfAirportName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -189,21 +208,33 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null},
+                {null},
+                {null}
             },
             new String [] {
-                "Airport ID", "Name", "City", "Country", "IATA/FAA", "ICAO"
+                "null"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+            Class[] types = new Class [] {
+                java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTable.setColumnSelectionAllowed(true);
+        jTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable);
+        jTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -278,20 +309,73 @@ public class jfSelectAirport extends javax.swing.JDialog {
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void jPanelSearchForKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanelSearchForKeyTyped
-        // TODO add your handling code here:
-        System.out.println("Typed!");
-    }//GEN-LAST:event_jPanelSearchForKeyTyped
-
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         // TODO add your handling code here:
+        data.clear(); // Empty the data so we can get the limited results in.
+        airports = atc2.acc.GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
+
+        while (airports.hasNext()) {
+            Airport iter = airports.next();
+
+            // Filter results bases on Airport ID
+            try {
+                if (!"".equals(tfAirportID.getText())
+                        && iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
+                    continue; // the airport in this iteration does not meet the citerea
+                }
+            } catch (NumberFormatException e) {
+                tfAirportID.setText("");
+            }
+
+            if (!"".equals(tfAirportName.getText())
+                    && !iter.getAirportName().contains(tfAirportName.getText())) {
+                continue;
+            }
+
+            if (!"".equals(tfCity.getText())
+                    && !iter.getCity().contains(tfCity.getText())) {
+                continue;
+            }
+
+            if (!"".equals(tfCountry.getText())
+                    && !iter.getCountry().contains(tfCountry.getText())) {
+                continue;
+            }
+            if (!"".equals(tfIATA_FAA.getText())
+                    && !iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
+                continue;
+            }
+            if (!"".equals(tfICAO.getText())
+                    && !iter.getICAO().contains(tfICAO.getText())) {
+                continue;
+            }
+
+            Vector<String> row = new Vector<>();
+            row.addElement(String.valueOf(iter.getAirportID()));
+            row.addElement(iter.getAirportName());
+            row.addElement(iter.getCity());
+            row.addElement(iter.getCountry());
+            row.addElement(iter.getIATA_FAA());
+            row.addElement(iter.getICAO());
+            data.addElement(row);
+        }
+
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
+        jTable.setColumnSelectionAllowed(false);
+        jTable.setRowSelectionAllowed(true);
     }//GEN-LAST:event_tfSearchKeyTyped
 
+    /**
+     * Gets the value of this dialog.
+     * @return Airport
+     */
     Airport getValue() {
         setVisible(true);
+        //airport = atc2.acc.GetCTA().get;
         return airport;
     }
-    
+
     /**
      * @param args the command line arguments
      */
