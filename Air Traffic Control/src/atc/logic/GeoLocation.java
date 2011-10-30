@@ -28,6 +28,22 @@ public class GeoLocation {
         return Longitude;
     }
 
+    
+    
+    public void setAltitude(double Altitude) {
+        this.Altitude = Altitude;
+    }
+
+    public void setLatitude(double Latitude) {
+        this.Latitude = Latitude;
+    }
+
+    public void setLongitude(double Longitude) {
+        this.Longitude = Longitude;
+    }
+    
+    
+
     /**
      * 
      * @return 
