@@ -25,6 +25,8 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
     private GeoLocation location;
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
+    private double longitudeTravelled;
+    private double latitudeTravelled;
 
     public enum Statusses {
 
@@ -85,6 +87,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
         ChangeSpeed();
         ChangeDirection();
         ChangeAltitude();
+        ChangeGeoLocation();
     }
 
     /**
@@ -118,8 +121,12 @@ public class Airplane extends AirplaneFactory implements Runnable {
     
     public void ChangeGeoLocation()
     {
+        //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
        distanceTravelled = (this.Speed / 36000);
-       
+       longitudeTravelled = distanceTravelled * Math.sin(Direction);
+       latitudeTravelled = distanceTravelled * Math.cos(Direction);
+       location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
     }
     
     
