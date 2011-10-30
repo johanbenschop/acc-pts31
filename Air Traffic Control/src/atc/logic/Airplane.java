@@ -24,6 +24,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     //private Date SecondsRunning = new Date();
     private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
     private GeoLocation location;
+    private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
 
     public enum Statusses {
 
@@ -70,7 +71,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
         try {
             Fly();
-            Thread.sleep(100);// er word telkens één seconde gewacht.
+            Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
         } catch (InterruptedException ex) {
             Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -106,12 +107,22 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * @param speed : The speed in km/h
      */
     void TakeOff(Runway r, double direction, double altitude, double speed) {
+        location.setAltitude(r.getAltitude());
+        location.setLatitude(r.getLatitude());
+        location.setLongitude(r.getLongitude());
         this.Status = Statusses.TAKINGOFF;
         SetAimedDirection(direction);
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-
+    
+    public void ChangeGeoLocation()
+    {
+       distanceTravelled = (this.Speed / 36000);
+       
+    }
+    
+    
     /**
      * The speed at the takeoff will change with 6,67 km/h every second.
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
