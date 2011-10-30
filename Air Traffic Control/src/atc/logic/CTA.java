@@ -110,7 +110,7 @@ public class CTA {
             while((strline = br.readLine()) != null)
             {
              try {
-            String[] props = strline.split(",");
+            String[] props = strline.split("|");
                 int id = Integer.parseInt(props[0]);
                 String name = props[1];
                 String city = props[2];
@@ -126,7 +126,7 @@ public class CTA {
                 GeoLocation location = new GeoLocation(longitude, latitude, altitude);
                 
                 Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
-                System.out.println(airport.getAirportID());
+                
                 airportList.add(airport);
                 }  catch (NumberFormatException | InputMismatchException e) {
                     System.out.println("Corrupt data line...");
@@ -134,21 +134,36 @@ public class CTA {
     }
 
     //Loads available airplanes from the AvailableAirplanes.txt file
-    public void loadAvailableAirplaneList() throws FileNotFoundException {
-        Scanner s = new Scanner(new FileReader("AvailableAirplanes.txt"));
-        while (s.hasNext()) {
-            String line = s.nextLine();
-            Scanner lineScanner = new Scanner(line);
-            lineScanner.useDelimiter("|");
-            while (lineScanner.hasNext()) {
-                AirplaneFactory airplaneFactory = new AirplaneFactory(lineScanner.nextInt(), lineScanner.nextInt(), lineScanner.nextInt(), lineScanner.next(), lineScanner.next(), lineScanner.nextInt(), lineScanner.nextInt(), lineScanner.nextInt(), lineScanner.nextInt(), lineScanner.nextInt());
+    public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
+            FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.txt");
+
+            DataInputStream in2 = new DataInputStream(fstream2);
+            BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+
+            String strline;
+            while((strline = br2.readLine()) != null)
+            {
+             try {
+            String[] props2 = strline.split(",");
+
+                int MaxSpeed = Integer.parseInt(props2[0]);
+                int MinSpeed = Integer.parseInt(props2[1]);
+                int Weight = Integer.parseInt(props2[2]);
+                String Type = props2[3];
+                String Manufacturer = props2[4];
+                int PlaneHeight = Integer.parseInt(props2[5]);
+                int PlanWidth = Integer.parseInt(props2[6]);
+                int PlaneLength = Integer.parseInt(props2[7]);
+                int MaxFuel = Integer.parseInt(props2[8]);
+                int FuelUsage = Integer.parseInt(props2[9]);
+  
+                AirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
+                System.out.println(airplaneFactory.getType());
                 AvailableAirplanes.add(airplaneFactory);
-            }
-            lineScanner.close();
-        }
-        s.close();
+  }  catch (NumberFormatException | InputMismatchException e) {
+                    System.out.println("Corrupt data line...");
+                }}
     }
-    //Getters
 
     public Airplane getCurrentSelectedAirplane() {
         return airplane;
