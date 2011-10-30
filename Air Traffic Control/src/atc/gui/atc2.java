@@ -3,9 +3,12 @@ package atc.gui;
 import SysBar.UnityBar;
 import SysBar.UnityItem;
 import atc.logic.ACC;
+import atc.logic.Airplane;
 import atc.logic.Airport;
 import atc.logic.CTA;
+import atc.logic.Flightplan;
 import gov.nasa.worldwind.View;
+import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.avlist.AVList;
 import gov.nasa.worldwind.event.SelectEvent;
@@ -17,10 +20,13 @@ import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
 import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.AnnotationAttributes;
+import gov.nasa.worldwind.render.BasicShapeAttributes;
+import gov.nasa.worldwind.render.Box;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.Renderable;
+import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.airspaces.Airspace;
 import gov.nasa.worldwind.render.airspaces.Polygon;
 import gov.nasa.worldwind.util.WWUtil;
@@ -54,6 +60,7 @@ public final class atc2 extends atc {
         private apAnnotation mouseEq, latestEq;
         protected AirspaceLayer airspaceLayer;
         protected RenderableLayer airportLayer;
+        protected RenderableLayer airplaneLayer;
         private GlobeAnnotation tooltipAnnotation;
 
         public AppFrame() {
@@ -62,7 +69,9 @@ public final class atc2 extends atc {
             final UnityBar menuBar = new UnityBar();
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
 
-            // Testing items, to be removed or to be subsituted!
+            final View view = this.getWwd().getView();
+
+            // The menu items
             final UnityItem uiSettings = menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/settings.png", UnityBar.Type.NORMAL));
             uiSettings.addActionListener(
                     new java.awt.event.ActionListener() {
@@ -106,8 +115,16 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    new jfSelectAirport(null, true).setVisible(true);
-
+                                    Airport goToAirport = new jfSelectAirport(null, true).getValue();
+                                    
+                                    // Use a PanToIterator to iterate view to target position
+                                    if (view != null && goToAirport != null) {
+                                        Position targetPos = goToAirport.getLocation().toPosition();
+                                        // The elevation component of 'targetPos' here is not the surface elevation,
+                                        // so we ignore it when specifying the view center position.
+                                        view.goTo(new Position(targetPos, 0),
+                                                targetPos.getElevation() + 20000); // 1000 = 100 meter
+                                    }
                                     uiGoToAirport.setActive(false);
                                 }
                             });
@@ -206,7 +223,7 @@ public final class atc2 extends atc {
                     });
 
 
-            final View view = this.getWwd().getView();
+
             menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                     new java.awt.event.ActionListener() {
 
@@ -253,6 +270,7 @@ public final class atc2 extends atc {
             // Add the airport & airspace layers
             buildAirportLayer();
             buildAirspaceLayer();
+            buildAirplaneLayer();
 
             // Add the graticule layer
             LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
@@ -266,7 +284,7 @@ public final class atc2 extends atc {
         public LayerPanel getLayerPanel() {
             return this.layerPanel;
         }
-        
+
         /**
          * Build the airspace layer.
          * TODO build the airspace according to the CTA and not directly as done.
@@ -277,7 +295,7 @@ public final class atc2 extends atc {
             this.airspaceLayer.setName("Airspaces");
             this.airspaceLayer.setEnableBatchPicking(false);
             insertBeforePlacenames(this.getWwd(), this.airspaceLayer);
-            
+
             Polygon poly = new Polygon();
 
             poly.setLocations(Arrays.asList(
@@ -291,7 +309,7 @@ public final class atc2 extends atc {
             this.setupDefaultMaterial(poly, Color.RED);
             airspaceLayer.addAirspace(poly);
         }
-        
+
         /**
          * Sets up default material.
          * @param a Airspace
@@ -314,7 +332,7 @@ public final class atc2 extends atc {
             this.airportLayer = new RenderableLayer();
             this.airportLayer.setName("Airports");
             insertBeforePlacenames(this.getWwd(), this.airportLayer);
-            
+
             // Init tooltip annotation
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
             Font font = Font.decode("Arial-Plain-16");
@@ -331,7 +349,7 @@ public final class atc2 extends atc {
 
                 public void selected(SelectEvent event) {
                     if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
-                        highlight(event.getTopObject());
+                        highlightAirport(event.getTopObject());
                     }
                 }
             });
@@ -339,11 +357,11 @@ public final class atc2 extends atc {
             // Add click-and-go select listener for airports
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), apAnnotation.class, 20000));
-            
+
             ListIterator<Airport> litr = acc.GetCTA().GetAirports();
 
             while (litr.hasNext()) {
-                addAirport(airportLayer, litr.next());
+                addAirportToLayer(airportLayer, litr.next());
             }
         }
         private AnnotationAttributes apAttributes;
@@ -353,7 +371,7 @@ public final class atc2 extends atc {
          * @param layer Airport Layer
          * @param airport Airport
          */
-        private void addAirport(RenderableLayer layer, Airport airport) {
+        private void addAirportToLayer(RenderableLayer layer, Airport airport) {
             if (apAttributes == null) {
                 // Init default attributes for all eq
                 apAttributes = new AnnotationAttributes();
@@ -373,12 +391,12 @@ public final class atc2 extends atc {
 
             layer.addRenderable(ea);
         }
-        
+
         /** 
          * Shows the annotation of an airport when param o is indeed a apAnnotation.
          * @param o Object under the mouse
          */
-        private void highlight(Object o) {
+        private void highlightAirport(Object o) {
             if (this.mouseEq == o) {
                 return; // same thing selected
             }
@@ -391,11 +409,62 @@ public final class atc2 extends atc {
             if (o != null && o instanceof apAnnotation) {
                 this.mouseEq = (apAnnotation) o;
                 this.mouseEq.getAttributes().setHighlighted(true);
-                this.tooltipAnnotation.setText("<p><b>" + this.mouseEq.airport.getAirportName() + "</b></p>" + "<br />" + this.mouseEq.airport.ToString());
+                this.tooltipAnnotation.setText("<p><b>" + this.mouseEq.airport.getAirportName() + "</b> ("
+                        + this.mouseEq.airport.getAirportID() + ") </p>"
+                        + "City = " + this.mouseEq.airport.getCity() + "<br>"
+                        + "Country = " + this.mouseEq.airport.getCountry() + "<br>"
+                        + "IATA/FAA = " + this.mouseEq.airport.getIATA_FAA() + "<br>"
+                        + "ICAO = " + this.mouseEq.airport.getICAO() + "<br>"
+                        + "Timezone = " + this.mouseEq.airport.getTimezone() + "<br>");
                 this.tooltipAnnotation.setPosition(this.mouseEq.airport.getLocation().toPosition());
                 this.tooltipAnnotation.getAttributes().setVisible(true);
                 this.getWwd().repaint();
             }
+        }
+
+        /**
+         * Build the layer with all of the airplanes.
+         */
+        private void buildAirplaneLayer() {
+            // Add the airplane layer
+            this.airplaneLayer = new RenderableLayer();
+            this.airplaneLayer.setName("Airplanes");
+            insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
+
+            // Add click-and-go select listener for airplanes
+            this.getWwd().addSelectListener(new ClickAndGoSelectListener(
+                    this.getWwd(), airplaneRendereble.class, 500)); // last value is height
+
+            ListIterator<Flightplan> litr = acc.getFlightplans();
+
+            while (litr.hasNext()) {
+                addAirplaneToLayer(airplaneLayer, litr.next());
+            }
+        }
+
+        /**
+         * Adds an airplane to the airplane layer.
+         */
+        private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
+            Airplane airplane = flightplan.getAirplane();
+
+            // Create and set an attribute bundle.
+            ShapeAttributes attrs = new BasicShapeAttributes();
+            attrs.setInteriorMaterial(Material.GREEN);
+            attrs.setInteriorOpacity(1);
+            attrs.setEnableLighting(true);
+            attrs.setOutlineMaterial(Material.RED);
+            attrs.setOutlineWidth(2d);
+            attrs.setDrawInterior(true);
+            attrs.setDrawOutline(false);
+
+            // We create our airplane renderables
+            airplaneRendereble rend = new airplaneRendereble(airplane);
+            rend.setAltitudeMode(WorldWind.ABSOLUTE);
+            rend.setAttributes(attrs);
+            rend.setVisible(true);
+            rend.setValue(AVKey.DISPLAY_NAME, "Flight " + flightplan.getFlightnumber() + "");
+            layer.addRenderable(rend);
         }
     }
 

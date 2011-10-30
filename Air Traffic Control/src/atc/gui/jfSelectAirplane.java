@@ -13,6 +13,11 @@ package atc.gui;
 import atc.logic.AirplaneFactory;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -20,11 +25,27 @@ import java.awt.event.WindowEvent;
  */
 public class jfSelectAirplane extends javax.swing.JDialog {
     private AirplaneFactory airplane;
+    private ListIterator<AirplaneFactory> airplanes;
+    private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
+    private Vector<Vector> data = new Vector<>();
+    private boolean closed;
+    private ArrayList<AirplaneFactory> retAirplanes;
     
     /** Creates new form jfSelectAirplane */
     public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        airplanes = atc2.acc.GetCTA().getAvailableAirplanes();
+        retAirplanes = new ArrayList<>();
+        columnNames.addElement("Type");
+        columnNames.addElement("Manafactuer");
+        columnNames.addElement("Max Speed");
+        columnNames.addElement("Weight");
+        columnNames.addElement("Airliner"); // WDAL = Wold Dominating AirLiner :p
+
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
     }
 
     /** This method is called from within the constructor to
@@ -40,7 +61,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         btnSelect = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         tfType = new javax.swing.JTextField();
@@ -68,7 +89,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(" Search results (0 airplanes found) "));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -84,7 +105,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -92,7 +113,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -109,6 +130,24 @@ public class jfSelectAirplane extends javax.swing.JDialog {
 
         jLabel1.setText("Type");
 
+        tfType.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfTypeKeyPressed(evt);
+            }
+        });
+
+        tfAirliner.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfTypeKeyPressed(evt);
+            }
+        });
+
+        tfManafacturer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfTypeKeyPressed(evt);
+            }
+        });
+
         jLabel2.setText("Manafacturer");
 
         jLabel3.setText("Airliner");
@@ -120,12 +159,12 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -159,7 +198,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -184,18 +223,63 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        closed = true;
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        // TODO add your handling code here:
-        
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
 
-    AirplaneFactory getValue() {
+    private void tfTypeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyPressed
+        data.clear(); // Empty the data so we can get the limited results in.
+        airplanes = atc2.acc.GetCTA().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+        retAirplanes.clear();
+        while (airplanes.hasNext()) {
+            AirplaneFactory iter = airplanes.next();
+            
+            if (!"".equals(tfType.getText())
+                    && !iter.getType().contains(tfType.getText())) {
+                continue;
+            }
+            
+            if (!"".equals(tfManafacturer.getText())
+                    && !iter.getManufacturer().contains(tfManafacturer.getText())) {
+                continue;
+            }
+            
+            // We don't have the airliner stuff implemented yet so we can't actually searh it.
+//            if (tfAirliner.getText() != ""
+//                    && !iter.getAirliner().contains(tfAirliner.getText())) {
+//                continue;
+//            }
+            
+            Vector<String> row = new Vector<>();
+            row.addElement(iter.getType());
+            row.addElement(iter.getManufacturer());
+            row.addElement(String.valueOf(iter.getMaxSpeed()));
+            row.addElement(String.valueOf(iter.getWeight()));
+            row.addElement("WDAL");
+            data.addElement(row);
+            retAirplanes.add(iter);
+        }
+        
+    }//GEN-LAST:event_tfTypeKeyPressed
+
+    /**
+     * Get the return value of this dialog.
+     * @return AirplaneFactory
+     */
+    public AirplaneFactory getValue() {
         setVisible(true);
-        return airplane;
+        if (!closed) {
+            int id = jTable.getSelectedRow();
+            airplane = retAirplanes.get(id);
+            return airplane;
+        }
+        return null;
     }
     
     /**
@@ -250,7 +334,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField tfAirliner;
     private javax.swing.JTextField tfManafacturer;
     private javax.swing.JTextField tfType;
