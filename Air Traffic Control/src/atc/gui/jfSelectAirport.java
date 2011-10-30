@@ -30,8 +30,9 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private Airport airport;
     private ListIterator<Airport> airports;
-    Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
-    Vector<Vector> data = new Vector<>();
+    private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
+    private Vector<Vector> data = new Vector<>();
+    private boolean closed;
 
     /** Creates new form jfSearchAirport */
     public jfSelectAirport(java.awt.Frame parent, boolean modal) {
@@ -301,10 +302,13 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         // TODO add your handling code here:
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
+        closed = true;
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -372,8 +376,12 @@ public class jfSelectAirport extends javax.swing.JDialog {
      */
     Airport getValue() {
         setVisible(true);
-        //airport = atc2.acc.GetCTA().get;
-        return airport;
+        if (!closed) {
+            int id = Integer.parseInt((String) data.get(jTable.getSelectedRow()).get(0));
+            airport = atc2.acc.GetCTA().GetAirport(id);
+            return airport;
+        }
+        return null;
     }
 
     /**
