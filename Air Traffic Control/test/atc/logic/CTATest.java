@@ -99,7 +99,7 @@ public class CTATest {
         fail("The test case is a prototype.");
     }
  
-    /** //Geen idee hoe dit moet
+    /** 
      * Test of addAirplane method, of class CTA.
      */
     @Test
@@ -125,8 +125,8 @@ public class CTATest {
     @Test
     public void testDeleteAirplane() {
         System.out.println("deleteAirplane");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        cta.deleteAirplane(airplane.getAirplaneNumber());
+        Assert.assertEquals("Airport has been added.", false, cta.getAirportList().contains(airport));
     }
     
     /**
