@@ -43,8 +43,8 @@ public class ACCTest {
         loc = new GeoLocation(1,1,1);
         cta = new CTA(loc, 1,1);
         acc = new ACC(1, cta);
-        apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100);
-        apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100);
+        apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100, 650);
+        apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100, 651);
         ra = new Runway(1,1,50, 300, 180, true);
         ru = new Runway(1,1,50,300, 270, false);
     }
