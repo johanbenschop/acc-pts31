@@ -25,11 +25,11 @@ public class airplaneRendereble extends Box {
     
 
     public airplaneRendereble(Flightplan flightplan) {
-//        super(flightplan.getAirplane().getLocation().toPosition(),
-//                flightplan.getAirplane().getPlaneLength(),
-//                flightplan.getAirplane().getPlaneHeight(),
-//                flightplan.getAirplane().getPlaneWidth());
-        super(flightplan.getAirplane().getLocation().toPosition(), 50000, 50000, 50000);
+        super(flightplan.getAirplane().getLocation().toPosition(),
+                flightplan.getAirplane().getPlaneLength(),
+                flightplan.getAirplane().getPlaneHeight(),
+                flightplan.getAirplane().getPlaneWidth());
+        //super(flightplan.getAirplane().getLocation().toPosition(), 50000, 50000, 50000);
         this.flightplan = flightplan;
         this.airplane = flightplan.getAirplane();
         
