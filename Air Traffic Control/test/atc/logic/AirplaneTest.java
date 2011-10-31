@@ -20,7 +20,7 @@ import junit.framework.Assert;
  */
 public class AirplaneTest {
     
-    private GeoLocation location;
+    private GeoLocation location, location2;
     private Airplane airplane;
     private Runway runway;
     
@@ -38,7 +38,8 @@ public class AirplaneTest {
     @Before
     public void setUp() {
         //een vliegtuig met speed, direction en altitude 0;
-        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, 0, 299, 0, 012345);
+        location2 = new GeoLocation(2,2,2);
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, Double.parseDouble("0"), 100, Double.parseDouble("0"), location, location2, 1);
         location = new GeoLocation(10, 10, 10);
         runway = new Runway(1,1,50,300, 270, false);
     }

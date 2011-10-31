@@ -205,7 +205,6 @@ public class CTA {
     }
 
     //Loads airports from the airports.dat file
-    //Todo : Deleting the "" in all strings gained from the aiport.dat file
     public void loadAirportList() throws FileNotFoundException, IOException {
         FileInputStream fstream = new FileInputStream("airports.dat");
 
