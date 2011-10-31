@@ -171,4 +171,9 @@ public class CTA {
     public ListIterator<Airport> GetAirports() {
         return airportList.listIterator();
     }
+    
+    public Airport getAirport()
+    {
+        return airport;
+    }
 }
