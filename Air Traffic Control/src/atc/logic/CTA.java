@@ -69,16 +69,65 @@ public class CTA {
      * @return
      */
     public void Collision() {
-        for (Airplane a : airplaneList) {
-            //int xposa = a.xpos;
-            //if(a.Status == INFLIGHT || a.Status == CRASHING)
-            //{
-            //a.posx + 300;
-            //  for (Airplane b : airplaneList) {
-            //      if(a.posx == b.posx){
-            //      set a.status = CRASHED;
-            //  }
-            //}
+        double lat1 = 0, lat2 = 0, lat3 = 0, lon1 = 0, lon2 = 0, lon3 = 0, bearing1 = 0, bearing2 = 0, bearing13 = 0, bearing12 = 0, bearing21 = 0, bearing23 = 0;
+        double dLat = 0, dLon = 0, dLon13 = 0, bearingA =0, bearingB = 0, dist12 = 0, dist13 = 0, alpha1 = 0, alpha2 = 0, alpha3 = 0, distance1 = 0, distance2 = 0, tijd1 = 0, tijd2 = 0;
+        
+        if (airplaneList.size() > 1) {
+            for (Airplane target : airplaneList) {
+                if (target.getStatus().equals(Airplane.Statusses.INFLIGHT)) {
+                    lat1 = Math.toRadians(target.getLocation().getLatitude());
+                    lon1 = Math.toRadians(target.getLocation().getLongitude());
+                    bearing1 = Math.toRadians(target.getDirection());
+                    for (Airplane crashobject : airplaneList) {
+                        if (crashobject.getStatus().equals(Airplane.Statusses.INFLIGHT)) {
+                            if (crashobject != target && crashobject.getAltitude() == target.getAltitude()) {
+                                lat2 = Math.toRadians(crashobject.getLocation().getLatitude());
+                                lon2 = Math.toRadians(crashobject.getLocation().getLongitude());
+                                bearing2 = Math.toRadians(crashobject.getDirection());
+                                
+                                bearing13 = bearing1;
+                                
+                                bearing23 = bearing2;
+                                
+                                dLat = lat2 - lat1;
+                                dLon = lon2 - lon1;
+                                dist12 = 2 * Math.asin(Math.sqrt(Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon /2)));
+                                bearingA = Math.acos((Math.sin(lat2) - Math.sin(lat1) * Math.cos(dist12))
+                                        / (Math.sin(dist12) * Math.cos(lat1)));
+                                bearingB = Math.acos((Math.sin(lat1) - Math.sin(lat2) * Math.cos(dist12))
+                                        / (Math.sin(dist12) * Math.cos(lat2)));
+                                
+                                if (Math.sin(lon2 - lon1) > 0) {
+                                    bearing12 = bearingA;
+                                    bearing21 = 2 * Math.PI - bearingB;
+                                } else {
+                                    bearing12 = 2 * Math.PI - bearingA;
+                                    bearing21 = bearingB;
+                                }
+                                
+                                alpha1 = (bearing13 - bearing12 + Math.PI) % (2 * Math.PI) - Math.PI;
+                                alpha2 = (bearing21 - bearing23 + Math.PI) % (2 * Math.PI) - Math.PI;
+                                if (Math.sin(alpha1) == 0 && Math.sin(alpha2) == 0) {
+                                    
+                                }
+                                
+                                alpha3 = Math.acos(-Math.cos(alpha1) * Math.cos(alpha2)
+                                        + Math.sin(alpha1) * Math.sin(alpha2) * Math.cos(dist12));
+                                dist13 = Math.atan2(Math.sin(dist12) * Math.sin(alpha1) * Math.sin(alpha2),
+                                        Math.cos(alpha2) + Math.cos(alpha1) * Math.cos(alpha3));
+                                lat3 = Math.asin(Math.sin(lat1) * Math.cos(dist13)
+                                        + Math.cos(lat1) * Math.sin(dist13) * Math.cos(bearing13));
+                                dLon13 = Math.atan2(Math.sin(bearing13) * Math.sin(dist13) * Math.cos(lat1),
+                                        Math.cos(dist13) - Math.sin(lat1) * Math.sin(lat3));
+                                lon3 = lon1 + dLon13;
+                                lon3 = (lon3 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+                                
+                                
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

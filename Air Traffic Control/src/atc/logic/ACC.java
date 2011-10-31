@@ -170,11 +170,11 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      */
     public void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException {
         if (flightlevel == 1) {
-            a.SetAimedAltitude(300);
+            a.SetAimedAltitude(1000);
         } else if (flightlevel == 2) {
-            a.SetAimedAltitude(600);
+            a.SetAimedAltitude(2000);
         } else if (flightlevel == 3) {
-            a.SetAimedAltitude(900);
+            a.SetAimedAltitude(3000);
         } else {
             throw new AssignmentException();
         }
