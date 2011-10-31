@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
  */
 public class RunwayTest {
     
+    private Runway runway;
+    
     public RunwayTest() {
     }
 
@@ -27,7 +29,9 @@ public class RunwayTest {
     
     @Before
     public void setUp() {
-        Runway runway = new Runway(longitude, latitude, altitude, length, direction, availability);
+        int longitude = 1, latitude = 1, altitude = 1, length = 30, direction = 2;
+        boolean availability = false;
+        runway = new Runway(longitude, latitude, altitude, length, direction, availability);
     }
     
     @After
@@ -40,8 +44,6 @@ public class RunwayTest {
     @Test
     public void testChangeAvailability() throws InterruptedException {
         System.out.println("ChangeAvailability");
-        int longitude = 1, latitude = 1, altitude = 1, length = 30, direction = 2;
-        boolean availability = false;
         runway.ChangeAvailability(false);
         Assert.assertEquals("Availability has changed to false", false, runway.getAvailability());
         runway.ChangeAvailability(true);
