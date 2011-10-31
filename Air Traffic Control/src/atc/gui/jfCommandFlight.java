@@ -14,7 +14,7 @@ import atc.logic.Flightplan;
 
 /**
  *
- * @author Mateusz
+ * @author Johan & Mateusz
  */
 public class jfCommandFlight extends javax.swing.JDialog {
     private Flightplan flightplan;
