@@ -27,6 +27,7 @@ public class RunwayTest {
     
     @Before
     public void setUp() {
+        Runway runway = new Runway(longitude, latitude, altitude, length, direction, availability);
     }
     
     @After
@@ -41,11 +42,10 @@ public class RunwayTest {
         System.out.println("ChangeAvailability");
         int longitude = 1, latitude = 1, altitude = 1, length = 30, direction = 2;
         boolean availability = false;
-        Runway instance = new Runway(longitude, latitude, altitude, length, direction, availability);
-        instance.ChangeAvailability(false);
-        Assert.assertEquals("Availability has changed to false", false, instance.getAvailability());
-        instance.ChangeAvailability(true);
+        runway.ChangeAvailability(false);
+        Assert.assertEquals("Availability has changed to false", false, runway.getAvailability());
+        runway.ChangeAvailability(true);
         Thread.sleep(180001);
-        Assert.assertEquals("Availability has changed to true", true, instance.getAvailability());
+        Assert.assertEquals("Availability has changed to true", true, runway.getAvailability());
    }
 }
