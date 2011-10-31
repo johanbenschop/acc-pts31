@@ -126,6 +126,10 @@ public class Airplane extends AirplaneFactory implements Runnable {
         SetAimedSpeed(speed);
     }
     
+    
+    /**
+     * Change the longitude and lattitude based on the distance travelled.
+     */
     public void ChangeGeoLocation()
     {
         //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
