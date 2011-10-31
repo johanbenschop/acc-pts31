@@ -4,6 +4,8 @@
  */
 package atc.logic;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -21,6 +23,8 @@ public class CTATest {
     private CTA cta;
     private GeoLocation geoLocation;
     private Airplane airplane;
+    private AirplaneFactory airplaneFactory;
+    private Airport airport;
     
     public CTATest() {
     }
@@ -130,10 +134,11 @@ public class CTATest {
      * Test of loadAirportList method, of class CTA.
      */
     @Test
-    public void testloadAirportList() {
+    public void testloadAirportList() throws FileNotFoundException, IOException {
         System.out.println("loadAirportList");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        cta.loadAirportList();
+        airport = cta.GetAirport(1);
+        assertEquals("This objects number should be number 1", airport.getAirportID(), 1);
     }
     
     /**
