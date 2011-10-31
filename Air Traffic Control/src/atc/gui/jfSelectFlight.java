@@ -290,32 +290,32 @@ public class jfSelectFlight extends javax.swing.JDialog {
             Flightplan iter = flightplans.next();
             bufFlightplans.add(iter);
 
-            try {
-                if (tfFlightnumber.getText() != ""
-                        && iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
-                    continue;
-                }
-            } catch (NumberFormatException e) {
-                tfFlightnumber.setText("");
-            }
-            
-            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
-                    tfDepartureDate.getDate().getMonth(),
-                    tfDepartureDate.getDate().getDay());
-            if (tfDepartureDate.getDate() != null && cal != iter.getDepartureDate()) {
-                continue;
-            }
-            
-            cal = new GregorianCalendar(tfArrivalDate.getDate().getYear(),
-                    tfArrivalDate.getDate().getMonth(),
-                    tfArrivalDate.getDate().getDay());
-            if (tfArrivalDate.getDate() != null && cal != iter.getArrivalDate()) {
-                continue;
-            }
-            
-            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
-                continue;
-            }
+//            try {
+//                if (tfFlightnumber.getText() != ""
+//                        && iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+//                    continue;
+//                }
+//            } catch (NumberFormatException e) {
+//                tfFlightnumber.setText("");
+//            }
+//            
+//            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
+//                    tfDepartureDate.getDate().getMonth(),
+//                    tfDepartureDate.getDate().getDay());
+//            if (tfDepartureDate.getDate() != null && cal != iter.getDepartureDate()) {
+//                continue;
+//            }
+//            
+//            cal = new GregorianCalendar(tfArrivalDate.getDate().getYear(),
+//                    tfArrivalDate.getDate().getMonth(),
+//                    tfArrivalDate.getDate().getDay());
+//            if (tfArrivalDate.getDate() != null && cal != iter.getArrivalDate()) {
+//                continue;
+//            }
+//            
+//            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
+//                continue;
+//            }
             
             Vector<String> row = new Vector<>();
             row.addElement(String.valueOf(iter.getFlightnumber()));
@@ -326,8 +326,9 @@ public class jfSelectFlight extends javax.swing.JDialog {
             data.addElement(row);
             
         }
-
-       
+        
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);       
     }//GEN-LAST:event_tfDepartureDateKeyTyped
 
     public Flightplan getValue() {

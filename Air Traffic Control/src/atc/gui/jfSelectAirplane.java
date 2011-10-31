@@ -264,6 +264,9 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             row.addElement("WDAL");
             data.addElement(row);
             retAirplanes.add(iter);
+            
+            TableModel model = new DefaultTableModel(data, columnNames);
+            jTable.setModel(model);
         }
         
     }//GEN-LAST:event_tfTypeKeyPressed
