@@ -145,19 +145,4 @@ public class AirplaneTest {
         Assert.assertEquals("Status should have changed", Airplane.Statusses.LANDING , airplane.getStatus());
         System.out.println("1e voltooid");
     }
-    
-    
-    
-     /**
-     * Test of TakeOff method, of class Airplane.
-     */
-    /*
-    @Test
-    public void testTakeOff() {
-        System.out.println("TakeOff");
-        airplane.setStatus(Statusses.STANDINGONAIRPORT);
-        airplane.TakeOff(runway, 50, 50, 50);
-        Assert.assertEquals("Status should have changed", Airplane.Statusses.TAKINGOFF , airplane.getStatus());
-        System.out.println("1e voltooid");
-    }*/
 }
