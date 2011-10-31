@@ -1,6 +1,7 @@
 package atc.logic;
 
 import java.util.*;
+import java.io.*;
 
 /**
  * 
@@ -13,6 +14,8 @@ public class ACC {
     private CTA cta;
     private ArrayList<Flightplan> fp;
     private int flightnumber = 1;
+    private ArrayList<AirplaneFactory> airplaneFactoryList;
+    private AirplaneFactory airplaneFactory;
 
     /***************Constructor**********/
     /** 
@@ -26,6 +29,15 @@ public class ACC {
         this.ID = ID;
         cta = CTA;
         fp = new ArrayList<Flightplan>();
+        airplaneFactoryList = new ArrayList<>();
+        try {
+            loadAvailableAirplaneList();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     /**************Methods**************/
@@ -36,29 +48,75 @@ public class ACC {
     public CTA GetCTA() {
         return cta;
     }
-    
+
     public ArrayList<Flightplan> getfp() {
         return fp;
     }
 
-    /**
-     * Method to change the speed of the airplane. First its set to the Aimed
-     * speed of the airplane so it can take its needed time to get to this speed
-     * and doesnt suddenly change from 100 to 300 without taking time to do so.
-     * 
-     * @param speed is the desired new speed for the airplane.
-     * 
-     * @param a is the Airplane of wich you want to change the speed.
-     * 
-     * Question: Do we want to handle the not allowed assignements thru an exception
-     * or do we want to return false as ive done now. If we do it thru an exception,
-     * do we want to make one ourselves or is there an exception in java wich we
-     * can use.
-     * 
-     * @return true is returned when the speed has succesfully been change.
-     * @return false is returned if the speed was above the planes maximum speed.
-     */
-    public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
+    public AirplaneFactory GetAirplaneFactory(String Type) {
+        for (AirplaneFactory a : airplaneFactoryList) {
+            if (a.getType() == Type) {
+                airplaneFactory = a;
+                return a;
+            }
+        }
+        return null;
+    }
+    public ListIterator<AirplaneFactory> getAvailableAirplanes() {
+        return airplaneFactoryList.listIterator();
+    }
+    //Loads available airplanes into a list
+
+    public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
+        FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
+
+        DataInputStream in2 = new DataInputStream(fstream2);
+        BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+
+        String strline2;
+        while ((strline2 = br2.readLine()) != null) {
+            try {
+                String[] props2 = strline2.split(",");
+
+                int MaxSpeed = Integer.parseInt(props2[0]);
+                int MinSpeed = Integer.parseInt(props2[1]);
+                int Weight = Integer.parseInt(props2[2]);
+                String Type = props2[3];
+                String Manufacturer = props2[4];
+                int PlaneHeight = Integer.parseInt(props2[5]);
+                int PlanWidth = Integer.parseInt(props2[6]);
+                int PlaneLength = Integer.parseInt(props2[7]);
+                int MaxFuel = Integer.parseInt(props2[8]);
+                int FuelUsage = Integer.parseInt(props2[9]);
+
+                AirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
+                System.out.println(airplaneFactory.getType());
+
+                airplaneFactoryList.add(airplaneFactory);
+            } catch (NumberFormatException | InputMismatchException e) {
+                System.out.println("Corrupt data line...");
+            }
+        }
+    }
+
+/**
+ * Method to change the speed of the airplane. First its set to the Aimed
+ * speed of the airplane so it can take its needed time to get to this speed
+ * and doesnt suddenly change from 100 to 300 without taking time to do so.
+ * 
+ * @param speed is the desired new speed for the airplane.
+ * 
+ * @param a is the Airplane of wich you want to change the speed.
+ * 
+ * Question: Do we want to handle the not allowed assignements thru an exception
+ * or do we want to return false as ive done now. If we do it thru an exception,
+ * do we want to make one ourselves or is there an exception in java wich we
+ * can use.
+ * 
+ * @return true is returned when the speed has succesfully been change.
+ * @return false is returned if the speed was above the planes maximum speed.
+ */
+public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
             a.SetAimedSpeed(speed);
         } else {

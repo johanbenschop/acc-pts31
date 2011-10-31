@@ -4,6 +4,8 @@
  */
 package atc.logic;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,6 +27,7 @@ public class ACCTest {
     private Airplane apt; //Airplane thats ready for takeoff
     private Runway ra; //available runway
     private Runway ru; //unavailable runway
+    private AirplaneFactory airplaneFactory;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -121,5 +124,15 @@ public class ACCTest {
     public void GiveRunwayTakeOff() {
         System.out.println("GiveRunwayTakeOff");
         
+    }
+        /**
+     * Test of loadAvailableAirplaneList method, of class CTA.
+     */
+    @Test
+    public void testLoadAvailableAirplaneList() throws FileNotFoundException, IOException {
+        System.out.println("loadAvailableAirplaneList");
+        acc.loadAvailableAirplaneList();
+        airplaneFactory = acc.GetAirplaneFactory("A380");
+        assertEquals("This objects type should be A380", airplaneFactory.getType(), "A380");
     }
 }

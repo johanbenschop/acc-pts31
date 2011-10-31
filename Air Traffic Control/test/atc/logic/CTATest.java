@@ -23,7 +23,6 @@ public class CTATest {
     private CTA cta;
     private GeoLocation geoLocation;
     private Airplane airplane;
-    private AirplaneFactory airplaneFactory;
     private Airport airport;
     
     public CTATest() {
