@@ -24,6 +24,21 @@ public class Airport {
     //DST is a letter specifying the DST: E (Europe), A (US/Canada), S (South America), O (Australia), Z (New Zealand), N (None) or U (Unknown)
     private String DST;
 
+      /***************Constructor**********/
+    /**
+     * An Airport is made with its own AirportID, AirportName, City, Country, ITATA_FAA, ICAO, Altitude, Timezone, DST and location.
+     * @param AirportID: This is the ID of the airport.
+     * @param AirportName: This is the name of the airport.
+     * @param City: This is the city where the aiport is in.
+     * @param County: This is the County where the airport is in.
+     * @param ITATA_FAA: This is the ITATA_FAA of the airplane.
+     * @param ICAO: The ICAO of the aiport.
+     * @param Geolocation: The Geolocation of the airport.
+     * @param Altitude: The altitude of the airport.
+     * @param Timezone: The timezone of the airport.
+     * @param DST: The DST of the airport.
+     */
+    
     public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, GeoLocation location, int Altitude, double Timezone, String DST) {
         this.AirportID = AirportID;
         this.AirportName = AirportName;
