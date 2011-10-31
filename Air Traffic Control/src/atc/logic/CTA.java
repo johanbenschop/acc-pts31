@@ -51,10 +51,9 @@ public class CTA {
         for (Airport a : airportList) {
             if (a.getAirportID() == AirportID) {
                 airport = a;
-                return a;
             }
         }
-        return null;
+        return airport;
     }
 
     /**
