@@ -1,11 +1,9 @@
 package atc.logic;
 
-import java.io.Serializable;
-
 /**
  * @author Robbert
  */ 
-public class AirplaneFactory implements Serializable {
+public class AirplaneFactory {
 
     //Properties
     private int MaxSpeed;
