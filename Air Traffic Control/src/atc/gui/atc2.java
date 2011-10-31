@@ -61,14 +61,17 @@ public final class atc2 extends atc {
         private GlobeAnnotation tooltipAnnotation;
         private Timer timerAirplane;
         private ArrayList<Airplane> addedAirplanes;
+        private final UnityBar menuBar;
+        private final View view;
+        private final Timer timerColision;
 
         public AppFrame() {
 
             // Create our custom made menu system bar thingy.
-            final UnityBar menuBar = new UnityBar();
+            menuBar = new UnityBar();
             this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
 
-            final View view = this.getWwd().getView();
+            view = this.getWwd().getView();
 
             // The menu items
             final UnityItem uiSettings = menuBar.addItem(new UnityItem("Settings", Color.BLUE, 0, "src/atc/gui/resources/settings.png", UnityBar.Type.NORMAL));
@@ -144,7 +147,7 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     Flightplan plan = new jfSelectFlight(null, true).getValue();
-                                    
+
                                     // Use a PanToIterator to iterate view to target position
                                     if (view != null && plan != null) {
                                         Position targetPos = plan.getAirplane().getLocation().toPosition();
@@ -232,49 +235,57 @@ public final class atc2 extends atc {
 
 
 
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-                    new java.awt.event.ActionListener() {
+//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+//                    new java.awt.event.ActionListener() {
+//
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            //.goTo(Position position, double distance);
+//                            // This object class we handle and we have an orbit view
+//                            Position targetPos = Position.fromDegrees(52.09153109717759, 5.1381683349609375);
+//
+//                            // Use a PanToIterator to iterate view to target position
+//                            if (view != null) {
+//                                // The elevation component of 'targetPos' here is not the surface elevation,
+//                                // so we ignore it when specifying the view center position.
+//                                view.goTo(new Position(targetPos, 0),
+//                                        targetPos.getElevation() + 20000); // 1000 = 100 meter
+//                            }
+//                        }
+//                    });
+//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+//                    new java.awt.event.ActionListener() {
+//
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            //throw new UnsupportedOperationException("Not supported yet.");
+//                        }
+//                    });
+//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+//                    new java.awt.event.ActionListener() {
+//
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            //throw new UnsupportedOperationException("Not supported yet.");
+//                        }
+//                    });
+//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+//                    new java.awt.event.ActionListener() {
+//
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            //throw new UnsupportedOperationException("Not supported yet.");
+//                        }
+//                    });
 
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //.goTo(Position position, double distance);
-                            // This object class we handle and we have an orbit view
-                            Position targetPos = Position.fromDegrees(52.09153109717759, 5.1381683349609375);
+            this.timerColision = new Timer(1000, new ActionListener() {
 
-                            // Use a PanToIterator to iterate view to target position
-                            if (view != null) {
-                                // The elevation component of 'targetPos' here is not the surface elevation,
-                                // so we ignore it when specifying the view center position.
-                                view.goTo(new Position(targetPos, 0),
-                                        targetPos.getElevation() + 20000); // 1000 = 100 meter
-                            }
-                        }
-                    });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //throw new UnsupportedOperationException("Not supported yet.");
-                        }
-                    });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //throw new UnsupportedOperationException("Not supported yet.");
-                        }
-                    });
-            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //throw new UnsupportedOperationException("Not supported yet.");
-                        }
-                    });
-
+                public void actionPerformed(ActionEvent event) {
+                    findCollisions();
+                }
+            });
+            timerColision.start();
+            
             // Add the airport & airspace layers
             buildAirportLayer();
             buildAirspaceLayer();
@@ -283,6 +294,56 @@ public final class atc2 extends atc {
             // Add the graticule layer
             LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
             insertBeforePlacenames(getWwd(), graticuleLayer);
+        }
+
+        /**
+         * Finds collisions and gives a warning about it.
+         */
+        public void findCollisions() {
+            menuBar.clearAlerts();
+            for (final Airplane p : addedAirplanes) {
+                if (p.getStatus() == Airplane.Statusses.CRASHING1) {
+                    menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+                            new java.awt.event.ActionListener() {
+
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    //.goTo(Position position, double distance);
+                                    // This object class we handle and we have an orbit view
+                                    Position targetPos = p.getLocation().toPosition();
+
+                                    // Use a PanToIterator to iterate view to target position
+                                    if (view != null) {
+                                        // The elevation component of 'targetPos' here is not the surface elevation,
+                                        // so we ignore it when specifying the view center position.
+                                        view.goTo(new Position(targetPos, 0),
+                                                targetPos.getElevation() + 300); // 1000 = 100 meter
+                                    }
+                                }
+                            });
+                } else if (p.getStatus() == Airplane.Statusses.CRASHING2) {
+                    menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
+                            new java.awt.event.ActionListener() {
+
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    //.goTo(Position position, double distance);
+                                    // This object class we handle and we have an orbit view
+                                    Position targetPos = p.getLocation().toPosition();
+
+                                    // Use a PanToIterator to iterate view to target position
+                                    if (view != null) {
+                                        // The elevation component of 'targetPos' here is not the surface elevation,
+                                        // so we ignore it when specifying the view center position.
+                                        view.goTo(new Position(targetPos, 0),
+                                                targetPos.getElevation() + 300); // 1000 = 100 meter
+                                    }
+                                }
+                            });
+                }
+
+
+            }
         }
 
         /**
@@ -453,7 +514,7 @@ public final class atc2 extends atc {
                     }
                 }
             });
-            
+
             this.timerAirplane = new Timer(1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
@@ -496,16 +557,16 @@ public final class atc2 extends atc {
                 layer.addRenderable(rend);
             }
         }
-        
+
         private void clickAirplane(Object o) {
             if (o.getClass() != airplaneRendereble.class) {
                 return; // The selected object isn't our airplane.
             }
             airplaneRendereble rend = (airplaneRendereble) o;
             Flightplan flightplan = rend.getFlightplan();
-            
+
             new jfCommandFlight(this, true).setFlightplan(flightplan);
-            
+
         }
     }
 
