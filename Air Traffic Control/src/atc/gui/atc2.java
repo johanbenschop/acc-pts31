@@ -143,7 +143,16 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    new jfSelectFlight(null, true).setVisible(true);
+                                    Flightplan plan = new jfSelectFlight(null, true).getValue();
+                                    
+                                    // Use a PanToIterator to iterate view to target position
+                                    if (view != null && plan != null) {
+                                        Position targetPos = plan.getAirplane().getLocation().toPosition();
+                                        // The elevation component of 'targetPos' here is not the surface elevation,
+                                        // so we ignore it when specifying the view center position.
+                                        view.goTo(new Position(targetPos, 0),
+                                                targetPos.getElevation() + 100); // 1000 = 100 meter
+                                    }
                                     uiGoToFlight.setActive(false);
                                 }
                             });
