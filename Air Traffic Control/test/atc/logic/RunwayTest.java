@@ -1,5 +1,6 @@
 package atc.logic;
 
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -36,13 +37,15 @@ public class RunwayTest {
      * Test of ChangeAvailability method, of class Runway.
      */
     @Test
-    public void testChangeAvailability() {
-//        System.out.println("ChangeAvailability");
-//        int length = 30, direction = 2;
-//        boolean availability = false;
-//        Runway instance = new Runway(length, direction, availability);
-//        instance.ChangeAvailability();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+    public void testChangeAvailability() throws InterruptedException {
+        System.out.println("ChangeAvailability");
+        int longitude = 1, latitude = 1, altitude = 1, length = 30, direction = 2;
+        boolean availability = false;
+        Runway instance = new Runway(longitude, latitude, altitude, length, direction, availability);
+        instance.ChangeAvailability(false);
+        Assert.assertEquals("Availability has changed to false", false, instance.getAvailability());
+        instance.ChangeAvailability(true);
+        Thread.sleep(180001);
+        Assert.assertEquals("Availability has changed to true", true, instance.getAvailability());
    }
 }
