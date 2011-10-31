@@ -44,6 +44,10 @@ public class CTA {
         }
     }
 
+    /**
+     * Returns the airport with the given AirportID
+     * @return
+     */
     public Airport GetAirport(int AirportID) {
         for (Airport a : airportList) {
             if (a.getAirportID() == AirportID) {
@@ -80,14 +84,26 @@ public class CTA {
         }
     }
 
+    /**
+     * Adds a airplane to the airplaneList
+     * @return
+     */
     public void addAirplane(Airplane a) {
         airplaneList.add(a);
     }
 
+    /**
+     * Adds a airport to the airportList
+     * @return
+     */
     public void addAirport(Airport a) {
         airportList.add(a);
     }
 
+    /**
+     * Deletes the airplane with the corresponding AirplaneNumber from the airplaneList
+     * @return
+     */
     public void deleteAirplane(int AirplaneNumber) {
         for (Airplane a : airplaneList) {
             if(a.getAirplaneNumber() == AirplaneNumber)
