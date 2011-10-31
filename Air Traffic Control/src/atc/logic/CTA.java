@@ -191,7 +191,7 @@ public class CTA {
                 Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
                 }  catch (NumberFormatException | InputMismatchException e) {
-                    System.out.println("Corrupt data line...");
+                    System.out.println("Corrupt data line on airport.dat...");
                 }}
     }
 

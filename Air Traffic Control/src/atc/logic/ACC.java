@@ -90,8 +90,7 @@ public class ACC {
                 int FuelUsage = Integer.parseInt(props2[9]);
 
                 AirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
-                System.out.println(airplaneFactory.getType());
-
+                
                 airplaneFactoryList.add(airplaneFactory);
             } catch (NumberFormatException | InputMismatchException e) {
                 System.out.println("Corrupt data line...");
