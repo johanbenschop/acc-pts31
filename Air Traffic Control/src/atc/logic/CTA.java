@@ -203,4 +203,14 @@ public class CTA {
     public ListIterator<AirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
+    
+    public ArrayList<Airplane> getAirplaneList()
+    {
+        return airplaneList;
+    }
+    
+    public ArrayList<Airport> getAirportList()
+    {
+        return airportList;
+    }
 }
