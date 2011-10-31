@@ -435,6 +435,16 @@ public final class atc2 extends atc {
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), airplaneRendereble.class, 500)); // last value is height
 
+            // Add select listener for airport picking
+            this.getWwd().addSelectListener(new SelectListener() {
+
+                public void selected(SelectEvent event) {
+                    if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
+                        clickAirplane(event.getTopObject());
+                    }
+                }
+            });
+            
             this.timerAirplane = new Timer(1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
@@ -468,7 +478,7 @@ public final class atc2 extends atc {
                 attrs.setDrawOutline(false);
 
                 // We create our airplane renderables
-                airplaneRendereble rend = new airplaneRendereble(airplane);
+                airplaneRendereble rend = new airplaneRendereble(flightplan);
                 rend.setAltitudeMode(WorldWind.ABSOLUTE);
                 rend.setAttributes(attrs);
                 rend.setVisible(true);
@@ -476,6 +486,17 @@ public final class atc2 extends atc {
                 rend.setHeading(Angle.fromDegrees(airplane.getDirection()));
                 layer.addRenderable(rend);
             }
+        }
+        
+        private void clickAirplane(Object o) {
+            if (o.getClass() != airplaneRendereble.class) {
+                return; // The selected object isn't our airplane.
+            }
+            airplaneRendereble rend = (airplaneRendereble) o;
+            Flightplan flightplan = rend.getFlightplan();
+            
+            new jfCommandFlight(this, true).setFlightplan(flightplan);
+            
         }
     }
 

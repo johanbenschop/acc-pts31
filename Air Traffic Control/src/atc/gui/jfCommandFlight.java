@@ -11,6 +11,8 @@
 package atc.gui;
 
 import atc.logic.Flightplan;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -27,6 +29,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
     public void setFlightplan(Flightplan flightplan) {
         this.flightplan = flightplan;
+        setVisible(true);
     }
 
     /** This method is called from within the constructor to
@@ -134,6 +137,9 @@ public class jfCommandFlight extends javax.swing.JDialog {
         {
             flightplan.getAirplane().SetAimedAltitude(tfFlightlevel.getSelectedIndex() + 1);
         }
+        
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btChangeParameterActionPerformed
 
     /**
