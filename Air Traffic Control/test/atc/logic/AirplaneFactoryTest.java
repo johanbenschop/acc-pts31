@@ -43,7 +43,7 @@ public class AirplaneFactoryTest {
     public void testGetAirplanes() {
         System.out.println("getAirplanes");
         AirplaneFactory instance = new AirplaneFactory(0,0,0,"test", "test", 0 ,0, 0, 0, 0);
-        instance.getAirplanes();
+        //instance.getAirplanes();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
