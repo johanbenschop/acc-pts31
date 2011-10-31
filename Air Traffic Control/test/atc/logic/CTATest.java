@@ -38,35 +38,35 @@ public class CTATest {
     
     @Before
     public void setUp() {
-        geoLocation = new GeoLocation(0,0,0); //Hier moeten nog goede waardes inkomen maar ik weet niet welke.
-        cta = new CTA(geoLocation, 0, 0); // Hier moeten ook nog goede waardes in
-       // airplane = new Airplane(); 
-       // airport = new Airport();
+        geoLocation = new GeoLocation(100,100,0); //Hier moeten nog goede waardes inkomen maar ik weet niet welke.
+        cta = new CTA(geoLocation, 100, 100); // Hier moeten ook nog goede waardes in
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, 0, 299, 0, 012345); 
+        airport = new Airport(0, "", "", "","", "", geoLocation, 0, 0, "");
     }
     
     @After
     public void tearDown() {
     }
     
-    /**
-     * Test of DetectAirplane method, of class CTA.
-     */
-    @Test
-    public void testDetectAirplane() {
-        System.out.println("DetectAirplane");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    /**
+//     * Test of DetectAirplane method, of class CTA.
+//     */
+//    @Test
+//    public void testDetectAirplane() {
+//        System.out.println("DetectAirplane");
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
 
-    /**
-     * Test of Collision method, of class CTA.
-     */
-    @Test
-    public void testCollision() {
-        System.out.println("Collision");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    /**
+//     * Test of Collision method, of class CTA.
+//     */
+//    @Test
+//    public void testCollision() {
+//        System.out.println("Collision");
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
  
     /** 
      * Test of addAirplane method, of class CTA.
@@ -129,13 +129,13 @@ public class CTATest {
         assertEquals("This objects number should be number 1", airport.getAirportID(), 1);
     }
     
-    /**
-     * Test of loadAvailableAirplaneList method, of class CTA.
-     */
-    @Test
-    public void testLoadAvailableAirplaneList() {
-        System.out.println("loadAvailableAirplaneList");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    /**
+//     * Test of loadAvailableAirplaneList method, of class CTA.
+//     */
+//    @Test
+//    public void testLoadAvailableAirplaneList() {
+//        System.out.println("loadAvailableAirplaneList");
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
 }
