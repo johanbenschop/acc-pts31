@@ -6,9 +6,17 @@ import java.util.logging.Logger;
 /**
  * @author Paul
  */
-public class Airplane extends AirplaneFactory implements Runnable {
+public class Airplane extends Thread {
 
     /**************Datafields***********/
+    private int MaxSpeed;
+    private int MinSpeed;
+    private int Weight;
+    private String Type;
+    private String Manufacturer;
+    private int PlaneHeight;
+    private int PlaneWidth;
+    private int PlaneLength;
     private int AirplaneNumber; //Number
     private double Direction; // Degree's
     private double Speed; // Kilomithers per hour
@@ -30,12 +38,8 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double latitudeTravelled;
 
     public enum Statusses {
-        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
-    }
 
-    @Override
-    public String ToString() {
-        return super.ToString();
+        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
     }
 
     /***************Constructor**********/
@@ -60,7 +64,16 @@ public class Airplane extends AirplaneFactory implements Runnable {
      */
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
             int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, GeoLocation Location, GeoLocation DestinationLocation, int AirplaneNumber) {
-        super(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlaneWidth, PlaneLength, MaxFuel, FuelUsage);
+        this.MaxSpeed = MaxSpeed;
+        this.MinSpeed = MinSpeed;
+        this.Weight = Weight;
+        this.Type = Type;
+        this.Manufacturer = Manufacturer;
+        this.PlaneHeight = PlaneHeight;
+        this.PlaneWidth = PlaneWidth;
+        this.PlaneLength = PlaneLength;
+        this.MaxFuel = MaxFuel;
+        this.FuelUsage = FuelUsage;
         this.Direction = Direction;
         this.Speed = Speed;
         this.CurrentFuel = CurrentFuel;
@@ -72,12 +85,13 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
     @Override
     public void run() {
-
-        try {
-            Fly();
-            Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
+        while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
+            try {
+                Fly();
+                Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -86,12 +100,11 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
-        if(this.Status != Statusses.STANDINGONAIRPORT)
-        {
-        ChangeSpeed();
-        ChangeDirection();
-        ChangeAltitude();
-        ChangeGeoLocation();
+        if (this.Status != Statusses.STANDINGONAIRPORT) {
+            ChangeSpeed();
+            ChangeDirection();
+            ChangeAltitude();
+            ChangeGeoLocation();
         }
     }
 
@@ -123,28 +136,28 @@ public class Airplane extends AirplaneFactory implements Runnable {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-    
-    
+
     /**
      * Change the longitude and lattitude based on the distance travelled.
      */
-    public void ChangeGeoLocation()
-    {
+    public void ChangeGeoLocation() {
         //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
-       distanceTravelled = (this.Speed / 36000);
-       latitudeTravelled = distanceTravelled * Math.sin(Direction);
-       longitudeTravelled = distanceTravelled * Math.cos(Direction);
-       location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
-       
-               /*
-       longitudeTravelled = distanceTravelled * Math.sin(Direction);
-       latitudeTravelled = distanceTravelled * Math.cos(Direction);
-       location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());*/
+        distanceTravelled = (this.Speed / 36000);
+        latitudeTravelled = distanceTravelled * Math.sin(Direction);
+        longitudeTravelled = distanceTravelled * Math.cos(Direction);
+        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+        location.setLongitude((longitudeTravelled / (111.320 /* Math.cos(location.getLatitude())*/)) + location.getLongitude());
+        location.setAltitude(AimedAltitude);
+
+        System.out.println(location.ToString());
+
+        /*
+        longitudeTravelled = distanceTravelled * Math.sin(Direction);
+        latitudeTravelled = distanceTravelled * Math.cos(Direction);
+        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());*/
     }
-    
-    
+
     /**
      * The speed at the takeoff will change with 6,67 km/h every second.
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
@@ -156,12 +169,9 @@ public class Airplane extends AirplaneFactory implements Runnable {
                 this.Speed += takeOffAccelerationSpeed;
                 this.Status = Statusses.INFLIGHT;
             }
-        }
-        else if(this.Status == Statusses.CRASHED)
-        {
+        } else if (this.Status == Statusses.CRASHED) {
             this.Speed = 0;
-        }
-        else if (AimedSpeed != this.Speed) {
+        } else if (AimedSpeed != this.Speed) {
             if (this.Speed - amountChangeSpeed > AimedSpeed) {
                 this.Speed -= amountChangeSpeed;
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
@@ -177,43 +187,39 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * The direction will increase or decrease every second with 3 degrees.
      */
     public void ChangeDirection() {
-        double amountChangeDirection = 0.3;
-        if (AimedDirection != this.Direction) {
-            if (this.Direction - amountChangeDirection > AimedDirection) {
-                this.Direction -= amountChangeDirection;
-            } else if (this.Direction + amountChangeDirection < AimedDirection) {
-                this.Direction += amountChangeDirection; 
-            }
-            else
-            {
+//        double amountChangeDirection = 0.3;
+//        if (AimedDirection != this.Direction) {
+//            if (this.Direction - amountChangeDirection > AimedDirection) {
+//                this.Direction -= amountChangeDirection;
+//            } else if (this.Direction + amountChangeDirection < AimedDirection) {
+//                this.Direction += amountChangeDirection;
+//            } else {
                 this.Direction = this.AimedDirection;
-            }
-        }
+//            }
+//        }
     }
 
     /**
      * The altitude will increase or decrease with 20 feet every second.
      */
     public void ChangeAltitude() {
-        double amountChangeHeight = 2.0;
-        if (AimedAltitude != this.Altitude) {
-            if (this.Altitude - amountChangeHeight > AimedAltitude) {
-                this.Altitude -= amountChangeHeight;
-            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
-                this.Altitude += amountChangeHeight;
-            } else {
+//        double amountChangeHeight = 2.0;
+//        if (AimedAltitude != this.Altitude) {
+//            if (this.Altitude - amountChangeHeight > AimedAltitude) {
+//                this.Altitude -= amountChangeHeight;
+//            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
+//                this.Altitude += amountChangeHeight;
+//            } else {
                 this.Altitude = this.AimedAltitude;
-            }
-        }
+//            }
+//        }
     }
-    /**
-     * The CurrentFuel will change based on the FuelUsage of the airplane.
-     */
+
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
 
-    /**************Setters**************/
+    //Setters
     public void SetAimedSpeed(double speed) {
         this.AimedSpeed = speed;
     }
@@ -230,7 +236,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
         this.Status = Status;
     }
 
-    /**************Getters**************/
+    //Getters
     public int getAirplaneNumber() {
         return AirplaneNumber;
     }
@@ -269,6 +275,66 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
     public GeoLocation getLocation() {
         return location;
+    }
+
+    public int getFuelUsage() {
+        return FuelUsage;
+    }
+
+    public String getManufacturer() {
+        return Manufacturer;
+    }
+
+    public int getMaxFuel() {
+        return MaxFuel;
+    }
+
+    public int getMaxSpeed() {
+        return MaxSpeed;
+    }
+
+    public int getMinSpeed() {
+        return MinSpeed;
+    }
+
+    public int getPlaneHeight() {
+        return PlaneHeight;
+    }
+
+    public int getPlaneLength() {
+        return PlaneLength;
+    }
+
+    public int getPlaneWidth() {
+        return PlaneWidth;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public int getWeight() {
+        return Weight;
+    }
+
+    public GeoLocation getDestinationLocation() {
+        return destinationLocation;
+    }
+
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public double getLatitudeTravelled() {
+        return latitudeTravelled;
+    }
+
+    public double getLongitudeTravelled() {
+        return longitudeTravelled;
+    }
+
+    public double getTakeOffAccelerationSpeed() {
+        return takeOffAccelerationSpeed;
     }
     
     
