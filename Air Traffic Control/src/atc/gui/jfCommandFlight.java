@@ -48,6 +48,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         lblChangeDirectionTo = new javax.swing.JLabel();
         txtChangeDirectionTo = new javax.swing.JTextField();
         tfFlightlevel = new javax.swing.JComboBox();
+        btnLandFlight = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -67,37 +68,38 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         tfFlightlevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Flighlevel One", "Flightlevel Two", "Flightlevel Three" }));
 
+        btnLandFlight.setText("Land flight");
+        btnLandFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLandFlightActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                .addGap(239, 239, 239))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tfFlightlevel, 0, 151, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblChangeSpeedTo))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txtChangeSpeedTo, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblChangeHeightTo)))
-                .addGap(239, 239, 239))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblChangeDirectionTo)
-                .addContainerGap(253, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(232, Short.MAX_VALUE)
-                .addComponent(btChangeParameter)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                        .addGap(239, 239, 239))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfFlightlevel, javax.swing.GroupLayout.Alignment.LEADING, 0, 148, Short.MAX_VALUE)
+                            .addComponent(lblChangeSpeedTo, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtChangeSpeedTo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                            .addComponent(lblChangeHeightTo, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(239, 239, 239))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblChangeDirectionTo)
+                        .addContainerGap(253, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnLandFlight)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btChangeParameter)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,7 +117,9 @@ public class jfCommandFlight extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(btChangeParameter)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btChangeParameter)
+                    .addComponent(btnLandFlight))
                 .addContainerGap())
         );
 
@@ -141,6 +145,12 @@ public class jfCommandFlight extends javax.swing.JDialog {
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btChangeParameterActionPerformed
+
+    private void btnLandFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLandFlightActionPerformed
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_btnLandFlightActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,6 +197,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btChangeParameter;
+    private javax.swing.JButton btnLandFlight;
     private javax.swing.JLabel lblChangeDirectionTo;
     private javax.swing.JLabel lblChangeHeightTo;
     private javax.swing.JLabel lblChangeSpeedTo;
