@@ -19,6 +19,7 @@ public class CTA {
         this.width = width;
         this.length = length;
 
+        airplaneList = new ArrayList<>();
         airportList = new ArrayList<>();
 
         try {
