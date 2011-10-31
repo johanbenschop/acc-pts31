@@ -135,8 +135,6 @@ public class ACCTest {
     @Test
     public void testLoadAvailableAirplaneList() throws FileNotFoundException, IOException {
         System.out.println("loadAvailableAirplaneList");
-        acc.loadAvailableAirplaneList();
-        airplaneFactory = acc.GetAirplaneFactory("A380");
-        assertEquals("This objects type should be A380", airplaneFactory.getType(), "A380");
+        assertEquals("This objects type should be 747", "Fokker", acc.GetAirplaneFactory(1).getManufacturer());
     }
 }

@@ -6,6 +6,7 @@ package atc.logic;
 public class AirplaneFactory {
 
     //Properties
+    private int Id, nr = 1;
     private int MaxSpeed;
     private int MinSpeed;
     private int Weight;
@@ -23,6 +24,8 @@ public class AirplaneFactory {
     //Constructor of AirplaneFactory.
     
     public AirplaneFactory(int maxSpeed, int minSpeed, int weight, String type, String manufacturer, int planeHeight, int planeWidth, int planeLength, int maxFuel, int fuelUsage) {
+        
+        Id = nr;
         this.MaxSpeed = maxSpeed;
         this.MinSpeed = minSpeed;
         this.Weight = weight;
@@ -33,6 +36,7 @@ public class AirplaneFactory {
         this.PlaneLength = planeLength;
         this.MaxFuel = maxFuel;
         this.FuelUsage = fuelUsage;
+        nr++;
     }
     
         public String ToString()
@@ -43,7 +47,11 @@ public class AirplaneFactory {
     }
  
     
-    // Getters and setters of AirplaneFactory    
+    // Getters and setters of AirplaneFactory
+    public int getID(){
+        return Id;
+    }
+        
     public int getMaxSpeed() {
         return MaxSpeed;
     }
