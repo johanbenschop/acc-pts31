@@ -10,7 +10,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
 
     /**************Datafields***********/
     private int AirplaneNumber; //Number
-    private int Direction; // Degree's
+    private double Direction; // Degree's
     private double Speed; // Kilomithers per hour
     private int MaxFuel;  // Gallons
     private int CurrentFuel; // Gallons
@@ -30,7 +30,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double latitudeTravelled;
 
     public enum Statusses {
-        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING;
+        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2;
     }
 
     @Override
@@ -178,7 +178,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
             } else if (this.Altitude + changeHeight < AimedAltitude) {
                 this.Altitude += changeHeight;
             } else {
-                this.Altitude = AimedAltitude;
+                this.Altitude = 100;
             }
         }
     }
