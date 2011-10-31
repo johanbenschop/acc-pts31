@@ -22,76 +22,67 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="lblFlight" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblChangeDirectionTo" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblChangeHeightTo" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblChangeSpeedTo" min="-2" max="-2" attributes="0"/>
-                      </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="txtChangeDirectionTo" pref="148" max="32767" attributes="1"/>
+              <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="cbxFlight" alignment="0" pref="84" max="32767" attributes="1"/>
-                          <Component id="txtChangeSpeedTo" alignment="0" max="32767" attributes="1"/>
-                          <Component id="txtChangeHeightTo" alignment="0" max="32767" attributes="1"/>
-                          <Component id="txtChangeDirectionTo" alignment="0" max="32767" attributes="1"/>
-                      </Group>
+                      <Component id="tfFlightlevel" pref="151" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                      <Component id="btChangeParameter" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblChangeSpeedTo" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="1">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtChangeSpeedTo" pref="148" max="32767" attributes="1"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblChangeHeightTo" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblChangeDirectionTo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="253" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="232" max="32767" attributes="0"/>
+              <Component id="btChangeParameter" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblFlight" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbxFlight" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtChangeSpeedTo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblChangeSpeedTo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="lblChangeSpeedTo" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtChangeHeightTo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblChangeHeightTo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="txtChangeSpeedTo" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblChangeDirectionTo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtChangeDirectionTo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="lblChangeHeightTo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+              <Component id="tfFlightlevel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+              <Component id="lblChangeDirectionTo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="txtChangeDirectionTo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
               <Component id="btChangeParameter" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JComboBox" name="cbxFlight">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btChangeParameter">
       <Properties>
         <Property name="text" type="java.lang.String" value="Change parameter"/>
@@ -106,19 +97,9 @@
         <Property name="text" type="java.lang.String" value="Change Speed to: "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblFlight">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Flight: "/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblChangeHeightTo">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Change Height to: "/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtChangeHeightTo">
-      <Properties>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="text" type="java.lang.String" value="Change Flight Level to: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtChangeSpeedTo">
@@ -129,6 +110,17 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtChangeDirectionTo">
+    </Component>
+    <Component class="javax.swing.JComboBox" name="tfFlightlevel">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="Flighlevel One"/>
+            <StringItem index="1" value="Flightlevel Two"/>
+            <StringItem index="2" value="Flightlevel Three"/>
+          </StringArray>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

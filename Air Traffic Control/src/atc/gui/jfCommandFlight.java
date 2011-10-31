@@ -38,19 +38,15 @@ public class jfCommandFlight extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cbxFlight = new javax.swing.JComboBox();
         btChangeParameter = new javax.swing.JButton();
         lblChangeSpeedTo = new javax.swing.JLabel();
-        lblFlight = new javax.swing.JLabel();
         lblChangeHeightTo = new javax.swing.JLabel();
-        txtChangeHeightTo = new javax.swing.JTextField();
         txtChangeSpeedTo = new javax.swing.JTextField();
         lblChangeDirectionTo = new javax.swing.JLabel();
         txtChangeDirectionTo = new javax.swing.JTextField();
+        tfFlightlevel = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        cbxFlight.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btChangeParameter.setText("Change parameter");
         btChangeParameter.setName(""); // NOI18N
@@ -62,60 +58,62 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         lblChangeSpeedTo.setText("Change Speed to: ");
 
-        lblFlight.setText("Flight: ");
-
-        lblChangeHeightTo.setText("Change Height to: ");
-
-        txtChangeHeightTo.setToolTipText("");
+        lblChangeHeightTo.setText("Change Flight Level to: ");
 
         lblChangeDirectionTo.setText("Change Direction to: ");
+
+        tfFlightlevel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Flighlevel One", "Flightlevel Two", "Flightlevel Three" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                .addGap(239, 239, 239))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(tfFlightlevel, 0, 151, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblChangeSpeedTo))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtChangeSpeedTo, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblChangeHeightTo)))
+                .addGap(239, 239, 239))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblFlight)
-                            .addComponent(lblChangeDirectionTo)
-                            .addComponent(lblChangeHeightTo)
-                            .addComponent(lblChangeSpeedTo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbxFlight, 0, 84, Short.MAX_VALUE)
-                            .addComponent(txtChangeSpeedTo)
-                            .addComponent(txtChangeHeightTo)
-                            .addComponent(txtChangeDirectionTo)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(btChangeParameter)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(lblChangeDirectionTo)
+                .addContainerGap(253, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(232, Short.MAX_VALUE)
+                .addComponent(btChangeParameter)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFlight)
-                    .addComponent(cbxFlight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(lblChangeSpeedTo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtChangeSpeedTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblChangeSpeedTo))
+                .addComponent(txtChangeSpeedTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtChangeHeightTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblChangeHeightTo))
+                .addComponent(lblChangeHeightTo)
+                .addGap(8, 8, 8)
+                .addComponent(tfFlightlevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(lblChangeDirectionTo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblChangeDirectionTo)
-                    .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtChangeDirectionTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(btChangeParameter)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -132,9 +130,9 @@ public class jfCommandFlight extends javax.swing.JDialog {
             flightplan.getAirplane().SetAimedDirection(Integer.parseInt(txtChangeDirectionTo.getText()));
         }
         
-        if (!"".equals(txtChangeHeightTo.getText()))
+        if (!"".equals(tfFlightlevel.getSelectedItem()))
         {
-            flightplan.getAirplane().SetAimedAltitude(Integer.parseInt(txtChangeHeightTo.getText()));
+            flightplan.getAirplane().SetAimedAltitude(tfFlightlevel.getSelectedIndex() + 1);
         }
     }//GEN-LAST:event_btChangeParameterActionPerformed
 
@@ -183,13 +181,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btChangeParameter;
-    private javax.swing.JComboBox cbxFlight;
     private javax.swing.JLabel lblChangeDirectionTo;
     private javax.swing.JLabel lblChangeHeightTo;
     private javax.swing.JLabel lblChangeSpeedTo;
-    private javax.swing.JLabel lblFlight;
+    private javax.swing.JComboBox tfFlightlevel;
     private javax.swing.JTextField txtChangeDirectionTo;
-    private javax.swing.JTextField txtChangeHeightTo;
     private javax.swing.JTextField txtChangeSpeedTo;
     // End of variables declaration//GEN-END:variables
 }
