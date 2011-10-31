@@ -45,8 +45,8 @@ public class ACCTest {
         acc = new ACC(1, cta);
         apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100);
         apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100);
-        ra = new Runway(300, 180, true);
-        ru = new Runway(300, 270, false);
+        ra = new Runway(1, 1, 1, 300, 180, true);
+        ru = new Runway(1, 1, 1, 300, 270, false);
     }
     
     @After

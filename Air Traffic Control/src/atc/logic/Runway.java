@@ -38,6 +38,7 @@ public class Runway extends GeoLocation{
      * @return Availability
      */
     public void ChangeAvailability(boolean r) {
+        timer = new Timer();
         if (r) {
             timer.schedule(new tim(r), 180000); //180,000 milliseconds = 3 minutes
         } else {
