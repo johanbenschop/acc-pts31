@@ -76,6 +76,10 @@ public final class UnityBar extends JPanel {
         this.add(menuItem, java.awt.BorderLayout.SOUTH);
         return menuItem;
     }
+    
+    public void clearAlerts() {
+        this.Bottom.removeAll();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
