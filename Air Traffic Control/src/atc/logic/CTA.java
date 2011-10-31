@@ -54,10 +54,6 @@ public class CTA {
         return null;
     }
 
-    public ListIterator<Airport> GetAirports() {
-        return airportList.listIterator();
-    }
-
     /**
      *
      * @return
@@ -196,6 +192,8 @@ public class CTA {
                 }}
     }*/
 
+    
+    //Getters
     public Airplane getCurrentSelectedAirplane() {
         return airplane;
     }
@@ -217,5 +215,9 @@ public class CTA {
     public Airplane getAirplane()
     {
         return airplane;
+    }
+    
+    public ListIterator<Airport> GetAirports() {
+        return airportList.listIterator();
     }
 }
