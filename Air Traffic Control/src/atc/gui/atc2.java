@@ -10,7 +10,6 @@ import atc.logic.Flightplan;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
-import gov.nasa.worldwind.avlist.AVList;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Angle;
@@ -18,15 +17,12 @@ import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.AirspaceLayer;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
-import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.AnnotationAttributes;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
-import gov.nasa.worldwind.render.Box;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
-import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.airspaces.Airspace;
 import gov.nasa.worldwind.render.airspaces.Polygon;
@@ -38,14 +34,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ListIterator;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.Timer;
 
 /**
  *
@@ -63,6 +59,8 @@ public final class atc2 extends atc {
         protected RenderableLayer airportLayer;
         protected RenderableLayer airplaneLayer;
         private GlobeAnnotation tooltipAnnotation;
+        private Timer timerAirplane;
+        private ArrayList<Airplane> addedAirplanes;
 
         public AppFrame() {
 
@@ -117,7 +115,7 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     Airport goToAirport = new jfSelectAirport(null, true).getValue();
-                                    
+
                                     // Use a PanToIterator to iterate view to target position
                                     if (view != null && goToAirport != null) {
                                         Position targetPos = goToAirport.getLocation().toPosition();
@@ -428,6 +426,7 @@ public final class atc2 extends atc {
          */
         private void buildAirplaneLayer() {
             // Add the airplane layer
+            this.addedAirplanes = new ArrayList<>();
             this.airplaneLayer = new RenderableLayer();
             this.airplaneLayer.setName("Airplanes");
             insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
@@ -436,11 +435,17 @@ public final class atc2 extends atc {
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), airplaneRendereble.class, 500)); // last value is height
 
-            ListIterator<Flightplan> litr = acc.getFlightplans();
+            this.timerAirplane = new Timer(1000, new ActionListener() {
 
-            while (litr.hasNext()) {
-                addAirplaneToLayer(airplaneLayer, litr.next());
-            }
+                public void actionPerformed(ActionEvent event) {
+                    ListIterator<Flightplan> litr = acc.getFlightplans();
+
+                    while (litr.hasNext()) {
+                        addAirplaneToLayer(airplaneLayer, litr.next());
+                    }
+                }
+            });
+            timerAirplane.start();
         }
 
         /**
@@ -449,24 +454,28 @@ public final class atc2 extends atc {
         private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
 
-            // Create and set an attribute bundle.
-            ShapeAttributes attrs = new BasicShapeAttributes();
-            attrs.setInteriorMaterial(Material.GREEN);
-            attrs.setInteriorOpacity(1);
-            attrs.setEnableLighting(true);
-            attrs.setOutlineMaterial(Material.RED);
-            attrs.setOutlineWidth(2d);
-            attrs.setDrawInterior(true);
-            attrs.setDrawOutline(false);
+            if (!addedAirplanes.contains(airplane)) {
+                addedAirplanes.add(airplane);
 
-            // We create our airplane renderables
-            airplaneRendereble rend = new airplaneRendereble(airplane);
-            rend.setAltitudeMode(WorldWind.ABSOLUTE);
-            rend.setAttributes(attrs);
-            rend.setVisible(true);
-            rend.setValue(AVKey.DISPLAY_NAME, "Flight " + flightplan.getFlightnumber() + "");
-            rend.setHeading(Angle.fromDegrees(airplane.getDirection()));
-            layer.addRenderable(rend);
+                // Create and set an attribute bundle.
+                ShapeAttributes attrs = new BasicShapeAttributes();
+                attrs.setInteriorMaterial(Material.GREEN);
+                attrs.setInteriorOpacity(1);
+                attrs.setEnableLighting(true);
+                attrs.setOutlineMaterial(Material.RED);
+                attrs.setOutlineWidth(2d);
+                attrs.setDrawInterior(true);
+                attrs.setDrawOutline(false);
+
+                // We create our airplane renderables
+                airplaneRendereble rend = new airplaneRendereble(airplane);
+                rend.setAltitudeMode(WorldWind.ABSOLUTE);
+                rend.setAttributes(attrs);
+                rend.setVisible(true);
+                rend.setValue(AVKey.DISPLAY_NAME, "Flight " + flightplan.getFlightnumber() + "");
+                rend.setHeading(Angle.fromDegrees(airplane.getDirection()));
+                layer.addRenderable(rend);
+            }
         }
     }
 
