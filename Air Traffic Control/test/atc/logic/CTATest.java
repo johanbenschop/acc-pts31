@@ -41,7 +41,8 @@ public class CTATest {
     public void setUp() {
         geoLocation = new GeoLocation(0,0,0); //Hier moeten nog goede waardes inkomen maar ik weet niet welke.
         cta = new CTA(geoLocation, 0, 0); // Hier moeten ook nog goede waardes in
-        //airplane = new Airplane(); //Alle waarders nog
+       // airplane = new Airplane(); 
+       // airport = new Airport();
     }
     
     @After
@@ -105,9 +106,7 @@ public class CTATest {
     public void testAddAirplane() {
         System.out.println("addAirplane");
         cta.addAirplane(airplane);
-        //Assert.assertEquals("Airplane should have been added to the ArrayList", airplane, );
-        cta.addAirplane(null);
-        fail("");
+        Assert.assertEquals("Airplane has been added.", true, cta.getAirplaneList().contains(airplane));
     }
     
     /**
@@ -116,8 +115,8 @@ public class CTATest {
     @Test
     public void testAddAirport() {
         System.out.println("addAirport");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        cta.addAirport(airport);
+        Assert.assertEquals("Airport has been added.", true, cta.getAirportList().contains(airport));
     }
     
     /**
