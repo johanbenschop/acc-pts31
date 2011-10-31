@@ -141,7 +141,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      * @return false is when it was not possible to set the new direction.
      */
     public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
-        if (direction < 360) {
+        if (direction >= -180 && direction <= 180) {
             a.SetAimedDirection(direction);
         } else {
             throw new AssignmentException("The given direction is not possible.");
@@ -262,7 +262,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      */
     public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
-                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0/*, start.getLocation(), end.getLocation()*/, flightnumber);
+                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0, start.getLocation(), end.getLocation(), flightnumber);
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
         cta.addAirplane(ap);
