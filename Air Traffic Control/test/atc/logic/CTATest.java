@@ -128,6 +128,6 @@ public class CTATest {
         System.out.println("loadAirportList");
         cta.loadAirportList();
         airport = cta.GetAirport(1);
-        Assert.assertEquals("This objects number should be number 1", airport.getAirportID(), 1);
+        Assert.assertEquals("This objects number should be number 1", 1, airport.getAirportID());
     }
 }
