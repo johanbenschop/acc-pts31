@@ -192,7 +192,7 @@ public class ACC {
     // TODO DUCUMENTATION!!!
     public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
-                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0);
+                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0, start.getLocation(), end.getLocation());
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
     }
     
