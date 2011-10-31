@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class CTATest {
     
     private CTA cta;
-    private GeoLocation geoLocation;
+    private GeoLocation geoLocation, geoLocation2;
     private Airplane airplane;
     private Airport airport;
     
@@ -40,7 +40,8 @@ public class CTATest {
     public void setUp() {
         geoLocation = new GeoLocation(100,100,0); //Hier moeten nog goede waardes inkomen maar ik weet niet welke.
         cta = new CTA(geoLocation, 100, 100); // Hier moeten ook nog goede waardes in
-        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, 0, 299, 0, 012345); 
+        geoLocation2 = new GeoLocation(2,2,2);
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, Double.parseDouble("299"), 100, Double.parseDouble("650"), geoLocation, geoLocation2, 1);
         airport = new Airport(0, "", "", "","", "", geoLocation, 0, 0, "");
     }
     

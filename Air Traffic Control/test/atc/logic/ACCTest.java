@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class ACCTest {
     
     private CTA cta; //cta Thats being used for the test
-    private GeoLocation loc; // Location of the CTA
+    private GeoLocation loc, loc2; // Location of the CTA
     private ACC acc; //ACC thats being used for this test
     private Airplane apa; //Airplane thats in flight
     private Airplane apt; //Airplane thats ready for takeoff
@@ -44,10 +44,11 @@ public class ACCTest {
     @Before
     public void setUp() throws Exception {
         loc = new GeoLocation(1,1,1);
+        loc2 = new GeoLocation(2,2,2);
         cta = new CTA(loc, 1,1);
         acc = new ACC(1, cta);
-        apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100, 650);
-        apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100, 651);
+        apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, Double.parseDouble("299"), 100, Double.parseDouble("650"), loc, loc2, 1);
+        apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, Double.parseDouble("299"), 100, Double.parseDouble("640"), loc, loc2, 2);
         ra = new Runway(1,1,50, 300, 180, true);
         ru = new Runway(1,1,50,300, 270, false);
     }
