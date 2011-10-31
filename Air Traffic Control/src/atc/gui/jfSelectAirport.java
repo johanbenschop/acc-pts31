@@ -301,20 +301,17 @@ public class jfSelectAirport extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        // TODO add your handling code here:
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
         closed = true;
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
-        // TODO add your handling code here:
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.acc.GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
 
