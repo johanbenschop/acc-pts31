@@ -45,8 +45,8 @@ public class ACCTest {
         acc = new ACC(1, cta);
         apa = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 450, 299, 100);
         apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, 0, 299, 100);
-        ra = new Runway(1, 1, 1, 300, 180, true);
-        ru = new Runway(1, 1, 1, 300, 270, false);
+        ra = new Runway(1,1,50, 300, 180, true);
+        ru = new Runway(1,1,50,300, 270, false);
     }
     
     @After
@@ -101,9 +101,17 @@ public class ACCTest {
      * Test of GiveRunwayLand method, of class ACC.
      */
     @Test
-    public void GiveRunwayLand() {
+    public void GiveRunwayLand() throws AssignmentException {
         System.out.println("GiveRunwayLand");
+        acc.GiveRunwayLand(ru, apa, ru.getDirection());
+        fail("AssignmentException was expected because runway is unavailable.");
         
+        acc.GiveRunwayLand(ra, apa, 400);
+        fail("AssignementException was expected because the direction is not possible");
+        
+        acc.GiveRunwayLand(ra, apa, ra.getDirection());
+        Assert.assertEquals("Runway did not change availability" ,false , ra.getAvailability());
+        Assert.assertEquals("Airplane did not change direction.",180 ,apa.getAimedDirection());       
     }
     
     /*
