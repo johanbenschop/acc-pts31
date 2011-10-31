@@ -50,16 +50,6 @@ public class CTATest {
     }
 
     /**
-     * Test of GetActiveAirplane method, of class CTA.
-     */
-    @Test
-    public void testGetActiveAirplane() {
-        System.out.println("GetActiveAirplane");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of GetAirport method, of class CTA.
      */
     @Test
@@ -107,6 +97,16 @@ public class CTATest {
         System.out.println("addAirplane");
         cta.addAirplane(airplane);
         Assert.assertEquals("Airplane has been added.", true, cta.getAirplaneList().contains(airplane));
+    }
+    
+    /**
+     * Test of GetActiveAirplane method, of class CTA.
+     */
+    @Test
+    public void testGetActiveAirplane() {
+        System.out.println("GetActiveAirplane");
+        cta.GetActiveAirplane(airplane.getAirplaneNumber());
+        Assert.assertEquals("Retrieved active airplane", airplane, cta.getAirplane());
     }
     
     /**
