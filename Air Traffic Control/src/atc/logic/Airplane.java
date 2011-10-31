@@ -206,12 +206,14 @@ public class Airplane extends AirplaneFactory implements Runnable {
             }
         }
     }
-
+    /**
+     * The CurrentFuel will change based on the FuelUsage of the airplane.
+     */
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
 
-    //Setters
+    /**************Setters**************/
     public void SetAimedSpeed(double speed) {
         this.AimedSpeed = speed;
     }
@@ -228,7 +230,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
         this.Status = Status;
     }
 
-    //Getters
+    /**************Getters**************/
     public int getAirplaneNumber() {
         return AirplaneNumber;
     }

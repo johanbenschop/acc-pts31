@@ -40,7 +40,7 @@ public class ACC {
 
     }
 
-    /**************Methods**************/
+    /**************Getters**************/
     public int GetID() {
         return ID;
     }
@@ -65,8 +65,13 @@ public class ACC {
     public ListIterator<AirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
-    //Loads available airplanes into a list
 
+    /**************Methods**************/
+    
+     /**
+     * All airplanes in the AvailableAirplanes.dat list will be read into a list.
+     * @return
+     */
     public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
         FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
 
