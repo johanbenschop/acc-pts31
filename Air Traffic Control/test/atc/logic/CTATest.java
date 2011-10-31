@@ -83,6 +83,7 @@ public class CTATest {
      */
     @Test
     public void testGetActiveAirplane() {
+        cta.addAirplane(airplane);
         System.out.println("GetActiveAirplane");
         cta.GetActiveAirplane(airplane.getAirplaneNumber());
         Assert.assertEquals("Retrieved active airplane", airplane, cta.getAirplane());
@@ -113,8 +114,9 @@ public class CTATest {
      */
     @Test
     public void testGetAirport() {
+        cta.addAirport(airport);
         System.out.println("GetAirport");
-        cta.GetAirport(airport.getAirportID());
+        cta.GetAirport(0);
         Assert.assertEquals("Retrieved airport with given ID", airport, cta.getAirport());
     }
     
