@@ -30,7 +30,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double latitudeTravelled;
 
     public enum Statusses {
-        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2;
+        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
     }
 
     @Override
@@ -138,16 +138,17 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     public void ChangeSpeed() {
+        double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < 300) {
                 this.Speed += takeOffAccelerationSpeed;
                 this.Status = Statusses.INFLIGHT;
             }
         } else if (AimedSpeed != this.Speed) {
-            if (this.Speed - 1 > AimedSpeed) {
-                this.Speed -= 1;
-            } else if (this.Speed + 1 < AimedSpeed) {
-                this.Speed += 1;
+            if (this.Speed - amountChangeSpeed > AimedSpeed) {
+                this.Speed -= amountChangeSpeed;
+            } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
+                this.Speed += amountChangeSpeed;
             } else {
                 this.Speed = AimedSpeed;
             }
@@ -158,11 +159,16 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * The direction will increase or decrease every second with 3 degrees.
      */
     public void ChangeDirection() {
+        double amountChangeDirection = 0.3;
         if (AimedDirection != this.Direction) {
-            if (this.Direction > AimedDirection) {
-                this.Direction -= 0.3;
-            } else if (this.Direction < AimedDirection) {
-                this.Direction += 0.3; 
+            if (this.Direction - amountChangeDirection > AimedDirection) {
+                this.Direction -= amountChangeDirection;
+            } else if (this.Direction + amountChangeDirection < AimedDirection) {
+                this.Direction += amountChangeDirection; 
+            }
+            else
+            {
+                this.Direction = this.AimedDirection;
             }
         }
     }
@@ -171,14 +177,14 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * The altitude will increase or decrease with 20 feet every second.
      */
     public void ChangeAltitude() {
-        double changeHeight = 2.0;
+        double amountChangeHeight = 2.0;
         if (AimedAltitude != this.Altitude) {
-            if (this.Altitude - changeHeight > AimedAltitude) {
-                this.Altitude -= changeHeight;
-            } else if (this.Altitude + changeHeight < AimedAltitude) {
-                this.Altitude += changeHeight;
+            if (this.Altitude - amountChangeHeight > AimedAltitude) {
+                this.Altitude -= amountChangeHeight;
+            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
+                this.Altitude += amountChangeHeight;
             } else {
-                this.Altitude = 100;
+                this.Altitude = this.AimedAltitude;
             }
         }
     }
