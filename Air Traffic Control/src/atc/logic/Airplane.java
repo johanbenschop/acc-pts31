@@ -30,7 +30,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     private double latitudeTravelled;
 
     public enum Statusses {
-        TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
+        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
     }
 
     @Override
@@ -66,6 +66,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
         this.CurrentFuel = CurrentFuel;
         this.Altitude = Altitude;
         this.AirplaneNumber = AirplaneNumber;
+        this.Status = Statusses.STANDINGONAIRPORT;
         /*this.location = Location;
         this.destinationLocation = DestinationLocation;*/
 
@@ -87,10 +88,13 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
+        if(this.Status != Statusses.STANDINGONAIRPORT)
+        {
         ChangeSpeed();
         ChangeDirection();
         ChangeAltitude();
         ChangeGeoLocation();
+        }
     }
 
     /**
