@@ -20,8 +20,9 @@ import junit.framework.Assert;
  */
 public class AirplaneTest {
     
-    private GeoLocation geoLocation;
+    private GeoLocation location;
     private Airplane airplane;
+    private Runway runway;
     
     public AirplaneTest() {
     }
@@ -38,36 +39,12 @@ public class AirplaneTest {
     public void setUp() {
         //een vliegtuig met speed, direction en altitude 0;
         airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, 0, 299, 0, 012345);
+        location = new GeoLocation(10, 10, 10);
+        runway = new Runway(1,1,50,300, 270, false);
     }
     
     @After
     public void tearDown() {
-    }
-
-
-
-    /**
-     * Test of run method, of class Airplane.
-     */
-    @Test
-    public void testRun() {
-        System.out.println("run");
-        Airplane instance = null;
-        instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of Fly method, of class Airplane.
-     */
-    @Test
-    public void testFly() {
-        System.out.println("Fly");
-        Airplane instance = null;
-        instance.Fly();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -75,19 +52,46 @@ public class AirplaneTest {
      */
     @Test
     public void testChangeGeoLocation() {
+        System.out.println(location.getAltitude());
+        System.out.println(location.getLongitude());
         System.out.println("ChangeGeoLocation");
+        double latitudeTravelled = 10 * Math.sin(30);
+        double longitudeTravelled = 10 * Math.cos(30);
+        System.out.println(latitudeTravelled);
+        System.out.println(longitudeTravelled);
+        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
+        System.out.println(location.getLatitude());
+        System.out.println(location.getLongitude());
+        Assert.assertEquals("Latitude should have changed", 9.910617728958488 , location.getLatitude());
+        Assert.assertEquals("Longitude should have changed",9.984330154398483 , location.getLongitude());
     }
-
+    
     /**
      * Test of ChangeSpeed method, of class Airplane.
      */
     @Test
     public void testChangeSpeed() {
         System.out.println("ChangeSpeed");
-        airplane.SetAimedSpeed(500);
+        airplane.SetAimedSpeed(200);
         airplane.ChangeSpeed();
-        airplane.run();
-        Assert.assertEquals("Speed should have changed",500 , airplane.getAimedSpeed());
+        Assert.assertEquals("Speed should have changed",1.0 , airplane.getSpeed());
+        System.out.println("1e voltooid");
+        
+        airplane.SetAimedSpeed(500);
+        while(airplane.getSpeed() != airplane.getAimedSpeed())
+        {
+        airplane.ChangeSpeed();
+        }
+        Assert.assertEquals("Speed should have changed",500.0 , airplane.getSpeed());
+        System.out.println("2e voltooid");
+        
+        airplane.SetAimedSpeed(700);
+        airplane.setStatus(Statusses.CRASHED);
+        airplane.ChangeSpeed();
+        Assert.assertEquals("Speed should have changed",0.0 , airplane.getSpeed());
+        System.out.println("3e voltooid");
+                
     }
 
     /**
@@ -96,10 +100,18 @@ public class AirplaneTest {
     @Test
     public void testChangeDirection() {
         System.out.println("ChangeDirection");
-        Airplane instance = null;
-        instance.ChangeDirection();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        airplane.SetAimedDirection(180);
+        airplane.ChangeDirection();
+        Assert.assertEquals("Direction should have changed", 0.3 , airplane.getDirection());
+        System.out.println("1e voltooid");
+        
+        airplane.SetAimedDirection(180);
+        while(airplane.getDirection() != airplane.getAimedDirection())
+        {
+            airplane.ChangeDirection();
+        }
+        Assert.assertEquals("Direction should have changed",180.0 , airplane.getDirection());
+        System.out.println("2e voltooid");
     }
 
     /**
@@ -108,25 +120,44 @@ public class AirplaneTest {
     @Test
     public void testChangeAltitude() {
         System.out.println("ChangeAltitude");
-        Airplane instance = null;
-        instance.ChangeAltitude();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        airplane.SetAimedAltitude(100);
+        airplane.ChangeAltitude();
+        Assert.assertEquals("Altitude should have changed", 2.0 , airplane.getAltitude());
+        System.out.println("1e voltooid");
+        
+        airplane.SetAimedAltitude(600);
+        while(airplane.getAltitude() != airplane.getAimedAltitude())
+        {
+            airplane.ChangeAltitude();
+        }
+        Assert.assertEquals("Altitude should have changed", 600.0 , airplane.getAltitude());
+        System.out.println("2e voltooid");
     }
 
     /**
-     * Test of ChangeFuel method, of class Airplane.
+     * Test of Landing method, of class Airplane.
      */
     @Test
-    public void testChangeFuel() {
-        System.out.println("ChangeFuel");
-        Airplane instance = null;
-        instance.ChangeFuel();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testLanding() {
+        System.out.println("Landing");
+        airplane.setStatus(Statusses.INFLIGHT);
+        airplane.Landing(runway, 50);
+        Assert.assertEquals("Status should have changed", Airplane.Statusses.LANDING , airplane.getStatus());
+        System.out.println("1e voltooid");
     }
-
-
-
-  
+    
+    
+    
+     /**
+     * Test of TakeOff method, of class Airplane.
+     */
+    /*
+    @Test
+    public void testTakeOff() {
+        System.out.println("TakeOff");
+        airplane.setStatus(Statusses.STANDINGONAIRPORT);
+        airplane.TakeOff(runway, 50, 50, 50);
+        Assert.assertEquals("Status should have changed", Airplane.Statusses.TAKINGOFF , airplane.getStatus());
+        System.out.println("1e voltooid");
+    }*/
 }
