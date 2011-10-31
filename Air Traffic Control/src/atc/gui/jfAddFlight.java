@@ -310,6 +310,9 @@ public class jfAddFlight extends javax.swing.JDialog {
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Not all fields have been satisfied.");
         }
+        
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnAddFlightActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
