@@ -213,4 +213,9 @@ public class CTA {
     {
         return airportList;
     }
+    
+    public Airplane getAirplane()
+    {
+        return airplane;
+    }
 }
