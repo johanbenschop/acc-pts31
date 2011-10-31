@@ -94,7 +94,10 @@ public class CTA {
 
     public void deleteAirplane(int AirplaneNumber) {
         for (Airplane a : airplaneList) {
-            // als a.airplaneNumber == AirplaneNumber dan verwijder.. anders niets
+            if(a.getAirplaneNumber() == AirplaneNumber)
+            {
+                airplaneList.remove(a);
+            }
         }
     }
 
