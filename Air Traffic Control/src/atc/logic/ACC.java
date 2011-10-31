@@ -53,15 +53,15 @@ public class ACC {
         return fp;
     }
 
-    public AirplaneFactory GetAirplaneFactory(String Type) {
+    public AirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) {
         for (AirplaneFactory a : airplaneFactoryList) {
-            if (a.getType() == Type) {
+            if (a.getID() == AirplaneFactoryID) {
                 airplaneFactory = a;
-                return a;
             }
         }
-        return null;
+        return airplaneFactory;
     }
+    
     public ListIterator<AirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
