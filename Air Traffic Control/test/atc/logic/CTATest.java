@@ -48,15 +48,15 @@ public class CTATest {
     public void tearDown() {
     }
     
-//    /**
-//     * Test of DetectAirplane method, of class CTA.
-//     */
-//    @Test
-//    public void testDetectAirplane() {
-//        System.out.println("DetectAirplane");
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of DetectAirplane method, of class CTA.
+     */
+    @Test
+    public void testDetectAirplane() {
+        System.out.println("DetectAirplane");
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 
 //    /**
 //     * Test of Collision method, of class CTA.
