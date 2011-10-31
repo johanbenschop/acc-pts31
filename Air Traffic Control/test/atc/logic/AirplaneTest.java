@@ -4,6 +4,7 @@
  */
 package atc.logic;
 
+import junit.framework.Assert;
 import atc.logic.Airplane.Statusses;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,12 +12,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import junit.framework.Assert;
 
 /**
  *
  * @author PuHa
  */
 public class AirplaneTest {
+    
+    private GeoLocation geoLocation;
+    private Airplane airplane;
     
     public AirplaneTest() {
     }
@@ -31,25 +36,15 @@ public class AirplaneTest {
     
     @Before
     public void setUp() {
+        //een vliegtuig met speed, direction en altitude 0;
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, 0, 299, 0, 012345);
     }
     
     @After
     public void tearDown() {
     }
 
-    /**
-     * Test of ToString method, of class Airplane.
-     */
-    @Test
-    public void testToString() {
-        System.out.println("ToString");
-        Airplane instance = null;
-        String expResult = "";
-        String result = instance.ToString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+
 
     /**
      * Test of run method, of class Airplane.
@@ -81,10 +76,6 @@ public class AirplaneTest {
     @Test
     public void testChangeGeoLocation() {
         System.out.println("ChangeGeoLocation");
-        Airplane instance = null;
-        instance.ChangeGeoLocation();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -93,10 +84,10 @@ public class AirplaneTest {
     @Test
     public void testChangeSpeed() {
         System.out.println("ChangeSpeed");
-        Airplane instance = null;
-        instance.ChangeSpeed();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        airplane.SetAimedSpeed(500);
+        airplane.ChangeSpeed();
+        airplane.run();
+        Assert.assertEquals("Speed should have changed",500 , airplane.getAimedSpeed());
     }
 
     /**
@@ -135,70 +126,7 @@ public class AirplaneTest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of SetAirplaneNumber method, of class Airplane.
-     */
-    @Test
-    public void testSetAirplaneNumber() {
-        System.out.println("SetAirplaneNumber");
-        int airplaneNumber = 0;
-        Airplane instance = null;
-        instance.SetAirplaneNumber(airplaneNumber);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
-    /**
-     * Test of SetAimedSpeed method, of class Airplane.
-     */
-    @Test
-    public void testSetAimedSpeed() {
-        System.out.println("SetAimedSpeed");
-        double speed = 0.0;
-        Airplane instance = null;
-        instance.SetAimedSpeed(speed);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of SetAimedDirection method, of class Airplane.
-     */
-    @Test
-    public void testSetAimedDirection() {
-        System.out.println("SetAimedDirection");
-        double direction = 0.0;
-        Airplane instance = null;
-        instance.SetAimedDirection(direction);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of SetAimedAltitude method, of class Airplane.
-     */
-    @Test
-    public void testSetAimedAltitude() {
-        System.out.println("SetAimedAltitude");
-        double altitude = 0.0;
-        Airplane instance = null;
-        instance.SetAimedAltitude(altitude);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setStatus method, of class Airplane.
-     */
-    @Test
-    public void testSetStatus() {
-        System.out.println("setStatus");
-        Statusses Status = null;
-        Airplane instance = null;
-        instance.setStatus(Status);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
   
 }
