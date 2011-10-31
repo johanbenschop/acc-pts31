@@ -79,11 +79,14 @@ public class ACCTest {
     @Test (expected = AssignmentException.class)
     public void testChangeDirection() throws AssignmentException {
         System.out.println("ChangeDirection");
-        acc.ChangeDirection(400, apa);
+        acc.ChangeDirection(200, apa);
         fail("AssignmentException was expected");
         
         acc.ChangeDirection(90, apa);
         Assert.assertEquals("Direction should have been changed", 90, apa.getAimedDirection());
+        
+        acc.ChangeDirection(-70, apa);
+        Assert.assertEquals("Direction should have been changed", -70, apa.getAimedDirection());
     }
     
     /**
@@ -103,7 +106,7 @@ public class ACCTest {
     /**
      * Test of GiveRunwayLand method, of class ACC.
      */
-    @Test
+    @Test (expected = AssignmentException.class)
     public void GiveRunwayLand() throws AssignmentException {
         System.out.println("GiveRunwayLand");
         acc.GiveRunwayLand(ru, apa, ru.getDirection());
@@ -120,10 +123,11 @@ public class ACCTest {
     /*
      * Test of GIveRunwayTakeOff method, of class ACC.
      */
-    @Test
-    public void GiveRunwayTakeOff() {
+    @Test (expected = AssignmentException.class)
+    public void GiveRunwayTakeOff() throws AssignmentException {
         System.out.println("GiveRunwayTakeOff");
-        
+        acc.GiveRunwayTakeOff(ru, apt, 180, 2, 350);
+        fail("AssignmentException was expected because runway is unavailable.");
     }
         /**
      * Test of loadAvailableAirplaneList method, of class CTA.

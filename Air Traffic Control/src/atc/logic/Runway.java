@@ -14,7 +14,7 @@ public class Runway extends GeoLocation{
     private boolean Availability;
     private Timer timer;
 
-    public Runway(int Longitude, int Latitude, int Altitude, int length, int direction, boolean availability) {
+    public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) {
         super(Longitude, Latitude, Altitude);
         this.Length = length;
         this.Direction = direction;

@@ -23,7 +23,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
     //private Date SecondsBeforeRunning = new Date();
     //private Date SecondsRunning = new Date();
     private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
-    //private GeoLocation destinationLocation;
+    private GeoLocation destinationLocation;
     private GeoLocation location;
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
     private double longitudeTravelled;
@@ -59,17 +59,15 @@ public class Airplane extends AirplaneFactory implements Runnable {
      * @param Altitude: The current flight height of the airplane.
      */
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
-            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, /*GeoLocation Location, GeoLocation DestinationLocation,*/ int AirplaneNumber) {
+            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, GeoLocation Location, GeoLocation DestinationLocation, int AirplaneNumber) {
         super(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlaneWidth, PlaneLength, MaxFuel, FuelUsage);
         this.Direction = Direction;
         this.Speed = Speed;
         this.CurrentFuel = CurrentFuel;
         this.Altitude = Altitude;
         this.AirplaneNumber = AirplaneNumber;
-        this.Status = Statusses.STANDINGONAIRPORT;
-        /*this.location = Location;
-        this.destinationLocation = DestinationLocation;*/
-
+        this.location = Location;
+        this.destinationLocation = DestinationLocation;
     }
 
     @Override
