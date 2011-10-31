@@ -130,14 +130,4 @@ public class CTATest {
         airport = cta.GetAirport(1);
         assertEquals("This objects number should be number 1", airport.getAirportID(), 1);
     }
-    
-//    /**
-//     * Test of loadAvailableAirplaneList method, of class CTA.
-//     */
-//    @Test
-//    public void testLoadAvailableAirplaneList() {
-//        System.out.println("loadAvailableAirplaneList");
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
 }
