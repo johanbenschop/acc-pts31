@@ -10,8 +10,17 @@
  */
 package atc.gui;
 
+import atc.logic.Airplane;
+import atc.logic.AirplaneFactory;
+import atc.logic.Flightplan;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.ListIterator;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -19,10 +28,30 @@ import java.awt.event.WindowEvent;
  */
 public class jfSelectFlight extends javax.swing.JDialog {
 
+    private Flightplan flightplan;
+    private ListIterator<Flightplan> flightplans;
+    private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
+    private Vector<Vector> data = new Vector<>();
+    private boolean closed;
+    private AirplaneFactory selectedAirplane;
+    private ArrayList<Flightplan> bufFlightplans;
+
     /** Creates new form jfSearchFlight */
     public jfSelectFlight(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        bufFlightplans = new ArrayList<>();
+        
+        flightplans = atc2.acc.getFlightplans();
+
+        columnNames.addElement("Flightnumber");
+        columnNames.addElement("Airliner");
+        columnNames.addElement("Departure date");
+        columnNames.addElement("Arrival date");
+        columnNames.addElement("Airplane flying");
+
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
     }
 
     /** This method is called from within the constructor to
@@ -37,8 +66,6 @@ public class jfSelectFlight extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         tfFlightnumber = new javax.swing.JTextField();
-        tfDepartureDate = new javax.swing.JTextField();
-        tfArrivalDate = new javax.swing.JTextField();
         tfAirplaneFlying = new javax.swing.JTextField();
         btnSelectAirplame = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -46,9 +73,11 @@ public class jfSelectFlight extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         tfAirliner = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        tfDepartureDate = new org.jdesktop.swingx.JXDatePicker();
+        tfArrivalDate = new org.jdesktop.swingx.JXDatePicker();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         btnSelect = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
@@ -61,7 +90,18 @@ public class jfSelectFlight extends javax.swing.JDialog {
 
         jLabel1.setText("Flightnumber");
 
+        tfFlightnumber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDepartureDateKeyTyped(evt);
+            }
+        });
+
         tfAirplaneFlying.setEditable(false);
+        tfAirplaneFlying.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDepartureDateKeyTyped(evt);
+            }
+        });
 
         btnSelectAirplame.setText("Select Airplane");
         btnSelectAirplame.addActionListener(new java.awt.event.ActionListener() {
@@ -75,6 +115,12 @@ public class jfSelectFlight extends javax.swing.JDialog {
         jLabel3.setText("Arrival date");
 
         jLabel4.setText("Airliner");
+
+        tfAirliner.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDepartureDateKeyTyped(evt);
+            }
+        });
 
         jLabel5.setText("Airplane flying flight");
 
@@ -93,25 +139,23 @@ public class jfSelectFlight extends javax.swing.JDialog {
                     .addComponent(jLabel1))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tfDepartureDate, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(79, 79, 79)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSelectAirplame)))))
+                                .addComponent(btnSelectAirplame))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,7 +185,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(" Search results (0 flights found) "));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -157,7 +201,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -165,7 +209,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -197,7 +241,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancel)
@@ -223,21 +267,78 @@ public class jfSelectFlight extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelectAirplameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplameActionPerformed
-        // TODO add your handling code here:
-        
+        selectedAirplane = new jfSelectAirplane(null, true).getValue();
     }//GEN-LAST:event_btnSelectAirplameActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        // TODO add your handling code here:
-        
+        closed = true;
+        WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);        
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void tfDepartureDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDepartureDateKeyTyped
+        // TODO add your handling code here:
+        data.clear(); // Empty the data so we can get the limited results in.
+        flightplans = atc2.acc.getFlightplans(); // we must get an new iterator, since the previus one is empty.
+        bufFlightplans.clear();
+        while (flightplans.hasNext()) {
+            Flightplan iter = flightplans.next();
+            bufFlightplans.add(iter);
+
+            try {
+                if (tfFlightnumber.getText() != ""
+                        && iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                tfFlightnumber.setText("");
+            }
+            
+            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
+                    tfDepartureDate.getDate().getMonth(),
+                    tfDepartureDate.getDate().getDay());
+            if (tfDepartureDate.getDate() != null && cal != iter.getDepartureDate()) {
+                continue;
+            }
+            
+            cal = new GregorianCalendar(tfArrivalDate.getDate().getYear(),
+                    tfArrivalDate.getDate().getMonth(),
+                    tfArrivalDate.getDate().getDay());
+            if (tfArrivalDate.getDate() != null && cal != iter.getArrivalDate()) {
+                continue;
+            }
+            
+            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
+                continue;
+            }
+            
+            Vector<String> row = new Vector<>();
+            row.addElement(String.valueOf(iter.getFlightnumber()));
+            row.addElement("WDAL");
+            row.addElement(iter.getDepartureDate().toString());
+            row.addElement(iter.getArrivalDate().toString());
+            row.addElement(iter.getAirplane().ToString());
+            data.addElement(row);
+            
+        }
+
+       
+    }//GEN-LAST:event_tfDepartureDateKeyTyped
+
+    public Flightplan getValue() {
+        setVisible(true);
+        if (!closed) {
+            int id = jTable.getSelectedRow();
+            return bufFlightplans.get(id);
+        }
+        return null;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -266,7 +367,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the form */
-                java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 jfSelectFlight dialog = new jfSelectFlight(new javax.swing.JFrame(), true);
@@ -293,11 +394,11 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField tfAirliner;
     private javax.swing.JTextField tfAirplaneFlying;
-    private javax.swing.JTextField tfArrivalDate;
-    private javax.swing.JTextField tfDepartureDate;
+    private org.jdesktop.swingx.JXDatePicker tfArrivalDate;
+    private org.jdesktop.swingx.JXDatePicker tfDepartureDate;
     private javax.swing.JTextField tfFlightnumber;
     // End of variables declaration//GEN-END:variables
 }
