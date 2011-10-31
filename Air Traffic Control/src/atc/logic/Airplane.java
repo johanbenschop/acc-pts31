@@ -126,10 +126,16 @@ public class Airplane extends AirplaneFactory implements Runnable {
     {
         //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
        distanceTravelled = (this.Speed / 36000);
+       latitudeTravelled = distanceTravelled * Math.sin(Direction);
+       longitudeTravelled = distanceTravelled * Math.cos(Direction);
+       location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
+       
+               /*
        longitudeTravelled = distanceTravelled * Math.sin(Direction);
        latitudeTravelled = distanceTravelled * Math.cos(Direction);
        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
+       location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());*/
     }
     
     
@@ -144,7 +150,12 @@ public class Airplane extends AirplaneFactory implements Runnable {
                 this.Speed += takeOffAccelerationSpeed;
                 this.Status = Statusses.INFLIGHT;
             }
-        } else if (AimedSpeed != this.Speed) {
+        }
+        else if(this.Status == Statusses.CRASHED)
+        {
+            this.Speed = 0;
+        }
+        else if (AimedSpeed != this.Speed) {
             if (this.Speed - amountChangeSpeed > AimedSpeed) {
                 this.Speed -= amountChangeSpeed;
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
@@ -153,6 +164,7 @@ public class Airplane extends AirplaneFactory implements Runnable {
                 this.Speed = AimedSpeed;
             }
         }
+
     }
 
     /**
