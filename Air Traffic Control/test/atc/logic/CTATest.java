@@ -47,16 +47,6 @@ public class CTATest {
     @After
     public void tearDown() {
     }
-
-    /**
-     * Test of GetAirport method, of class CTA.
-     */
-    @Test
-    public void testGetAirport() {
-        System.out.println("GetAirport");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
     
     /**
      * Test of DetectAirplane method, of class CTA.
@@ -99,6 +89,16 @@ public class CTATest {
     }
     
     /**
+     * Test of deleteAirplane method, of class CTA.
+     */
+    @Test
+    public void testDeleteAirplane() {
+        System.out.println("deleteAirplane");
+        cta.deleteAirplane(airplane.getAirplaneNumber());
+        Assert.assertEquals("Airport has been added.", false, cta.getAirportList().contains(airport));
+    }
+    
+    /**
      * Test of addAirport method, of class CTA.
      */
     @Test
@@ -109,13 +109,13 @@ public class CTATest {
     }
     
     /**
-     * Test of deleteAirplane method, of class CTA.
+     * Test of GetAirport method, of class CTA.
      */
     @Test
-    public void testDeleteAirplane() {
-        System.out.println("deleteAirplane");
-        cta.deleteAirplane(airplane.getAirplaneNumber());
-        Assert.assertEquals("Airport has been added.", false, cta.getAirportList().contains(airport));
+    public void testGetAirport() {
+        System.out.println("GetAirport");
+        cta.GetAirport(airport.getAirportID());
+        Assert.assertEquals("Retrieved airport with given ID", airport, cta.getAirport());
     }
     
     /**
