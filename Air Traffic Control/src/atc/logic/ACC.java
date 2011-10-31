@@ -12,6 +12,7 @@ public class ACC {
     private int ID;
     private CTA cta;
     private ArrayList<Flightplan> fp;
+    private int flightnumber = 1;
 
     /***************Constructor**********/
     /** 
@@ -34,6 +35,10 @@ public class ACC {
 
     public CTA GetCTA() {
         return cta;
+    }
+    
+    public ArrayList<Flightplan> getfp() {
+        return fp;
     }
 
     /**
@@ -189,11 +194,21 @@ public class ACC {
         a.setStatus(Airplane.Statusses.INLANDINGQUEUE);
     }
 
-    // TODO DUCUMENTATION!!!
+    /**
+     * Method to create a flightplan
+     * @param a
+     * @param start
+     * @param end
+     * @param arrival
+     * @param departure
+     * @param flightnumber 
+     */
     public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure, int flightnumber) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
-                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0, start.getLocation(), end.getLocation());
+                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 0, 0, 300, 0, start.getLocation(), end.getLocation(), flightnumber);
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
+        flightnumber++;
+        cta.addAirplane(ap);
     }
     
     // READ ME! According to the class diagram the ACC does not have an direct relation to the Flightplan.
