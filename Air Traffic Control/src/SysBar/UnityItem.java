@@ -21,7 +21,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.Timer;
-import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 
@@ -43,66 +42,130 @@ public class UnityItem extends JComponent implements MouseListener {
     private int alphaIntensity;
     private static int x;
 
-    public int getAlphaIntensity() {
+    /**
+     * Return the alpha intensity for the icon.
+     * @return alpha intensity for the icon
+     */
+    private int getAlphaIntensity() {
         return alphaIntensity;
     }
 
-    public void setAlphaIntensity(int alphaIntensity) {
+    /**
+     * Sets the alpha intensity for the icon.
+     * @param alphaIntensity 
+     */
+    private void setAlphaIntensity(int alphaIntensity) {
         this.alphaIntensity = alphaIntensity;
     }
 
+    /**
+     * Gets the base colour of the icon.
+     * @return base colour of icon
+     */
     public Color getColour() {
         return colour;
     }
 
+    /**
+     * Sets  the base colour of the icon.
+     * @param colour the base colour of icon
+     */
     public void setColour(Color colour) {
         this.colour = colour;
         this.repaint();
     }
 
+    /**
+     * Gets the image inside the icon.
+     * @return the image inside the icon
+     */
     public Image getIcon() {
         return icon;
     }
 
+    /**
+     * Sets the image inside the icon.
+     * @param icon the image inside the icon
+     */
     public void setIcon(Image icon) {
         this.icon = icon;
         this.repaint();
     }
 
+    /**
+     * Returns the title of the icon.
+     * @return title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the title of the icon.
+     * @param title 
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets the weight of the icon. (NOT YET OMPLEMENTED)
+     * @return weight
+     */
     public int getWeight() {
         return weight;
     }
 
+    /**
+     * Sets the weight of the icon. (NOT YET OMPLEMENTED)
+     * @param weight 
+     */
     public void setWeight(int weight) {
         this.weight = weight;
     }
 
+    /**
+     * Returns true if icon is lid or flashing.
+     * @return 
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Sets the icon lid or flashing.
+     * @param active 
+     */
     public void setActive(boolean active) {
         this.active = active;
         this.repaint();
     }
 
+    /**
+     * Gets the type of the icon.
+     * @return type
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * Sets the type of the icon.
+     * @param type 
+     */
     public void setType(Type type) {
         this.type = type;
         this.repaint();
     }
 
+    /**
+     * Creates a new UnityItem with the given parameters.
+     * @param title
+     * @param colour
+     * @param weight
+     * @param icon
+     * @param type 
+     */
     public UnityItem(String title, Color colour, int weight, String icon, Type type) {
         super();
         this.enableInputMethods(true);
@@ -127,15 +190,16 @@ public class UnityItem extends JComponent implements MouseListener {
                 break;
             case ALERT:
                 this.timer = new Timer(50, new ActionListener() {
+
                     double x = 0;
                     int r = 0;
-                    
+
                     public void actionPerformed(ActionEvent event) {
                         int a = (int) (150 + (50 * Math.sin(x)));
                         if (a == 150 || (int) a == 192) {
                             r++;
                         }
-                        
+
                         setAlphaIntensity(a);
                         x = x + 0.2;
                         repaint();
@@ -144,13 +208,20 @@ public class UnityItem extends JComponent implements MouseListener {
                 timer.start();
                 break;
         }
-
     }
 
+    /**
+     * Add an action listener.
+     * @param listener 
+     */
     public void addActionListener(ActionListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Notify our listeners.
+     * @param e 
+     */
     private void notifyListeners(MouseEvent e) {
         ActionEvent evt = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, new String(), e.getWhen(), e.getModifiers());
 
@@ -162,21 +233,37 @@ public class UnityItem extends JComponent implements MouseListener {
         }
     }
 
+    /**
+     * Gets the preferred size of this JComponment.
+     * @return 
+     */
     @Override
     public Dimension getPreferredSize() {
         return dimension;
     }
 
+    /**
+     * Gets the minium size of this JComponment.
+     * @return 
+     */
     @Override
     public Dimension getMinimumSize() {
         return dimension;
     }
 
+    /**
+     * Gets the maximum size of this JComponment.
+     * @return 
+     */
     @Override
     public Dimension getMaximumSize() {
         return dimension;
     }
 
+    /**
+     * Paint the icon
+     * @param g Grap
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -223,12 +310,21 @@ public class UnityItem extends JComponent implements MouseListener {
         g.drawImage(image, 0, 0, this);
     }
 
+    /**
+     * Gets the Point() of tooltip. This value is always the same regardless of parameter input.
+     * @param event
+     * @return 
+     */
     @Override
     public Point getToolTipLocation(MouseEvent event) {
         // We give the fixed relative position.
         return new Point(67, 16);
     }
 
+    /**
+     * Create our cool tooltip
+     * @return JToolTip
+     */
     @Override
     public JToolTip createToolTip() {
         JToolTip tip = new JToolTip();
@@ -239,6 +335,11 @@ public class UnityItem extends JComponent implements MouseListener {
         return tip;
     }
 
+    /**
+     * Event that gets fired after a mouse click.
+     * Its activates the button.
+     * @param e 
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         notifyListeners(e);
@@ -254,15 +355,16 @@ public class UnityItem extends JComponent implements MouseListener {
         switch (this.type) {
             case NORMAL:
                 this.timer = new Timer(50, new ActionListener() {
+
                     double x = 0;
                     int r = 0;
-                    
+
                     public void actionPerformed(ActionEvent event) {
                         int a = (int) (150 + (50 * Math.sin(x)));
                         if (a == 150 || (int) a == 192) {
                             r++;
                         }
-                        
+
                         setAlphaIntensity(a);
                         x = x + 0.2;
                         repaint();
@@ -277,6 +379,7 @@ public class UnityItem extends JComponent implements MouseListener {
         }
 
     }
+    // We have to overide these methods even though we aren't using them.
 
     @Override
     public void mousePressed(MouseEvent e) {

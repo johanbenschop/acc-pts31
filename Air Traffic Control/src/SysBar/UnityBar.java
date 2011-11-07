@@ -30,6 +30,9 @@ public final class UnityBar extends JPanel {
         NORMAL, ALERT, NOTIFICATION;
     }
 
+    /**
+     * Create a new UnityBar().
+     */
     public UnityBar() {
         super(new BorderLayout());
         setPreferredSize(new Dimension(66, 720));
@@ -42,6 +45,11 @@ public final class UnityBar extends JPanel {
         this.add(Bottom, java.awt.BorderLayout.SOUTH);
     }
 
+    /**
+     * Adds an item to this bar.
+     * @param menuItem
+     * @return UnityItem just added
+     */
     public UnityItem addItem(UnityItem menuItem) {
         // We check the type and then add it to the correct panel.
         switch (menuItem.getType()) {
@@ -55,7 +63,7 @@ public final class UnityBar extends JPanel {
                 Bottom.add(menuItem);
                 break;
         }
-        
+
         // We need to (re)calculate the height of the part of the bar.
         int TopH = 0;
         for (int i = 0; i < Top.getComponentCount(); i++) {
@@ -67,20 +75,36 @@ public final class UnityBar extends JPanel {
         }
         Top.setPreferredSize(new Dimension(65, TopH));
         Bottom.setPreferredSize(new Dimension(65, BottomH));
-        
+
         return menuItem;
     }
 
+    /**
+     * Adds a new item to the bar.
+     * @param title
+     * @param colour
+     * @param weight
+     * @param icon
+     * @param type
+     * @return the newly created UnityItem
+     */
     public UnityItem addItem(String title, Color colour, int weight, String icon, Type type) {
         UnityItem menuItem = new UnityItem(title, colour, weight, icon, type);
         this.add(menuItem, java.awt.BorderLayout.SOUTH);
         return menuItem;
     }
-    
+
+    /**
+     * This clears all the icons of the type ALERT. 
+     */
     public void clearAlerts() {
         this.Bottom.removeAll();
     }
 
+    /**
+     * Paints the menu bar.
+     * @param g 
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
