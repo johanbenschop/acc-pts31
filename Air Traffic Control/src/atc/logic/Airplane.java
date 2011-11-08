@@ -135,9 +135,9 @@ public class Airplane extends Thread {
     public void Land(Runway r) {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
-            SetAimedDirection(r.getDirection());
+            SetAimedDirection(GeoLocation.CalcDirection(location, r.getLocation()));
             SetAimedAltitude(0);
-            SetAimedSpeed(0);
+       //     SetAimedSpeed(0);
         }
     }
 
@@ -150,9 +150,9 @@ public class Airplane extends Thread {
      */
     public void TakeOff(Runway r, double direction, double altitude, double speed) {
         System.out.println(direction);
-        location.setAltitude(r.getAltitude());
-        location.setLatitude(r.getLatitude());
-        location.setLongitude(r.getLongitude());
+        location.setAltitude(r.getLocation().getAltitude());
+        location.setLatitude(r.getLocation().getLatitude());
+        location.setLongitude(r.getLocation().getLongitude());
         this.Status = Statusses.TAKINGOFF;
         SetAimedDirection(direction);
         SetAimedAltitude(altitude);

@@ -274,7 +274,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        double direction = CalcDirection(start, end);
+        double direction = GeoLocation.CalcDirection(start, end);
         System.out.println("The direction to the airfield is " + direction);
             System.out.println(ap.getStatus());
             int i = 0;
@@ -293,21 +293,5 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
     
     public ListIterator<Flightplan> getFlightplans() {
         return fp.listIterator();
-    }
-    
-    public double CalcDirection(Airport a, Airport b){
-        GeoLocation locationA = new GeoLocation(0,0,0);
-        GeoLocation locationB = new GeoLocation(0,0,0);
-        locationA = a.getLocation();
-        locationB = b.getLocation();
-        double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
-        double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
-        double lat1 = Math.toRadians(locationA.getLatitude());
-        double lat2 = Math.toRadians(locationB.getLatitude());
-        
-        double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-        double direction = Math.toDegrees(Math.atan2(y, x));
-        return direction;
     }
 }
