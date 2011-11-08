@@ -11,6 +11,7 @@
 package atc.gui;
 
 import atc.logic.Airplane.Statusses;
+import atc.logic.AssignmentException;
 import atc.logic.Flightplan;
 import atc.logic.Runway;
 import java.awt.Toolkit;
@@ -168,14 +169,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
     private void btnLandFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLandFlightActionPerformed
         // TODO add your handling code here:
         
-        Runway runway = flightplan.getDestinationAirport().getRunway();
-        if (runway != null) {
-            flightplan.getAirplane().Land(runway);
-        }
-        else {
+        try {
+            atc2.acc.LandFlight(flightplan);
+        } catch (AssignmentException ex) {
             JOptionPane.showMessageDialog(this, "There are no runways available at destination airport.");
         }
-        
     }//GEN-LAST:event_btnLandFlightActionPerformed
 
     /**
