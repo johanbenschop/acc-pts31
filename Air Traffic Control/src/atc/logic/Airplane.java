@@ -37,7 +37,6 @@ public class Airplane extends Thread {
     private double longitudeTravelled;
     private double latitudeTravelled;
     private boolean boolTakeOff = false;
-    
 
     public enum Statusses {
 
@@ -84,19 +83,24 @@ public class Airplane extends Thread {
         this.location = Location;
         this.destinationLocation = DestinationLocation;
         this.Status = Statusses.INTAKEOFFQUEUE;
-        
+
     }
 
     @Override
     public void run() {
-        while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
-            try {
-                Fly();
-                Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
+        while (true) {
+            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF ||
+                    Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 ||
+                    Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
+                try {
+                    Fly();
+                    Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
+
     }
 
     /**
@@ -119,7 +123,7 @@ public class Airplane extends Thread {
             ChangeSpeed();
             ChangeDirection();
             ChangeAltitude();
-            ChangeGeoLocation(); 
+            ChangeGeoLocation();
         }
     }
 
@@ -129,12 +133,11 @@ public class Airplane extends Thread {
      * @param direction : The direction of the runway
      */
     public void Land(Runway r) {
-        if(this.Status == Statusses.INLANDINGQUEUE)
-        {
-        this.Status = Statusses.LANDING;
-        SetAimedDirection(r.getDirection());
-        SetAimedAltitude(0);
-        SetAimedSpeed(0);
+        if (this.Status == Statusses.INLANDINGQUEUE) {
+            this.Status = Statusses.LANDING;
+            SetAimedDirection(r.getDirection());
+            SetAimedAltitude(0);
+            SetAimedSpeed(0);
         }
     }
 
@@ -155,9 +158,8 @@ public class Airplane extends Thread {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-    
-    void Circling()
-    {
+
+    void Circling() {
         Direction += 10;
     }
 
@@ -218,7 +220,7 @@ public class Airplane extends Thread {
 //            } else if (this.Direction + amountChangeDirection < AimedDirection) {
 //                this.Direction += amountChangeDirection;
 //            } else {
-                this.Direction = this.AimedDirection;
+        this.Direction = this.AimedDirection;
 //            }
 //        }
     }
@@ -234,7 +236,7 @@ public class Airplane extends Thread {
 //            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
 //                this.Altitude += amountChangeHeight;
 //            } else {
-                this.Altitude = this.AimedAltitude;
+        this.Altitude = this.AimedAltitude;
 //            }
 //        }
     }
@@ -242,7 +244,7 @@ public class Airplane extends Thread {
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
-    
+
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 3958.75;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -375,6 +377,4 @@ public class Airplane extends Thread {
     public double getTakeOffAccelerationSpeed() {
         return takeOffAccelerationSpeed;
     }
-    
-    
 }
