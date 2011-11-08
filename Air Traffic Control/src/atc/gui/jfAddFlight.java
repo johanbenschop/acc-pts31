@@ -298,7 +298,6 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnAddFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFlightActionPerformed
         // TODO add your handling code here:
-        int flightnumber = 0;
         try {
             this.arrivalDate = new GregorianCalendar(dpDateArr.getDate().getYear(),
                     dpDateArr.getDate().getMonth(),
@@ -314,7 +313,7 @@ public class jfAddFlight extends javax.swing.JDialog {
                     (int) spMinutesDep.getValue(),
                     (int) spSecondsDep.getValue());
 
-            atc2.acc.CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate, flightnumber);
+            atc2.acc.CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
         } catch (AssignmentException ex) {
             ex.printStackTrace();
         } catch (NullPointerException e) {
