@@ -40,9 +40,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="lblChangeDirectionTo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="253" max="32767" attributes="0"/>
+                      <EmptySpace pref="285" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
+                      <Component id="btnTakeOffFlight" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnLandFlight" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btChangeParameter" min="-2" max="-2" attributes="0"/>
@@ -71,6 +73,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btChangeParameter" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnLandFlight" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnTakeOffFlight" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -123,6 +126,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLandFlightActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnTakeOffFlight">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Takeoff Flight"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTakeOffFlightActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -236,7 +236,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      * @return true is given when the assignment has been succesfully transferred to the airplane.
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
-    public void GiveRunwayTakeOff(Runway r, Airplane a, int direction, double height, double speed) throws AssignmentException {
+    public void GiveRunwayTakeOff(Runway r, Airplane a, double direction, double height, double speed) throws AssignmentException {
         if (r.getAvailability() == true) {
             r.ChangeAvailability(true);
             a.TakeOff(r, direction, height, speed);
@@ -271,8 +271,18 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
         cta.addAirplane(ap);
-        GiveRunwayTakeOff(start.getRunway(), ap, 0, 2, 300);
         new Thread(ap).start();
+        double direction = CalcDirection(start, end);
+            System.out.println(ap.getStatus());
+            int i = 0;
+            while (ap.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
+                System.out.println(direction);
+                i++;
+            if(start.getRunway() != null){
+            GiveRunwayTakeOff(start.getRunway(), ap, direction , 2, 300);
+            System.out.println(ap.getStatus());
+            }
+        }
     }
     
     // READ ME! According to the class diagram the ACC does not have an direct relation to the Flightplan.
@@ -280,5 +290,21 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
     
     public ListIterator<Flightplan> getFlightplans() {
         return fp.listIterator();
+    }
+    
+    public double CalcDirection(Airport a, Airport b){
+        GeoLocation locationA = new GeoLocation(0,0,0);
+        GeoLocation locationB = new GeoLocation(0,0,0);
+        locationA = a.getLocation();
+        locationB = b.getLocation();
+        double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
+        double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
+        double lat1 = Math.toRadians(locationA.getLatitude());
+        double lat2 = Math.toRadians(locationB.getLatitude());
+        
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.cos(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+        double direction = Math.toDegrees(Math.toRadians(Math.atan2(y, x)));
+        return direction;
     }
 }
