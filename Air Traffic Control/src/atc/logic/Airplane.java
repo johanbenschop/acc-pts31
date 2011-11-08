@@ -143,6 +143,9 @@ public class Airplane extends Thread {
         SetAimedSpeed(speed);
     }
     
+    /**
+     * Change the direction so it will circle.
+     */
     void Circling()
     {
         Direction += 10;
