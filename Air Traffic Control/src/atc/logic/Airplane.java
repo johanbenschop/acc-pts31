@@ -111,7 +111,7 @@ public class Airplane extends Thread {
             ChangeSpeed();
             ChangeDirection();
             ChangeAltitude();
-            ChangeGeoLocation(); 
+            ChangeGeoLocation();
         }
     }
 
@@ -120,11 +120,13 @@ public class Airplane extends Thread {
      * @param r : Runway
      * @param direction : The direction of the runway
      */
-    void Landing(Runway r, double direction) {
-        this.Status = Statusses.LANDING;
-        SetAimedDirection(direction);
-        SetAimedAltitude(0);
-        SetAimedSpeed(0);
+    public void Land(Runway r) {
+        if (this.Status == Statusses.INLANDINGQUEUE) {
+            this.Status = Statusses.LANDING;
+            SetAimedDirection(r.getDirection());
+            SetAimedAltitude(0);
+            SetAimedSpeed(0);
+        }
     }
 
     /**
@@ -134,7 +136,7 @@ public class Airplane extends Thread {
      * @param altitude : The altitude in feet
      * @param speed : The speed in km/h
      */
-    void TakeOff(Runway r, double direction, double altitude, double speed) {
+    public void TakeOff(Runway r, double direction, double altitude, double speed) {
         location.setAltitude(r.getAltitude());
         location.setLatitude(r.getLatitude());
         location.setLongitude(r.getLongitude());
@@ -143,12 +145,11 @@ public class Airplane extends Thread {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-    
+
     /**
      * Change the direction so it will circle.
      */
-    void Circling()
-    {
+    void Circling() {
         Direction += 10;
     }
 
@@ -209,7 +210,7 @@ public class Airplane extends Thread {
 //            } else if (this.Direction + amountChangeDirection < AimedDirection) {
 //                this.Direction += amountChangeDirection;
 //            } else {
-                this.Direction = this.AimedDirection;
+        this.Direction = this.AimedDirection;
 //            }
 //        }
     }
@@ -225,7 +226,7 @@ public class Airplane extends Thread {
 //            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
 //                this.Altitude += amountChangeHeight;
 //            } else {
-                this.Altitude = this.AimedAltitude;
+        this.Altitude = this.AimedAltitude;
 //            }
 //        }
     }
@@ -233,7 +234,7 @@ public class Airplane extends Thread {
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
-    
+
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 3958.75;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -366,6 +367,4 @@ public class Airplane extends Thread {
     public double getTakeOffAccelerationSpeed() {
         return takeOffAccelerationSpeed;
     }
-    
-    
 }
