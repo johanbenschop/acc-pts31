@@ -168,12 +168,28 @@ public class Airplane extends Thread {
      */
     public void ChangeGeoLocation() {
         //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
-        distanceTravelled = (this.Speed / 36000);
-        latitudeTravelled = distanceTravelled * Math.sin(Direction);
-        longitudeTravelled = distanceTravelled * Math.cos(Direction);
-        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-        location.setLongitude((longitudeTravelled / (111.320 * Math.cos(location.getLatitude()))) + location.getLongitude());
+        distanceTravelled = (this.Speed / 36000d);
+        double bearing = Direction / 180d * Math.PI;
+        
+        double R = 6371;
+        
+        double lat = location.getLatitude() / 180d * Math.PI;
+        double lon = location.getLongitude() / 180d * Math.PI;
+        
+        double destLat = Math.asin(Math.sin(lat) * Math.cos(distanceTravelled / R) + Math.cos(lat) * Math.sin(distanceTravelled/R)*Math.cos(bearing));
+        double destLon = lon + Math.atan2(Math.sin(bearing) * Math.sin(distanceTravelled / R) * Math.cos(lat), Math.cos(distanceTravelled /R) - Math.sin(lat) * Math.sin(destLat));
+        
+        location.setLatitude(destLat * 180 / Math.PI);
+        location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
+        
+//        //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
+//        distanceTravelled = (this.Speed / 36000);
+//        latitudeTravelled = distanceTravelled * Math.sin(Direction);
+//        longitudeTravelled = distanceTravelled * Math.cos(Direction);
+//        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+//        location.setLongitude((longitudeTravelled / (111.320 * Math.cos(location.getLatitude()))) + location.getLongitude());
+//        location.setAltitude(Altitude);
 
         System.out.println(location.ToString());
 
