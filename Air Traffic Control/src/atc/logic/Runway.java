@@ -15,6 +15,15 @@ public class Runway {
     private Timer timer;
     private GeoLocation location;
 
+    /**
+     * algemeen
+     * @param Longitude
+     * @param Latitude
+     * @param Altitude
+     * @param length
+     * @param direction
+     * @param availability 
+     */
     public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) {
         location = new GeoLocation(Longitude, Latitude, Altitude);
         this.Length = length;

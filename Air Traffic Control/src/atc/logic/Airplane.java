@@ -40,7 +40,7 @@ public class Airplane extends Thread {
 
     public enum Statusses {
 
-        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE;
+        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE, HASLANDED;
     }
 
     /***************Constructor**********/
@@ -122,6 +122,14 @@ public class Airplane extends Thread {
         } else {
             ChangeSpeed();
             ChangeDirection();
+            ChangeAltitude();
+            ChangeGeoLocation();
+        }
+            if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 100 && this.Status == Statusses.LANDING) {
+            this.Status = Statusses.HASLANDED;
+            SetAimedSpeed(0);
+            SetAimedAltitude(0);
+            ChangeSpeed();
             ChangeAltitude();
             ChangeGeoLocation();
         }
