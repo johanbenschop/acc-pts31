@@ -32,7 +32,7 @@ public class airplaneRendereble extends Box {
         //super(flightplan.getAirplane().getLocation().toPosition(), 50000, 50000, 50000);
         this.flightplan = flightplan;
         this.airplane = flightplan.getAirplane();
-        //this.airplane.SetAimedAltitude(200);
+        this.airplane.SetAimedAltitude(200);
         
         this.timerAirplane = new Timer(500, new ActionListener() {
 
