@@ -274,7 +274,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        double direction = CalcDirection(start, end);
+        double direction = CalcDirection(start, end) + 90;
         System.out.println("The direction to the airfield is " + direction);
             System.out.println(ap.getStatus());
             int i = 0;
