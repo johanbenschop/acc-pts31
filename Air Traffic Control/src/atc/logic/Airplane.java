@@ -98,6 +98,7 @@ public class Airplane extends Thread {
     /**
      * This will run the methods ChangeSpeed, ChangeDirection and ChangeAltitude,
      * which change the speed, direction and altitude from an airplane.
+     * When the airplane's status is INLANDINGQUEUE it will circle.
      */
     public void Fly() {
         if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
