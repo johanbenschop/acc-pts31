@@ -113,7 +113,7 @@ public class Airplane extends Thread {
 //            boolTakeOff = true;
 //            
 //        }
-        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
+        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
             ChangeSpeed();
@@ -160,7 +160,7 @@ public class Airplane extends Thread {
     }
 
     void Circling() {
-        Direction += 0.5;
+        Direction += 1;
     }
 
     /**
