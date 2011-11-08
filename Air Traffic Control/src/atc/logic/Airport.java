@@ -104,4 +104,14 @@ public class Airport {
     public GeoLocation getLocation() {
         return location;
     }
+
+    public Runway getRunway1() {
+        return runway1;
+    }
+
+    public Runway getRunway2() {
+        return runway2;
+    }
+    
+    
 }
