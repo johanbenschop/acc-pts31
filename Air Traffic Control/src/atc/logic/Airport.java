@@ -18,11 +18,11 @@ public class Airport {
     private GeoLocation location;
     private int Altitude;
     private double Timezone;
-    private Runway runway1;
-    private Runway runway2;
+
     
     //DST is a letter specifying the DST: E (Europe), A (US/Canada), S (South America), O (Australia), Z (New Zealand), N (None) or U (Unknown)
     private String DST;
+    private ArrayList<Runway> runways;
 
       /***************Constructor**********/
     /**
@@ -50,8 +50,10 @@ public class Airport {
         this.Timezone = Timezone;
         this.DST = DST;
         this.location = location;
-        runway1 = new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, 90, true);
-        runway2 = new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, -90, true);
+       runways = new ArrayList<>();
+       
+        runways.add( new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, 90, true));
+        runways.add( new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, -90, true));
     }
     
     public String ToString()
@@ -65,8 +67,14 @@ public class Airport {
      * 
      * @return 
      */
-    public void getRunway() {
-        throw new UnsupportedOperationException();
+    public Runway getRunway() {
+        for (Runway runway : runways) {
+            if (runway.getAvailability() == true)
+            {
+            return runway;
+            }
+        }
+        return null;
     }
 
     public int getAirportID() {
@@ -104,14 +112,5 @@ public class Airport {
     public GeoLocation getLocation() {
         return location;
     }
-
-    public Runway getRunway1() {
-        return runway1;
-    }
-
-    public Runway getRunway2() {
-        return runway2;
-    }
-    
     
 }

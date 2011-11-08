@@ -271,7 +271,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
         cta.addAirplane(ap);
-        GiveRunwayTakeOff(start.getRunway1(), ap, 0, 2, 300);
+        GiveRunwayTakeOff(start.getRunway(), ap, 0, 2, 300);
         new Thread(ap).start();
     }
     

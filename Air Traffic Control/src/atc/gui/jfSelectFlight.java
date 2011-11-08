@@ -322,7 +322,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
             row.addElement("WDAL");
             row.addElement(iter.getDepartureDate().toString());
             row.addElement(iter.getArrivalDate().toString());
-            row.addElement(iter.getAirplane().ToString());
+            row.addElement(iter.getAirplane().toString());
             data.addElement(row);
             
         }
