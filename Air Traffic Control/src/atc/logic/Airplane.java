@@ -171,7 +171,7 @@ public class Airplane extends Thread {
         longitudeTravelled = distanceTravelled * Math.cos(Direction);
         location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
         location.setLongitude((longitudeTravelled / (111.320 * Math.cos(location.getLatitude()))) + location.getLongitude());
-        location.setAltitude(AimedAltitude);
+        location.setAltitude(Altitude);
 
         System.out.println(location.ToString());
 
