@@ -36,10 +36,12 @@ public class Airplane extends Thread {
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
     private double longitudeTravelled;
     private double latitudeTravelled;
+    private boolean boolTakeOff = false;
+    
 
     public enum Statusses {
 
-        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED;
+        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE;
     }
 
     /***************Constructor**********/
@@ -81,6 +83,8 @@ public class Airplane extends Thread {
         this.AirplaneNumber = AirplaneNumber;
         this.location = Location;
         this.destinationLocation = DestinationLocation;
+        this.Status = Statusses.INTAKEOFFQUEUE;
+        
     }
 
     @Override
@@ -88,6 +92,7 @@ public class Airplane extends Thread {
         while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
             try {
                 Fly();
+                System.out.println("Vliegen");
                 Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
             } catch (InterruptedException ex) {
                 Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,9 +103,13 @@ public class Airplane extends Thread {
     /**
      * This will run the methods ChangeSpeed, ChangeDirection and ChangeAltitude,
      * which change the speed, direction and altitude from an airplane.
-     * When the airplane's status is INLANDINGQUEUE it will circle.
      */
     public void Fly() {
+//        if(this.Status == Statusses.TAKINGOFF && boolTakeOff == false)
+//        {
+//            boolTakeOff = true;
+//            
+//        }
         if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
@@ -111,7 +120,7 @@ public class Airplane extends Thread {
             ChangeSpeed();
             ChangeDirection();
             ChangeAltitude();
-            ChangeGeoLocation();
+            ChangeGeoLocation(); 
         }
     }
 
@@ -121,11 +130,12 @@ public class Airplane extends Thread {
      * @param direction : The direction of the runway
      */
     public void Land(Runway r) {
-        if (this.Status == Statusses.INLANDINGQUEUE) {
-            this.Status = Statusses.LANDING;
-            SetAimedDirection(r.getDirection());
-            SetAimedAltitude(0);
-            SetAimedSpeed(0);
+        if(this.Status == Statusses.INLANDINGQUEUE)
+        {
+        this.Status = Statusses.LANDING;
+        SetAimedDirection(r.getDirection());
+        SetAimedAltitude(0);
+        SetAimedSpeed(0);
         }
     }
 
@@ -137,6 +147,7 @@ public class Airplane extends Thread {
      * @param speed : The speed in km/h
      */
     public void TakeOff(Runway r, double direction, double altitude, double speed) {
+        System.out.println(direction);
         location.setAltitude(r.getAltitude());
         location.setLatitude(r.getLatitude());
         location.setLongitude(r.getLongitude());
@@ -145,11 +156,9 @@ public class Airplane extends Thread {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-
-    /**
-     * Change the direction so it will circle.
-     */
-    void Circling() {
+    
+    void Circling()
+    {
         Direction += 10;
     }
 
@@ -162,7 +171,7 @@ public class Airplane extends Thread {
         latitudeTravelled = distanceTravelled * Math.sin(Direction);
         longitudeTravelled = distanceTravelled * Math.cos(Direction);
         location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-        location.setLongitude((longitudeTravelled / (111.320 /* Math.cos(location.getLatitude())*/)) + location.getLongitude());
+        location.setLongitude((longitudeTravelled / (111.320 * Math.cos(location.getLatitude()))) + location.getLongitude());
         location.setAltitude(AimedAltitude);
 
         System.out.println(location.ToString());
@@ -210,7 +219,7 @@ public class Airplane extends Thread {
 //            } else if (this.Direction + amountChangeDirection < AimedDirection) {
 //                this.Direction += amountChangeDirection;
 //            } else {
-        this.Direction = this.AimedDirection;
+                this.Direction = this.AimedDirection;
 //            }
 //        }
     }
@@ -226,7 +235,7 @@ public class Airplane extends Thread {
 //            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
 //                this.Altitude += amountChangeHeight;
 //            } else {
-        this.Altitude = this.AimedAltitude;
+                this.Altitude = this.AimedAltitude;
 //            }
 //        }
     }
@@ -234,7 +243,7 @@ public class Airplane extends Thread {
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
     }
-
+    
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 3958.75;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -367,4 +376,6 @@ public class Airplane extends Thread {
     public double getTakeOffAccelerationSpeed() {
         return takeOffAccelerationSpeed;
     }
+    
+    
 }

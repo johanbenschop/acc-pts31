@@ -69,6 +69,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         txtChangeDirectionTo = new javax.swing.JTextField();
         tfFlightlevel = new javax.swing.JComboBox();
         btnLandFlight = new javax.swing.JButton();
+        btnTakeOffFlight = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -95,6 +96,13 @@ public class jfCommandFlight extends javax.swing.JDialog {
             }
         });
 
+        btnTakeOffFlight.setText("Takeoff Flight");
+        btnTakeOffFlight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTakeOffFlightActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,8 +122,10 @@ public class jfCommandFlight extends javax.swing.JDialog {
                         .addGap(239, 239, 239))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblChangeDirectionTo)
-                        .addContainerGap(253, Short.MAX_VALUE))
+                        .addContainerGap(285, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnTakeOffFlight)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLandFlight)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btChangeParameter)
@@ -139,7 +149,8 @@ public class jfCommandFlight extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btChangeParameter)
-                    .addComponent(btnLandFlight))
+                    .addComponent(btnLandFlight)
+                    .addComponent(btnTakeOffFlight))
                 .addContainerGap())
         );
 
@@ -175,6 +186,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "There are no runways available at destination airport.");
         }
     }//GEN-LAST:event_btnLandFlightActionPerformed
+
+    private void btnTakeOffFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeOffFlightActionPerformed
+        flightplan.getAirplane().setStatus(Statusses.TAKINGOFF);
+        System.out.println("TakeOff");
+    }//GEN-LAST:event_btnTakeOffFlightActionPerformed
 
     /**
      * @param args the command line arguments
@@ -222,6 +238,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btChangeParameter;
     private javax.swing.JButton btnLandFlight;
+    private javax.swing.JButton btnTakeOffFlight;
     private javax.swing.JLabel lblChangeDirectionTo;
     private javax.swing.JLabel lblChangeHeightTo;
     private javax.swing.JLabel lblChangeSpeedTo;
