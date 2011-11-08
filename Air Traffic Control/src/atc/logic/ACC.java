@@ -203,11 +203,11 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      * @return true is given when the assignment has been succesfully transferred to the airplane.
      * @return false is given when the assignement wasnt succesfully given to the airplane.
      */
-    public void GiveRunwayLand(Runway r, Airplane a, int direction) throws AssignmentException {
-        if (r.getAvailability() == true) {
-            r.ChangeAvailability(false);
-            a.Landing(r, direction);
-            a.setStatus(Airplane.Statusses.LANDING);
+    public void LandFlight(Flightplan fp) throws AssignmentException {
+        Runway runway = fp.getDestinationAirport().getRunway();
+        if (runway.getAvailability() == true) {
+            runway.ChangeAvailability(false);
+            fp.getAirplane().Land(runway);
         } else {
             throw new AssignmentException("Runway is unavailable.");
         }
