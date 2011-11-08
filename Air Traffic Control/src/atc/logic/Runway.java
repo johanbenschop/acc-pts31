@@ -7,18 +7,23 @@ import java.util.TimerTask;
  *
  * @author Mateusz
  */
-public class Runway extends GeoLocation{
+public class Runway {
 
     private int Length;
     private int Direction;
     private boolean Availability;
     private Timer timer;
+    private GeoLocation location;
 
     public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) {
-        super(Longitude, Latitude, Altitude);
+        location = new GeoLocation(Longitude, Latitude, Altitude);
         this.Length = length;
         this.Direction = direction;
         this.Availability = availability;
+    }
+
+    public GeoLocation getLocation() {
+        return location;
     }
     
     public int getLength() {

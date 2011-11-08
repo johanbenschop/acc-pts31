@@ -61,4 +61,33 @@ public class GeoLocation {
     public Position toPosition() {
         return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
     }
+    
+    
+    public static double CalcDirection(Airport a, Airport b){
+        GeoLocation locationA = new GeoLocation(0,0,0);
+        GeoLocation locationB = new GeoLocation(0,0,0);
+        locationA = a.getLocation();
+        locationB = b.getLocation();
+        double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
+        double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
+        double lat1 = Math.toRadians(locationA.getLatitude());
+        double lat2 = Math.toRadians(locationB.getLatitude());
+        
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+        double direction = Math.toDegrees(Math.atan2(y, x));
+        return direction;
+    }
+    
+        public static double CalcDirection(GeoLocation locationA, GeoLocation locationB) {
+        double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
+        double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
+        double lat1 = Math.toRadians(locationA.getLatitude());
+        double lat2 = Math.toRadians(locationB.getLatitude());
+        
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+        double direction = Math.toDegrees(Math.atan2(y, x));
+        return direction;
+    }
 }
