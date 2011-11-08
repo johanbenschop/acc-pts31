@@ -146,7 +146,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
      * @return false is when it was not possible to set the new direction.
      */
     public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
-        if (direction >= -180 && direction <= 180) {
+        if (direction >= 0 && direction <= 360) {
             a.SetAimedDirection(direction);
         } else {
             throw new AssignmentException("The given direction is not possible.");
