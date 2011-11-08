@@ -282,6 +282,8 @@ public final class atc2 extends atc {
 
                 public void actionPerformed(ActionEvent event) {
                     findCollisions();
+                    
+                    getWwd().redraw();
                 }
             });
             timerColision.start();
