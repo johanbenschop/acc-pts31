@@ -160,7 +160,7 @@ public class Airplane extends Thread {
     }
 
     void Circling() {
-        Direction += 10;
+        Direction += 0.5;
     }
 
     /**
