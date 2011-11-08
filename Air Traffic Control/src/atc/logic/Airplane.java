@@ -92,7 +92,6 @@ public class Airplane extends Thread {
         while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
             try {
                 Fly();
-                System.out.println("Vliegen");
                 Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
             } catch (InterruptedException ex) {
                 Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
