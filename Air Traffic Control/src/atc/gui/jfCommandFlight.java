@@ -10,9 +10,15 @@
  */
 package atc.gui;
 
+import atc.logic.Airplane.Statusses;
 import atc.logic.Flightplan;
+import atc.logic.Runway;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import javax.swing.Timer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,11 +26,24 @@ import java.awt.event.WindowEvent;
  */
 public class jfCommandFlight extends javax.swing.JDialog {
     private Flightplan flightplan;
+    private final Timer timer;
     
     /** Creates new form jfCommandFlight */
     public jfCommandFlight(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.timer = new Timer(50, new ActionListener() {
+                    public void actionPerformed(ActionEvent event) {
+                        if (flightplan.getAirplane().getStatus() == Statusses.INLANDINGQUEUE) {
+                            btnLandFlight.setEnabled(true);
+                        }
+                        else {
+                            btnLandFlight.setEnabled(false);
+                        }
+                    }
+                });
+                timer.start();
     }
 
     public void setFlightplan(Flightplan flightplan) {
@@ -149,6 +168,13 @@ public class jfCommandFlight extends javax.swing.JDialog {
     private void btnLandFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLandFlightActionPerformed
         // TODO add your handling code here:
         
+        Runway runway = flightplan.getDestinationAirport().getRunway();
+        if (runway != null) {
+            flightplan.getAirplane().Land(runway);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "There are no runways available at destination airport.");
+        }
         
     }//GEN-LAST:event_btnLandFlightActionPerformed
 
