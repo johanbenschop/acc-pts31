@@ -274,7 +274,7 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        double direction = CalcDirection(start, end) + 90;
+        double direction = CalcDirection(start, end);
         System.out.println("The direction to the airfield is " + direction);
             System.out.println(ap.getStatus());
             int i = 0;
@@ -306,8 +306,8 @@ public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         double lat2 = Math.toRadians(locationB.getLatitude());
         
         double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1) * Math.cos(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-        double direction = Math.toDegrees(Math.toRadians(Math.atan2(y, x)));
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+        double direction = Math.toDegrees(Math.atan2(y, x));
         return direction;
     }
 }
