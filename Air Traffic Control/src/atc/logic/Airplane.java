@@ -19,18 +19,18 @@ public class Airplane extends Thread {
     private int PlaneLength;
     private int AirplaneNumber; //Number
     private double Direction; // Degree's
-    private double Speed; // Kilomithers per hour
+    private double Speed; // Kilometers per hour
     private int MaxFuel;  // Gallons
     private int CurrentFuel; // Gallons
     private int FuelUsage; // Gallons
-    private double Altitude; // Kilomithers
-    private double AimedSpeed; // Kilomithers per hour
+    private double Altitude; // Kilometers
+    private double AimedSpeed; // Kilometers per hour
     private double AimedDirection; // Degree's (could be changed)
-    private double AimedAltitude; // Kilomithers
+    private double AimedAltitude; // Kilometers
     private Statusses Status;
     //private Date SecondsBeforeRunning = new Date();
     //private Date SecondsRunning = new Date();
-    private double takeOffAccelerationSpeed = 0.667; // Kilomithers per hour
+    private double takeOffAccelerationSpeed = 0.667; // Kilometers per hour
     private GeoLocation destinationLocation;
     private GeoLocation location;
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
@@ -100,11 +100,17 @@ public class Airplane extends Thread {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
-        if (this.Status != Statusses.STANDINGONAIRPORT) {
+        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
+            this.Status = Statusses.INLANDINGQUEUE;
+            Circling();
+            ChangeSpeed();
+            ChangeAltitude();
+            ChangeGeoLocation();
+        } else {
             ChangeSpeed();
             ChangeDirection();
             ChangeAltitude();
-            ChangeGeoLocation();
+            ChangeGeoLocation(); 
         }
     }
 
@@ -135,6 +141,11 @@ public class Airplane extends Thread {
         SetAimedDirection(direction);
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
+    }
+    
+    void Circling()
+    {
+        Direction += 10;
     }
 
     /**
@@ -217,6 +228,21 @@ public class Airplane extends Thread {
 
     public void ChangeFuel() {
         this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
+    }
+    
+    public double distFrom(double lat1, double lon1, double lat2, double lon2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double dist = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Double(dist * meterConversion).doubleValue();
     }
 
     //Setters
