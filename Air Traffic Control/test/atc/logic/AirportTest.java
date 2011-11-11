@@ -4,6 +4,7 @@
  */
 package atc.logic;
 
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,11 +14,15 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author johan
+ * @author PuHa
  */
 public class AirportTest {
     
+    private Airport airport;
+    private GeoLocation location;
+    
     public AirportTest() {
+        
     }
 
     @BeforeClass
@@ -30,29 +35,11 @@ public class AirportTest {
     
     @Before
     public void setUp() {
+        location = new GeoLocation(1,1,1);
+        airport = new Airport(12345, "Schiphol", "Amsterdam", "The Netherlands", "AS", "AS", location, 0, 0.1, "E");
     }
     
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of getRunway method, of class Airport.
-     */
-    @Test
-    public void testGetRunway() {
-        System.out.println("getRunway");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of CreateActiveAirplane method, of class Airport.
-     */
-    @Test
-    public void testCreateActiveAirplane() {
-        System.out.println("CreateActiveAirplane");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }
