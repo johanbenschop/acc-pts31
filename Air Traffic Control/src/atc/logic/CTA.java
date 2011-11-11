@@ -6,14 +6,21 @@ import java.io.*;
 
 public class CTA {
 
-    private GeoLocation location;
-    private double width;
-    private double length;
-    private Airplane airplane;
-    private Airport airport;
-    private ArrayList<Airplane> airplaneList;
-    private ArrayList<Airport> airportList;
+    private GeoLocation location;                   // the geolocation of the CTA
+    private double width;                           //the width of the CTA
+    private double length;                          //the length of the CTA
+    private Airplane airplane;                      //a airplane used for getting focus of a selected airplane within the CTA
+    private Airport airport;                        //a airport used for getting focus of a selected airport within the CTA
+    private ArrayList<Airplane> airplaneList;       //a list used for collecting all the active airplanes within the CTA     
+    private ArrayList<Airport> airportList;         //a list used for collecting all the airports within the CTA
 
+        /***************Constructor**********/
+    /**
+     * this is a constructor used for making a CTA it contains a location and the width/length
+     * @param location is the location of the CTA
+     * @param width is the width of the CTA
+     * @param length is the length of the CTA
+     */
     public CTA(GeoLocation location, double width, double length) {
         this.location = location;
         this.width = width;
@@ -33,7 +40,7 @@ public class CTA {
 
     /**
      * Returns airplane with the given airplaneNumber
-     * @return
+     * @return 
      */
     public void GetActiveAirplane(int AirplaneNumber) {
         for (Airplane a : airplaneList) {
@@ -57,7 +64,7 @@ public class CTA {
     }
 
     /**
-     *
+     * is not yet implemented
      * @return
      */
     public void DetectAirplane() {
@@ -65,8 +72,8 @@ public class CTA {
     }
 
     /**
-     *
-     * @return
+     * this is the collision detection, it checks if the airplanes within the CTA are on a collision course, if they are it will send a message to the GUI.
+     * @return if the airplanes are on a collision course it will send a message to the GUI and sets the status of both airplanes to CRASHING
      */
     public void Collision() {
         double lat1 = 0, lat2 = 0, lat3 = 0, lon1 = 0, lon2 = 0, lon3 = 0, bearing1 = 0, bearing2 = 0, bearing13 = 0, bearing12 = 0, bearing21 = 0, bearing23 = 0;
@@ -161,6 +168,14 @@ public class CTA {
         }
     }
 
+    /**
+     * checks the distance between 2 given points
+     * @param lat1 is the first given latitude
+     * @param lon1 is the first given longitude
+     * @param lat2 is the second given latitude
+     * @param lon2 is the second given longitude
+     * @return a double with the calculated distance
+     */
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 3958.75;
         double dLat = Math.toRadians(lat2 - lat1);
@@ -204,7 +219,11 @@ public class CTA {
         }
     }
 
-    //Loads airports from the airports.dat file
+    /**
+     * Loads airports from the airports.dat file
+     * @throws FileNotFoundException if the file doesn't exist
+     * @throws IOException 
+     */
     public void loadAirportList() throws FileNotFoundException, IOException {
         FileInputStream fstream = new FileInputStream("airports.dat");
 
@@ -236,27 +255,50 @@ public class CTA {
                 }}
     }
 
-    //Getters
+    /**
+     * gets the current airplane
+     * @return airplane
+     */
     public Airplane getCurrentSelectedAirplane() {
         return airplane;
     }
 
+    /**
+     * gets the airplane list
+     * @return airplaneList
+     */
     public ArrayList<Airplane> getAirplaneList() {
         return airplaneList;
     }
 
+    /**
+     * gets the airport list
+     * @return airportList
+     */
     public ArrayList<Airport> getAirportList() {
         return airportList;
     }
 
+    /**
+     * might not be necessary
+     * @return airplane
+     */
     public Airplane getAirplane() {
         return airplane;
     }
 
+    /**
+     * turns the airport list into a Iterator
+     * @return Iterator airportList
+     */
     public ListIterator<Airport> GetAirports() {
         return airportList.listIterator();
     }
 
+    /**
+     * might not be necessary
+     * @return airport
+     */
     public Airport getAirport() {
         return airport;
     }
