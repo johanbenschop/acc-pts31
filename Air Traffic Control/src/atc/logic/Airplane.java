@@ -36,7 +36,7 @@ public class Airplane extends Thread {
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
     private double longitudeTravelled;
     private double latitudeTravelled;
-    private boolean boolTakeOff = false;
+//    private boolean boolTakeOff = false;
 
     public enum Statusses {
 
@@ -198,7 +198,7 @@ public class Airplane extends Thread {
         location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
 
-//        System.out.println(location.ToString());
+        System.out.println(location.ToString());
     }
 
     /**
