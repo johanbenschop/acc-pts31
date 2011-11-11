@@ -45,23 +45,24 @@ public class Airplane extends Thread {
 
     /***************Constructor**********/
     /**
-     * An Airplane is made with its own maximum speed, minimum speed, weight,
-     * type, manufacturer, planeheight, planewidth, planelength, maximum fuel, 
-     * fuel usage, direction, speed, currentfuel and altitude.
-     * @param MaxSpeed: This is the maximum speed of the airplane.
-     * @param MinSpeed: This is the minimum speed of the airplane.
-     * @param Weight: This is they weight of the airplane.
-     * @param Type: This is the type of the airplane
-     * @param Manufacturer: This is the builder of the airplane.
-     * @param PlaneHeight: The height of the airplane.
-     * @param PlaneWidth: The width of the airplane.
-     * @param PlaneLength: The length of the airplane.
-     * @param MaxFuel: The maximum fuel of the airplane.
-     * @param FuelUsage: The usage of fuel of the airplane
-     * @param Direction: The current direction of the airplane.
-     * @param Speed: The current speed of the airplane.
-     * @param CurrentFuel: The current amount of fuel in the tank.
-     * @param Altitude: The current flight height of the airplane.
+     * Constructor to create an airplane.
+     * @param MaxSpeed maximum speed for the airplane.
+     * @param MinSpeed minimum speed for the airplane.
+     * @param Weight the weight of the airplane.
+     * @param Type the type of airplane (as in for boeing a 747)
+     * @param Manufacturer the company that manufactured the airplane.
+     * @param PlaneHeight the height of the airplane in meters
+     * @param PlaneWidth the width of the airplane in meters.
+     * @param PlaneLength the length of the airplane in meters.
+     * @param MaxFuel the maximum amount of fuel in liters that an airplane can carry
+     * @param FuelUsage the amount of fuel it uses on average during flight in liters.
+     * @param Direction the current direction in wicht the airplane is heading.
+     * @param Speed the current speed with wich the airplane is flying.
+     * @param CurrentFuel the amount of fuel that is currently on board.
+     * @param Altitude the current altitude at wich the airplane is flying.
+     * @param Location the location in longitgude and latitude as well as the altitude.
+     * @param DestinationLocation the location of the destination in longitude and latitude.
+     * @param AirplaneNumber the number of the airplane.
      */
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
             int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, GeoLocation Location, GeoLocation DestinationLocation, int AirplaneNumber) {
@@ -86,6 +87,10 @@ public class Airplane extends Thread {
 
     }
 
+    /**
+     * Run method to start the thread wich contains the current airplane. Start
+     * this and the airplane starts flying.
+     */
     @Override
     public void run() {
         while (true) {
@@ -137,8 +142,7 @@ public class Airplane extends Thread {
 
     /**
      * This will make an airplane land on a runway.
-     * @param r : Runway
-     * @param direction : The direction of the runway
+     * @param r : Runway where the airplane will land.
      */
     public void Land(Runway r) {
         if (this.Status == Statusses.INLANDINGQUEUE) {
@@ -166,13 +170,16 @@ public class Airplane extends Thread {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-
+    
+    /**
+     * When the airplane is circling around an airport this method is called to change the direction in wich it flies.
+     */
     void Circling() {
-        Direction += 1;
+        Direction += 0.5;
     }
 
     /**
-     * Change the longitude and lattitude based on the distance travelled.
+     * Change the longitude and lattitude based on the distance travelled and the direction in wich the airplane flies.
      */
     public void ChangeGeoLocation() {
         //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
@@ -190,22 +197,8 @@ public class Airplane extends Thread {
         location.setLatitude(destLat * 180 / Math.PI);
         location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
-        
-//        //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
-//        distanceTravelled = (this.Speed / 36000);
-//        latitudeTravelled = distanceTravelled * Math.sin(Direction);
-//        longitudeTravelled = distanceTravelled * Math.cos(Direction);
-//        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-//        location.setLongitude((longitudeTravelled / (111.320 * Math.cos(location.getLatitude()))) + location.getLongitude());
-//        location.setAltitude(Altitude);
 
-        System.out.println(location.ToString());
-
-        /*
-        longitudeTravelled = distanceTravelled * Math.sin(Direction);
-        latitudeTravelled = distanceTravelled * Math.cos(Direction);
-        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());*/
+//        System.out.println(location.ToString());
     }
 
     /**
@@ -234,7 +227,8 @@ public class Airplane extends Thread {
     }
 
     /**
-     * The direction will increase or decrease every second with 3 degrees.
+     * The direction will increase or decrease every second with 3 degrees, this
+     * will currently instantly change the direction, subject to change.
      */
     public void ChangeDirection() {
 //        double amountChangeDirection = 0.3;
@@ -250,7 +244,8 @@ public class Airplane extends Thread {
     }
 
     /**
-     * The altitude will increase or decrease with 20 feet every second.
+     * The altitude will increase or decrease with 20 feet every second. Currently
+     * will change the altitude immeadiatly, subject to change if theres time.
      */
     public void ChangeAltitude() {
 //        double amountChangeHeight = 2.0;
@@ -265,10 +260,23 @@ public class Airplane extends Thread {
 //        }
     }
 
+    /**
+     * Method for calculating the current amount of fuel. Currently not in use.
+     */
     public void ChangeFuel() {
-        this.CurrentFuel = (this.MaxFuel - this.FuelUsage);
+        this.CurrentFuel = (this.CurrentFuel - this.FuelUsage);
     }
 
+    /**
+     * Method to calculate the distance from 1 point on the globe to the other point,
+     * using latitude and longitude for both points.
+     * 
+     * @param lat1 latitude of point 1.
+     * @param lon1 longitude of point 1.
+     * @param lat2 latitude of point 2.
+     * @param lon2 longitude of point 2.
+     * @return the distance in meters between point 1 and 2.
+     */
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 3958.75;
         double dLat = Math.toRadians(lat2 - lat1);
