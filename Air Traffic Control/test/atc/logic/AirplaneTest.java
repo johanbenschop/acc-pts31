@@ -39,8 +39,8 @@ public class AirplaneTest {
     public void setUp() {
         //een vliegtuig met speed, direction en altitude 0;
         location2 = new GeoLocation(2,2,2);
-        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 1, 0, Double.parseDouble("0"), 100, Double.parseDouble("0"), location, location2, 1);
-        location = new GeoLocation(10, 10, 10);
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 10, 0, Double.parseDouble("0"), 100, Double.parseDouble("0"), location, location2, 1);
+        location = new GeoLocation(4.765293926879027, 52.30667884074721, 2.0);
         runway = new Runway(1,1,50,300, 270, false);
     }
     
@@ -53,19 +53,21 @@ public class AirplaneTest {
      */
     @Test
     public void testChangeGeoLocation() {
-        System.out.println(location.getAltitude());
-        System.out.println(location.getLongitude());
         System.out.println("ChangeGeoLocation");
-        double latitudeTravelled = 10 * Math.sin(30);
-        double longitudeTravelled = 10 * Math.cos(30);
-        System.out.println(latitudeTravelled);
-        System.out.println(longitudeTravelled);
-        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
-        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
-        System.out.println(location.getLatitude());
-        System.out.println(location.getLongitude());
-        Assert.assertEquals("Latitude should have changed", 9.910617728958488 , location.getLatitude());
-        Assert.assertEquals("Longitude should have changed",9.984330154398483 , location.getLongitude());
+        airplane.setStatus(Statusses.INFLIGHT);
+        airplane.SetAimedSpeed(300);
+        airplane.ChangeSpeed();
+        airplane.ChangeGeoLocation();
+//        double latitudeTravelled = 10 * Math.sin(30);
+//        double longitudeTravelled = 10 * Math.cos(30);
+//        System.out.println(latitudeTravelled);
+//        System.out.println(longitudeTravelled);
+//        location.setLatitude((latitudeTravelled / 110.54) + location.getLatitude());
+//        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
+//        System.out.println(location.getLatitude());
+//        System.out.println(location.getLongitude());
+        Assert.assertEquals("Latitude should have changed", 9.910617728958488 , airplane.getLocation().getLatitude());
+        Assert.assertEquals("Longitude should have changed",9.984330154398483 , airplane.getLocation().getLongitude());
     }
     
     /**
@@ -77,7 +79,6 @@ public class AirplaneTest {
         airplane.SetAimedSpeed(200);
         airplane.ChangeSpeed();
         Assert.assertEquals("Speed should have changed",1.0 , airplane.getSpeed());
-        System.out.println("1e voltooid");
         
         airplane.SetAimedSpeed(500);
         while(airplane.getSpeed() != airplane.getAimedSpeed())
@@ -85,13 +86,11 @@ public class AirplaneTest {
         airplane.ChangeSpeed();
         }
         Assert.assertEquals("Speed should have changed",500.0 , airplane.getSpeed());
-        System.out.println("2e voltooid");
         
         airplane.SetAimedSpeed(700);
         airplane.setStatus(Statusses.CRASHED);
         airplane.ChangeSpeed();
         Assert.assertEquals("Speed should have changed",0.0 , airplane.getSpeed());
-        System.out.println("3e voltooid");
                 
     }
 
@@ -103,8 +102,7 @@ public class AirplaneTest {
         System.out.println("ChangeDirection");
         airplane.SetAimedDirection(180);
         airplane.ChangeDirection();
-        Assert.assertEquals("Direction should have changed", 0.3 , airplane.getDirection());
-        System.out.println("1e voltooid");
+        Assert.assertEquals("Direction should have changed", 180.0 , airplane.getDirection());
         
         airplane.SetAimedDirection(180);
         while(airplane.getDirection() != airplane.getAimedDirection())
@@ -112,7 +110,6 @@ public class AirplaneTest {
             airplane.ChangeDirection();
         }
         Assert.assertEquals("Direction should have changed",180.0 , airplane.getDirection());
-        System.out.println("2e voltooid");
     }
 
     /**
@@ -123,8 +120,7 @@ public class AirplaneTest {
         System.out.println("ChangeAltitude");
         airplane.SetAimedAltitude(100);
         airplane.ChangeAltitude();
-        Assert.assertEquals("Altitude should have changed", 2.0 , airplane.getAltitude());
-        System.out.println("1e voltooid");
+        Assert.assertEquals("Altitude should have changed", 100.0 , airplane.getAltitude());
         
         airplane.SetAimedAltitude(600);
         while(airplane.getAltitude() != airplane.getAimedAltitude())
@@ -132,7 +128,6 @@ public class AirplaneTest {
             airplane.ChangeAltitude();
         }
         Assert.assertEquals("Altitude should have changed", 600.0 , airplane.getAltitude());
-        System.out.println("2e voltooid");
     }
 
     /**
@@ -141,9 +136,41 @@ public class AirplaneTest {
     @Test
     public void testLanding() {
         System.out.println("Landing");
-        airplane.setStatus(Statusses.INFLIGHT);
-        airplane.Landing(runway, 50);
+        airplane.setStatus(Statusses.INLANDINGQUEUE);
+        airplane.Land(runway);
         Assert.assertEquals("Status should have changed", Airplane.Statusses.LANDING , airplane.getStatus());
         System.out.println("1e voltooid");
+    }
+    
+    @Test
+    public void TakeOff() {
+        System.out.println("TakeOff");
+        airplane.TakeOff(runway, 100, 2, 300);
+        Assert.assertEquals("Status should have changed", Airplane.Statusses.TAKINGOFF, airplane.getStatus());
+        Assert.assertEquals("Direction should have changed", 100.0, airplane.getAimedDirection());
+        Assert.assertEquals("Speed should have changed", 300.0, airplane.getAimedSpeed());
+        Assert.assertEquals("Altitude should have changed", 200.0, airplane.getAimedAltitude());
+    }
+    
+    @Test
+    public void Circling() {
+        System.out.println("Circling");
+        airplane.Circling();
+        Assert.assertEquals("Direction should have changed by 0.5", 0.5, airplane.getDirection());
+    }
+    
+    @Test
+    public void ChangeFuel() {
+        System.out.println("ChangeFuel");
+        airplane.ChangeFuel();
+        Assert.assertEquals("CurrentFuel should change.", 90, airplane.getCurrentFuel());
+    }
+    
+    @Test
+    public void distFrom() {
+        System.out.println("distFrom");
+        double distance;
+        distance = airplane.distFrom(location.getLatitude(), location.getLongitude(), location2.getLatitude(), location2.getLongitude());
+        Assert.assertEquals("Distance between point 1 and 2 is not correct", 5598531.406476725, distance);
     }
 }
