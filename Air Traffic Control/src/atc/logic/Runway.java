@@ -4,25 +4,41 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
+ * A runway of an airplane
+ * 
  * @author Mateusz
  */
 public class Runway {
 
+        /**************Datafields***********/
+    /**
+     * The length of the runway
+     */
     private int Length;
+    /**
+     * The direction the runway is set.
+     */
     private int Direction;
+    /**
+     * If the runway is available to land or take off an airplane
+     */
     private boolean Availability;
+     /**
+     * A timer to calculate when the 3 minutes are past before the runway is available again
+     */
     private Timer timer;
+     /**
+     * The geolocation of the runway. 
+     */
     private GeoLocation location;
 
-    /**
-     * algemeen
-     * @param Longitude
-     * @param Latitude
-     * @param Altitude
-     * @param length
-     * @param direction
-     * @param availability 
+    /**A runway is made with the following parameters:
+     * @param Longitude: The longitude of the runway.
+     * @param Latitude: The latitude of the runway.
+     * @param Altitude: The altitude of the runway.
+     * @param length: The length of the runway
+     * @param direction: The direction that the runway lies
+     * @param availability: Checks if the runway is available
      */
     public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) {
         location = new GeoLocation(Longitude, Latitude, Altitude);
@@ -30,7 +46,7 @@ public class Runway {
         this.Direction = direction;
         this.Availability = availability;
     }
-
+    /**************Getters**************/
     public GeoLocation getLocation() {
         return location;
     }
@@ -60,6 +76,9 @@ public class Runway {
         }
     }
 
+     /**
+     * A class for the timer.
+     */
     private class tim extends TimerTask {
 
         boolean r;
