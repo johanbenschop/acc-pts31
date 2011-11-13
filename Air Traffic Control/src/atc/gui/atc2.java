@@ -2,6 +2,8 @@ package atc.gui;
 
 import SysBar.UnityBar;
 import SysBar.UnityItem;
+import atc.cli.CommandLine;
+import atc.cli.jpTerminal;
 import atc.logic.ACC;
 import atc.logic.Airplane;
 import atc.logic.Airport;
@@ -35,6 +37,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
@@ -67,9 +71,40 @@ public final class atc2 extends atc {
 
         public AppFrame() {
 
+//            final jpTerminal cli = new jpTerminal();
+//            this.getContentPane().add(cli, java.awt.BorderLayout.SOUTH);
+//            this.addKeyListener(new KeyListener() {
+//                boolean open;
+//                
+//                @Override
+//                public void keyTyped(KeyEvent e) {
+//                    System.out.println("In!");
+//                    if (e.isAltDown() && e.getKeyChar() == '/' ) {
+//                        System.out.println("Double IN!");
+//                        if (open) {
+//                            getContentPane().remove(cli);
+//                        }
+//                        else {
+//                            getContentPane().add(cli, java.awt.BorderLayout.SOUTH);
+//                            CommandLine.println("Free Pancakes!");
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void keyPressed(KeyEvent e) {
+//                    System.out.println("In2!");
+//                }
+//
+//                @Override
+//                public void keyReleased(KeyEvent e) {
+//                    System.out.println("In!");
+//                }
+//            });
+
             // Create our custom made menu system bar thingy.
             menuBar = new UnityBar();
-            this.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
+            this.getContentPane().add(menuBar, java.awt.BorderLayout.LINE_START);
 
             view = this.getWwd().getView();
 
@@ -89,13 +124,7 @@ public final class atc2 extends atc {
                                 public void run() {
                                     menuBar.contains(3, 3);
                                     LayerPanel layerPanel = new LayerPanel(wwjPanel.getWwd(), null);
-
-//                                    JDialog jdSettings = new JDialog();
-//                                    jdSettings.getContentPane().add(layerPanel);
-//                                    jdSettings.setVisible(true);
-
                                     jfSettings settings = new jfSettings(null, false);
-                                    //settings.addLayerPanel(layerPanel);
                                     settings.setWwd(wwjPanel.getWwd());
                                     settings.setVisible(true);
                                     uiSettings.setActive(false);
@@ -233,61 +262,16 @@ public final class atc2 extends atc {
                         }
                     });
 
-
-
-//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-//                    new java.awt.event.ActionListener() {
-//
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            //.goTo(Position position, double distance);
-//                            // This object class we handle and we have an orbit view
-//                            Position targetPos = Position.fromDegrees(52.09153109717759, 5.1381683349609375);
-//
-//                            // Use a PanToIterator to iterate view to target position
-//                            if (view != null) {
-//                                // The elevation component of 'targetPos' here is not the surface elevation,
-//                                // so we ignore it when specifying the view center position.
-//                                view.goTo(new Position(targetPos, 0),
-//                                        targetPos.getElevation() + 20000); // 1000 = 100 meter
-//                            }
-//                        }
-//                    });
-//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-//                    new java.awt.event.ActionListener() {
-//
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            //throw new UnsupportedOperationException("Not supported yet.");
-//                        }
-//                    });
-//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-//                    new java.awt.event.ActionListener() {
-//
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            //throw new UnsupportedOperationException("Not supported yet.");
-//                        }
-//                    });
-//            menuBar.addItem(new UnityItem("Collision detected!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
-//                    new java.awt.event.ActionListener() {
-//
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            //throw new UnsupportedOperationException("Not supported yet.");
-//                        }
-//                    });
-
             this.timerColision = new Timer(1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
                     findCollisions();
-                    
+
                     getWwd().redraw();
                 }
             });
             timerColision.start();
-            
+
             // Add the airport & airspace layers
             buildAirportLayer();
             buildAirspaceLayer();
@@ -532,6 +516,8 @@ public final class atc2 extends atc {
 
         /**
          * Adds an airplane to the airplane layer.
+         * @param layer
+         * @param flightplan 
          */
         private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
