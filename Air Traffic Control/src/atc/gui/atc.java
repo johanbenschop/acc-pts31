@@ -65,10 +65,18 @@ public class atc {
             return new WorldWindowGLCanvas();
         }
 
+        /**
+         * Returns the WorldWindowGLCanvas that's in the GUI.
+         * @return WorldWindowGLCanvas
+         */
         public WorldWindowGLCanvas getWwd() {
             return wwd;
         }
 
+        /**
+         * Gets the status bar that's in the GUI.
+         * @return StatusBar
+         */
         public StatusBar getStatusBar() {
             return statusBar;
         }
@@ -82,10 +90,19 @@ public class atc {
         protected StatisticsPanel statsPanel;
         protected RenderableLayer renderLayer;
 
+        /**
+         * Constructor for the AppFrame.
+         */
         public AppFrame() {
             this.initialize(false, false, false); // Layer panel, status bar, other panel
         }
 
+        /**
+         * Constructor for the AppFrame.
+         * @param includeStatusBar True includes the status bar
+         * @param includeLayerPanel True includes the layer panel
+         * @param includeStatsPanel True includes statistical panel
+         */
         public AppFrame(boolean includeStatusBar, boolean includeLayerPanel, boolean includeStatsPanel) {
             this.initialize(includeStatusBar, includeLayerPanel, includeStatsPanel);
         }
@@ -155,30 +172,58 @@ public class atc {
             return new AppPanel(canvasSize, includeStatusBar);
         }
 
+        /**
+         * Gets the canvas size
+         * @return canvas size in Dimension
+         */
         public Dimension getCanvasSize() {
             return canvasSize;
         }
 
+        /**
+         * Gets the Word Wind Java panel.
+         * @return AppPanel
+         */
         public AppPanel getWwjPanel() {
             return wwjPanel;
         }
 
+        /**
+         * Returns the WorldWindowGLCanvas that's in the GUI.
+         * @return WorldWindowGLCanvas
+         */
         public WorldWindowGLCanvas getWwd() {
             return this.wwjPanel.getWwd();
         }
 
+        /**
+         * Gets the status bar that's in the GUI.
+         * @return StatusBar
+         */
         public StatusBar getStatusBar() {
             return this.wwjPanel.getStatusBar();
         }
 
+        /**
+         * Gets the layer panel that's in the GUI.
+         * @return LayerPanel
+         */
         public LayerPanel getLayerPanel() {
             return layerPanel;
         }
 
+        /**
+         * Gets the Statistics panel.
+         * @return StatisticsPanel
+         */
         public StatisticsPanel getStatsPanel() {
             return statsPanel;
         }
 
+        /**
+         * Sets the tooltip controller.
+         * @param controller ToolTipController
+         */
         public void setToolTipController(ToolTipController controller) {
             if (this.wwjPanel.toolTipController != null) {
                 this.wwjPanel.toolTipController.dispose();
@@ -187,6 +232,10 @@ public class atc {
             this.wwjPanel.toolTipController = controller;
         }
 
+        /**
+         * Sets the highlight controller.
+         * @param controller setHighlightController
+         */
         public void setHighlightController(HighlightController controller) {
             if (this.wwjPanel.highlightController != null) {
                 this.wwjPanel.highlightController.dispose();
@@ -196,8 +245,12 @@ public class atc {
         }
     }
 
+    /**
+     * Insert the layer into the layer list just before the compass.
+     * @param wwd
+     * @param layer 
+     */
     public static void insertBeforeCompass(WorldWindow wwd, Layer layer) {
-        // Insert the layer into the layer list just before the compass.
         int compassPosition = 0;
         LayerList layers = wwd.getModel().getLayers();
         for (Layer l : layers) {
@@ -208,8 +261,12 @@ public class atc {
         layers.add(compassPosition, layer);
     }
 
+    /**
+     * Insert the layer into the layer list just before the placenames.
+     * @param wwd
+     * @param layer 
+     */
     public static void insertBeforePlacenames(WorldWindow wwd, Layer layer) {
-        // Insert the layer into the layer list just before the placenames.
         int compassPosition = 0;
         LayerList layers = wwd.getModel().getLayers();
         for (Layer l : layers) {
@@ -220,8 +277,12 @@ public class atc {
         layers.add(compassPosition, layer);
     }
 
+    /**
+     * Insert the layer into the layer list just after the placenames.
+     * @param wwd
+     * @param layer 
+     */
     public static void insertAfterPlacenames(WorldWindow wwd, Layer layer) {
-        // Insert the layer into the layer list just after the placenames.
         int compassPosition = 0;
         LayerList layers = wwd.getModel().getLayers();
         for (Layer l : layers) {
@@ -232,8 +293,13 @@ public class atc {
         layers.add(compassPosition + 1, layer);
     }
 
+    /**
+     * Insert the layer into the layer list just before the target layer.
+     * @param wwd
+     * @param layer
+     * @param targetName 
+     */
     public static void insertBeforeLayerName(WorldWindow wwd, Layer layer, String targetName) {
-        // Insert the layer into the layer list just before the target layer.
         int targetPosition = 0;
         LayerList layers = wwd.getModel().getLayers();
         for (Layer l : layers) {
@@ -257,6 +323,12 @@ public class atc {
         }
     }
 
+    /**
+     * Starts the AppFrame
+     * @param appName Name of the application
+     * @param appFrameClass
+     * @return An very nice AppFrame.
+     */
     public static AppFrame start(String appName, Class appFrameClass) {
         if (Configuration.isMacOS() && appName != null) {
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", appName);
