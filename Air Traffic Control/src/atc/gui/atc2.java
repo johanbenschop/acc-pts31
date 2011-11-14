@@ -70,7 +70,6 @@ public final class atc2 extends atc {
         private final Timer timerColision;
 
         public AppFrame() {
-
 //            final jpTerminal cli = new jpTerminal();
 //            this.getContentPane().add(cli, java.awt.BorderLayout.SOUTH);
 //            this.addKeyListener(new KeyListener() {

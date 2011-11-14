@@ -23,18 +23,14 @@ public class airplaneRendereble extends Box {
     private final Flightplan flightplan;
     private final Timer timerAirplane;
     
-
     public airplaneRendereble(Flightplan flightplan) {
         super(flightplan.getAirplane().getLocation().toPosition(),
                 flightplan.getAirplane().getPlaneLength(),
                 flightplan.getAirplane().getPlaneHeight(),
                 flightplan.getAirplane().getPlaneWidth());
-        //super(flightplan.getAirplane().getLocation().toPosition(), 50000, 50000, 50000);
         this.flightplan = flightplan;
-        this.airplane = flightplan.getAirplane();
-        
+        this.airplane = flightplan.getAirplane();        
         this.timerAirplane = new Timer(500, new ActionListener() {
-
                 public void actionPerformed(ActionEvent event) {
                     moveTo(airplane.getLocation().toPosition());
                 }
@@ -49,7 +45,4 @@ public class airplaneRendereble extends Box {
     public Flightplan getFlightplan() {
         return flightplan;
     }
-    
-    
-    
 }
