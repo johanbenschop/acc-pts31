@@ -62,7 +62,6 @@ public class ACC {
     }
 
     /**************Getters**************/
-    
     /**
      * Method to get ID of this ACC
      * 
