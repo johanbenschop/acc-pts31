@@ -1,7 +1,10 @@
 package atc.logic;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.io.*;
+import javax.swing.Timer;
 
 /**
  * An ACC which has control over a CTA
@@ -11,7 +14,6 @@ import java.io.*;
 public class ACC {
 
     /**************Datafields***********/
-    
     /**
      * unique identification number of the ACC
      */
@@ -36,9 +38,9 @@ public class ACC {
      * an airplane factory
      */
     private AirplaneFactory airplaneFactory;
+    private Timer timer;
 
     /***************Constructor**********/
-    
     /** 
      * An ACC is made with its own unique ID linked to a Control Area (CTA).
      * 
@@ -88,7 +90,7 @@ public class ACC {
     public ArrayList<Flightplan> getfp() {
         return fp;
     }
-    
+
     /**
      * Method to get the Airplane Factory
      * 
@@ -102,7 +104,7 @@ public class ACC {
         }
         return airplaneFactory;
     }
-    
+
     /**
      * Method to get all Available Airplanes
      * 
@@ -113,10 +115,9 @@ public class ACC {
     }
 
     /**************Methods**************/
-    
     /**
-    * All airplanes in the AvailableAirplanes.dat list will be read into a list.
-    */
+     * All airplanes in the AvailableAirplanes.dat list will be read into a list.
+     */
     public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
         FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
 
@@ -239,13 +240,14 @@ public class ACC {
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
     public void LandFlight(Flightplan fp) throws AssignmentException {
-        Runway runway = fp.getDestinationAirport().getRunway();
-        if (runway.getAvailability() == true) {
-            runway.ChangeAvailability(false);
-            fp.getAirplane().Land(runway);
-        } else {
-            throw new AssignmentException("Runway is unavailable.");
-        }
+//        Runway runway = fp.getDestinationAirport().getRunway();
+//        if (runway.getAvailability() == true) {
+//            runway.ChangeAvailability(false);
+//            fp.getAirplane().Land(runway);
+//        } else {
+//            throw new AssignmentException("Runway is unavailable.");
+//        }
+        addRunwayTimer(fp.getTakeoffAirport(), fp.getAirplane());
     }
 
     /**
@@ -269,7 +271,7 @@ public class ACC {
      */
     public void GiveRunwayTakeOff(Runway r, Airplane a, double direction, double height, double speed) throws AssignmentException {
         if (r.getAvailability() == true) {
-            r.ChangeAvailability(true);
+            r.ChangeAvailability(false);
             a.TakeOff(r, direction, height, speed);
             a.setStatus(Airplane.Statusses.TAKINGOFF);
         } else {
@@ -302,29 +304,30 @@ public class ACC {
      * 
      * @param flightnumber is the flightnumber of the airplane
      */
-    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure) throws AssignmentException {
+    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
-                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 
+                a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(),
                 0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
-        
+
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        double direction = GeoLocation.CalcDirection(start, end);
-        System.out.println("The direction to the airfield is " + direction);
-            System.out.println(ap.getStatus());
-            int i = 0;
-            while (ap.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
-                System.out.println(direction);
-                i++;
-            if(start.getRunway() != null){
-            GiveRunwayTakeOff(start.getRunway(), ap, direction , 2, 300);
-            System.out.println(ap.getStatus());
-            }
-        }
+        addRunwayTimer(start, ap);
+//        double direction = GeoLocation.CalcDirection(start, end);      
+//        System.out.println("The direction to the airfield is " + direction);
+//        System.out.println(ap.getStatus());
+//        int i = 0;
+//        while (ap.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
+//            System.out.println(direction);
+//            i++;
+//            if (start.getRunway() != null) {
+//                GiveRunwayTakeOff(start.getRunway(), ap, direction, 2, 300);
+//                System.out.println(ap.getStatus());
+//            }
+//        }
     }
-    
+
     /**
      * Method to get all Flightplans
      * 
@@ -332,5 +335,25 @@ public class ACC {
      */
     public ListIterator<Flightplan> getFlightplans() {
         return fp.listIterator();
+    }
+
+    private void addRunwayTimer(final Airport airport, final Airplane airplane) {
+        this.timer = new Timer(300, new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                Runway runway = airport.getRunway();
+                if (runway.getAvailability()) {
+                    runway.ChangeAvailability(false);
+
+                    if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
+                        airplane.TakeOff(runway, runway.getDirection(), 2, (0.7 * airplane.getMaxSpeed()));
+                    } else if (airplane.getStatus() == Airplane.Statusses.INLANDINGQUEUE) {
+                        airplane.Land(runway);
+                    }
+                    timer.stop();
+                }
+            }
+        });
+        timer.start();
     }
 }
