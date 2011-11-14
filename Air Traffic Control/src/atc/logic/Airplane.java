@@ -28,15 +28,12 @@ public class Airplane extends Thread {
     private double AimedDirection; // Degree's (could be changed)
     private double AimedAltitude; // Kilometers
     private Statusses Status;
-    //private Date SecondsBeforeRunning = new Date();
-    //private Date SecondsRunning = new Date();
     private double takeOffAccelerationSpeed = 0.667; // Kilometers per hour
     private GeoLocation destinationLocation;
     private GeoLocation location;
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
     private double longitudeTravelled;
     private double latitudeTravelled;
-//    private boolean boolTakeOff = false;
 
     public enum Statusses {
 
@@ -113,11 +110,6 @@ public class Airplane extends Thread {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
-//        if(this.Status == Statusses.TAKINGOFF && boolTakeOff == false)
-//        {
-//            boolTakeOff = true;
-//            
-//        }
         if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
@@ -149,7 +141,6 @@ public class Airplane extends Thread {
             this.Status = Statusses.LANDING;
             SetAimedDirection(GeoLocation.CalcDirection(location, r.getLocation()));
             SetAimedAltitude(0);
-       //     SetAimedSpeed(0);
         }
     }
 
@@ -182,7 +173,6 @@ public class Airplane extends Thread {
      * Change the longitude and lattitude based on the distance travelled and the direction in wich the airplane flies.
      */
     public void ChangeGeoLocation() {
-        //Latitude: 1 deg = 110.54 kmLongitude: 1 deg = 111.320*cos(latitude) km
         distanceTravelled = (this.Speed / 36000d);
         double bearing = Direction / 180d * Math.PI;
         
