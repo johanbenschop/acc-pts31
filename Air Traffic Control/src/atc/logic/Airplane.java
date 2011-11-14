@@ -232,9 +232,12 @@ public class Airplane extends Thread {
     public void ChangeSpeed() {
         double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
-            if (this.Speed < 300) {
+            if (this.Speed < MinSpeed) {
                 this.Speed += takeOffAccelerationSpeed;
                 this.Status = Statusses.INFLIGHT;
+            }
+            else if (this.Speed >= MinSpeed) {
+            this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
             }
         } else if (this.Status == Statusses.CRASHED) {
             this.Speed = 0;
