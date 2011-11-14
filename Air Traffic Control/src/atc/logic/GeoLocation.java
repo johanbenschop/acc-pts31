@@ -116,7 +116,6 @@ public class GeoLocation {
         return direction;
     }
     
-    
      /**
      * Method to return a double value of the direction calculated between GeoLocation a and GeoLocation b.
      * 
