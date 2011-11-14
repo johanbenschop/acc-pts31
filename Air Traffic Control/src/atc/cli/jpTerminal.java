@@ -80,7 +80,7 @@ public final class jpTerminal extends JPanel implements DocumentListener {
                 classes.add(Class.forName("atc.cli.commands." + file.getName().replaceFirst(".java", "")));
             }
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 
