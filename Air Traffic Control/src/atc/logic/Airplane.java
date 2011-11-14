@@ -1,5 +1,6 @@
 package atc.logic;
 
+import atc.cli.CommandLine;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -93,11 +94,13 @@ public class Airplane extends Thread {
     @Override
     public void run() {
         while (true) {
-            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF ||
-                    Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2 ||
-                    Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
+            System.out.println("Speed: " + Speed + "Status: " + Status.toString());
+            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
+                    || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
+                    || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
                 try {
                     Fly();
+                    System.out.println("Speed: " + Speed + "Status: " + Status.toString());
                     Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,7 +115,8 @@ public class Airplane extends Thread {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
-        if ((distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING) || this.Status == Statusses.INLANDINGQUEUE) {
+        if ((distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING)
+                || this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
             ChangeSpeed();
@@ -124,7 +128,8 @@ public class Airplane extends Thread {
             ChangeAltitude();
             ChangeGeoLocation();
         }
-            if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 100 && this.Status == Statusses.LANDING) {
+        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 100
+                && this.Status == Statusses.LANDING) {
             this.Status = Statusses.HASLANDED;
             SetAimedSpeed(0);
             SetAimedAltitude(0);
@@ -163,7 +168,7 @@ public class Airplane extends Thread {
         SetAimedAltitude(altitude);
         SetAimedSpeed(speed);
     }
-    
+
     /**
      * When the airplane is circling around an airport this method is called to change the direction in wich it flies.
      */
@@ -192,7 +197,7 @@ public class Airplane extends Thread {
                 if (this.Direction - 1 < 0) {
                     double newDirection;
                     newDirection = this.Direction;
-                    newDirection -=1;
+                    newDirection -= 1;
                     newDirection += 360;
                     this.Direction = newDirection;
                 } else {
@@ -209,20 +214,20 @@ public class Airplane extends Thread {
     public void ChangeGeoLocation() {
         distanceTravelled = (this.Speed / 36000d);
         double bearing = Direction / 180d * Math.PI;
-        
+
         double R = 6371;
-        
+
         double lat = location.getLatitude() / 180d * Math.PI;
         double lon = location.getLongitude() / 180d * Math.PI;
-        
-        double destLat = Math.asin(Math.sin(lat) * Math.cos(distanceTravelled / R) + Math.cos(lat) * Math.sin(distanceTravelled/R)*Math.cos(bearing));
-        double destLon = lon + Math.atan2(Math.sin(bearing) * Math.sin(distanceTravelled / R) * Math.cos(lat), Math.cos(distanceTravelled /R) - Math.sin(lat) * Math.sin(destLat));
-        
+
+        double destLat = Math.asin(Math.sin(lat) * Math.cos(distanceTravelled / R) + Math.cos(lat) * Math.sin(distanceTravelled / R) * Math.cos(bearing));
+        double destLon = lon + Math.atan2(Math.sin(bearing) * Math.sin(distanceTravelled / R) * Math.cos(lat), Math.cos(distanceTravelled / R) - Math.sin(lat) * Math.sin(destLat));
+
         location.setLatitude(destLat * 180 / Math.PI);
         location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
 
-       // System.out.println(location.ToString());
+        // System.out.println(location.ToString());
     }
 
     /**
@@ -230,14 +235,15 @@ public class Airplane extends Thread {
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     public void ChangeSpeed() {
+        System.out.println("Speed: " + Speed + "Status: " + Status.toString());
         double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {
                 this.Speed += takeOffAccelerationSpeed;
+            } else {
+                // The airplane is up in the air and can go to it's destination
                 this.Status = Statusses.INFLIGHT;
-            }
-            else if (this.Speed >= MinSpeed) {
-            this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
+                this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
             }
         } else if (this.Status == Statusses.CRASHED) {
             this.Speed = 0;
@@ -250,7 +256,6 @@ public class Airplane extends Thread {
                 this.Speed = AimedSpeed * 10;
             }
         }
-
     }
 
     /**

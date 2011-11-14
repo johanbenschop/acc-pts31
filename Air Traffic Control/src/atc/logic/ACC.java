@@ -38,7 +38,6 @@ public class ACC {
      * an airplane factory
      */
     private AirplaneFactory airplaneFactory;
-    private Timer timer;
 
     /***************Constructor**********/
     /** 
@@ -60,7 +59,7 @@ public class ACC {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
     }
 
     /**************Getters**************/
@@ -120,15 +119,15 @@ public class ACC {
      */
     public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
         FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
-
+        
         DataInputStream in2 = new DataInputStream(fstream2);
         BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-
+        
         String strline2;
         while ((strline2 = br2.readLine()) != null) {
             try {
                 String[] props2 = strline2.split(",");
-
+                
                 int MaxSpeed = Integer.parseInt(props2[0]);
                 int MinSpeed = Integer.parseInt(props2[1]);
                 int Weight = Integer.parseInt(props2[2]);
@@ -139,9 +138,9 @@ public class ACC {
                 int PlaneLength = Integer.parseInt(props2[7]);
                 int MaxFuel = Integer.parseInt(props2[8]);
                 int FuelUsage = Integer.parseInt(props2[9]);
-
+                
                 AirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
-
+                
                 airplaneFactoryList.add(airplaneFactory);
             } catch (NumberFormatException | InputMismatchException e) {
                 System.out.println("Corrupt data line...");
@@ -149,6 +148,7 @@ public class ACC {
         }
     }
 
+    // TODO edit comment block below. Block has no return value!
     /**
      * Method to change the speed of the airplane. First its set to the Aimed
      * speed of the airplane so it can take its needed time to get to this speed
@@ -166,7 +166,7 @@ public class ACC {
         if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
             a.SetAimedSpeed(speed);
         } else {
-            throw new AssignmentException("The Speed given is too low or high.");
+            throw new AssignmentException("The speed given is too low or high.");
         }
     }
 
@@ -270,13 +270,14 @@ public class ACC {
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
     public void GiveRunwayTakeOff(Runway r, Airplane a, double direction, double height, double speed) throws AssignmentException {
-        if (r.getAvailability() == true) {
-            r.ChangeAvailability(false);
-            a.TakeOff(r, direction, height, speed);
-            a.setStatus(Airplane.Statusses.TAKINGOFF);
-        } else {
-            throw new AssignmentException("Runway is not available.");
-        }
+//        if (r.getAvailability() == true) {
+//            r.ChangeAvailability(false);
+//            a.TakeOff(r, direction, height, speed);
+//            a.setStatus(Airplane.Statusses.TAKINGOFF);
+//        } else {
+//            throw new AssignmentException("Runway is not available.");
+//        }
+        //addRunwayTimer(null, a);
     }
 
     /**
@@ -308,7 +309,7 @@ public class ACC {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(),
                 0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
-
+        
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
         cta.addAirplane(ap);
@@ -336,15 +337,16 @@ public class ACC {
     public ListIterator<Flightplan> getFlightplans() {
         return fp.listIterator();
     }
-
+    
     private void addRunwayTimer(final Airport airport, final Airplane airplane) {
-        this.timer = new Timer(300, new ActionListener() {
-
+        final Timer timer = new Timer(300, null);
+        timer.addActionListener(new ActionListener() {
+            
             public void actionPerformed(ActionEvent event) {
                 Runway runway = airport.getRunway();
                 if (runway.getAvailability()) {
                     runway.ChangeAvailability(false);
-
+                    
                     if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
                         airplane.TakeOff(runway, runway.getDirection(), 2, (0.7 * airplane.getMaxSpeed()));
                     } else if (airplane.getStatus() == Airplane.Statusses.INLANDINGQUEUE) {

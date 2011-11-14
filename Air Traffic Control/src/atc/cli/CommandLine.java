@@ -200,7 +200,7 @@ public class CommandLine implements Runnable {
         System.out.println("Command line exiting.");
     }
 
-    public static void println(String input) {
+    public static synchronized void println(String input) {
         try {
             outw.write(input);
             outw.newLine();
@@ -210,7 +210,7 @@ public class CommandLine implements Runnable {
         }
     }
 
-    public static void print(String input) {
+    public static synchronized void print(String input) {
         try {
             outw.write(input);
             outw.flush();
