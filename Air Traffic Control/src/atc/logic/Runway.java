@@ -71,7 +71,7 @@ public class Runway {
     public void ChangeAvailability(boolean r) {
         timer = new Timer();
         if (r) {
-            timer.schedule(new tim(r), 180000); //180,000 milliseconds = 3 minutes
+            timer.schedule(new timerTask(r), 180000); //180,000 milliseconds = 3 minutes
         } else {
             Availability = r;
         }
@@ -80,17 +80,17 @@ public class Runway {
     /**
      * A class for the timer.
      */
-    private class tim extends TimerTask {
+    private class timerTask extends TimerTask {
 
-        boolean r;
+        boolean availeble;
 
-        private tim(boolean r) {
-            this.r = r;
+        private timerTask(boolean availeble) {
+            this.availeble = availeble;
         }
 
         @Override
         public void run() {
-            Availability = r;
+            Availability = availeble;
             timer.cancel();
         }
     }
