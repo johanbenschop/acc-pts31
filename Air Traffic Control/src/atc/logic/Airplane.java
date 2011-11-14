@@ -34,6 +34,8 @@ public class Airplane extends Thread {
     private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
     private double longitudeTravelled;
     private double latitudeTravelled;
+    private boolean InLandingQeueu = false;
+    private boolean binnenStraal = false;
 
     public enum Statusses {
 
@@ -110,7 +112,7 @@ public class Airplane extends Thread {
      * which change the speed, direction and altitude from an airplane.
      */
     public void Fly() {
-        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING) {
+        if ((distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING) || this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
             ChangeSpeed();
@@ -166,7 +168,39 @@ public class Airplane extends Thread {
      * When the airplane is circling around an airport this method is called to change the direction in wich it flies.
      */
     void Circling() {
-        Direction += 0.5;
+        if (this.InLandingQeueu == false) {
+            this.Direction += 90;
+            InLandingQeueu = true;
+        }
+        if (InLandingQeueu == true) {
+            if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
+                this.binnenStraal = true;
+            } else if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) > 20000) {
+                this.binnenStraal = false;
+            }
+            if (this.binnenStraal == true) {
+                if (this.Direction + 1 > 360) {
+                    double newDirection;
+                    newDirection = this.Direction;
+                    newDirection += 1;
+                    newDirection -= 360;
+                    this.Direction = newDirection;
+                } else {
+                    this.Direction += 1;
+                }
+            } else if (binnenStraal == false) {
+                if (this.Direction - 1 < 0) {
+                    double newDirection;
+                    newDirection = this.Direction;
+                    newDirection -=1;
+                    newDirection += 360;
+                    this.Direction = newDirection;
+                } else {
+                    this.Direction -= 1;
+                }
+            }
+        }
+        System.err.println(this.Direction);
     }
 
     /**
@@ -188,7 +222,7 @@ public class Airplane extends Thread {
         location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
 
-        System.out.println(location.ToString());
+       // System.out.println(location.ToString());
     }
 
     /**
@@ -210,7 +244,7 @@ public class Airplane extends Thread {
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
                 this.Speed += amountChangeSpeed;
             } else {
-                this.Speed = AimedSpeed;
+                this.Speed = AimedSpeed * 10;
             }
         }
 
