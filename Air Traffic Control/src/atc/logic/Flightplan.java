@@ -9,8 +9,6 @@ import java.util.*;
 public class Flightplan {
 
     /**************Datafields***********/
-    
-       
      /**
      * The Airport where the flight is going to. 
      */
@@ -41,7 +39,7 @@ public class Flightplan {
      */
     private Airplane airplane;
     
-       /**A flightplan is made with the following parameters:
+    /**A flightplan is made with the following parameters:
      * @param destinationAirport: The Airport where the flight is going to. 
      * @param takeoffAirport: The Airport where the flight is taking off from.
      * @param flightnumber: Flightnumber of the flight.
@@ -49,7 +47,6 @@ public class Flightplan {
      * @param ArrivalDate: The date and time of when the flight arrives.
      * @param airplane: The airplane that is gonna be used for the flight.
      */
-  
     public Flightplan(Airport destination, Airport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, Airplane airplane) {
         destinationAirport = destination;
         takeoffAirport = takeOff;
@@ -58,8 +55,8 @@ public class Flightplan {
         ArrivalDate = arrival;
         this.airplane = airplane;
     }
-    /**************Getters**************/
     
+    /**************Getters**************/
     public GregorianCalendar getArrivalDate() {
         return ArrivalDate;
     }
