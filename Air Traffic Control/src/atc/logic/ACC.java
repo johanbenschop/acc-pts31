@@ -305,7 +305,7 @@ public class ACC {
     public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure) throws AssignmentException {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(), 
-                0, 0, 300, 0, start.getLocation(), end.getLocation(), flightnumber);
+                0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
         
         fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
         flightnumber++;
