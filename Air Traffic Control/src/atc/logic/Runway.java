@@ -10,7 +10,7 @@ import java.util.TimerTask;
  */
 public class Runway {
 
-        /**************Datafields***********/
+    /**************Datafields***********/
     /**
      * The length of the runway
      */
@@ -23,11 +23,11 @@ public class Runway {
      * If the runway is available to land or take off an airplane
      */
     private boolean Availability;
-     /**
+    /**
      * A timer to calculate when the 3 minutes are past before the runway is available again
      */
     private Timer timer;
-     /**
+    /**
      * The geolocation of the runway. 
      */
     private GeoLocation location;
@@ -46,11 +46,12 @@ public class Runway {
         this.Direction = direction;
         this.Availability = availability;
     }
+
     /**************Getters**************/
     public GeoLocation getLocation() {
         return location;
     }
-    
+
     public int getLength() {
         return Length;
     }
@@ -62,7 +63,7 @@ public class Runway {
     public boolean getAvailability() {
         return Availability;
     }
-    
+
     /**
      * @param r is what the availability should become after calling this method.
      * @return Availability
@@ -76,7 +77,7 @@ public class Runway {
         }
     }
 
-     /**
+    /**
      * A class for the timer.
      */
     private class tim extends TimerTask {
