@@ -54,6 +54,10 @@ public class GeoLocation {
     public double getLongitude() {
         return Longitude;
     }
+    
+    public GeoLocation getNewGeoLocation() {
+        return new GeoLocation(Longitude, Latitude, Altitude);
+    }
 
     
     /**************Setters**************/
