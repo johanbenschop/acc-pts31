@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package atc.logic;
 
 import java.io.*;
@@ -26,7 +22,7 @@ public class AssignmentException extends Exception {
         super(err);
         WrongAssignment = err;
     }
-    
+
     public String getError() {
         return WrongAssignment;
     }
