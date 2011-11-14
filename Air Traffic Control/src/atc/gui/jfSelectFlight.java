@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * jfSearchFlight.java
  *
  * Created on 6-okt-2011, 12:42:52
@@ -289,7 +284,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         while (flightplans.hasNext()) {
             Flightplan iter = flightplans.next();
             bufFlightplans.add(iter);
-
+            // TODO fix (...) algorithm
 //            try {
 //                if (tfFlightnumber.getText() != ""
 //                        && iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {

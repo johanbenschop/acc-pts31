@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * jfSettings.java
  *
  * Created on 18-okt-2011, 14:24:11
@@ -33,7 +28,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  *
- * @author Acer
+ * @author Johan & Mateusz
  */
 public class jfSettings extends javax.swing.JDialog {
 

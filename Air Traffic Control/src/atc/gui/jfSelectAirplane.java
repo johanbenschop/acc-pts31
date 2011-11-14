@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * jfSelectAirplane.java
  *
  * Created on Oct 15, 2011, 9:24:53 PM

@@ -27,6 +27,7 @@ public class apAnnotation extends GlobeAnnotation {
         gl.glTranslated(x, y, 0);
         gl.glScaled(finalScale, finalScale, 1);
     }
+    
     // Override annotation drawing for a simple circle
     private DoubleBuffer shapeBuffer;
 
