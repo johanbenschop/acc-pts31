@@ -1,7 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- * 
  * Sources: 
  * http://stackoverflow.com/questions/2158/creating-a-custom-button-in-java
  * 
