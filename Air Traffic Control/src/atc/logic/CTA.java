@@ -6,20 +6,42 @@ import java.io.*;
 
 public class CTA {
 
-    private GeoLocation location;                   // the geolocation of the CTA
-    private double width;                           //the width of the CTA
-    private double length;                          //the length of the CTA
-    private Airplane airplane;                      //a airplane used for getting focus of a selected airplane within the CTA
-    private Airport airport;                        //a airport used for getting focus of a selected airport within the CTA
-    private ArrayList<Airplane> airplaneList;       //a list used for collecting all the active airplanes within the CTA     
-    private ArrayList<Airport> airportList;         //a list used for collecting all the airports within the CTA
-
-        /***************Constructor**********/
+    /**************Datafields***********/
     /**
-     * this is a constructor used for making a CTA it contains a location and the width/length
-     * @param location is the location of the CTA
-     * @param width is the width of the CTA
-     * @param length is the length of the CTA
+     * The geolocation of the CTA
+     */
+    private GeoLocation location;
+    /**
+     * the width of the CTA
+     */
+    private double width;
+    /**
+     * The length of the CTA
+     */
+    private double length;
+    /**
+     * A airplane used for getting focus of a selected airplane within the CTA
+     */
+    private Airplane airplane;
+    /**
+     * A airport used for getting focus of a selected airport within the CTA
+     */
+    private Airport airport;
+    /**
+     * A list used for collecting all the active airplanes within the CTA  
+     */
+    private ArrayList<Airplane> airplaneList;
+    /**
+     * A list used for collecting all the airports within the CTA
+     */
+    private ArrayList<Airport> airportList;
+
+    /***************Constructor**********/
+    /**
+     * This is a constructor used for making a CTA it contains a location and the width/length
+     * @param Location is the location of the CTA
+     * @param Width is the width of the CTA
+     * @param Length is the length of the CTA
      */
     public CTA(GeoLocation location, double width, double length) {
         this.location = location;
@@ -64,7 +86,7 @@ public class CTA {
     }
 
     /**
-     * is not yet implemented
+     * Not yet implemented
      * @return
      */
     public void DetectAirplane() {
@@ -72,7 +94,7 @@ public class CTA {
     }
 
     /**
-     * this is the collision detection, it checks if the airplanes within the CTA are on a collision course, if they are it will send a message to the GUI.
+     * This is the collision detection, it checks if the airplanes within the CTA are on a collision course, if they are it will send a message to the GUI.
      * @return if the airplanes are on a collision course it will send a message to the GUI and sets the status of both airplanes to CRASHING
      */
     public void Collision() {
@@ -169,7 +191,7 @@ public class CTA {
     }
 
     /**
-     * checks the distance between 2 given points
+     * Checks the distance between 2 given points
      * @param lat1 is the first given latitude
      * @param lon1 is the first given longitude
      * @param lat2 is the second given latitude
@@ -250,13 +272,14 @@ public class CTA {
 
                 Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
-                }  catch (NumberFormatException | InputMismatchException e) {
-                    System.out.println("Corrupt data line on airport.dat...");
-                }}
+            } catch (NumberFormatException | InputMismatchException e) {
+                System.out.println("Corrupt data line on airport.dat...");
+            }
+        }
     }
 
     /**
-     * gets the current airplane
+     * Gets the current airplane
      * @return airplane
      */
     public Airplane getCurrentSelectedAirplane() {
@@ -264,7 +287,7 @@ public class CTA {
     }
 
     /**
-     * gets the airplane list
+     * Gets the airplane list
      * @return airplaneList
      */
     public ArrayList<Airplane> getAirplaneList() {
@@ -272,7 +295,7 @@ public class CTA {
     }
 
     /**
-     * gets the airport list
+     * Gets the airport list
      * @return airportList
      */
     public ArrayList<Airport> getAirportList() {
@@ -280,7 +303,7 @@ public class CTA {
     }
 
     /**
-     * might not be necessary
+     * Might not be necessary
      * @return airplane
      */
     public Airplane getAirplane() {
@@ -288,7 +311,7 @@ public class CTA {
     }
 
     /**
-     * turns the airport list into a Iterator
+     * Turns the airport list into a Iterator
      * @return Iterator airportList
      */
     public ListIterator<Airport> GetAirports() {
