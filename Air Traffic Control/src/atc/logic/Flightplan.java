@@ -80,4 +80,11 @@ public class Flightplan {
     public Airport getTakeoffAirport() {
         return takeoffAirport;
     }
+
+    @Override
+    public String toString() {
+        return "[" + Flightnumber + "] " + takeoffAirport.getIATA_FAA() + "- " + destinationAirport.getIATA_FAA();
+    }
+    
+    
 }

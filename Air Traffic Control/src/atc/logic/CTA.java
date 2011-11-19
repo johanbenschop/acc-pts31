@@ -8,17 +8,9 @@ public class CTA {
 
     /**************Datafields***********/
     /**
-     * The geolocation of the CTA
+     * The GeoSector of the CTA
      */
-    private GeoLocation location;
-    /**
-     * the width of the CTA
-     */
-    private double width;
-    /**
-     * The length of the CTA
-     */
-    private double length;
+    private GeoSector sector;
     /**
      * A airplane used for getting focus of a selected airplane within the CTA
      */
@@ -43,16 +35,14 @@ public class CTA {
      * @param Width is the width of the CTA
      * @param Length is the length of the CTA
      */
-    public CTA(GeoLocation location, double width, double length) {
-        this.location = location;
-        this.width = width;
-        this.length = length;
+    public CTA(GeoSector location) {
+        this.sector = location;
 
         airplaneList = new ArrayList<>();
         airportList = new ArrayList<>();
 
         try {
-            loadAirportList();
+            loadAirportList(sector);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -60,6 +50,14 @@ public class CTA {
         }
     }
 
+    /**
+     * Returns the GeoSector of this CTA
+     * @return 
+     */
+    public GeoSector getSector() {
+        return sector;
+    }
+    
     /**
      * Returns airplane with the given airplaneNumber
      * @return 
@@ -257,16 +255,16 @@ public class CTA {
             try {
                 String[] props = strline.split(",");
                 int id = Integer.parseInt(props[0]);
-                String name = props[1];
-                String city = props[2];
-                String country = props[3];
-                String iata_faa = props[4];
-                String icao = props[5];
+                String name = props[1].replaceAll("\"", "");
+                String city = props[2].replaceAll("\"", "");
+                String country = props[3].replaceAll("\"", "");
+                String iata_faa = props[4].replaceAll("\"", "");
+                String icao = props[5].replaceAll("\"", "");
                 double latitude = Double.parseDouble(props[6]);
                 double longitude = Double.parseDouble(props[7]);
                 int altitude = Integer.parseInt(props[8]);
                 double timezone = Double.parseDouble(props[9]);
-                String dst = props[10];
+                String dst = props[10].replaceAll("\"", "");
 
                 GeoLocation location = new GeoLocation(longitude, latitude, altitude);
 
@@ -278,6 +276,46 @@ public class CTA {
         }
     }
 
+     /**
+     * Loads airports from the airports.dat file and filters the data for the GeoSecor
+     * @throws FileNotFoundException if the file doesn't exist
+     * @throws IOException 
+     */
+    public void loadAirportList(GeoSector sector) throws FileNotFoundException, IOException {
+        FileInputStream fstream = new FileInputStream("airports.dat");
+
+        DataInputStream in = new DataInputStream(fstream);
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        String strline;
+        while ((strline = br.readLine()) != null) {
+            try {
+                String[] props = strline.split(",");
+                int id = Integer.parseInt(props[0]);
+                String name = props[1].replaceAll("\"", "");
+                String city = props[2].replaceAll("\"", "");
+                String country = props[3].replaceAll("\"", "");
+                String iata_faa = props[4].replaceAll("\"", "");
+                String icao = props[5].replaceAll("\"", "");
+                double latitude = Double.parseDouble(props[6]);
+                double longitude = Double.parseDouble(props[7]);
+                int altitude = Integer.parseInt(props[8]);
+                double timezone = Double.parseDouble(props[9]);
+                String dst = props[10].replaceAll("\"", "");
+
+                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+                if (!sector.containsGeoLocation(location)) {
+                    continue; // The airport is not within the CTA
+                }
+
+                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                airportList.add(airport);
+            } catch (NumberFormatException | InputMismatchException e) {
+                System.out.println("Corrupt data line on airport.dat...");
+            }
+        }
+    }
+    
     /**
      * Gets the current airplane
      * @return airplane

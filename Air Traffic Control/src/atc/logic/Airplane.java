@@ -40,7 +40,8 @@ public class Airplane extends Thread {
 
     public enum Statusses {
 
-        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING, CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE, HASLANDED;
+        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING,
+        CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE, HASLANDED;
     }
 
     /***************Constructor**********/
@@ -94,18 +95,18 @@ public class Airplane extends Thread {
     @Override
     public void run() {
         while (true) {
-            System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
-                    || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
-                    || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
+            //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
+//            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
+//                    || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
+//                    || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
                 try {
                     Fly();
-                    System.out.println("Speed: " + Speed + "Status: " + Status.toString());
+                    //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
                     Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+//            }
         }
 
     }
@@ -235,7 +236,7 @@ public class Airplane extends Thread {
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     public void ChangeSpeed() {
-        System.out.println("Speed: " + Speed + "Status: " + Status.toString());
+        //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
         double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {

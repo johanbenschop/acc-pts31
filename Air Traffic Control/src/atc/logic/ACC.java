@@ -344,7 +344,7 @@ public class ACC {
             
             public void actionPerformed(ActionEvent event) {
                 Runway runway = airport.getRunway();
-                if (runway.getAvailability()) {
+                if (runway != null && runway.getAvailability()) {
                     runway.ChangeAvailability(false);
                     
                     if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
