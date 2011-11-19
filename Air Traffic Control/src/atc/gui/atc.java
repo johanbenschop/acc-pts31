@@ -6,8 +6,6 @@ All Rights Reserved.
  */
 package atc.gui;
 
-import SysBar.*;
-import atc.logic.Airplane;
 import gov.nasa.worldwind.*;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
@@ -17,11 +15,11 @@ import gov.nasa.worldwind.exception.WWAbsentRequirementException;
 import gov.nasa.worldwind.layers.*;
 import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.util.*;
+import gov.nasa.worldwind.view.orbit.OrbitView;
 import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 /**
  * Provides a base application framework for simple WorldWind examples. Examine other examples in this package to see
@@ -179,7 +177,17 @@ public class atc {
         public Dimension getCanvasSize() {
             return canvasSize;
         }
-
+        
+        /**
+         * Gets the Orbit View of the WWD.
+         * @return OrbitView if WWD's view happens to be an OrbitView, otherwise null
+         */
+        public OrbitView getOrbitView()
+        {
+            View view = this.getWwd().getView();
+            return (view != null && view instanceof OrbitView) ? (OrbitView) view : null;
+        }
+        
         /**
          * Gets the Word Wind Java panel.
          * @return AppPanel

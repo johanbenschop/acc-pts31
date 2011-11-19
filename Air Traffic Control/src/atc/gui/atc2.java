@@ -2,46 +2,38 @@ package atc.gui;
 
 import SysBar.UnityBar;
 import SysBar.UnityItem;
-import atc.cli.CommandLine;
 import atc.cli.jpTerminal;
 import atc.logic.ACC;
 import atc.logic.Airplane;
 import atc.logic.Airport;
 import atc.logic.CTA;
 import atc.logic.Flightplan;
+import atc.logic.GeoSector;
 import gov.nasa.worldwind.View;
-import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
-import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.layers.AirspaceLayer;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.render.AnnotationAttributes;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.ShapeAttributes;
-import gov.nasa.worldwind.render.airspaces.Airspace;
-import gov.nasa.worldwind.render.airspaces.Polygon;
-import gov.nasa.worldwind.util.WWUtil;
+import gov.nasa.worldwind.render.SurfaceSector;
 import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ListIterator;
+import java.util.prefs.*;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -53,13 +45,15 @@ import javax.swing.Timer;
  */
 public final class atc2 extends atc {
 
-    private static CTA cta = new CTA(null, 5, 4);
+    private static CTA cta = new CTA(new GeoSector(40, 60, -10, 10));
     public static ACC acc = new ACC(343, cta);
+    private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public static class AppFrame extends atc.AppFrame {
 
-        private apAnnotation mouseEq, latestEq;
-        protected AirspaceLayer airspaceLayer;
+        private AirportRenderable currentAirportAnnotation;
+        private AirplaneRenderable currentAirplaneAnnotation;
+        protected RenderableLayer airspaceLayer;
         protected RenderableLayer airportLayer;
         protected RenderableLayer airplaneLayer;
         private GlobeAnnotation tooltipAnnotation;
@@ -70,36 +64,38 @@ public final class atc2 extends atc {
         private final Timer timerColision;
 
         public AppFrame() {
-//            final jpTerminal cli = new jpTerminal();
-//            this.getContentPane().add(cli, java.awt.BorderLayout.SOUTH);
-//            this.addKeyListener(new KeyListener() {
-//                boolean open;
-//                
-//                @Override
-//                public void keyTyped(KeyEvent e) {
-//                    System.out.println("In!");
-//                    if (e.isAltDown() && e.getKeyChar() == '/' ) {
-//                        System.out.println("Double IN!");
-//                        if (open) {
-//                            getContentPane().remove(cli);
-//                        }
-//                        else {
-//                            getContentPane().add(cli, java.awt.BorderLayout.SOUTH);
-//                            CommandLine.println("Free Pancakes!");
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void keyPressed(KeyEvent e) {
-//                    System.out.println("In2!");
-//                }
-//
-//                @Override
-//                public void keyReleased(KeyEvent e) {
-//                    System.out.println("In!");
-//                }
-//            });
+            if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
+                this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+            }
+            
+            final jpTerminal cli = new jpTerminal();
+            cli.setVisible(prefs.getBoolean("CLI_VISIBLE", false));
+            super.getWwjPanel().add(cli, java.awt.BorderLayout.SOUTH);
+            KeyListener kl = new KeyListener() {
+
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    if (e.isAltDown() && e.getKeyChar() == '/' || e.getKeyChar() == '`') {
+                        if (cli.isVisible()) {
+                            cli.setVisible(false);
+                        } else {
+                            cli.setVisible(true);
+                        }
+                    }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            };
+            this.getWwd().addKeyListener(kl);
+            this.addKeyListener(kl);
+            this.getWwjPanel().addKeyListener(kl);
+            cli.addKeyListener(kl);
 
             // Create our custom made menu system bar thingy.
             menuBar = new UnityBar();
@@ -261,7 +257,7 @@ public final class atc2 extends atc {
                         }
                     });
 
-            this.timerColision = new Timer(1000, new ActionListener() {
+            this.timerColision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
                     findCollisions();
@@ -271,14 +267,32 @@ public final class atc2 extends atc {
             });
             timerColision.start();
 
+            // Add the graticule layer
+
+            LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
+            insertBeforePlacenames(getWwd(), graticuleLayer);
+            graticuleLayer.setEnabled(false);
+
             // Add the airport & airspace layers
             buildAirportLayer();
             buildAirspaceLayer();
             buildAirplaneLayer();
 
-            // Add the graticule layer
-            LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
-            insertBeforePlacenames(getWwd(), graticuleLayer);
+            // Init tooltip annotation
+            this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
+            Font font = Font.decode(prefs.get("TT_FONT", "Arial-Plain-16"));
+            this.tooltipAnnotation.getAttributes().setFont(font);
+            this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);
+            this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
+            this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
+            this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
+            this.tooltipAnnotation.getAttributes().setBackgroundColor(new Color(0f, 0f, 0f, .7f));
+            //this.tooltipAnnotation.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLES,
+            //        (float) 0.1, Color.LIGHT_GRAY));
+            this.tooltipAnnotation.getAttributes().setImageScale(.4);
+            this.tooltipAnnotation.getAttributes().setVisible(false);
+            this.tooltipAnnotation.setAlwaysOnTop(true);
+            airportLayer.addRenderable(this.tooltipAnnotation);
         }
 
         /**
@@ -326,8 +340,6 @@ public final class atc2 extends atc {
                                 }
                             });
                 }
-
-
             }
         }
 
@@ -344,38 +356,35 @@ public final class atc2 extends atc {
          * TODO build the airspace according to the CTA and not directly as done.
          */
         private void buildAirspaceLayer() {
-            // Add the airspace layer with our ACC in it
-            this.airspaceLayer = new AirspaceLayer();
-            this.airspaceLayer.setName("Airspaces");
-            this.airspaceLayer.setEnableBatchPicking(false);
-            insertBeforePlacenames(this.getWwd(), this.airspaceLayer);
+            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+            ShapeAttributes attr = new BasicShapeAttributes();
+            //attr.setInteriorMaterial(Material.WHITE);
+            attr.setOutlineMaterial(Material.RED);
+            attr.setInteriorOpacity(0);
+            attr.setOutlineOpacity(0.7);
+            attr.setOutlineWidth(3);
+            surfaceSector.setAttributes(attr);
+            surfaceSector.setPathType(AVKey.RHUMB_LINE);
+            attr.setEnableAntialiasing(true);
 
-            Polygon poly = new Polygon();
+            airspaceLayer = new RenderableLayer();
+            airspaceLayer.setName("Airspaces");
+            airspaceLayer.setPickEnabled(false);
+            airspaceLayer.addRenderable(surfaceSector);
+            insertBeforePlacenames(this.getWwd(), airspaceLayer);
 
-            poly.setLocations(Arrays.asList(
-                    LatLon.fromDegrees(60, -10),
-                    LatLon.fromDegrees(60, 10),
-                    LatLon.fromDegrees(40, 10),
-                    LatLon.fromDegrees(40, -10)));
-            poly.setAltitudes(100000.0, 500000.0);
-            poly.setTerrainConforming(true, true);
-            poly.setValue(AVKey.DISPLAY_NAME, "CTA - Greater Europe");
-            this.setupDefaultMaterial(poly, Color.RED);
-            airspaceLayer.addAirspace(poly);
-        }
-
-        /**
-         * Sets up default material.
-         * @param a Airspace
-         * @param color Colour
-         */
-        protected void setupDefaultMaterial(Airspace a, Color color) {
-            a.getAttributes().setDrawOutline(true);
-            a.getAttributes().setMaterial(new Material(color));
-            a.getAttributes().setOutlineMaterial(new Material(WWUtil.makeColorBrighter(color)));
-            a.getAttributes().setOpacity(0.8);
-            a.getAttributes().setOutlineOpacity(0.9);
-            a.getAttributes().setOutlineWidth(3.0);
+//            OrbitView view = this.getOrbitView();
+//            if (view != null) {
+//                OrbitViewLimits limits = view.getOrbitViewLimits();
+//                if (limits != null) {
+//                    Globe globe = this.getWwd().getModel().getGlobe();
+//
+//                    limits.setCenterLocationLimits(acc.GetCTA().getSector().toSector());
+//                    limits.setZoomLimits(0, 5000000);
+//                    BasicOrbitViewLimits.applyLimits(view, limits);
+//                }
+//                surfaceSector.setSector(limits.getCenterLocationLimits());
+//            }
         }
 
         /**
@@ -386,17 +395,6 @@ public final class atc2 extends atc {
             this.airportLayer = new RenderableLayer();
             this.airportLayer.setName("Airports");
             insertBeforePlacenames(this.getWwd(), this.airportLayer);
-
-            // Init tooltip annotation
-            this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
-            Font font = Font.decode("Arial-Plain-16");
-            this.tooltipAnnotation.getAttributes().setFont(font);
-            this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
-            this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
-            this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
-            this.tooltipAnnotation.getAttributes().setVisible(false);
-            this.tooltipAnnotation.setAlwaysOnTop(true);
-            airportLayer.addRenderable(this.tooltipAnnotation);
 
             // Add select listener for airport picking
             this.getWwd().addSelectListener(new SelectListener() {
@@ -410,7 +408,7 @@ public final class atc2 extends atc {
 
             // Add click-and-go select listener for airports
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                    this.getWwd(), apAnnotation.class, 20000));
+                    this.getWwd(), AirportRenderable.class, 20000));
 
             ListIterator<Airport> litr = acc.GetCTA().GetAirports();
 
@@ -418,7 +416,6 @@ public final class atc2 extends atc {
                 addAirportToLayer(airportLayer, litr.next());
             }
         }
-        private AnnotationAttributes apAttributes;
 
         /**
          * Adds an airport to the airport layer.
@@ -426,52 +423,29 @@ public final class atc2 extends atc {
          * @param airport Airport
          */
         private void addAirportToLayer(RenderableLayer layer, Airport airport) {
-            if (apAttributes == null) {
-                // Init default attributes for all eq
-                apAttributes = new AnnotationAttributes();
-                apAttributes.setLeader(AVKey.SHAPE_NONE);
-                apAttributes.setDrawOffset(new Point(0, 0));
-                apAttributes.setSize(new Dimension(32, 32));
-                apAttributes.setBorderWidth(0);
-                apAttributes.setCornerRadius(0);
-                apAttributes.setBackgroundColor(new Color(0, 0, 0, 0));
-            }
-
-            apAnnotation ea = new apAnnotation(airport, apAttributes);
-
-            ea.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLE, .8f, Color.BLUE));
-            ea.getAttributes().setTextColor(Color.BLUE);
-            ea.getAttributes().setScale(1);
-
-            layer.addRenderable(ea);
+            layer.addRenderable(new AirportRenderable(airport));
         }
 
         /** 
-         * Shows the annotation of an airport when param o is indeed a apAnnotation.
+         * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */
         private void highlightAirport(Object o) {
-            if (this.mouseEq == o) {
+            if (currentAirportAnnotation == o) {
                 return; // same thing selected
             }
-            if (this.mouseEq != null) {
-                this.mouseEq.getAttributes().setHighlighted(false);
-                this.mouseEq = null;
-                this.tooltipAnnotation.getAttributes().setVisible(false);
+            if (currentAirportAnnotation != null) {
+                currentAirportAnnotation.getAttributes().setHighlighted(false);
+                currentAirportAnnotation = null;
+                tooltipAnnotation.getAttributes().setVisible(false);
             }
 
-            if (o != null && o instanceof apAnnotation) {
-                this.mouseEq = (apAnnotation) o;
-                this.mouseEq.getAttributes().setHighlighted(true);
-                this.tooltipAnnotation.setText("<p><b>" + this.mouseEq.airport.getAirportName() + "</b> ("
-                        + this.mouseEq.airport.getAirportID() + ") </p>"
-                        + "City = " + this.mouseEq.airport.getCity() + "<br>"
-                        + "Country = " + this.mouseEq.airport.getCountry() + "<br>"
-                        + "IATA/FAA = " + this.mouseEq.airport.getIATA_FAA() + "<br>"
-                        + "ICAO = " + this.mouseEq.airport.getICAO() + "<br>"
-                        + "Timezone = " + this.mouseEq.airport.getTimezone() + "<br>");
-                this.tooltipAnnotation.setPosition(this.mouseEq.airport.getLocation().toPosition());
-                this.tooltipAnnotation.getAttributes().setVisible(true);
+            if (o != null && o instanceof AirportRenderable) {
+                currentAirportAnnotation = (AirportRenderable) o;
+                currentAirportAnnotation.getAttributes().setHighlighted(true);
+                tooltipAnnotation.setText(currentAirportAnnotation.getAnnotationText());
+                tooltipAnnotation.setPosition(currentAirportAnnotation.airport.getLocation().toPosition());
+                tooltipAnnotation.getAttributes().setVisible(true);
                 this.getWwd().repaint();
             }
         }
@@ -488,7 +462,7 @@ public final class atc2 extends atc {
 
             // Add click-and-go select listener for airplanes
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                    this.getWwd(), airplaneRendereble.class, 500)); // last value is height
+                    this.getWwd(), airplaneRenderableOLD.class, 500)); // last value is height
 
             // Add select listener for airport picking
             this.getWwd().addSelectListener(new SelectListener() {
@@ -496,6 +470,9 @@ public final class atc2 extends atc {
                 public void selected(SelectEvent event) {
                     if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
                         clickAirplane(event.getTopObject());
+                    }
+                    if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                        highlightAirplane(event.getTopObject());
                     }
                 }
             });
@@ -523,37 +500,42 @@ public final class atc2 extends atc {
 
             if (!addedAirplanes.contains(airplane)) {
                 addedAirplanes.add(airplane);
+                layer.addRenderable(new AirplaneRenderable(flightplan));
+            }
+        }
 
-                // Create and set an attribute bundle.
-                ShapeAttributes attrs = new BasicShapeAttributes();
-                attrs.setInteriorMaterial(Material.GREEN);
-                attrs.setInteriorOpacity(1);
-                attrs.setEnableLighting(true);
-                attrs.setOutlineMaterial(Material.RED);
-                attrs.setOutlineWidth(2d);
-                attrs.setDrawInterior(true);
-                attrs.setDrawOutline(false);
+        /** 
+         * Shows the annotation of an airport when param o is indeed a AirportRenderable.
+         * @param o Object under the mouse
+         */
+        private void highlightAirplane(Object o) {
+            if (currentAirplaneAnnotation == o) {
+                return; // same thing selected
+            }
+            if (currentAirplaneAnnotation != null) {
+                currentAirplaneAnnotation.getAttributes().setHighlighted(false);
+                currentAirplaneAnnotation.unsetHoverAnnotation();
+                currentAirplaneAnnotation = null;
+                tooltipAnnotation.getAttributes().setVisible(false);
+            }
 
-                // We create our airplane renderables
-                airplaneRendereble rend = new airplaneRendereble(flightplan);
-                rend.setAltitudeMode(WorldWind.ABSOLUTE);
-                rend.setAttributes(attrs);
-                rend.setVisible(true);
-                rend.setValue(AVKey.DISPLAY_NAME, "Flight " + flightplan.getFlightnumber() + "");
-                rend.setHeading(Angle.fromDegrees(airplane.getDirection()));
-                layer.addRenderable(rend);
+            if (o != null && o instanceof AirplaneRenderable) {
+                currentAirplaneAnnotation = (AirplaneRenderable) o;
+                currentAirplaneAnnotation.getAttributes().setHighlighted(true);
+                tooltipAnnotation.getAttributes().setVisible(true);
+                currentAirplaneAnnotation.setHoverAnnotation(tooltipAnnotation);
+                this.getWwd().repaint();
             }
         }
 
         private void clickAirplane(Object o) {
-            if (o.getClass() != airplaneRendereble.class) {
+            if (o.getClass() != AirplaneRenderable.class) {
                 return; // The selected object isn't our airplane.
             }
-            airplaneRendereble rend = (airplaneRendereble) o;
+            AirplaneRenderable rend = (AirplaneRenderable) o;
             Flightplan flightplan = rend.getFlightplan();
 
             new jfCommandFlight(this, true).setFlightplan(flightplan);
-
         }
     }
 
@@ -575,50 +557,53 @@ public final class atc2 extends atc {
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }
-        // Because the jogl.jar libary does not (yet) play nice to 64 bit systems
-        // we need to check whether the system uses 32 bit JVM.
-        Object[] options = {"Override", "Cancel"};
-        switch (System.getProperty("sun.arch.data.model").toString()) {
-            case "32":
-                System.out.println("Detecting a 32 bit Java virtual machine, all fine.");
-                break;
-            case "64":
-                System.out.println("Detecting a 64 bit Java virtual machine, oh oh!");
-                System.out.println("Please use a 32 bit JVM.");
-                int n1 = JOptionPane.showOptionDialog(null,
-                        "You seem to be running a 64 bit version of the Java virtual machine."
-                        + "\nThe included JOGL libary doesn't work with 64 bit JVMs."
-                        + "\nWould you like to ingore this warning?",
-                        "Wrong architecture!",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.ERROR_MESSAGE,
-                        null, // This is for custom icon
-                        options, // The titles of buttons
-                        options[0]); // Default button title
-                if (n1 == 1) {
-                    return;
-                } else {
-                    System.out.println("Overridden. Starting on 64 bit JVM. Stay safe.");
-                }
-                break;
-            default:
-                System.out.println("Unkown architecture detected: " + System.getProperty("sun.arch.data.model").toString());
-                int n2 = JOptionPane.showOptionDialog(null,
-                        "You seem to be running an unknown architecture. (" + System.getProperty("sun.arch.data.model").toString() + ")"
-                        + "\nWe cannot guarantee the safety of the universe when the application starts, so please contact Support."
-                        + "\nWould you like to ingore this warning?",
-                        "Wrong architecture!",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.ERROR_MESSAGE,
-                        null, // This is for custom icon
-                        options, // The titles of buttons
-                        options[0]); // Default button title
-                if (n2 == 1) {
-                    return;
-                } else {
-                    System.out.println("Overridden. Stay safe.");
-                }
-                break;
+
+        if (prefs.getBoolean("APP_IGNORE-AT", false)) {
+            // Because the jogl.jar libary does not (yet) play nice to 64 bit systems
+            // we need to check whether the system uses 32 bit JVM.
+            Object[] options = {"Override", "Cancel"};
+            switch (System.getProperty("sun.arch.data.model").toString()) {
+                case "32":
+                    System.out.println("Detecting a 32 bit Java virtual machine, all fine.");
+                    break;
+                case "64":
+                    System.out.println("Detecting a 64 bit Java virtual machine, oh oh!");
+                    System.out.println("Please use a 32 bit JVM.");
+                    int n1 = JOptionPane.showOptionDialog(null,
+                            "You seem to be running a 64 bit version of the Java virtual machine."
+                            + "\nThe included JOGL libary doesn't work with 64 bit JVMs."
+                            + "\nWould you like to ingore this warning?",
+                            "Wrong architecture!",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.ERROR_MESSAGE,
+                            null, // This is for custom icon
+                            options, // The titles of buttons
+                            options[0]); // Default button title
+                    if (n1 == 1) {
+                        return;
+                    } else {
+                        System.out.println("Overridden. Starting on 64 bit JVM. Stay safe.");
+                    }
+                    break;
+                default:
+                    System.out.println("Unkown architecture detected: " + System.getProperty("sun.arch.data.model").toString());
+                    int n2 = JOptionPane.showOptionDialog(null,
+                            "You seem to be running an unknown architecture. (" + System.getProperty("sun.arch.data.model").toString() + ")"
+                            + "\nWe cannot guarantee the safety of the universe when the application starts, so please contact Support."
+                            + "\nWould you like to ingore this warning?",
+                            "Wrong architecture!",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.ERROR_MESSAGE,
+                            null, // This is for custom icon
+                            options, // The titles of buttons
+                            options[0]); // Default button title
+                    if (n2 == 1) {
+                        return;
+                    } else {
+                        System.out.println("Overridden. Stay safe.");
+                    }
+                    break;
+            }
         }
 
         // Call the static start method like this from the main method of your derived class.

@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ import javax.swing.text.BadLocationException;
 
 /**
  *
- * @author johan
+ * @author Johan Benschop
  */
 public final class jpTerminal extends JPanel implements DocumentListener {
 
@@ -82,6 +83,13 @@ public final class jpTerminal extends JPanel implements DocumentListener {
         } catch (ClassNotFoundException ex) {
             //ex.printStackTrace();
         }
+    }
+
+    @Override
+    public synchronized void addKeyListener(KeyListener l) {
+        super.addKeyListener(l);
+        taInput.addKeyListener(l);
+        taOutput.addKeyListener(l);
     }
 
     class ReaderThread extends Thread {
