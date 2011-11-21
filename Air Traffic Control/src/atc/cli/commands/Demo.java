@@ -38,6 +38,23 @@ public class Demo {
         return "Adding stuff....";
     }
     
+    public static String addFlightEindhovenSchiphol() {
+        CommandLine.println("Adding flight: Eindhoven - Schiphol");
+        AirplaneFactory af = atc2.acc.GetAirplaneFactory(1);
+        Airport ap_arr = atc2.acc.GetCTA().GetAirport(585);
+        Airport ap_dest = atc2.acc.GetCTA().GetAirport(580);
+        GregorianCalendar cal = new GregorianCalendar();
+        atc2.acc.CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        return "Adding stuff....";
+    }
+    
+    public static String addCrashEHVAMS()
+    {
+        addFlightEindhovenSchiphol();
+        addFlightSchipholEindhoven();
+        return "Added two planes that will crash....";
+    }
+    
     public static String addRandomFlights(int amount) {
         Random random = new Random();
         ArrayList<Integer> airportIDs = new ArrayList<>();
