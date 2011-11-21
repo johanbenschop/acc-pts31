@@ -137,7 +137,7 @@ public class AirplaneTest {
     public void testLanding() {
         System.out.println("Landing");
         airplane.setStatus(Statusses.INLANDINGQUEUE);
-        airplane.Land(runway);
+        airplane.Land();
         Assert.assertEquals("Status should have changed", Airplane.Statusses.LANDING , airplane.getStatus());
         System.out.println("1e voltooid");
     }
