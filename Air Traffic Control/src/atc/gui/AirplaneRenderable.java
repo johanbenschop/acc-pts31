@@ -15,6 +15,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
@@ -123,6 +124,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
     }
 
     private String updateText() {
+                DecimalFormat DF = new DecimalFormat("#.##");
         return "<p><b><font color=\"#664400\">Flight " + flightplan.getFlightnumber() + "</font></b>"
                 + "<br />Departure: "
                 + flightplan.getTakeoffAirport().getCity() + ", " 
@@ -135,7 +137,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + "<br />"
                 + "<br /><b>Airplane</b>"
                 + "<br />["
-                + airplane.getSpeed() + " km/h], ["
+                + DF.format(airplane.getSpeed()) + " km/h], ["
                 + airplane.getAltitude() + " feet | UNK], ["
                 + airplane.getDirection() + "&deg;]"
                 + "<br />Model: " + airplane.getManufacturer() + ", " + airplane.getType()
