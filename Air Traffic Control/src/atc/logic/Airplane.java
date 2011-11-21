@@ -284,16 +284,16 @@ public class Airplane extends Thread {
      * will change the altitude immeadiatly, subject to change if theres time.
      */
     public void ChangeAltitude() {
-//        double amountChangeHeight = 2.0;
-//        if (AimedAltitude != this.Altitude) {
-//            if (this.Altitude - amountChangeHeight > AimedAltitude) {
-//                this.Altitude -= amountChangeHeight;
-//            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
-//                this.Altitude += amountChangeHeight;
-//            } else {
-        this.Altitude = this.AimedAltitude;
-//            }
-//        }
+        double amountChangeHeight = 2.0;
+        if (AimedAltitude != this.Altitude && this.Status != this.Status.TAKINGOFF) {
+            if (this.Altitude - amountChangeHeight > AimedAltitude) {
+                this.Altitude -= amountChangeHeight;
+            } else if (this.Altitude + amountChangeHeight < AimedAltitude) {
+                this.Altitude += amountChangeHeight;
+            } else {
+                this.Altitude = this.AimedAltitude;
+            }
+        }
     }
     
     /**
