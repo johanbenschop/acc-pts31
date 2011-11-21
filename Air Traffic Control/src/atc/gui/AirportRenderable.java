@@ -75,7 +75,7 @@ public class AirportRenderable extends GlobeAnnotation {
                 + "<br />"
                 + "<br />IATA/FAA: " + airport.getIATA_FAA() + ""
                 + "<br />ICAO: " + airport.getICAO() + ""
-                + "<br />Timezone: " + airport.getICAO() + ""
+                + "<br />Timezone: " + airport.getTimezone() + ""
                 + "</p>";
     }
 }
