@@ -314,40 +314,40 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.acc.GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
-
+        
         while (airports.hasNext()) {
             Airport iter = airports.next();
 
             // Filter results bases on Airport ID
             try {
-                if (!"".equals(tfAirportID.getText())
-                        && iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
+                if (evt.getComponent() == tfAirportID
+                        && iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
                     continue; // the airport in this iteration does not meet the citerea
                 }
             } catch (NumberFormatException e) {
                 tfAirportID.setText("");
             }
 
-            if (!"".equals(tfAirportName.getText())
-                    && !iter.getAirportName().contains(tfAirportName.getText())) {
+            if (evt.getComponent() == tfAirportName
+                    && !iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
                 continue;
             }
 
-            if (!"".equals(tfCity.getText())
-                    && !iter.getCity().contains(tfCity.getText())) {
+            if (evt.getComponent() == tfCity
+                    && !iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
                 continue;
             }
 
-            if (!"".equals(tfCountry.getText())
-                    && !iter.getCountry().contains(tfCountry.getText())) {
+            if (evt.getComponent() == tfCountry
+                    && !iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
                 continue;
             }
-            if (!"".equals(tfIATA_FAA.getText())
-                    && !iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
+            if (evt.getComponent() == tfIATA_FAA
+                    && !iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
                 continue;
             }
-            if (!"".equals(tfICAO.getText())
-                    && !iter.getICAO().contains(tfICAO.getText())) {
+            if (evt.getComponent() == tfICAO
+                    && !iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
                 continue;
             }
 
