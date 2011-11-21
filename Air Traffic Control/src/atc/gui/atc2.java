@@ -3,6 +3,7 @@ package atc.gui;
 import SysBar.UnityBar;
 import SysBar.UnityItem;
 import atc.cli.jpTerminal;
+import atc.gui.Audio.Statusses;
 import atc.logic.ACC;
 import atc.logic.Airplane;
 import atc.logic.Airport;
@@ -293,6 +294,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
+            Audio.play(Statusses.ALARM5);
         }
 
         /**
