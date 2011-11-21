@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.cli.CommandLine;
+import atc.gui.atc2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,11 +95,12 @@ public class Airplane extends Thread {
      */
     @Override
     public void run() {
+        
         while (true) {
             //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-//            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
-//                    || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
-//                    || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
+            while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
+                    || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
+                    || Status == Statusses.INLANDINGQUEUE || Status == Statusses.LANDING) {
                 try {
                     Fly();
                     //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
@@ -106,7 +108,7 @@ public class Airplane extends Thread {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
                 }
-//            }
+            }
         }
 
     }
@@ -120,9 +122,10 @@ public class Airplane extends Thread {
                 || this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
-            ChangeSpeed();
-            ChangeAltitude();
-            ChangeGeoLocation();
+            Land();
+//            ChangeSpeed();
+//            ChangeAltitude();
+//            ChangeGeoLocation();
         } else {
             ChangeSpeed();
             ChangeDirection();
@@ -144,10 +147,10 @@ public class Airplane extends Thread {
      * This will make an airplane land on a runway.
      * @param r : Runway where the airplane will land.
      */
-    public void Land(Runway r) {
+    public void Land() {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
-            SetAimedDirection(GeoLocation.CalcDirection(location, r.getLocation()));
+            SetAimedDirection(GeoLocation.CalcDirection(destinationLocation, location));
             SetAimedAltitude(0);
         }
     }
@@ -237,7 +240,7 @@ public class Airplane extends Thread {
      */
     public void ChangeSpeed() {
         //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-        double amountChangeSpeed = 1;
+       double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {
                 this.Speed += takeOffAccelerationSpeed;
@@ -254,7 +257,7 @@ public class Airplane extends Thread {
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
                 this.Speed += amountChangeSpeed;
             } else {
-                this.Speed = AimedSpeed;
+                this.Speed = AimedSpeed * 25;
             }
         }
     }
@@ -292,7 +295,7 @@ public class Airplane extends Thread {
 //            }
 //        }
     }
-
+    
     /**
      * Method for calculating the current amount of fuel. Currently not in use.
      */
@@ -343,6 +346,11 @@ public class Airplane extends Thread {
     }
 
     //Getters
+    public int getFlightLevel()
+    {
+        return (int) this.Altitude / 1000;
+    }
+    
     public int getAirplaneNumber() {
         return AirplaneNumber;
     }

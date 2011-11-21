@@ -251,36 +251,6 @@ public class ACC {
     }
 
     /**
-     * Method to give the airplane the direction, speed and height which it has
-     * to use after its initial takeoff.
-     * 
-     * @param r is the runway on which the airplane has to land.
-     * 
-     * @param a is the airplane to which this assignement is given.
-     * 
-     * @param direction this is the direction in which the airplane will take
-     * off or will use for its final approach to the runway.
-     * 
-     * @param height to which the airplane has to climb right after its takeoff.
-     * 
-     * @param speed which the airplane has to maintain once it has taken off.
-     *  
-     * @return true is given when the assignment has been succesfully transferred to the airplane.
-     * 
-     * @return false is given when the assignement has not been succesfully transferred to the airplane.
-     */
-    public void GiveRunwayTakeOff(Runway r, Airplane a, double direction, double height, double speed) throws AssignmentException {
-//        if (r.getAvailability() == true) {
-//            r.ChangeAvailability(false);
-//            a.TakeOff(r, direction, height, speed);
-//            a.setStatus(Airplane.Statusses.TAKINGOFF);
-//        } else {
-//            throw new AssignmentException("Runway is not available.");
-//        }
-        //addRunwayTimer(null, a);
-    }
-
-    /**
      * Method has to be called when assignmentexception is given on the
      * GiveLandingRunway method incase the runway is not available.
      * 
@@ -315,18 +285,6 @@ public class ACC {
         cta.addAirplane(ap);
         new Thread(ap).start();
         addRunwayTimer(start, ap);
-//        double direction = GeoLocation.CalcDirection(start, end);      
-//        System.out.println("The direction to the airfield is " + direction);
-//        System.out.println(ap.getStatus());
-//        int i = 0;
-//        while (ap.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
-//            System.out.println(direction);
-//            i++;
-//            if (start.getRunway() != null) {
-//                GiveRunwayTakeOff(start.getRunway(), ap, direction, 2, 300);
-//                System.out.println(ap.getStatus());
-//            }
-//        }
     }
 
     /**
@@ -348,9 +306,9 @@ public class ACC {
                     runway.ChangeAvailability(false);
                     
                     if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
-                        airplane.TakeOff(runway, runway.getDirection(), 2, (0.7 * airplane.getMaxSpeed()));
+                        airplane.TakeOff(runway, runway.getDirection(), 0, (0.7 * airplane.getMaxSpeed()));
                     } else if (airplane.getStatus() == Airplane.Statusses.INLANDINGQUEUE) {
-                        airplane.Land(runway);
+                        airplane.Land();
                     }
                     timer.stop();
                 }
