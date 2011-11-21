@@ -314,41 +314,91 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.acc.GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
-        
+
         while (airports.hasNext()) {
             Airport iter = airports.next();
 
             // Filter results bases on Airport ID
             try {
-                if (evt.getComponent() == tfAirportID
-                        && iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
-                    continue; // the airport in this iteration does not meet the citerea
+                if (evt.getComponent() == tfAirportID) {
+                    if (evt.getKeyChar() == '\b') {
+                        tfAirportID.setText(tfAirportID.getText().substring(0, tfAirportID.getText().length()));
+                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
+                            continue;
+                        }
+                    } else {
+                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    }
                 }
             } catch (NumberFormatException e) {
                 tfAirportID.setText("");
             }
 
-            if (evt.getComponent() == tfAirportName
-                    && !iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
-                continue;
+            if (evt.getComponent() == tfAirportName) {
+                if (evt.getKeyChar() == '\b') {
+                    tfAirportName.setText(tfAirportName.getText().substring(0, tfAirportName.getText().length()));
+                    if (!iter.getAirportName().contains(tfAirportName.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
-            if (evt.getComponent() == tfCity
-                    && !iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
-                continue;
+            if (evt.getComponent() == tfCity) {
+                if (evt.getKeyChar() == '\b') {
+                    tfCity.setText(tfCity.getText().substring(0, tfCity.getText().length()));
+                    if (!iter.getCity().contains(tfCity.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
-            if (evt.getComponent() == tfCountry
-                    && !iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
-                continue;
+            if (evt.getComponent() == tfCountry) {
+                if (evt.getKeyChar() == '\b') {
+                    tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
+                    if (!iter.getCountry().contains(tfCountry.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
-            if (evt.getComponent() == tfIATA_FAA
-                    && !iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
-                continue;
+
+            if (evt.getComponent() == tfIATA_FAA) {
+                if (evt.getKeyChar() == '\b') {
+                    tfIATA_FAA.setText(tfIATA_FAA.getText().substring(0, tfIATA_FAA.getText().length()));
+                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
-            if (evt.getComponent() == tfICAO
-                    && !iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
-                continue;
+
+            if (evt.getComponent() == tfICAO) {
+                if (evt.getKeyChar() == '\b') {
+                    tfICAO.setText(tfICAO.getText().substring(0, tfICAO.getText().length()));
+                    if (!iter.getICAO().contains(tfICAO.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
             Vector<String> row = new Vector<>();
@@ -360,11 +410,14 @@ public class jfSelectAirport extends javax.swing.JDialog {
             row.addElement(iter.getICAO());
             data.addElement(row);
         }
-
         TableModel model = new DefaultTableModel(data, columnNames);
+
         jTable.setModel(model);
-        jTable.setColumnSelectionAllowed(false);
-        jTable.setRowSelectionAllowed(true);
+
+        jTable.setColumnSelectionAllowed(
+                false);
+        jTable.setRowSelectionAllowed(
+                true);
     }//GEN-LAST:event_tfSearchKeyTyped
 
     /**
@@ -395,6 +448,8 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
+
                 }
             }
         } catch (ClassNotFoundException ex) {
