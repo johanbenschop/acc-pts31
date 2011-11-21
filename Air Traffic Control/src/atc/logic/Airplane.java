@@ -132,7 +132,7 @@ public class Airplane extends Thread {
             ChangeAltitude();
             ChangeGeoLocation();
         }
-        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 100
+        if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 500
                 && this.Status == Statusses.LANDING) {
             this.Status = Statusses.HASLANDED;
             SetAimedSpeed(0);
@@ -150,7 +150,7 @@ public class Airplane extends Thread {
     public void Land() {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
-            SetAimedDirection(GeoLocation.CalcDirection(destinationLocation, location));
+            this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
             SetAimedAltitude(0);
         }
     }
@@ -257,7 +257,7 @@ public class Airplane extends Thread {
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
                 this.Speed += amountChangeSpeed;
             } else {
-                this.Speed = AimedSpeed * 25;
+                this.Speed = AimedSpeed;
             }
         }
     }
