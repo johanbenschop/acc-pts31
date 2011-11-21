@@ -160,17 +160,29 @@ public class jfCommandFlight extends javax.swing.JDialog {
     private void btChangeParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChangeParameterActionPerformed
         if (!"".equals(txtChangeSpeedTo.getText()))
         {
-            flightplan.getAirplane().SetAimedSpeed(Integer.parseInt(txtChangeSpeedTo.getText()));
+            try {
+                atc2.acc.ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+            } catch (AssignmentException ex) {
+                ex.printStackTrace();
+            }
         }
         
         if (!"".equals(txtChangeDirectionTo.getText()))
         {
-            flightplan.getAirplane().SetAimedDirection(Integer.parseInt(txtChangeDirectionTo.getText()));
+            try {
+                atc2.acc.ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+            } catch (AssignmentException ex) {
+                ex.printStackTrace();
+            }
         }
         
         if (!"".equals(tfFlightlevel.getSelectedItem()))
         {
-            flightplan.getAirplane().SetAimedAltitude(tfFlightlevel.getSelectedIndex() + 1);
+            try {
+                atc2.acc.ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+            } catch (AssignmentException ex) {
+                ex.printStackTrace();
+            }
         }
         
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
