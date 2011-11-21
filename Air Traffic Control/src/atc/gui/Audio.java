@@ -15,14 +15,13 @@ public class Audio {
 
     static String fileName;
 
-    static enum Statusses {
+    public static enum Statusses {
 
         ALARM1, ALARM2, ALARM3, ALARM4, ALARM5,
         ALARM6;
     }
 
-    public static void play(Statusses s) throws FileNotFoundException, IOException {
-
+    public static void play(Statusses s) {
         switch (s) {
             case ALARM1:
                 fileName = "src/atc/gui/resources/Alarm-1.wav";
@@ -43,11 +42,19 @@ public class Audio {
                 fileName = "src/atc/gui/resources/Alarm-6.wav";
                 break;
         }
-        InputStream in = new FileInputStream(fileName);
-        AudioStream as = new AudioStream(in);
-        AudioPlayer.player.start(as);
-    }
+        InputStream in;
+        try {
+            in = new FileInputStream(fileName);
+            AudioStream as = new AudioStream(in);
+            AudioPlayer.player.start(as);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
+
+    }
 }
 /*import java.applet.Applet;
 import java.applet.AudioClip;
