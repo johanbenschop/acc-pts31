@@ -33,24 +33,24 @@
                               <Component id="lblDepartureAirport" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="tfAirplane" alignment="0" pref="443" max="32767" attributes="1"/>
-                                      <Component id="tfDepartureAirport" alignment="0" pref="443" max="32767" attributes="1"/>
-                                      <Component id="tfArrivalAirport" alignment="0" pref="443" max="32767" attributes="0"/>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="dpDateDep" pref="240" max="32767" attributes="1"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="tfAirplane" alignment="0" pref="471" max="32767" attributes="1"/>
+                                      <Component id="tfDepartureAirport" alignment="0" pref="471" max="32767" attributes="1"/>
+                                      <Component id="tfArrivalAirport" alignment="0" pref="471" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="dpDateDep" min="-2" pref="245" max="-2" attributes="1"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="spHoursDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="spHoursDep" min="-2" pref="52" max="-2" attributes="0"/>
+                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                               <Component id="spMinutesDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
-                                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                               <Component id="spSecondsDep" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -71,11 +71,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="lblDepartureTime" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="428" max="32767" attributes="0"/>
+                          <EmptySpace pref="483" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="dpDateArr" pref="215" max="32767" attributes="1"/>
+                              <Component id="dpDateArr" min="-2" pref="245" max="-2" attributes="1"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblDepartureTime1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
@@ -134,18 +134,25 @@
                   <Component id="btnSelectAirportArr" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblDepartureTime" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="dpDateDep" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="spSecondsDep" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="spMinutesDep" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="spHoursDep" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="lblDepartureTime" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="dpDateDep" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="spHoursDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="spMinutesDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="spSecondsDep" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
