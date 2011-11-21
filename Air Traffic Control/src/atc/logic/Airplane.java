@@ -254,7 +254,7 @@ public class Airplane extends Thread {
             } else if (this.Speed + amountChangeSpeed < AimedSpeed) {
                 this.Speed += amountChangeSpeed;
             } else {
-                this.Speed = AimedSpeed * 10;
+                this.Speed = AimedSpeed;
             }
         }
     }
