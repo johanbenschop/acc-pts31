@@ -19,18 +19,19 @@ import javax.swing.table.TableModel;
  * @author johan
  */
 public class jfSelectAirplane extends javax.swing.JDialog {
+
     private AirplaneFactory airplane;
     private ListIterator<AirplaneFactory> airplanes;
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
     private ArrayList<AirplaneFactory> retAirplanes;
-    
+
     /** Creates new form jfSelectAirplane */
     public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         airplanes = atc2.acc.getAvailableAirplanes();
         retAirplanes = new ArrayList<>();
         columnNames.addElement("Type");
@@ -108,7 +109,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -126,24 +127,24 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         jLabel1.setText("Type");
 
         tfType.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfTypeKeyPressed(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfSearchKeyTyped(evt);
             }
         });
 
         tfAirliner.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfTypeKeyPressed(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfSearchKeyTyped(evt);
             }
         });
 
         tfManafacturer.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfTypeKeyPressed(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfSearchKeyTyped(evt);
             }
         });
 
-        jLabel2.setText("Manafacturer");
+        jLabel2.setText("Manufacturer");
 
         jLabel3.setText("Airliner");
 
@@ -154,12 +155,12 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -193,7 +194,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -228,43 +229,66 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
 
-    private void tfTypeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyPressed
-        data.clear(); // Empty the data so we can get the limited results in.
-        airplanes = atc2.acc.getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
-        retAirplanes.clear();
-        while (airplanes.hasNext()) {
-            AirplaneFactory iter = airplanes.next();
-            
-            if (!"".equals(tfType.getText())
-                    && !iter.getType().contains(tfType.getText())) {
-                continue;
+private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
+
+    data.clear(); // Empty the data so we can get the limited results in.
+    airplanes = atc2.acc.getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+    retAirplanes.clear();
+    while (airplanes.hasNext()) {
+        AirplaneFactory iter = airplanes.next();
+
+        if (evt.getComponent() == tfType) {
+            if (evt.getKeyChar() == '\b') {
+                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+                if (!iter.getType().contains(tfType.getText())) {
+                    continue;
+                }
+            } else {
+                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
+                    continue;
+                }
             }
-            
-            if (!"".equals(tfManafacturer.getText())
-                    && !iter.getManufacturer().contains(tfManafacturer.getText())) {
-                continue;
-            }
-            
-            // We don't have the airliner stuff implemented yet so we can't actually searh it.
-//            if (tfAirliner.getText() != ""
-//                    && !iter.getAirliner().contains(tfAirliner.getText())) {
-//                continue;
-//            }
-            
-            Vector<String> row = new Vector<>();
-            row.addElement(iter.getType());
-            row.addElement(iter.getManufacturer());
-            row.addElement(String.valueOf(iter.getMaxSpeed()));
-            row.addElement(String.valueOf(iter.getWeight()));
-            row.addElement("WDAL");
-            data.addElement(row);
-            retAirplanes.add(iter);
-            
-            TableModel model = new DefaultTableModel(data, columnNames);
-            jTable.setModel(model);
         }
-        
-    }//GEN-LAST:event_tfTypeKeyPressed
+
+        if (evt.getComponent() == tfManafacturer) {
+            if (evt.getKeyChar() == '\b') {
+                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
+                    continue;
+                }
+            } else {
+                if (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar())) {
+                    continue;
+                }
+            }
+        }
+//         //We don't have the airliner stuff implemented yet so we can't actually searh it.
+//        if (evt.getComponent() == tfAirliner) {
+//            if (evt.getKeyChar() == '\b') {
+//                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
+//                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+//                    continue;
+//                }
+//            } else {
+//                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+//                    continue;
+//                }
+//            }
+//        }
+
+        Vector<String> row = new Vector<>();
+        row.addElement(iter.getType());
+        row.addElement(iter.getManufacturer());
+        row.addElement(String.valueOf(iter.getMaxSpeed()));
+        row.addElement(String.valueOf(iter.getWeight()));
+        row.addElement("WDAL");
+        data.addElement(row);
+        retAirplanes.add(iter);
+    }
+
+    TableModel model = new DefaultTableModel(data, columnNames);
+    jTable.setModel(model);
+}//GEN-LAST:event_tfSearchKeyTyped
 
     /**
      * Get the return value of this dialog.
@@ -279,7 +303,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         }
         return null;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -294,6 +318,8 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
+
                 }
             }
         } catch (ClassNotFoundException ex) {
@@ -308,7 +334,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the form */
-                java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
                 jfSelectAirplane dialog = new jfSelectAirplane(new javax.swing.JFrame(), true);
