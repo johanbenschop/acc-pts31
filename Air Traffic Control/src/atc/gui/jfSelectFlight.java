@@ -119,6 +119,12 @@ public class jfSelectFlight extends javax.swing.JDialog {
 
         jLabel5.setText("Airplane flying flight");
 
+        tfDepartureDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dpSearchDateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -129,8 +135,8 @@ public class jfSelectFlight extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(47, 47, 47))
-                    .addComponent(tfAirliner, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                    .addComponent(tfFlightnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(tfAirliner, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(tfFlightnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(jLabel1))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -138,7 +144,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                                .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSelectAirplame))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -150,7 +156,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -204,7 +210,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -318,8 +324,27 @@ public class jfSelectFlight extends javax.swing.JDialog {
 //            }
 //        }
             
-            
+            Vector<String> row = new Vector<>();
+            row.addElement(String.valueOf(iter.getFlightnumber()));
+            row.addElement("WDAL");
+            row.addElement(iter.getDepartureDate().toString());
+            row.addElement(iter.getArrivalDate().toString());
+            row.addElement(iter.getAirplane().toString());
+            data.addElement(row);
+
+        }
+
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
+    }//GEN-LAST:event_tfDepartureDateKeyTyped
+
+    
+private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dpSearchDateChanged
               // TODO fix (...) algorithm
+    //Ik vermoedt dat we de code uit de event handlers komen aan t slopen,
+    //omdat we voor textfield en date picker andere event handlers moeten gebruiken.
+    //maar wel dezelfde dingen nodig hebben.
+    
 //            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
 //                    tfDepartureDate.getDate().getMonth(),
 //                    tfDepartureDate.getDate().getDay());
@@ -337,20 +362,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
 //            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
 //                continue;
 //            }
-
-            Vector<String> row = new Vector<>();
-            row.addElement(String.valueOf(iter.getFlightnumber()));
-            row.addElement("WDAL");
-            row.addElement(iter.getDepartureDate().toString());
-            row.addElement(iter.getArrivalDate().toString());
-            row.addElement(iter.getAirplane().toString());
-            data.addElement(row);
-
-        }
-
-        TableModel model = new DefaultTableModel(data, columnNames);
-        jTable.setModel(model);
-    }//GEN-LAST:event_tfDepartureDateKeyTyped
+}//GEN-LAST:event_dpSearchDateChanged
 
     public Flightplan getValue() {
         setVisible(true);
