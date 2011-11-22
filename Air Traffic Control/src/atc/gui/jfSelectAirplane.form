@@ -229,22 +229,22 @@
         </Component>
         <Component class="javax.swing.JTextField" name="tfType">
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfTypeKeyPressed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfSearchKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tfAirliner">
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfTypeKeyPressed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfSearchKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tfManafacturer">
           <Events>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfTypeKeyPressed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfSearchKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Manafacturer"/>
+            <Property name="text" type="java.lang.String" value="Manufacturer"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
