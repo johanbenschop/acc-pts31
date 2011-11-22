@@ -36,7 +36,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         bufFlightplans = new ArrayList<>();
-        
+
         flightplans = atc2.acc.getFlightplans();
 
         columnNames.addElement("Flightnumber");
@@ -281,19 +281,45 @@ public class jfSelectFlight extends javax.swing.JDialog {
         data.clear(); // Empty the data so we can get the limited results in.
         flightplans = atc2.acc.getFlightplans(); // we must get an new iterator, since the previus one is empty.
         bufFlightplans.clear();
+
         while (flightplans.hasNext()) {
             Flightplan iter = flightplans.next();
             bufFlightplans.add(iter);
-            // TODO fix (...) algorithm
-//            try {
-//                if (tfFlightnumber.getText() != ""
-//                        && iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+            
+            try {
+                if (evt.getComponent() == tfFlightnumber) {
+                    if (evt.getKeyChar() == '\b') {
+                        tfFlightnumber.setText(tfFlightnumber.getText().substring(0, tfFlightnumber.getText().length()));
+                        if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+                            continue;
+                        }
+                    } else {
+                        if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                tfFlightnumber.setText("");
+            }
+
+          // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
+          //We don't have the airliner stuff implemented yet so we can't actually searh it.
+//        if (evt.getComponent() == tfAirliner) {
+//            if (evt.getKeyChar() == '\b') {
+//                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
+//                if (!iter.getAirliner().contains(tfAirliner.getText())) {
 //                    continue;
 //                }
-//            } catch (NumberFormatException e) {
-//                tfFlightnumber.setText("");
+//            } else {
+//                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+//                    continue;
+//                }
 //            }
-//            
+//        }
+            
+            
+              // TODO fix (...) algorithm
 //            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
 //                    tfDepartureDate.getDate().getMonth(),
 //                    tfDepartureDate.getDate().getDay());
@@ -311,7 +337,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
 //            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
 //                continue;
 //            }
-            
+
             Vector<String> row = new Vector<>();
             row.addElement(String.valueOf(iter.getFlightnumber()));
             row.addElement("WDAL");
@@ -319,11 +345,11 @@ public class jfSelectFlight extends javax.swing.JDialog {
             row.addElement(iter.getArrivalDate().toString());
             row.addElement(iter.getAirplane().toString());
             data.addElement(row);
-            
+
         }
-        
+
         TableModel model = new DefaultTableModel(data, columnNames);
-        jTable.setModel(model);       
+        jTable.setModel(model);
     }//GEN-LAST:event_tfDepartureDateKeyTyped
 
     public Flightplan getValue() {
@@ -334,7 +360,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         }
         return null;
     }
-    
+
     /**
      * @param args the command line arguments
      */
