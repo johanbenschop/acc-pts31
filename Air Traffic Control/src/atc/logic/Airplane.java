@@ -135,8 +135,8 @@ public class Airplane extends Thread {
         if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 500
                 && this.Status == Statusses.LANDING) {
             this.Status = Statusses.HASLANDED;
-            SetAimedSpeed(0);
-            SetAimedAltitude(0);
+            setAimedSpeed(0);
+            setAimedAltitude(0);
             ChangeSpeed();
             ChangeAltitude();
             ChangeGeoLocation();
@@ -145,13 +145,12 @@ public class Airplane extends Thread {
 
     /**
      * This will make an airplane land on a runway.
-     * @param r : Runway where the airplane will land.
      */
     public void Land() {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
             this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
-            SetAimedAltitude(0);
+            setAimedAltitude(0);
         }
     }
 
@@ -168,9 +167,9 @@ public class Airplane extends Thread {
         location.setLatitude(r.getLocation().getLatitude());
         location.setLongitude(r.getLocation().getLongitude());
         this.Status = Statusses.TAKINGOFF;
-        SetAimedDirection(direction);
-        SetAimedAltitude(altitude);
-        SetAimedSpeed(speed);
+        setAimedDirection(direction);
+        setAimedAltitude(altitude);
+        setAimedSpeed(speed);
     }
 
     /**
@@ -329,15 +328,15 @@ public class Airplane extends Thread {
     }
 
     //Setters
-    public void SetAimedSpeed(double speed) {
+    public void setAimedSpeed(double speed) {
         this.AimedSpeed = speed;
     }
 
-    public void SetAimedDirection(double direction) {
+    public void setAimedDirection(double direction) {
         this.AimedDirection = direction;
     }
 
-    public void SetAimedAltitude(double altitude) {
+    public void setAimedAltitude(double altitude) {
         this.AimedAltitude = altitude;
     }
 

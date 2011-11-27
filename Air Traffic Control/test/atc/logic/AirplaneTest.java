@@ -55,7 +55,7 @@ public class AirplaneTest {
     public void testChangeGeoLocation() {
         System.out.println("ChangeGeoLocation");
         airplane.setStatus(Statusses.INFLIGHT);
-        airplane.SetAimedSpeed(300);
+        airplane.setAimedSpeed(300);
         airplane.ChangeSpeed();
         airplane.ChangeGeoLocation();
 //        double latitudeTravelled = 10 * Math.sin(30);
@@ -76,18 +76,18 @@ public class AirplaneTest {
     @Test
     public void testChangeSpeed() {
         System.out.println("ChangeSpeed");
-        airplane.SetAimedSpeed(200);
+        airplane.setAimedSpeed(200);
         airplane.ChangeSpeed();
         Assert.assertEquals("Speed should have changed",1.0 , airplane.getSpeed());
         
-        airplane.SetAimedSpeed(500);
+        airplane.setAimedSpeed(500);
         while(airplane.getSpeed() != airplane.getAimedSpeed())
         {
         airplane.ChangeSpeed();
         }
         Assert.assertEquals("Speed should have changed",500.0 , airplane.getSpeed());
         
-        airplane.SetAimedSpeed(700);
+        airplane.setAimedSpeed(700);
         airplane.setStatus(Statusses.CRASHED);
         airplane.ChangeSpeed();
         Assert.assertEquals("Speed should have changed",0.0 , airplane.getSpeed());
@@ -100,11 +100,11 @@ public class AirplaneTest {
     @Test
     public void testChangeDirection() {
         System.out.println("ChangeDirection");
-        airplane.SetAimedDirection(180);
+        airplane.setAimedDirection(180);
         airplane.ChangeDirection();
         Assert.assertEquals("Direction should have changed", 180.0 , airplane.getDirection());
         
-        airplane.SetAimedDirection(180);
+        airplane.setAimedDirection(180);
         while(airplane.getDirection() != airplane.getAimedDirection())
         {
             airplane.ChangeDirection();
@@ -118,11 +118,11 @@ public class AirplaneTest {
     @Test
     public void testChangeAltitude() {
         System.out.println("ChangeAltitude");
-        airplane.SetAimedAltitude(100);
+        airplane.setAimedAltitude(100);
         airplane.ChangeAltitude();
         Assert.assertEquals("Altitude should have changed", 100.0 , airplane.getAltitude());
         
-        airplane.SetAimedAltitude(600);
+        airplane.setAimedAltitude(600);
         while(airplane.getAltitude() != airplane.getAimedAltitude())
         {
             airplane.ChangeAltitude();
