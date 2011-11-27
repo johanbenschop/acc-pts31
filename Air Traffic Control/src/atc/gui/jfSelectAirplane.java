@@ -275,8 +275,26 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
 //                }
 //            }
 //        }
+fillVector(iter);
+//        Vector<String> row = new Vector<>();
+//        row.addElement(iter.getType());
+//        row.addElement(iter.getManufacturer());
+//        row.addElement(String.valueOf(iter.getMaxSpeed()));
+//        row.addElement(String.valueOf(iter.getWeight()));
+//        row.addElement("WDAL");
+//        data.addElement(row);
+//        retAirplanes.add(iter);
+    }
 
-        Vector<String> row = new Vector<>();
+    fillTable();
+    //TableModel model = new DefaultTableModel(data, columnNames);
+   // jTable.setModel(model);
+}//GEN-LAST:event_tfSearchKeyTyped
+
+
+public void fillVector(AirplaneFactory iter)
+{
+            Vector<String> row = new Vector<>();
         row.addElement(iter.getType());
         row.addElement(iter.getManufacturer());
         row.addElement(String.valueOf(iter.getMaxSpeed()));
@@ -284,11 +302,17 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
         row.addElement("WDAL");
         data.addElement(row);
         retAirplanes.add(iter);
-    }
-
-    TableModel model = new DefaultTableModel(data, columnNames);
+}
+public void fillTable()
+{
+        TableModel model = new DefaultTableModel(data, columnNames);
     jTable.setModel(model);
-}//GEN-LAST:event_tfSearchKeyTyped
+}
+
+
+
+
+
 
     /**
      * Get the return value of this dialog.
