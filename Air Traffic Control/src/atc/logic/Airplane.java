@@ -37,7 +37,7 @@ public class Airplane extends Thread {
     private double longitudeTravelled;
     private double latitudeTravelled;
     private boolean InLandingQeueu = false;
-    private boolean binnenStraal = false;
+    private boolean withinRadius = false;
 
     public enum Statusses {
 
@@ -182,11 +182,11 @@ public class Airplane extends Thread {
         }
         if (InLandingQeueu == true) {
             if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
-                this.binnenStraal = true;
+                this.withinRadius = true;
             } else if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) > 20000) {
-                this.binnenStraal = false;
+                this.withinRadius = false;
             }
-            if (this.binnenStraal == true) {
+            if (this.withinRadius == true) {
                 if (this.Direction + 1 > 360) {
                     double newDirection;
                     newDirection = this.Direction;
@@ -196,7 +196,7 @@ public class Airplane extends Thread {
                 } else {
                     this.Direction += 1;
                 }
-            } else if (binnenStraal == false) {
+            } else if (withinRadius == false) {
                 if (this.Direction - 1 < 0) {
                     double newDirection;
                     newDirection = this.Direction;
