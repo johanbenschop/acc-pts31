@@ -164,7 +164,7 @@ public class ACC {
      */
     public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
-            a.SetAimedSpeed(speed);
+            a.setAimedSpeed(speed);
         } else {
             throw new AssignmentException("The speed given is too low or high.");
         }
@@ -190,7 +190,7 @@ public class ACC {
      */
     public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
         if (direction >= 0 && direction <= 360) {
-            a.SetAimedDirection(direction);
+            a.setAimedDirection(direction);
         } else {
             throw new AssignmentException("The given direction is not possible.");
         }
@@ -215,11 +215,11 @@ public class ACC {
      */
     public void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException {
         if (flightlevel == 1) {
-            a.SetAimedAltitude(1000);
+            a.setAimedAltitude(1000);
         } else if (flightlevel == 2) {
-            a.SetAimedAltitude(2000);
+            a.setAimedAltitude(2000);
         } else if (flightlevel == 3) {
-            a.SetAimedAltitude(3000);
+            a.setAimedAltitude(3000);
         } else {
             throw new AssignmentException();
         }
