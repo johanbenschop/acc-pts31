@@ -23,6 +23,7 @@ public class jfAddFlight extends javax.swing.JDialog {
     private Airport arrivalAirport;
     private GregorianCalendar arrivalDate;
     private GregorianCalendar departureDate;
+    public static Airspace airspace = new Airspace();
 
     /** Creates new form jfAddFlight */
     public jfAddFlight(java.awt.Frame parent, boolean modal) {
@@ -317,7 +318,7 @@ public class jfAddFlight extends javax.swing.JDialog {
                     (int) spMinutesDep.getValue(),
                     (int) spSecondsDep.getValue());
 
-            atc2.acc.CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
+            airspace.getACC(0).CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Not all fields have been satisfied.");
         }

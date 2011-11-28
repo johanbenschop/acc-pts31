@@ -33,12 +33,13 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
+    public static Airspace airspace = new Airspace();
 
     /** Creates new form jfSearchAirport */
     public jfSelectAirport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        airports = atc2.acc.GetCTA().GetAirports();
+        airports = airspace.getACC(0).GetCTA().GetAirports();
 
         columnNames.addElement("Airport ID");
         columnNames.addElement("Name");
@@ -313,7 +314,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
-        airports = atc2.acc.GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
+        airports = airspace.getACC(0).GetCTA().GetAirports(); // we must get an new iterator, since the previus one is empty.
 
         while (airports.hasNext()) {
             Airport iter = airports.next();
@@ -438,7 +439,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         setVisible(true);
         if (!closed) {
             int id = Integer.parseInt((String) data.get(jTable.getSelectedRow()).get(0));
-            airport = atc2.acc.GetCTA().GetAirport(id);
+            airport = airspace.getACC(0).GetCTA().GetAirport(id);
             return airport;
         }
         return null;
