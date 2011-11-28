@@ -84,6 +84,15 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     tooltip.moveTo(position);
                     tooltip.setText(updateText());
                 }
+                if (airplane.getStatus().equals(airplane.getStatus().HASLANDED))
+                {
+                    try {
+                        airplane.sleep(500);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    airplane.interrupt();
+                }
             }
         }, 10, 300);
     }
