@@ -22,12 +22,35 @@ public class Airspace {
 //    public static ACC acc2 = new ACC(344, cta2);
     public Airspace() {
         ACCs = new ArrayList<ACC>();
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 10, 30))));
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 30, 50))));
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 50, 70))));
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 70, 90))));
+        for (int e = -50; e < 70; e += 20) {
+            
         
+        for (int i = -140; i < 160; i += 20) {
+         ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, i, i+20))));  
+        
+        }
+    //}
+//
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -180, -160))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -160, -140))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -140, -120))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -120, -100))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -100, -80))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -80, -60))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -60, -40))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -40, -20))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -20, 0))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 0, 20))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 20, 40))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 40, 60))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 60, 80))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 80, 100))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 100, 120))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 120, 140))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 140, 160))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 160, 180))));
+   }
+//        
     }
     
     public ACC getACC(int ID) {
