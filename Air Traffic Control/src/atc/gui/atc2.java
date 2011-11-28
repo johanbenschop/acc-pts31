@@ -308,7 +308,8 @@ public final class atc2 extends atc {
         public void findCollisions() {
             menuBar.clearAlerts();
             for (final Airplane p : addedAirplanes) {
-                if (p.getStatus() == Airplane.Statusses.CRASHING1) {
+                if (p.getStatus() == Airplane.Statusses.CRASHING2) {
+                    Audio.play(Statusses.ALARM5);
                     menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -327,7 +328,8 @@ public final class atc2 extends atc {
                                     }
                                 }
                             });
-                } else if (p.getStatus() == Airplane.Statusses.CRASHING2) {
+                } else if (p.getStatus() == Airplane.Statusses.CRASHING1) {
+                    Audio.play(Statusses.ALARM4);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -346,6 +348,8 @@ public final class atc2 extends atc {
                                     }
                                 }
                             });
+                } else if (p.getStatus() == Airplane.Statusses.CRASHED){
+                    Audio.play(Statusses.ALARM3);
                 }
             }
         }
