@@ -341,9 +341,24 @@ public class jfSelectAirport extends javax.swing.JDialog {
                     tfAirportName.setText(tfAirportName.getText().substring(0, tfAirportName.getText().length()));
                     if (!iter.getAirportName().contains(tfAirportName.getText())) {
                         continue;
+
                     }
                 } else {
                     if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
+            }
+
+            if (evt.getComponent() == tfCountry) {
+
+                if (evt.getKeyChar() == '\b') {
+                    tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
+                    if (!iter.getCountry().contains(tfCountry.getText())) {
+                        continue;
+                    }
+                } else {
+                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
                         continue;
                     }
                 }
@@ -362,18 +377,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 }
             }
 
-            if (evt.getComponent() == tfCountry) {
-                if (evt.getKeyChar() == '\b') {
-                    tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
-                    if (!iter.getCountry().contains(tfCountry.getText())) {
-                        continue;
-                    }
-                } else {
-                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
-                        continue;
-                    }
-                }
-            }
 
             if (evt.getComponent() == tfIATA_FAA) {
                 if (evt.getKeyChar() == '\b') {
@@ -400,16 +403,23 @@ public class jfSelectAirport extends javax.swing.JDialog {
                     }
                 }
             }
-
-            Vector<String> row = new Vector<>();
-            row.addElement(String.valueOf(iter.getAirportID()));
-            row.addElement(iter.getAirportName());
-            row.addElement(iter.getCity());
-            row.addElement(iter.getCountry());
-            row.addElement(iter.getIATA_FAA());
-            row.addElement(iter.getICAO());
-            data.addElement(row);
+            fillVector(iter);
         }
+        fillTable();
+    }//GEN-LAST:event_tfSearchKeyTyped
+    
+    public void fillVector(Airport iter) {
+        Vector<String> row = new Vector<>();
+        row.addElement(String.valueOf(iter.getAirportID()));
+        row.addElement(iter.getAirportName());
+        row.addElement(iter.getCity());
+        row.addElement(iter.getCountry());
+        row.addElement(iter.getIATA_FAA());
+        row.addElement(iter.getICAO());
+        data.addElement(row);
+    }
+
+    public void fillTable() {
         TableModel model = new DefaultTableModel(data, columnNames);
 
         jTable.setModel(model);
@@ -418,7 +428,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 false);
         jTable.setRowSelectionAllowed(
                 true);
-    }//GEN-LAST:event_tfSearchKeyTyped
+    }
 
     /**
      * Gets the value of this dialog.
@@ -448,6 +458,8 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
+
 
 
                 }
