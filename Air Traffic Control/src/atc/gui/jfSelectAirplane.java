@@ -27,14 +27,13 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
     private ArrayList<AirplaneFactory> retAirplanes;
-    public static Airspace airspace = new Airspace();
 
     /** Creates new form jfSelectAirplane */
     public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
-        airplanes = airspace.getACC(0).getAvailableAirplanes();
+        airplanes = atc2.airspace.getACC(0).getAvailableAirplanes();
         retAirplanes = new ArrayList<>();
         columnNames.addElement("Type");
         columnNames.addElement("Manafactuer");
@@ -234,7 +233,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
 private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
 
     data.clear(); // Empty the data so we can get the limited results in.
-    airplanes = airspace.getACC(0).getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+    airplanes = atc2.airspace.getACC(0).getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
     retAirplanes.clear();
     
     while (airplanes.hasNext()) {

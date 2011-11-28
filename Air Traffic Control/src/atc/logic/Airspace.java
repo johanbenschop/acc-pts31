@@ -5,6 +5,7 @@
 package atc.logic;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  *
@@ -23,6 +24,10 @@ public class Airspace {
         ACCs = new ArrayList<ACC>();
         ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
         ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 10, 30))));
+        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 30, 50))));
+        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 50, 70))));
+        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, 70, 90))));
+        
     }
     
     public ACC getACC(int ID) {
@@ -33,7 +38,10 @@ public class Airspace {
         }
         return null;
     }
-
+    
+    public ListIterator<ACC> GetACCs() {
+        return ACCs.listIterator();
+    }
     public ACC getCurrentACC() {
         return currentACC;
     }

@@ -34,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.prefs.*;
 import javax.swing.JOptionPane;
@@ -265,9 +266,13 @@ public final class atc2 extends atc {
             this.timerColision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    airspace.getACC(0).GetCTA().Collision();
+                    for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+                        ACC acc = it.next();
+                        acc.GetCTA().Collision();
+                        
+                        
+                    }
                     findCollisions();
-
                     getWwd().redraw();
                 }
             });
@@ -367,27 +372,31 @@ public final class atc2 extends atc {
          * TODO build the airspace according to the CTA and not directly as done.
          */
         private void buildAirspaceLayer() {
-            SurfaceSector surfaceSector = new SurfaceSector(airspace.getACC(0).GetCTA().getSector().toSector());
-            SurfaceSector surfaceSector2 = new SurfaceSector(airspace.getACC(1).GetCTA().getSector().toSector()); //Temporarely
+            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
             ShapeAttributes attr = new BasicShapeAttributes();
             //attr.setInteriorMaterial(Material.WHITE);
             attr.setOutlineMaterial(Material.RED);
             attr.setInteriorOpacity(0);
             attr.setOutlineOpacity(0.7);
             attr.setOutlineWidth(3);
+            attr.setEnableAntialiasing(true);
+                ACC acc = it.next();
+             
+            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+             //Temporarely
+
             surfaceSector.setAttributes(attr);
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
-            attr.setEnableAntialiasing(true);
-
-            surfaceSector2.setAttributes(attr); //Temporarely
-            surfaceSector2.setPathType(AVKey.RHUMB_LINE); //Temporarely
-            
-            airspaceLayer = new RenderableLayer();
+                       airspaceLayer = new RenderableLayer();
             airspaceLayer.setName("Airspaces");
             airspaceLayer.setPickEnabled(false);
             airspaceLayer.addRenderable(surfaceSector);
-            airspaceLayer.addRenderable(surfaceSector2); //Temporarely
             insertBeforePlacenames(this.getWwd(), airspaceLayer);
+            
+            }
+
+            
+ 
 
 //            OrbitView view = this.getOrbitView();
 //            if (view != null) {
@@ -426,15 +435,17 @@ public final class atc2 extends atc {
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), AirportRenderable.class, 20000));
 
-            ListIterator<Airport> litr = airspace.getACC(0).GetCTA().GetAirports();
-             ListIterator<Airport> litr2 = airspace.getACC(1).GetCTA().GetAirports();
+            
+            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+                ACC acc = it.next();
+            ListIterator<Airport> litr = acc.GetCTA().GetAirports();
+
             while (litr.hasNext()) {
                 addAirportToLayer(airportLayer, litr.next());
-            }
-            while (litr2.hasNext()) {
-                addAirportToLayer(airportLayer, litr2.next()); //Temporarely
-            }
+            
+          }
         }
+      }
 
         /**
          * Adds an airport to the airport layer.
@@ -499,16 +510,13 @@ public final class atc2 extends atc {
             this.timerAirplane = new Timer(1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    ListIterator<Flightplan> litr = airspace.getACC(0).getFlightplans();
+                    for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+                        ACC acc = it.next();
+                    ListIterator<Flightplan> litr = acc.getFlightplans();
 
                     while (litr.hasNext()) {
                         addAirplaneToLayer(airplaneLayer, litr.next());
                     }
-                    
-                    ListIterator<Flightplan> litr2 = airspace.getACC(1).getFlightplans(); //Temporarely 
-
-                    while (litr2.hasNext()) {
-                        addAirplaneToLayer(airplaneLayer, litr2.next()); //Temporarely
                     }
                 }
             });
