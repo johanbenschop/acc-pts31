@@ -55,6 +55,33 @@ public class Demo {
         return "Added two planes that will crash....";
     }
     
+    public static String addFlightEindhovenBudel() {
+        CommandLine.println("Adding flight: Eindhoven - Budel");
+        AirplaneFactory af = atc2.acc.GetAirplaneFactory(1);
+        Airport ap_arr = atc2.acc.GetCTA().GetAirport(585);
+        Airport ap_dest = atc2.acc.GetCTA().GetAirport(581);
+        GregorianCalendar cal = new GregorianCalendar();
+        atc2.acc.CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        return "Adding stuff....";
+    }
+    
+    public static String addFlightBudelEindhoven() {
+        CommandLine.println("Adding flight: Budel - Eindhoven");
+        AirplaneFactory af = atc2.acc.GetAirplaneFactory(1);
+        Airport ap_arr = atc2.acc.GetCTA().GetAirport(581);
+        Airport ap_dest = atc2.acc.GetCTA().GetAirport(585);
+        GregorianCalendar cal = new GregorianCalendar();
+        atc2.acc.CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        return "Adding stuff....";
+    }
+    
+    public static String addCrashEHVBUD()
+    {
+        addFlightEindhovenBudel();
+        addFlightBudelEindhoven();
+        return "Added two planes that will crash....";
+    }
+    
     public static String addRandomFlights(int amount) {
         Random random = new Random();
         ArrayList<Integer> airportIDs = new ArrayList<>();
