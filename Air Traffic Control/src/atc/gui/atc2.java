@@ -261,6 +261,7 @@ public final class atc2 extends atc {
             this.timerColision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
+                    cta.Collision();
                     findCollisions();
 
                     getWwd().redraw();
