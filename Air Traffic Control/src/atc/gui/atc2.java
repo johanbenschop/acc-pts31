@@ -299,7 +299,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
-            Audio.play(Statusses.ALARM5);
+//            Audio.play(Statusses.ALARM5);
         }
 
         /**
