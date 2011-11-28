@@ -3,6 +3,7 @@ package atc.logic;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.*;
+import java.text.DecimalFormat;
 
 public class CTA {
 
@@ -57,7 +58,7 @@ public class CTA {
     public GeoSector getSector() {
         return sector;
     }
-    
+
     /**
      * Returns airplane with the given airplaneNumber
      * @return 
@@ -150,39 +151,59 @@ public class CTA {
 
                                 distance1 = distFrom(lat1, lon1, lat3, lon3);
                                 time1 = distance1 / ((double) target.getSpeed() / 3600);
+                                DecimalFormat df = new DecimalFormat("#.###");
+                                df.format(time1);
                                 distance2 = distFrom(lat2, lon2, lat3, lon3);
                                 time2 = distance1 / ((double) crashobject.getSpeed() / 3600);
+                                df.format(time2);
 
-                                if (time1 >= time2) {
-                                    if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
-                                        if (time1 - time2 <= 1 / ((double) crashobject.getSpeed() / 3.6)) {
-                                            target.setStatus(Airplane.Statusses.CRASHING1);
-                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
-                                        } else {
-                                            target.setStatus(Airplane.Statusses.CRASHING2);
-                                            target.setStatus(Airplane.Statusses.CRASHING1);
-                                        }
-                                    } else {
+                                if (time1 == time2) {
+                                    if (time1 <= 60000) {
+                                        target.setStatus(Airplane.Statusses.CRASHING1);
+                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
+                                    } else if (time1 <= 18000) {
+                                        target.setStatus(Airplane.Statusses.CRASHING2);
+                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
+                                    } else if (time1 >= 60000) {
                                         target.setStatus(Airplane.Statusses.INFLIGHT);
                                         crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+                                    } else if (time1 <= 300) {
+                                        target.setStatus(Airplane.Statusses.CRASHED);
+                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
                                     }
-                                } else if (time1 <= time2) {
-                                    if (time1 - time2 <= 3 / ((double) target.getSpeed() / 3.6) && time1 - time2 >= -3000 / ((double) target.getSpeed() / 3.6)) {
-                                        if (time1 - time2 <= 1 / ((double) crashobject.getSpeed() / 3.6)) {
-                                            target.setStatus(Airplane.Statusses.CRASHING1);
-                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
-                                        } else {
-                                            target.setStatus(Airplane.Statusses.CRASHING2);
-                                            target.setStatus(Airplane.Statusses.CRASHING1);
-                                        }
-                                    }
-                                } else if (time1 == 0 && time2 == 0) {
-                                    target.setStatus(Airplane.Statusses.CRASHED);
-                                    crashobject.setStatus(Airplane.Statusses.CRASHED);
-                                } else {
-                                    target.setStatus(Airplane.Statusses.INFLIGHT);
-                                    crashobject.setStatus(Airplane.Statusses.INFLIGHT);
                                 }
+
+                                // code that prob doesnt work do not remove yet pls pls pls
+//                                if (time1 >= time2) {
+//                                    if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
+//                                        if (time1 - time2 <= 1 / ((double) crashobject.getSpeed() / 3.6)) {
+//                                            target.setStatus(Airplane.Statusses.CRASHING1);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                        } else {
+//                                            target.setStatus(Airplane.Statusses.CRASHING2);
+//                                            target.setStatus(Airplane.Statusses.CRASHING1);
+//                                        }
+//                                    } else {
+//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+//                                    }
+//                                } else if (time1 <= time2) {
+//                                    if (time1 - time2 <= 3 / ((double) target.getSpeed() / 3.6) && time1 - time2 >= -3000 / ((double) target.getSpeed() / 3.6)) {
+//                                        if (time1 - time2 <= 1 / ((double) crashobject.getSpeed() / 3.6)) {
+//                                            target.setStatus(Airplane.Statusses.CRASHING1);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                        } else {
+//                                            target.setStatus(Airplane.Statusses.CRASHING2);
+//                                            target.setStatus(Airplane.Statusses.CRASHING1);
+//                                        }
+//                                    }
+//                                } else if (time1 == 0 && time2 == 0) {
+//                                    target.setStatus(Airplane.Statusses.CRASHED);
+//                                    crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                } else {
+//                                    target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                    crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+//                                }
                             }
                         }
                     }
@@ -279,7 +300,7 @@ public class CTA {
         }
     }
 
-     /**
+    /**
      * Loads airports from the airports.dat file and filters the data for the GeoSecor
      * @throws FileNotFoundException if the file doesn't exist
      * @throws IOException 
@@ -318,7 +339,7 @@ public class CTA {
             }
         }
     }
-    
+
     /**
      * Gets the current airplane
      * @return airplane
