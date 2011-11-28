@@ -179,6 +179,9 @@ public class CTA {
                                 } else if (time1 == 0 && time2 == 0) {
                                     target.setStatus(Airplane.Statusses.CRASHED);
                                     crashobject.setStatus(Airplane.Statusses.CRASHED);
+                                } else {
+                                    target.setStatus(Airplane.Statusses.INFLIGHT);
+                                    crashobject.setStatus(Airplane.Statusses.INFLIGHT);
                                 }
                             }
                         }
