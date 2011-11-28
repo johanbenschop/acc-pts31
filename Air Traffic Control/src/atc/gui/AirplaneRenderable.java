@@ -75,6 +75,22 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 double direction = airplane.getDirection();
                 Position position = airplane.getLocation().toPosition();
 
+                try {
+                    if (airplane.getStatus().equals(Airplane.Statusses.INFLIGHT)) {
+                        originalImage = ImageIO.read(new File("src/atc/gui/resources/airplane.png"));
+                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING1)) {
+                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineyellow.png"));
+                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING2)) {
+                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineorange.png"));
+                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHED)) {
+                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plainered.png"));
+                    } else if (airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
+                    } 
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+
                 if (direction != lastDirection) {
                     getAttributes().setImageSource(drawHeading());
                     lastDirection = direction;
@@ -84,8 +100,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     tooltip.moveTo(position);
                     tooltip.setText(updateText());
                 }
-                if (airplane.getStatus().equals(airplane.getStatus().HASLANDED))
-                {
+                if (airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
                     try {
                         airplane.sleep(500);
                     } catch (InterruptedException ex) {
@@ -133,22 +148,22 @@ public class AirplaneRenderable extends GlobeAnnotation {
     }
 
     private String updateText() {
-                DecimalFormat DF = new DecimalFormat("#.##");
+        DecimalFormat DF = new DecimalFormat("#.##");
         return "<p><b><font color=\"#664400\">Flight " + flightplan.getFlightnumber() + "</font></b>"
                 + "<br />Departure: "
-                + flightplan.getTakeoffAirport().getCity() + ", " 
-                + flightplan.getTakeoffAirport().getCountry() + " [" 
+                + flightplan.getTakeoffAirport().getCity() + ", "
+                + flightplan.getTakeoffAirport().getCountry() + " ["
                 + flightplan.getTakeoffAirport().getIATA_FAA() + "]"
                 + "<br />Arrival: "
-                + flightplan.getDestinationAirport().getCity() + ", " 
-                + flightplan.getDestinationAirport().getCountry() + " [" 
+                + flightplan.getDestinationAirport().getCity() + ", "
+                + flightplan.getDestinationAirport().getCountry() + " ["
                 + flightplan.getDestinationAirport().getIATA_FAA() + "]"
                 + "<br />"
                 + "<br /><b>Airplane</b>"
                 + "<br />[Speed: "
                 + DF.format(airplane.getSpeed()) + " km/h] <br />[Altitude: "
                 + airplane.getAltitude() + " feet]"
-     //           +"<br />[Flightlevel: " + airplane.getFlightLevel() + "]"
+                //           +"<br />[Flightlevel: " + airplane.getFlightLevel() + "]"
                 + "<br />[Direction: " + DF.format(airplane.getDirection()) + "°]"
                 + "<br />Model: " + airplane.getManufacturer() + ", " + airplane.getType()
                 + "<br >Current state: " + airplane.getStatus()
