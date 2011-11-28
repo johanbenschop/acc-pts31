@@ -31,7 +31,6 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private boolean closed;
     private AirplaneFactory selectedAirplane;
     private ArrayList<Flightplan> bufFlightplans;
-    public static Airspace airspace = new Airspace();
 
     /** Creates new form jfSearchFlight */
     public jfSelectFlight(java.awt.Frame parent, boolean modal) {
@@ -39,7 +38,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         initComponents();
         bufFlightplans = new ArrayList<>();
 
-        flightplans = airspace.getACC(0).getFlightplans();
+        flightplans = atc2.airspace.getACC(0).getFlightplans();
 
         columnNames.addElement("Flightnumber");
         columnNames.addElement("Airliner");
@@ -287,7 +286,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private void tfDepartureDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDepartureDateKeyTyped
         // TODO add your handling code here:
         data.clear(); // Empty the data so we can get the limited results in.
-        flightplans = airspace.getACC(0).getFlightplans(); // we must get an new iterator, since the previus one is empty.
+        flightplans = atc2.airspace.getACC(0).getFlightplans(); // we must get an new iterator, since the previus one is empty.
         bufFlightplans.clear();
 
         while (flightplans.hasNext()) {

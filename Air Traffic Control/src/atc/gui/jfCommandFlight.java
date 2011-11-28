@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 public class jfCommandFlight extends javax.swing.JDialog {
     private Flightplan flightplan;
     private final Timer timer;
-    public static Airspace airspace = new Airspace();
     
     /** Creates new form jfCommandFlight */
     public jfCommandFlight(java.awt.Frame parent, boolean modal) {
@@ -163,7 +162,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeSpeedTo.getText()))
         {
             try {
-                airspace.getACC(0).ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+                atc2.airspace.getACC(0).ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -172,7 +171,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeDirectionTo.getText()))
         {
             try {
-                airspace.getACC(0).ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+                atc2.airspace.getACC(0).ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -181,7 +180,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(tfFlightlevel.getSelectedItem()))
         {
             try {
-                airspace.getACC(0).ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+                atc2.airspace.getACC(0).ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -195,7 +194,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         // TODO add your handling code here:
         
         try {
-            airspace.getACC(0).LandFlight(flightplan);
+            atc2.airspace.getACC(0).LandFlight(flightplan);
         } catch (AssignmentException ex) {
             JOptionPane.showMessageDialog(this, "There are no runways available at destination airport.");
         }
