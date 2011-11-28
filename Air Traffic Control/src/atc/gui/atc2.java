@@ -7,6 +7,7 @@ import atc.gui.Audio.Statusses;
 import atc.logic.ACC;
 import atc.logic.Airplane;
 import atc.logic.Airport;
+import atc.logic.Airspace;
 import atc.logic.CTA;
 import atc.logic.Flightplan;
 import atc.logic.GeoSector;
@@ -46,8 +47,11 @@ import javax.swing.Timer;
  */
 public final class atc2 extends atc {
 
-    private static CTA cta = new CTA(new GeoSector(40, 60, -10, 10));
-    public static ACC acc = new ACC(343, cta);
+//    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
+//    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
+//    public static ACC acc = new ACC(343, cta);
+//    public static ACC acc2 = new ACC(344, cta2);
+    public static Airspace airspace = new Airspace();
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public static class AppFrame extends atc.AppFrame {
@@ -261,7 +265,7 @@ public final class atc2 extends atc {
             this.timerColision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    cta.Collision();
+                    airspace.getACC(0).GetCTA().Collision();
                     findCollisions();
 
                     getWwd().redraw();
@@ -359,7 +363,8 @@ public final class atc2 extends atc {
          * TODO build the airspace according to the CTA and not directly as done.
          */
         private void buildAirspaceLayer() {
-            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+            SurfaceSector surfaceSector = new SurfaceSector(airspace.getACC(0).GetCTA().getSector().toSector());
+            SurfaceSector surfaceSector2 = new SurfaceSector(airspace.getACC(1).GetCTA().getSector().toSector()); //Temporarely
             ShapeAttributes attr = new BasicShapeAttributes();
             //attr.setInteriorMaterial(Material.WHITE);
             attr.setOutlineMaterial(Material.RED);
@@ -370,10 +375,14 @@ public final class atc2 extends atc {
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
             attr.setEnableAntialiasing(true);
 
+            surfaceSector2.setAttributes(attr); //Temporarely
+            surfaceSector2.setPathType(AVKey.RHUMB_LINE); //Temporarely
+            
             airspaceLayer = new RenderableLayer();
             airspaceLayer.setName("Airspaces");
             airspaceLayer.setPickEnabled(false);
             airspaceLayer.addRenderable(surfaceSector);
+            airspaceLayer.addRenderable(surfaceSector2); //Temporarely
             insertBeforePlacenames(this.getWwd(), airspaceLayer);
 
 //            OrbitView view = this.getOrbitView();
@@ -413,10 +422,13 @@ public final class atc2 extends atc {
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), AirportRenderable.class, 20000));
 
-            ListIterator<Airport> litr = acc.GetCTA().GetAirports();
-
+            ListIterator<Airport> litr = airspace.getACC(0).GetCTA().GetAirports();
+             ListIterator<Airport> litr2 = airspace.getACC(1).GetCTA().GetAirports();
             while (litr.hasNext()) {
                 addAirportToLayer(airportLayer, litr.next());
+            }
+            while (litr2.hasNext()) {
+                addAirportToLayer(airportLayer, litr2.next()); //Temporarely
             }
         }
 
@@ -483,10 +495,16 @@ public final class atc2 extends atc {
             this.timerAirplane = new Timer(1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    ListIterator<Flightplan> litr = acc.getFlightplans();
+                    ListIterator<Flightplan> litr = airspace.getACC(0).getFlightplans();
 
                     while (litr.hasNext()) {
                         addAirplaneToLayer(airplaneLayer, litr.next());
+                    }
+                    
+                    ListIterator<Flightplan> litr2 = airspace.getACC(1).getFlightplans(); //Temporarely 
+
+                    while (litr2.hasNext()) {
+                        addAirplaneToLayer(airplaneLayer, litr2.next()); //Temporarely
                     }
                 }
             });

@@ -139,7 +139,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + "<br />[Speed: "
                 + DF.format(airplane.getSpeed()) + " km/h] <br />[Altitude: "
                 + airplane.getAltitude() + " feet]"
-                +"<br />[Flightlevel: " + airplane.getFlightLevel() + "]"
+     //           +"<br />[Flightlevel: " + airplane.getFlightLevel() + "]"
                 + "<br />[Direction: " + DF.format(airplane.getDirection()) + "°]"
                 + "<br />Model: " + airplane.getManufacturer() + ", " + airplane.getType()
                 + "<br >Current state: " + airplane.getStatus()
