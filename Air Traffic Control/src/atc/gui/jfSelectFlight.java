@@ -31,6 +31,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private boolean closed;
     private AirplaneFactory selectedAirplane;
     private ArrayList<Flightplan> bufFlightplans;
+    private boolean eerstekeer = true;
 
     /** Creates new form jfSearchFlight */
     public jfSelectFlight(java.awt.Frame parent, boolean modal) {
@@ -292,7 +293,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         while (flightplans.hasNext()) {
             Flightplan iter = flightplans.next();
             bufFlightplans.add(iter);
-            
+
             try {
                 if (evt.getComponent() == tfFlightnumber) {
                     if (evt.getKeyChar() == '\b') {
@@ -310,8 +311,8 @@ public class jfSelectFlight extends javax.swing.JDialog {
                 tfFlightnumber.setText("");
             }
 
-          // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
-          //We don't have the airliner stuff implemented yet so we can't actually searh it.
+            // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
+            //We don't have the airliner stuff implemented yet so we can't actually searh it.
 //        if (evt.getComponent() == tfAirliner) {
 //            if (evt.getKeyChar() == '\b') {
 //                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
@@ -324,46 +325,73 @@ public class jfSelectFlight extends javax.swing.JDialog {
 //                }
 //            }
 //        }
-            
-            Vector<String> row = new Vector<>();
-            row.addElement(String.valueOf(iter.getFlightnumber()));
-            row.addElement("WDAL");
-            row.addElement(iter.getDepartureDate().toString());
-            row.addElement(iter.getArrivalDate().toString());
-            row.addElement(iter.getAirplane().toString());
-            data.addElement(row);
-
+            fillVector(iter);
         }
-
-        TableModel model = new DefaultTableModel(data, columnNames);
-        jTable.setModel(model);
+        fillTable();
     }//GEN-LAST:event_tfDepartureDateKeyTyped
 
-    
 private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dpSearchDateChanged
-              // TODO fix (...) algorithm
-    //Ik vermoedt dat we de code uit de event handlers komen aan t slopen,
-    //omdat we voor textfield en date picker andere event handlers moeten gebruiken.
-    //maar wel dezelfde dingen nodig hebben.
-    
-//            GregorianCalendar cal = new GregorianCalendar(tfDepartureDate.getDate().getYear(),
-//                    tfDepartureDate.getDate().getMonth(),
-//                    tfDepartureDate.getDate().getDay());
+//    if (!eerstekeer) {
+//        // TODO fix (...) algorithm
+//        //Ik vermoedt dat we de code uit de event handlers komen aan t slopen,
+//        //omdat we voor textfield en date picker andere event handlers moeten gebruiken.
+//        //maar wel dezelfde dingen nodig hebben.
+//
+//        //data.clear(); // Empty the data so we can get the limited results in.
+//        flightplans = atc2.acc.getFlightplans(); // we must get an new iterator, since the previus one is empty.
+//
+//        while (flightplans.hasNext()) {
+//            Flightplan iter = flightplans.next();
+//
+//            GregorianCalendar cal = new GregorianCalendar();
+//            //cal.setTime(tfDepartureDate.getDate());
+//            cal.set(tfDepartureDate.getDate().getYear(), tfDepartureDate.getDate().getMonth(), tfDepartureDate.getDate().getDay());
 //            if (tfDepartureDate.getDate() != null && cal != iter.getDepartureDate()) {
 //                continue;
 //            }
-//            
-//            cal = new GregorianCalendar(tfArrivalDate.getDate().getYear(),
-//                    tfArrivalDate.getDate().getMonth(),
-//                    tfArrivalDate.getDate().getDay());
-//            if (tfArrivalDate.getDate() != null && cal != iter.getArrivalDate()) {
+//
+//            GregorianCalendar cal2 = new GregorianCalendar();
+//            //cal2.setTime(tfArrivalDate.getDate());
+//            cal2.set(tfArrivalDate.getDate().getYear(), tfArrivalDate.getDate().getMonth(), tfArrivalDate.getDate().getDay());
+//            if (tfArrivalDate.getDate() != null && cal2 != iter.getArrivalDate()) {
 //                continue;
 //            }
-//            
-//            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
-//                continue;
-//            }
+//
+//
+////        cal = new GregorianCalendar(tfArrivalDate.getDate().getYear(),
+////                tfArrivalDate.getDate().getMonth(),
+////                tfArrivalDate.getDate().getDay());
+////        if (tfArrivalDate.getDate() != null && tfArrivalDate.getDate() != iter.getArrivalDate()) {
+////            continue;
+//            //}
+//
+//            fillVector(iter);
+//        }
+//        fillTable();
+//
+//    } else {
+//        eerstekeer = false;
+//    }
+//
+////            if (selectedAirplane != null && !selectedAirplane.equals(iter.getAirplane())) {
+////                continue;
+////            }
 }//GEN-LAST:event_dpSearchDateChanged
+
+    public void fillVector(Flightplan iter) {
+        Vector<String> row = new Vector<>();
+        row.addElement(String.valueOf(iter.getFlightnumber()));
+        row.addElement("WDAL");
+        row.addElement(iter.getDepartureDate().toString());
+        row.addElement(iter.getArrivalDate().toString());
+        row.addElement(iter.getAirplane().toString());
+        data.addElement(row);
+    }
+
+    public void fillTable() {
+        TableModel model = new DefaultTableModel(data, columnNames);
+        jTable.setModel(model);
+    }
 
     public Flightplan getValue() {
         setVisible(true);
@@ -388,6 +416,8 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
+
                 }
             }
         } catch (ClassNotFoundException ex) {
