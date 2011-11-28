@@ -234,6 +234,7 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
     data.clear(); // Empty the data so we can get the limited results in.
     airplanes = atc2.acc.getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
     retAirplanes.clear();
+    
     while (airplanes.hasNext()) {
         AirplaneFactory iter = airplanes.next();
 
@@ -262,6 +263,11 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
                 }
             }
         }
+        
+//        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
+//        {
+//            continue;
+//        }
 //         //We don't have the airliner stuff implemented yet so we can't actually searh it.
 //        if (evt.getComponent() == tfAirliner) {
 //            if (evt.getKeyChar() == '\b') {
@@ -275,26 +281,14 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
 //                }
 //            }
 //        }
-fillVector(iter);
-//        Vector<String> row = new Vector<>();
-//        row.addElement(iter.getType());
-//        row.addElement(iter.getManufacturer());
-//        row.addElement(String.valueOf(iter.getMaxSpeed()));
-//        row.addElement(String.valueOf(iter.getWeight()));
-//        row.addElement("WDAL");
-//        data.addElement(row);
-//        retAirplanes.add(iter);
+        fillVector(iter);
     }
 
     fillTable();
-    //TableModel model = new DefaultTableModel(data, columnNames);
-   // jTable.setModel(model);
 }//GEN-LAST:event_tfSearchKeyTyped
 
-
-public void fillVector(AirplaneFactory iter)
-{
-            Vector<String> row = new Vector<>();
+    public void fillVector(AirplaneFactory iter) {
+        Vector<String> row = new Vector<>();
         row.addElement(iter.getType());
         row.addElement(iter.getManufacturer());
         row.addElement(String.valueOf(iter.getMaxSpeed()));
@@ -302,17 +296,12 @@ public void fillVector(AirplaneFactory iter)
         row.addElement("WDAL");
         data.addElement(row);
         retAirplanes.add(iter);
-}
-public void fillTable()
-{
+    }
+
+    public void fillTable() {
         TableModel model = new DefaultTableModel(data, columnNames);
-    jTable.setModel(model);
-}
-
-
-
-
-
+        jTable.setModel(model);
+    }
 
     /**
      * Get the return value of this dialog.
