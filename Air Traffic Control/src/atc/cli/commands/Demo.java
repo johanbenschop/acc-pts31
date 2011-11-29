@@ -21,7 +21,7 @@ public class Demo {
 
     public static String collision() throws AssignmentException {
         try {
-            atc2.airspace.getACC(0).CreateFlight(null, null, null, null, null);
+            atc2.airspace.getCurrentACC().CreateFlight(null, null, null, null, null);
 
             CommandLine.println("Searching...");
             Thread.sleep(2000);
@@ -33,21 +33,21 @@ public class Demo {
 
     public static String addFlightSchipholEindhoven() {
         CommandLine.println("Adding flight: Schiphol - Eindhoven");
-        AirplaneFactory af = atc2.airspace.getACC(0).GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getACC(0).GetCTA().GetAirport(580);
-        Airport ap_dest = atc2.airspace.getACC(0).GetCTA().GetAirport(585);
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(580);
+        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
         GregorianCalendar cal = new GregorianCalendar();
-        atc2.airspace.getACC(0).CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
     }
 
     public static String addFlightEindhovenSchiphol() {
         CommandLine.println("Adding flight: Eindhoven - Schiphol");
-        AirplaneFactory af = atc2.airspace.getACC(0).GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getACC(0).GetCTA().GetAirport(585);
-        Airport ap_dest = atc2.airspace.getACC(0).GetCTA().GetAirport(580);
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
+        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(580);
         GregorianCalendar cal = new GregorianCalendar();
-        atc2.airspace.getACC(0).CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
     }
 
@@ -59,21 +59,21 @@ public class Demo {
 
     public static String addFlightEindhovenBudel() {
         CommandLine.println("Adding flight: Eindhoven - Budel");
-        AirplaneFactory af = atc2.airspace.getACC(0).GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getACC(0).GetCTA().GetAirport(585);
-        Airport ap_dest = atc2.airspace.getACC(0).GetCTA().GetAirport(581);
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
+        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(581);
         GregorianCalendar cal = new GregorianCalendar();
-        atc2.airspace.getACC(0).CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
     }
 
     public static String addFlightBudelEindhoven() {
         CommandLine.println("Adding flight: Budel - Eindhoven");
-        AirplaneFactory af = atc2.airspace.getACC(0).GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getACC(0).GetCTA().GetAirport(581);
-        Airport ap_dest = atc2.airspace.getACC(0).GetCTA().GetAirport(585);
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(581);
+        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
         GregorianCalendar cal = new GregorianCalendar();
-        atc2.airspace.getACC(0).CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
     }
 
@@ -86,13 +86,13 @@ public class Demo {
     public static String addRandomFlights(int amount) {
         Random random = new Random();
         ArrayList<Integer> airportIDs = new ArrayList<>();
-        AirplaneFactory af = atc2.airspace.getACC(0).GetAirplaneFactory(1);
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         GregorianCalendar cal = new GregorianCalendar();
 
         // We put the airport ID's in an ArrayList so we can get the airport
         // randomly, since not all airports might be availeble and an iterator
         // can not get a random index, only next, next, next, hence the name iterator.
-        for (Iterator<Airport> it = atc2.airspace.getACC(0).GetCTA().GetAirports(); it.hasNext();) {
+        for (Iterator<Airport> it = atc2.airspace.getCurrentACC().GetCTA().GetAirports(); it.hasNext();) {
             airportIDs.add(it.next().getAirportID());
         }
 
@@ -108,10 +108,10 @@ public class Demo {
                 dest_id = random.nextInt(airports);
             }
 
-            Airport ap_arr = atc2.airspace.getACC(0).GetCTA().GetAirport(airportIDs.get(arr_id));
-            Airport ap_dest = atc2.airspace.getACC(0).GetCTA().GetAirport(airportIDs.get(dest_id));
+            Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(airportIDs.get(arr_id));
+            Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(airportIDs.get(dest_id));
 
-            atc2.airspace.getACC(0).CreateFlight(af, ap_arr, ap_dest, cal, cal);
+            atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         }
 
         return "Added " + amount + " of random flights.";
