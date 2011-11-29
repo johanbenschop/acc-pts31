@@ -105,13 +105,22 @@ public class CTA {
                 if (target.getStatus().equals(Airplane.Statusses.INFLIGHT) || target.getStatus().equals(Airplane.Statusses.CRASHING1) || target.getStatus().equals(Airplane.Statusses.CRASHING2)) {
                     lat1 = Math.toRadians(target.getLocation().getLatitude());
                     lon1 = Math.toRadians(target.getLocation().getLongitude());
-                    bearing1 = Math.toRadians(target.getDirection());
+                    if (target.getDirection() < 0) {
+                        bearing1 = Math.toRadians(target.getDirection() + 360);
+                    } else {
+                        bearing1 = Math.toRadians((target.getDirection()));
+                    }
+
                     for (Airplane crashobject : airplaneList) {
                         if (crashobject.getStatus().equals(Airplane.Statusses.INFLIGHT) || crashobject.getStatus().equals(Airplane.Statusses.CRASHING1) || crashobject.getStatus().equals(Airplane.Statusses.CRASHING2)) {
-                            if (crashobject != target && crashobject.getAltitude() == target.getAltitude()) {
+                            if (crashobject != target && crashobject.getAltitude() == target.getAltitude() && crashobject.isCollcheck() == false) {
                                 lat2 = Math.toRadians(crashobject.getLocation().getLatitude());
                                 lon2 = Math.toRadians(crashobject.getLocation().getLongitude());
-                                bearing2 = Math.toRadians(crashobject.getDirection());
+                                if (crashobject.getDirection() < 0) {
+                                    bearing2 = Math.toRadians(crashobject.getDirection() + 360);
+                                } else {
+                                    bearing2 = Math.toRadians(crashobject.getDirection());
+                                }
 
                                 bearing13 = bearing1;
 
@@ -136,53 +145,151 @@ public class CTA {
                                 alpha1 = (bearing13 - bearing12 + Math.PI) % (2 * Math.PI) - Math.PI;
                                 alpha2 = (bearing21 - bearing23 + Math.PI) % (2 * Math.PI) - Math.PI;
                                 if (Math.sin(alpha1) == 0 && Math.sin(alpha2) == 0) {
+                                    //TODO when 2 airplane fly behind each other or towards each other.
                                 }
 
                                 alpha3 = Math.acos(-Math.cos(alpha1) * Math.cos(alpha2)
                                         + Math.sin(alpha1) * Math.sin(alpha2) * Math.cos(dist12));
+
                                 dist13 = Math.atan2(Math.sin(dist12) * Math.sin(alpha1) * Math.sin(alpha2),
                                         Math.cos(alpha2) + Math.cos(alpha1) * Math.cos(alpha3));
+
                                 lat3 = Math.asin(Math.sin(lat1) * Math.cos(dist13)
                                         + Math.cos(lat1) * Math.sin(dist13) * Math.cos(bearing13));
+
                                 dLon13 = Math.atan2(Math.sin(bearing13) * Math.sin(dist13) * Math.cos(lat1),
                                         Math.cos(dist13) - Math.sin(lat1) * Math.sin(lat3));
+
                                 lon3 = lon1 + dLon13;
                                 lon3 = (lon3 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
 
                                 distance1 = distFrom(lat1, lon1, lat3, lon3);
                                 time1 = distance1 / ((double) target.getSpeed() / 3600);
-                                DecimalFormat df = new DecimalFormat("#.###");
-                                df.format(time1);
                                 distance2 = distFrom(lat2, lon2, lat3, lon3);
-                                time2 = distance1 / ((double) crashobject.getSpeed() / 3600);
-                                df.format(time2);
-                                System.out.println("time 2 " + crashobject.getAirplaneNumber() + ": " + time2);
+                                time2 = distance2 / ((double) crashobject.getSpeed() / 3600);
 
-                                System.out.println("time 1 " + target.getAirplaneNumber() + ": " + time1);
-
-                                if (time1 == time2) {
-                                    if (time1 <= 5) {
+                                if (distance1 <= 10000 && distance2 <= 10000) {
+                                    if (distance1 <= 100 || distance2 <= 100) {
                                         target.setStatus(Airplane.Statusses.CRASHED);
                                         crashobject.setStatus(Airplane.Statusses.CRASHED);
-                                    } else if (time1 <= 3600) {
+                                    } else if (distance1 <= 5000 || distance2 <= 5000) {
                                         target.setStatus(Airplane.Statusses.CRASHING2);
                                         crashobject.setStatus(Airplane.Statusses.CRASHING2);
-                                    } else if (time1 <= 12000) {
+                                    } else if (distance1 <= 10000 || distance2 <= 10000) {
                                         target.setStatus(Airplane.Statusses.CRASHING1);
                                         crashobject.setStatus(Airplane.Statusses.CRASHING1);
-                                    } else if (time1 >= 12000) {
-                                        target.setStatus(Airplane.Statusses.INFLIGHT);
-                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
                                     }
                                 }
-                            } else {
-                                target.setStatus(Airplane.Statusses.INFLIGHT);
-                                crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+                                //haxxorz method but it works for 2 airplanes.
+                                //more then 2 doesnt though same issue random collisions, less then the first though.
+                                //numbers are based on trial and error.
+//                                if (time1 >= time2) {
+//                                    if (time1 - time2 <= 1 && time1 - time2 >= -1) {
+//                                        target.setStatus(Airplane.Statusses.CRASHED);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                    } else if (time1 - time2 <= 400 && time1 - time2 >= -400) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING2);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
+//                                    } else if (time1 - time2 <= 450 && time1 - time2 >= -450) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING1);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                    }
+//                                } else {
+//                                    if (time1 - time2 <= 1 && time1 - time2 >= -1) {
+//                                        target.setStatus(Airplane.Statusses.CRASHED);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                    } else if (time1 - time2 <= 400 && time1 - time2 >= -400) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING2);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
+//                                    } else if (time1 - time2 <= 450 && time1 - time2 >= -450) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING1);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                    }
+//                                }
+
+//                                    if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
+//                                            target.setStatus(Airplane.Statusses.CRASHED);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                            System.out.println("boem optie1");
+//                                            System.out.println(Double.toString(time1 - time2));
+//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                    } else {
+//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        System.out.println("Blijven vliegen optie 1");
+//                                        System.out.println(Double.toString(time1 - time2));
+//                                        System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                        System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                    }
+//                                } else if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
+//                                    if (time1 - time2 <= 3 / ((double) target.getSpeed() / 3.6) && time1 - time2 >= -3000 / ((double) target.getSpeed() / 3.6)) {
+//                                        if (time1 - time2 <= 0.5 / ((double) target.getSpeed() / 3.6)) {
+//                                            target.setStatus(Airplane.Statusses.CRASHED);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                            System.out.println("boem optie 2");
+//                                            System.out.println(Double.toString(time1 - time2));
+//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                            System.out.println(0.5 / ((double) target.getSpeed() / 3.6));
+//                                        } else if (time1 - time2 <= 1 / ((double) target.getSpeed() / 3.6)) {
+//                                            target.setStatus(Airplane.Statusses.CRASHING2);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHING2);
+//                                            System.out.println("nog net geen boem optie 2");
+//                                            System.out.println(Double.toString(time1 - time2));
+//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                        } else {
+//                                            target.setStatus(Airplane.Statusses.CRASHING1);
+//                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                            System.out.println("nog lang geen boem optie 2");
+//                                            System.out.println(Double.toString(time1 - time2));
+//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                        }
+//                                    } else {
+//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        System.out.println("Wij blijven vliegen optie 2");
+//                                        System.out.println(Double.toString(time1 - time2));
+//                                        System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
+//                                        System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
+//                                    }
+//                                }
+
+//                                if ((time1 == time2) && time1 <= 12000) {
+//                                    if (time1 <= 5) {
+//                                        target.setStatus(Airplane.Statusses.CRASHED);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
+//                                    } else if (time1 <= 3600) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING2);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
+//                                    } else if (time1 <= 12000) {
+//                                        target.setStatus(Airplane.Statusses.CRASHING1);
+//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
+//                                    } 
+//                                    else if ((time1 >= 12000) || !target.getStatus().equals(Airplane.Statusses.CRASHING1) || !target.getStatus().equals(Airplane.Statusses.CRASHING2) || !target.getStatus().equals(Airplane.Statusses.CRASHED)) {
+//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
+//                                    }
+//                                } else if (time1 != time2) {
+//                                    System.err.println("time not equal!");
+//                                    System.err.println(time1);
+//                                    System.err.println(time2);
+//                                }
+
+//                            } else {
+//                                target.setStatus(Airplane.Statusses.INFLIGHT);
+//                                crashobject.setStatus(Airplane.Statusses.INFLIGHT);
                             }
                         }
                     }
+                    target.setCollcheck(true);
                 }
             }
+        }
+        for (Airplane ap : airplaneList) {
+            ap.setCollcheck(false);
         }
     }
 
@@ -195,18 +302,24 @@ public class CTA {
      * @return a double with the calculated distance
      */
     public double distFrom(double lat1, double lon1, double lat2, double lon2) {
-        double earthRadius = 3958.75;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLng = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double dist = earthRadius * c;
+        double earthRadius = 6371;
+        double distance;
+        distance = Math.acos(Math.sin(lat1) * Math.sin(lat2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.cos(lon2 - lon1)) * earthRadius;
+        distance = distance * 1000;
+        return distance;
+//        double dLat = Math.toRadians(lat2 - lat1);
+//        double dLng = Math.toRadians(lon2 - lon1);
+//        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+//                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+//                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//        double dist = earthRadius * c;
 
-        int meterConversion = 1609;
+//        int meterConversion = 1609;
 
-        return new Double(dist * meterConversion).doubleValue();
+//        return dist;
     }
 
     /**
