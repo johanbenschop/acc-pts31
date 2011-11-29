@@ -39,7 +39,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         initComponents();
         bufFlightplans = new ArrayList<>();
 
-        flightplans = atc2.airspace.getACC(0).getFlightplans();
+        flightplans = atc2.airspace.getCurrentACC().getFlightplans();
 
         columnNames.addElement("Flightnumber");
         columnNames.addElement("Airliner");
@@ -287,7 +287,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private void tfDepartureDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDepartureDateKeyTyped
         // TODO add your handling code here:
         data.clear(); // Empty the data so we can get the limited results in.
-        flightplans = atc2.airspace.getACC(0).getFlightplans(); // we must get an new iterator, since the previus one is empty.
+        flightplans = atc2.airspace.getCurrentACC().getFlightplans(); // we must get an new iterator, since the previus one is empty.
         bufFlightplans.clear();
 
         while (flightplans.hasNext()) {

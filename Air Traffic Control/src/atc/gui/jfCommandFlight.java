@@ -162,7 +162,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeSpeedTo.getText()))
         {
             try {
-                atc2.airspace.getACC(0).ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+                atc2.airspace.getCurrentACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -171,7 +171,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeDirectionTo.getText()))
         {
             try {
-                atc2.airspace.getACC(0).ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+                atc2.airspace.getCurrentACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -180,7 +180,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(tfFlightlevel.getSelectedItem()))
         {
             try {
-                atc2.airspace.getACC(0).ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+                atc2.airspace.getCurrentACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
             } catch (AssignmentException ex) {
                 ex.printStackTrace();
             }
@@ -194,7 +194,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         // TODO add your handling code here:
         
         try {
-            atc2.airspace.getACC(0).LandFlight(flightplan);
+            atc2.airspace.getCurrentACC().LandFlight(flightplan);
         } catch (AssignmentException ex) {
             JOptionPane.showMessageDialog(this, "There are no runways available at destination airport.");
         }
