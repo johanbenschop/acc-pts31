@@ -22,16 +22,16 @@ public class Airspace {
 //    public static ACC acc2 = new ACC(344, cta2);
     public Airspace() {
         ACCs = new ArrayList<ACC>();
-        for (int e = -50; e < 70; e += 20) {
-            
-        
-        for (int i = -140; i < 160; i += 20) {
-         ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, i, i+20))));  
-        
-        }
-    //}
+//        for (int e = -50; e < 70; e += 20) {
+//            
+//        
+//        for (int i = -140; i < 160; i += 20) {
+//         ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, i, i+20))));  
+//        
+//        }
+//    //}
 //
-//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -180, -160))));
+        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -160, -140))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -140, -120))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -120, -100))));
@@ -49,7 +49,7 @@ public class Airspace {
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 120, 140))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 140, 160))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 160, 180))));
-   }
+   //}
 //        
     }
     

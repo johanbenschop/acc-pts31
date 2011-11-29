@@ -70,6 +70,7 @@ public final class atc2 extends atc {
         private final Timer timerColision;
 
         public AppFrame() {
+            
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
@@ -305,6 +306,8 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
 //            Audio.play(Statusses.ALARM5);
+            
+            atc2.airspace.setCurrentACC(atc2.airspace.getACC(0));
         }
 
         /**
