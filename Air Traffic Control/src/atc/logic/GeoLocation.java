@@ -142,4 +142,16 @@ public class GeoLocation {
         double direction = Math.toDegrees(Math.atan2(y, x));
         return direction;
     }
+    
+    public static GeoLocation CalcPosition(double lon1, double lat1, double direction,  double distance)
+    {
+        double Distance = distance / 3958.75;
+        double Direction = direction;
+
+        double Lat1 = Math.toRadians(lat1);
+        double Lon1 = Math.toRadians(lon1);
+        double Lat2 = Math.asin(Math.sin(Lat1)*Math.cos(Distance) + Math.cos(Lat1)*Math.sin(Distance)*Math.cos(Direction));
+        double Lon2 = Lon1 + Math.atan2(Math.sin(Direction)*Math.sin(Distance)*Math.cos(Lat1), Math.cos(Distance)-Math.sin(Lat1)*Math.sin(Lat2));        
+        return new GeoLocation(Math.toDegrees(Lon2), Math.toDegrees(Lat2));
+    }
 }
