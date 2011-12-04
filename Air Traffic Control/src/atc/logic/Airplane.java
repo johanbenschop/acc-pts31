@@ -97,6 +97,7 @@ public class Airplane extends Thread {
     public void run() {
         
         while (true) {
+            atc2.acc.GetCTA().CheckDistanceBetweenAirplaneAndATC();
             //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
             while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
                     || Status == Statusses.CRASHING1 || Status == Statusses.CRASHING2
