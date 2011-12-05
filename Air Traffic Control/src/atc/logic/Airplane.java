@@ -94,7 +94,7 @@ public class Airplane extends Thread {
     }
 
     /**
-     * Run method to start the thread wich contains the current airplane. Start
+     * Run method to start the thread which contains the current airplane. Start
      * this and the airplane starts flying.
      */
     @Override

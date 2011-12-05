@@ -314,6 +314,16 @@ public class ACC {
     }
     
     /**
+     * Creates and adds a new FlightController and add it to the list of controller as well as return it.
+     * @return FlightController
+     */
+    public FlightController addFlightController() {
+        FlightController controller = new FlightController();
+        flightControllers.add(controller);
+        return controller;
+    }
+    
+    /**
      * Unassign the flight from the controller.
      * @param flightplan 
      */
