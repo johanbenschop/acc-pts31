@@ -269,7 +269,7 @@ public final class atc2 extends atc {
                 public void actionPerformed(ActionEvent event) {
                     for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                         ACC acc = it.next();
-                        acc.GetCTA().Collision();
+                     acc.GetCTA().Collision();
                         
                         
                     }
@@ -375,15 +375,26 @@ public final class atc2 extends atc {
          * TODO build the airspace according to the CTA and not directly as done.
          */
         private void buildAirspaceLayer() {
+
             for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+                                            ACC acc = it.next();
             ShapeAttributes attr = new BasicShapeAttributes();
+                        ShapeAttributes attr2 = new BasicShapeAttributes();
             //attr.setInteriorMaterial(Material.WHITE);
             attr.setOutlineMaterial(Material.RED);
             attr.setInteriorOpacity(0);
             attr.setOutlineOpacity(0.7);
             attr.setOutlineWidth(3);
+            acc.GetCTA().CreateGreaterSector();
+            SurfaceSector s2 = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
+            attr2.setOutlineMaterial(Material.GREEN);
+            attr2.setInteriorOpacity(0);
+            attr2.setOutlineOpacity(0.7);
+            attr2.setOutlineWidth(3);
+            s2.setAttributes(attr2);
+            s2.setPathType(AVKey.RHUMB_LINE);
             attr.setEnableAntialiasing(true);
-                ACC acc = it.next();
+
              
             SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
              //Temporarely
@@ -394,6 +405,7 @@ public final class atc2 extends atc {
             airspaceLayer.setName("Airspaces");
             airspaceLayer.setPickEnabled(false);
             airspaceLayer.addRenderable(surfaceSector);
+            airspaceLayer.addRenderable(s2);
             insertBeforePlacenames(this.getWwd(), airspaceLayer);
             
             }
