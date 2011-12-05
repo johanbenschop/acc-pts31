@@ -314,6 +314,14 @@ public class ACC {
     }
     
     /**
+     * Unassign the flight from the controller.
+     * @param flightplan 
+     */
+    public void unassignFlightFromController(Flightplan flightplan) {
+        flightplan.getAssignedController().unassignFlight(flightplan);
+    }
+    
+    /**
      * Method to get all Flightplans
      * 
      * @return a list with all Flightplans
