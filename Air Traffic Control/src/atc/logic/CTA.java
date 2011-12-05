@@ -12,7 +12,7 @@ public class CTA {
     /**
      * The GeoSector of the CTA
      */
-    private GeoSector sector;
+    public GeoSector sector;
     public GeoSector sectorGreater;
     /**
      * A airplane used for getting focus of a selected airplane within the CTA
@@ -432,29 +432,23 @@ public class CTA {
     public void CreateGreaterSector()
     { 
                     double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
-                    System.out.println("maxLongitude: " + maxLatitude);
                     double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
-                    System.out.println("minLonigtude: " + minLatitude);
                     double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
-                    System.out.println("maxLatitude: " + maxLongitude);
                     double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
-                    System.out.println("minLonigtude: " + minLongitude);
                     sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
         }
     
+    
     /*public void CheckAirplaneATC()
     {
-        for(Airplane airplane : airplaneList)
-        {
-        if(sectorGreater.containsGeoLocation(airplane.getLocation()))
-        {
-            airplane.setVisibleCTA(this.cta);
-            if(sector.containsGeoLocation(airplane.getLocation()))
-            {
-                airplane.setControlCTA(this.cta);
+        for (Airplane airplane : airplaneList) {
+            if (sectorGreater.containsGeoLocation(airplane.getLocation())) {
+                airplane.setVisibleCTA(this.cta);
+                if (sector.containsGeoLocation(airplane.getLocation())) {
+                    airplane.setControlCTA(this.cta);
+                }
             }
         }
-            }
     }*/
     
     
