@@ -14,6 +14,7 @@ import java.io.*;
 public class Audio {
 
     static String fileName;
+    static boolean isPlaying;
 
     public static enum Statusses {
 
@@ -47,6 +48,7 @@ public class Audio {
             in = new FileInputStream(fileName);
             AudioStream as = new AudioStream(in);
             AudioPlayer.player.start(as);
+            
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -56,22 +58,3 @@ public class Audio {
 
     }
 }
-/*import java.applet.Applet;
-import java.applet.AudioClip;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-public class Audio {
-    private AudioClip alarm;
-    
-    
-    public void soundAlarm() {
-        try {
-            alarm = Applet.newAudioClip(new URL("src/atc/logic/resources/Alarm-6.wav"));
-            alarm.play();
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        }
-    }
-}
-*/

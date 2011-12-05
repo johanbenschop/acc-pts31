@@ -4,6 +4,7 @@ import atc.cli.CommandLine;
 import atc.gui.atc2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 /**
  * @author Paul
@@ -39,6 +40,7 @@ public class Airplane extends Thread {
     private boolean InLandingQeueu = false;
     private boolean withinRadius = false;
     private boolean collcheck;
+    private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public enum Statusses {
 
@@ -97,7 +99,7 @@ public class Airplane extends Thread {
      */
     @Override
     public void run() {
-        
+        double SIM_SPEED = prefs.getDouble("SIM_SPEED", 1);
         while (true) {
             //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
             while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
@@ -106,7 +108,7 @@ public class Airplane extends Thread {
                 try {
                     Fly();
                     //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-                    Thread.sleep(100);// er word telkens 1/10e seconde gewacht.
+                    Thread.sleep((int)(SIM_SPEED * 100));// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
                 }

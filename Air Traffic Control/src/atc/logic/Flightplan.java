@@ -39,6 +39,8 @@ public class Flightplan {
      */
     private Airplane airplane;
     
+    private FlightController assignedController;
+    
     /**A flightplan is made with the following parameters:
      * @param destinationAirport: The Airport where the flight is going to. 
      * @param takeoffAirport: The Airport where the flight is taking off from.
@@ -80,6 +82,16 @@ public class Flightplan {
     public Airport getTakeoffAirport() {
         return takeoffAirport;
     }
+
+    public FlightController getAssignedController() {
+        return assignedController;
+    }
+
+    public void setAssignedController(FlightController assignedController) {
+        this.assignedController = assignedController;
+    }
+    
+    
 
     @Override
     public String toString() {

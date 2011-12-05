@@ -2,6 +2,7 @@ package atc.logic;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.prefs.Preferences;
 
 /**
  * A runway of an airplane
@@ -32,6 +33,8 @@ public class Runway {
      */
     private GeoLocation location;
 
+    private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
+    
     /**A runway is made with the following parameters:
      * @param Longitude: The longitude of the runway.
      * @param Latitude: The latitude of the runway.
@@ -71,7 +74,7 @@ public class Runway {
     public void ChangeAvailability(boolean r) {
         timer = new Timer();
         if (r) {
-            timer.schedule(new timerTask(r), 180000); //180,000 milliseconds = 3 minutes
+            timer.schedule(new timerTask(r), (int)(prefs.getDouble("SIM_SPEED", 1) * 180000)); //180,000 milliseconds = 3 minutes
         } else {
             Availability = r;
         }

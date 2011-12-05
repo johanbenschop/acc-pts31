@@ -311,11 +311,11 @@ public class UnityItem extends JComponent implements MouseListener {
      * @param event
      * @return 
      */
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        // We give the fixed relative position.
-        return new Point(67, 16);
-    }
+//    @Override
+//    public Point getToolTipLocation(MouseEvent event) {
+//        // We give the fixed relative position.
+//        return new Point(67, 16);
+//    }
 
     /**
      * Create our cool tooltip
