@@ -499,4 +499,9 @@ public class CTA {
     public Airport getAirport() {
         return airport;
     }
+    
+    public void removeAirplane(Airplane airplane)
+    {
+        airplaneList.remove(airplane);
+    }
 }
