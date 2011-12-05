@@ -192,7 +192,7 @@ public class ACC {
      * @return false is when it was not possible to set the new direction.
      */
     public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
-        if (direction >= 0 && direction <= 360) {
+        if (direction >= -360 && direction <= 360) {
             a.setAimedDirection(direction);
         } else {
             throw new AssignmentException("The given direction is not possible.");
