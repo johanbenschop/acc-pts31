@@ -70,6 +70,7 @@ public final class atc2 extends atc {
         private final Timer timerColision;
 
         public AppFrame() {
+            prefs.putDouble("SIM_SPEED", 1);
             
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -106,8 +107,10 @@ public final class atc2 extends atc {
 
             // Create our custom made menu system bar thingy.
             menuBar = new UnityBar();
-            this.getContentPane().add(menuBar, java.awt.BorderLayout.LINE_START);
-
+            //this.getContentPane().add(menuBar, java.awt.BorderLayout.LINE_START);
+            super.getWwjPanel().add(menuBar, java.awt.BorderLayout.WEST);
+            //super.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
+            
             view = this.getWwd().getView();
 
             // The menu items
@@ -308,6 +311,7 @@ public final class atc2 extends atc {
 //            Audio.play(Statusses.ALARM5);
             
             atc2.airspace.setCurrentACC(atc2.airspace.getACC(0));
+            Audio.play(Statusses.ALARM3);
         }
 
         /**

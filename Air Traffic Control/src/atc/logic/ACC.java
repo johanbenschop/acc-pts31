@@ -38,7 +38,8 @@ public class ACC {
      * an airplane factory
      */
     private AirplaneFactory airplaneFactory;
-
+    private ArrayList<FlightController> flightControllers;
+    
     /***************Constructor**********/
     /** 
      * An ACC is made with its own unique ID linked to a Control Area (CTA).
@@ -50,8 +51,9 @@ public class ACC {
     public ACC(int ID, CTA CTA) {
         this.ID = ID;
         cta = CTA;
-        fp = new ArrayList<Flightplan>();
+        fp = new ArrayList<>();
         airplaneFactoryList = new ArrayList<>();
+        flightControllers = new ArrayList<>();
         try {
             loadAvailableAirplaneList();
         } catch (FileNotFoundException ex) {
