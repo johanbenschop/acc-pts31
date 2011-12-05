@@ -29,7 +29,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private final Airplane airplane;
     private final static Timer locationUpdateTimer = new Timer();
     private final Flightplan flightplan;
-    private static BufferedImage originalImage;
+    private BufferedImage originalImage;
     private GlobeAnnotation tooltip;
 
     public AirplaneRenderable(Flightplan flightplan) {
@@ -78,14 +78,19 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 try {
                     if (airplane.getStatus().equals(Airplane.Statusses.INFLIGHT)) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/airplane.png"));
+                        getAttributes().setImageSource(drawHeading());
                     } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING1)) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineyellow.png"));
+                        getAttributes().setImageSource(drawHeading());
                     } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING2)) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineorange.png"));
+                        getAttributes().setImageSource(drawHeading());
                     } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHED)) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plainered.png"));
+                        getAttributes().setImageSource(drawHeading());
                     } else if (airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
+                        getAttributes().setImageSource(drawHeading());
                     } 
                 } catch (IOException ioe) {
                     ioe.printStackTrace();

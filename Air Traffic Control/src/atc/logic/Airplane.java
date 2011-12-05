@@ -38,6 +38,7 @@ public class Airplane extends Thread {
     private double latitudeTravelled;
     private boolean InLandingQeueu = false;
     private boolean withinRadius = false;
+    private boolean collcheck;
 
     public enum Statusses {
 
@@ -86,6 +87,7 @@ public class Airplane extends Thread {
         this.location = Location;
         this.destinationLocation = DestinationLocation;
         this.Status = Statusses.INTAKEOFFQUEUE;
+        collcheck = false;
 
     }
 
@@ -450,4 +452,14 @@ public class Airplane extends Thread {
     public double getTakeOffAccelerationSpeed() {
         return takeOffAccelerationSpeed;
     }
+
+    public boolean isCollcheck() {
+        return collcheck;
+    }
+
+    public void setCollcheck(boolean collcheck) {
+        this.collcheck = collcheck;
+    }
+    
+    
 }
