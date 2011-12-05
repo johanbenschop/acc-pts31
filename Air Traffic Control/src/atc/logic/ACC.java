@@ -39,6 +39,7 @@ public class ACC {
      */
     private AirplaneFactory airplaneFactory;
     private ArrayList<FlightController> flightControllers;
+    private ArrayList<ACC> adjacentACCList;
     
     /***************Constructor**********/
     /** 
@@ -359,5 +360,28 @@ public class ACC {
             }
         });
         timer.start();
+    }
+
+    public void setAdjacentACCList(ArrayList<ACC> adjacentACCList) {
+        this.adjacentACCList = adjacentACCList;
+    }
+
+    public ArrayList<ACC> getAdjacentACCList() {
+        return adjacentACCList;
+    }
+    
+    public Boolean ContainsFlightplan(Flightplan flightplan)
+    {                
+       return fp.contains(flightplan);
+    }
+    
+    public void removeFlightPlan(Flightplan flightplan)
+    {
+        fp.remove(flightplan);
+    }
+    
+    public void addFlightPlan(Flightplan flightplan)
+    {
+        fp.add(flightplan);
     }
 }
