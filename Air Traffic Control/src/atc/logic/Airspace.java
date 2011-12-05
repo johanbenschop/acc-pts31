@@ -5,6 +5,7 @@
 package atc.logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
@@ -12,14 +13,15 @@ import java.util.ListIterator;
  * @author Robbert
  */
 public class Airspace {
+
     private ArrayList<ACC> ACCs;
     private int ID;
     private ACC currentACC;
-    
     //    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
     private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
     public static ACC acc = new ACC(343, cta);
 //    public static ACC acc2 = new ACC(344, cta2);
+
     public Airspace() {
         ACCs = new ArrayList<ACC>();
 //        for (int e = -50; e < 70; e += 20) {
@@ -49,10 +51,10 @@ public class Airspace {
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 120, 140))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 140, 160))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, 160, 180))));
-   //}
+        //}
 //        
     }
-    
+
     public ACC getACC(int ID) {
         for (ACC acc : ACCs) {
             if (acc.GetID() == ID) {
@@ -61,10 +63,11 @@ public class Airspace {
         }
         return null;
     }
-    
+
     public ListIterator<ACC> GetACCs() {
         return ACCs.listIterator();
     }
+
     public ACC getCurrentACC() {
         return currentACC;
     }
@@ -72,7 +75,7 @@ public class Airspace {
     public void setCurrentACC(ACC currentACC) {
         this.currentACC = currentACC;
     }
-    
+
     public void setCurrentACC(int ID) {
         for (ACC acc : ACCs) {
             if (acc.GetID() == ID) {
@@ -81,7 +84,19 @@ public class Airspace {
         }
         this.currentACC = null;
     }
-    
-    
-    
+
+    public void BorderControl() {
+        for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
+            Flightplan flightplan = it.next();
+            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                    currentACC.unassignFlightFromController(flightplan);
+                    currentACC.assignFlightToController(flightplan);
+                    //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
+                } else {
+                    //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA());
+                }
+            }
+        }
+    }
 }
