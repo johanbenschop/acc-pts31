@@ -282,13 +282,37 @@ public class ACC {
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(),
                 0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
         
-        fp.add(new Flightplan(end, start, flightnumber, departure, arrival, ap));
+        Flightplan flightplan = new Flightplan(end, start, flightnumber, departure, arrival, ap);
+        fp.add(flightplan);
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
         addRunwayTimer(start, ap);
+        
+        assignFlightToController(flightplan);
+        
     }
 
+    /**
+     * Assign a controller to a flightplan based on the contollers busyness.
+     * @param flightplan 
+     */
+    public void assignFlightToController(Flightplan flightplan) {
+        // Assign an controller to an airplane.
+        FlightController assignedController = null;
+        for (FlightController flightController : flightControllers) {
+            if (assignedController != null) {
+                if (flightController.getNumberAssignedFlights() < assignedController.getNumberAssignedFlights()) {
+                    assignedController = flightController;
+                }
+            }
+            else {
+                assignedController = flightController;
+            }
+        }
+        assignedController.assignFlight(flightplan);
+    }
+    
     /**
      * Method to get all Flightplans
      * 
