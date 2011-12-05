@@ -1,5 +1,6 @@
 package atc.logic;
 
+import atc.gui.atc2;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.*;
@@ -12,6 +13,7 @@ public class CTA {
      * The GeoSector of the CTA
      */
     private GeoSector sector;
+    public GeoSector sectorGreater;
     /**
      * A airplane used for getting focus of a selected airplane within the CTA
      */
@@ -427,6 +429,79 @@ public class CTA {
         }
     }
 
+    public void CreateGreaterSector()
+    { 
+                    /*double maxLatitude = (GeoLocation.CalcPosition(60, 60, 0, 100)).getLongitude();
+                    System.out.println("maxLongitude: " + maxLatitude);
+                    double minLatitude = (GeoLocation.CalcPosition(40, 40, 180, 100)).getLongitude();
+                    System.out.println("minLonigtude: " + minLatitude);
+                    double maxLongitude = (GeoLocation.CalcPosition(60, 60, 90, 100)).getLatitude();
+                    System.out.println("maxLatitude: " + maxLongitude);
+                    double minLongitude = (GeoLocation.CalcPosition(40, 40, -90, 100)).getLatitude();
+                    System.out.println("minLonigtude: " + minLongitude);
+                    sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);*/
+                    /*double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMinLatitude(), 90, 100)).getLongitude();
+                    double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 270, 100)).getLongitude();
+                    double maxLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 0, 100)).getLatitude();
+                    double minLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
+                    sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);*/
+                    double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
+                    System.out.println("maxLongitude: " + maxLatitude);
+                    double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
+                    System.out.println("minLonigtude: " + minLatitude);
+                    double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
+                    System.out.println("maxLatitude: " + maxLongitude);
+                    double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
+                    System.out.println("minLonigtude: " + minLongitude);
+                    sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
+                    /*double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
+                    double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLatitude();
+                    double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
+                    double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLatitude();
+                    System.out.println("maxLongitude: " + maxLongitude + "maxLatitude" + maxLatitude);
+                    sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
+                   GeoLocation locationE = GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100);
+                    System.out.println(locationE.getLongitude() + " " +locationE.getLatitude());*/
+                  
+                    /*GeoLocation locationA = GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 45, 100);
+                 System.out.println("Location A: " + locationA.getLongitude() + " " +locationA.getLatitude());
+            GeoLocation locationB = GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMaxLatitude(), 135, 100);
+            GeoLocation locationC = GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 225, 100);
+            GeoLocation locationD = GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMinLatitude(), 315, 100);
+            sectorGreater = new GeoSector(locationD.getLatitude(), locationA.getLatitude(), locationD.getLongitude(), locationA.getLongitude());
+
+        // long vertickaal
+        // lat horizontaal
+        /*for(Airplane a : airplaneList)
+
+
+            GeoSector sector2 = new GeoSector(locationA.getLongitude(), locationB.get, locationC, locationD);
+            sector2.containsGeoLocation(a.getLocation());
+            
+            /*GeoSector airplaneGeoSector = new GeoSector(a.getlocation().);
+            if(a.distFrom(a.getLocation().getLatitude(), a.getLocation().getLongitude(), a.getLocation().getLatitude(), atc2.acc.GetCTA().sector.getMinLongitude()) < 100000)
+            {
+                System.out.println(a.getName() + "HIJ IS ER 100 KM VaNAAF!!");
+               
+            }    */
+        }
+    
+    /*public void CheckAirplaneATC()
+    {
+        for(Airplane airplane : airplaneList)
+        {
+        if(sectorGreater.containsGeoLocation(airplane.getLocation()))
+        {
+            airplane.setVisibleCTA(this.cta);
+            if(sector.containsGeoLocation(airplane.getLocation()))
+            {
+                airplane.setControlCTA(this.cta);
+            }
+        }
+            }
+    }*/
+    
+    
     /**
      * Gets the current airplane
      * @return airplane
