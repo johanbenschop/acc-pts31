@@ -308,10 +308,14 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
-//            Audio.play(Statusses.ALARM5);
             
             atc2.airspace.setCurrentACC(atc2.airspace.getACC(0));
-            Audio.play(Statusses.ALARM3);
+            
+            // TODO Need to remove this and add the based on usage!
+            airspace.getCurrentACC().addFlightController();
+            airspace.getCurrentACC().addFlightController();
+            airspace.getCurrentACC().addFlightController();
+            
         }
 
         /**
