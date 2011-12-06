@@ -57,7 +57,7 @@ public class AirplaneFactory {
      */
     public String ToString() {
         String gegevens;
-        gegevens = "Manufacturer" + this.getManufacturer() + " , type: " + this.getType();
+        gegevens = "Manufacturer: " + this.getManufacturer() + ", type: " + this.getType();
         return gegevens;
     }
     
