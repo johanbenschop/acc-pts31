@@ -21,6 +21,7 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
+import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.SurfaceSector;
 import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
@@ -67,15 +68,15 @@ public final class atc2 extends atc {
         private ArrayList<Airplane> addedAirplanes;
         private final UnityBar menuBar;
         private final View view;
-        private final Timer timerColision;
+        private final Timer timerCollision;
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
-            
+
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
-            
+
             final jpTerminal cli = new jpTerminal();
             cli.setVisible(prefs.getBoolean("CLI_VISIBLE", false));
             super.getWwjPanel().add(cli, java.awt.BorderLayout.SOUTH);
@@ -110,7 +111,7 @@ public final class atc2 extends atc {
             //this.getContentPane().add(menuBar, java.awt.BorderLayout.LINE_START);
             super.getWwjPanel().add(menuBar, java.awt.BorderLayout.WEST);
             //super.getContentPane().add(menuBar, java.awt.BorderLayout.WEST);
-            
+
             view = this.getWwd().getView();
 
             // The menu items
@@ -267,20 +268,26 @@ public final class atc2 extends atc {
                         }
                     });
 
-            this.timerColision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
+            this.timerCollision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
                     for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                         ACC acc = it.next();
-                     acc.GetCTA().Collision();
-                        
+                        acc.GetCTA().Collision();
+                        // TODO have to be made working in order to delete inactive airplanes
+//                        Flightplan fp = currentAirplaneAnnotation.getFlightplan();
+//                        Airplane airplane = fp.getAirplane();
+//                        if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) | 
+//                                airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+//                            removeAirplaneFromLayer(airplaneLayer, fp);
+//                        }
                         
                     }
                     findCollisions();
                     getWwd().redraw();
                 }
             });
-            timerColision.start();
+            timerCollision.start();
 
             // Add the graticule layer
 
@@ -308,14 +315,14 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
-            
+
             atc2.airspace.setCurrentACC(atc2.airspace.getACC(0));
-            
+
             // TODO Need to remove this and add the based on usage!
             airspace.getCurrentACC().addFlightController();
             airspace.getCurrentACC().addFlightController();
             airspace.getCurrentACC().addFlightController();
-            
+
         }
 
         /**
@@ -364,7 +371,7 @@ public final class atc2 extends atc {
                                     }
                                 }
                             });
-                } else if (p.getStatus() == Airplane.Statusses.CRASHED){
+                } else if (p.getStatus() == Airplane.Statusses.CRASHED) {
                     Audio.play(Statusses.ALARM3);
                 }
             }
@@ -385,41 +392,41 @@ public final class atc2 extends atc {
         private void buildAirspaceLayer() {
 
             for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                                            ACC acc = it.next();
-            ShapeAttributes attr = new BasicShapeAttributes();
-                        ShapeAttributes attr2 = new BasicShapeAttributes();
-            //attr.setInteriorMaterial(Material.WHITE);
-            attr.setOutlineMaterial(Material.RED);
-            attr.setInteriorOpacity(0);
-            attr.setOutlineOpacity(0.7);
-            attr.setOutlineWidth(3);
-            acc.GetCTA().CreateGreaterSector();
-            SurfaceSector s2 = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
-            attr2.setOutlineMaterial(Material.GREEN);
-            attr2.setInteriorOpacity(0);
-            attr2.setOutlineOpacity(0.7);
-            attr2.setOutlineWidth(3);
-            s2.setAttributes(attr2);
-            s2.setPathType(AVKey.RHUMB_LINE);
-            attr.setEnableAntialiasing(true);
+                ACC acc = it.next();
+                ShapeAttributes attr = new BasicShapeAttributes();
+                ShapeAttributes attr2 = new BasicShapeAttributes();
+                //attr.setInteriorMaterial(Material.WHITE);
+                attr.setOutlineMaterial(Material.RED);
+                attr.setInteriorOpacity(0);
+                attr.setOutlineOpacity(0.7);
+                attr.setOutlineWidth(3);
+                acc.GetCTA().CreateGreaterSector();
+                SurfaceSector s2 = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
+                attr2.setOutlineMaterial(Material.GREEN);
+                attr2.setInteriorOpacity(0);
+                attr2.setOutlineOpacity(0.7);
+                attr2.setOutlineWidth(3);
+                s2.setAttributes(attr2);
+                s2.setPathType(AVKey.RHUMB_LINE);
+                attr.setEnableAntialiasing(true);
 
-             
-            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
-             //Temporarely
 
-            surfaceSector.setAttributes(attr);
-            surfaceSector.setPathType(AVKey.RHUMB_LINE);
-                       airspaceLayer = new RenderableLayer();
-            airspaceLayer.setName("Airspaces");
-            airspaceLayer.setPickEnabled(false);
-            airspaceLayer.addRenderable(surfaceSector);
-            airspaceLayer.addRenderable(s2);
-            insertBeforePlacenames(this.getWwd(), airspaceLayer);
-            
+                SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+                //Temporarely
+
+                surfaceSector.setAttributes(attr);
+                surfaceSector.setPathType(AVKey.RHUMB_LINE);
+                airspaceLayer = new RenderableLayer();
+                airspaceLayer.setName("Airspaces");
+                airspaceLayer.setPickEnabled(false);
+                airspaceLayer.addRenderable(surfaceSector);
+                airspaceLayer.addRenderable(s2);
+                insertBeforePlacenames(this.getWwd(), airspaceLayer);
+
             }
 
-            
- 
+
+
 
 //            OrbitView view = this.getOrbitView();
 //            if (view != null) {
@@ -458,7 +465,7 @@ public final class atc2 extends atc {
             this.getWwd().addSelectListener(new ClickAndGoSelectListener(
                     this.getWwd(), AirportRenderable.class, 20000));
 
-            
+
 //            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
 //                ACC acc = it.next();
             //airspace.setCurrentACC(0);
@@ -480,8 +487,7 @@ public final class atc2 extends atc {
 //                addAirportToLayer(airportLayer, litr.next());
             
           
-//        }
-      }
+       }
 
         /**
          * Adds an airport to the airport layer.
@@ -548,11 +554,11 @@ public final class atc2 extends atc {
                 public void actionPerformed(ActionEvent event) {
                     for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                         ACC acc = it.next();
-                    ListIterator<Flightplan> litr = acc.getFlightplans();
+                        ListIterator<Flightplan> litr = acc.getFlightplans();
 
-                    while (litr.hasNext()) {
-                        addAirplaneToLayer(airplaneLayer, litr.next());
-                    }
+                        while (litr.hasNext()) {
+                            addAirplaneToLayer(airplaneLayer, litr.next());
+                        }
                     }
                 }
             });
@@ -566,13 +572,35 @@ public final class atc2 extends atc {
          */
         private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
+            AirplaneRenderable airplanerenderable = null;
 
             if (!addedAirplanes.contains(airplane)) {
                 addedAirplanes.add(airplane);
-                layer.addRenderable(new AirplaneRenderable(flightplan));
+                airplanerenderable = new AirplaneRenderable(flightplan);
+                layer.addRenderable(airplanerenderable);
             }
         }
 
+        /**
+         * Removes an airplane from the airplane layer.
+         * @param layer
+         * @param flightplan 
+         */
+        private void removeAirplaneFromLayer(RenderableLayer layer, Flightplan flightplan) {
+            Airplane airplane = flightplan.getAirplane();
+
+            if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) | 
+                    airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+                if (addedAirplanes.contains(airplane)) {
+                    addedAirplanes.remove(airplane);
+                    layer.removeRenderable(currentAirplaneAnnotation);
+                    airplane.interrupt();
+                    currentAirplaneAnnotation = null;
+                    airplane = null;
+                }
+            }
+        }
+              
         /** 
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
