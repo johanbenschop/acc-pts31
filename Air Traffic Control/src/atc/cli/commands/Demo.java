@@ -34,8 +34,8 @@ public class Demo {
     public static String addFlightSchipholEindhoven() {
         CommandLine.println("Adding flight: Schiphol - Eindhoven");
         AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(580);
-        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
+        Airport ap_arr = atc2.airspace.GetAirport(580);
+        Airport ap_dest = atc2.airspace.GetAirport(585);
         GregorianCalendar cal = new GregorianCalendar();
         atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
@@ -44,8 +44,8 @@ public class Demo {
     public static String addFlightEindhovenSchiphol() {
         CommandLine.println("Adding flight: Eindhoven - Schiphol");
         AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
-        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(580);
+        Airport ap_arr = atc2.airspace.GetAirport(585);
+        Airport ap_dest = atc2.airspace.GetAirport(580);
         GregorianCalendar cal = new GregorianCalendar();
         atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
@@ -60,8 +60,8 @@ public class Demo {
     public static String addFlightEindhovenBudel() {
         CommandLine.println("Adding flight: Eindhoven - Budel");
         AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
-        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(581);
+        Airport ap_arr = atc2.airspace.GetAirport(585);
+        Airport ap_dest = atc2.airspace.GetAirport(581);
         GregorianCalendar cal = new GregorianCalendar();
         atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
@@ -70,8 +70,8 @@ public class Demo {
     public static String addFlightBudelEindhoven() {
         CommandLine.println("Adding flight: Budel - Eindhoven");
         AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
-        Airport ap_arr = atc2.airspace.getCurrentACC().GetCTA().GetAirport(581);
-        Airport ap_dest = atc2.airspace.getCurrentACC().GetCTA().GetAirport(585);
+        Airport ap_arr = atc2.airspace.GetAirport(581);
+        Airport ap_dest = atc2.airspace.GetAirport(585);
         GregorianCalendar cal = new GregorianCalendar();
         atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
