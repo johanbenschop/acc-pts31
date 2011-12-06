@@ -85,15 +85,15 @@ public class Runway {
      */
     private class timerTask extends TimerTask {
 
-        boolean availeble;
+        boolean available;
 
-        private timerTask(boolean availeble) {
-            this.availeble = availeble;
+        private timerTask(boolean available) {
+            this.available = available;
         }
 
         @Override
         public void run() {
-            Availability = availeble;
+            Availability = available;
             timer.cancel();
         }
     }
