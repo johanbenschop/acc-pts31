@@ -12,36 +12,126 @@ import java.util.prefs.Preferences;
 public class Airplane extends Thread {
 
     /**************Datafields***********/
+    /**
+     * The max speed of the airplane
+     */
     private int MaxSpeed;
+    /**
+     * The min speed of the airplane
+     */
     private int MinSpeed;
+    /**
+     * The weight of the airplane
+     */
     private int Weight;
+    /**
+     * The type of the airplane
+     */
     private String Type;
+    /**
+     * The manufacturer of the airplane
+     */
     private String Manufacturer;
+    /**
+     * The height of the airplane
+     */
     private int PlaneHeight;
+    /**
+     * The width of the airplane
+     */
     private int PlaneWidth;
+    /**
+     * The length of the airplane
+     */
     private int PlaneLength;
-    private int AirplaneNumber; //Number
-    private double Direction; // Degree's
-    private double Speed; // Kilometers per hour
-    private int MaxFuel;  // Gallons
-    private int CurrentFuel; // Gallons
-    private int FuelUsage; // Gallons
-    private double Altitude; // Kilometers
-    private double AimedSpeed; // Kilometers per hour
-    private double AimedDirection; // Degree's (could be changed)
-    private double AimedAltitude; // Kilometers
+    /**
+     * The number of the airplane
+     */
+    private int AirplaneNumber;
+    /**
+     * The direction the airplane is facing in degrees
+     */
+    private double Direction;
+    /**
+     * The speed of the airplane in km/h
+     */
+    private double Speed;
+    /**
+     * The maximal fuel the airplane can contain in gallons
+     */
+    private int MaxFuel;
+    /**
+     * The current fuel of the airplane in gallons
+     */
+    private int CurrentFuel;
+    /**
+     * The fuel usage in gallons                                        *per wat??????*
+     */
+    private int FuelUsage;
+    /**
+     * The altitude in km of the airplane
+     */
+    private double Altitude;
+    /**
+     * The speed the airplane must get at in km/h
+     */
+    private double AimedSpeed;
+    /**
+     * The direction the airplane has to get facing in degrees
+     */
+    private double AimedDirection;
+    /**
+     * The altitude the airplane must get at in km
+     */
+    private double AimedAltitude;
+    /**
+     * The status of the airplane
+     */
     private Statusses Status;
+    /**
+     * The takeoff acceleration speed of the airplane
+     */
     private double takeOffAccelerationSpeed = 0.667; // Kilometers per hour
+    /**
+     * The destination location as a GeoLocation
+     */
     private GeoLocation destinationLocation;
+    /**
+     * The current location of the airplane as a GeoLocation
+     */
     private GeoLocation location;
-    private double distanceTravelled; // distance travelled per 1/10e sec in km/h.
+    /**
+     * The distance the airplane has travelled per 1/10e sec in km/h
+     */
+    private double distanceTravelled;
+    /**
+     * The longitude the airplane has travelled                           klopt dit???
+     */
     private double longitudeTravelled;
+    /**
+     * The latitude the airplane has travelled                              klopt dit???
+     */
     private double latitudeTravelled;
+    /**
+     * Whether the airplane is in a landing queue
+     */
     private boolean InLandingQeueu = false;
+    /**
+     * Whether the airplane is within radius of the destination                      klopt dit??
+     */
     private boolean withinRadius = false;
+    /**
+     * Whether the airplane is colliding with another airplane
+     */
     private boolean collcheck;
+    /**
+     *                                                                              wat is dit?
+     */
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
+    /**
+     * Enumerator of possible statusses a airplane can have
+     */
     public enum Statusses {
 
         STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING,
