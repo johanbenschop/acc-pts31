@@ -7,6 +7,8 @@ package atc.logic;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.io.*;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -14,28 +16,44 @@ import java.util.ListIterator;
  */
 public class Airspace {
 
+    private ArrayList<Airport> airportList;
     private ArrayList<ACC> ACCs;
     private int ID = 0;
     ///!!!!!private int IDStart = 1000;
     private ACC currentACC;
     //    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
-    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
-    public static ACC acc = new ACC(343, cta);
+//    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
+//    public static ACC acc = new ACC(343, cta);
 //    public static ACC acc2 = new ACC(344, cta2);
 
     public Airspace() {
+        airportList = new ArrayList<Airport>();
         ACCs = new ArrayList<ACC>();
-//        for (int e = -50; e < 70; e += 20) {
-//            !!!!!!!!ID = IDStart;
-//        
-//        for (int i = -140; i < 160; i += 20) {
-//         ACCs.add(new ACC(ID, new CTA(new GeoSector(e, e+20, i, i+20))));  
-//        !!!!!ID++;
-//        }
-//       !!!!! IDStart+= 100;
-//    //}
+        try {
+            loadAirportList();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        GeoSector sector;
+        for (int hori = -50; hori < 70; hori += 20) {
+
+
+            for (int verti = -180; verti < 180; verti += 20) {
+                sector = new GeoSector(hori, hori + 20, verti, verti + 20);
+                CTA cta = new CTA(sector, getAirportCTA(sector));
+                ACCs.add(new ACC(ID, cta));
+                ID++;
+            }
+
+
+        }
+        currentACC = ACCs.get(35);
+        System.err.println(currentACC.GetID());
+        System.err.println(currentACC.GetCTA().getSector().getMaxLatitude());
 //
-        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
+//        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -160, -140))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -140, -120))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -120, -100))));
@@ -86,14 +104,87 @@ public class Airspace {
         }
         this.currentACC = null;
     }
-    
+
+    public void loadAirportList() throws FileNotFoundException, IOException {
+        FileInputStream fstream = new FileInputStream("airports.dat");
+        DataInputStream in = new DataInputStream(fstream);
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+        String strline;
+        while ((strline = br.readLine()) != null) {
+            try {
+                String[] props = strline.split(",");
+                int id = Integer.parseInt(props[0]);
+                String name = props[1].replaceAll("\"", "");
+                String city = props[2].replaceAll("\"", "");
+                String country = props[3].replaceAll("\"", "");
+                String iata_faa = props[4].replaceAll("\"", "");
+                String icao = props[5].replaceAll("\"", "");
+                double latitude = Double.parseDouble(props[6]);
+                double longitude = Double.parseDouble(props[7]);
+                int altitude = Integer.parseInt(props[8]);
+                double timezone = Double.parseDouble(props[9]);
+                String dst = props[10].replaceAll("\"", "");
+
+                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+
+                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                airportList.add(airport);
+            } catch (NumberFormatException | InputMismatchException e) {
+                System.out.println("Corrupt data line on airports.dat...");
+            }
+        }
+    }
+
+    public ArrayList<Airport> getAirportCTA(GeoSector sector) {
+        ArrayList<Airport> airportlist = new ArrayList<Airport>();
+        for (Airport airport : airportList) {
+            if (sector.containsGeoLocation(airport.getLocation())) {
+                airportlist.add(airport);
+            }
+        }
+        return airportlist;
+    }
+
+    /**
+     * Turns the airport list into a Iterator
+     * @return Iterator airportList
+     */
+    public ListIterator<Airport> GetAirports() {
+        return airportList.listIterator();
+    }
+
+    /**
+     * Returns the airport with the given AirportID
+     * @return
+     */
+    public Airport GetAirport(int AirportID) throws NullPointerException {
+        Airport airport = null;
+        for (Airport a : airportList) {
+            if (a.getAirportID() == AirportID) {
+                airport = a;
+            }
+        }
+        try {
+            if (airport != null) {
+                return airport;
+            } else if (airport == null) {
+                new NullPointerException("Airport doesn't exist.");
+            }
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
     /**
      * Gets all the adjacent ACC's from the current ACC and returns this ArrayList.
      * @param ACCID
      * @return Arraylist with adjacent ACC's
      */
     public ArrayList getAdjacentACCs(int CurrentACCID) {
-            ArrayList<ACC> adjacentACCList = new ArrayList();
+        ArrayList<ACC> adjacentACCList = new ArrayList();
         for (ACC acc : ACCs) {
             if (((CurrentACCID - 101) == acc.GetID()) || ((CurrentACCID - 100) == acc.GetID())
                     || ((CurrentACCID - 99) == acc.GetID()) || ((CurrentACCID - 1) == acc.GetID())
@@ -125,27 +216,27 @@ public class Airspace {
                     }
                 }
             }
-        
-        ///DIT BEWAREN (PAUL)
+
+            ///DIT BEWAREN (PAUL)
         /*for(ACC adjacentACC : currentACC.getAdjacentACCList())
-        {
-        for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
+            {
+            for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
             Flightplan flightplan = it.next();
             if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                    currentACC.unassignFlightFromController(flightplan);
-                    currentACC.assignFlightToController(flightplan);
-                    adjacentACC.removeFlightPlan(flightplan);
-                    currentACC.addFlightPlan(flightplan);
-                    adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
-                    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-                    //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
-                } else {
-                    //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA())
-                    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-                }
+            if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+            currentACC.unassignFlightFromController(flightplan);
+            currentACC.assignFlightToController(flightplan);
+            adjacentACC.removeFlightPlan(flightplan);
+            currentACC.addFlightPlan(flightplan);
+            adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
+            currentACC.GetCTA().addAirplane(flightplan.getAirplane());
+            //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
+            } else {
+            //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA())
+            currentACC.GetCTA().addAirplane(flightplan.getAirplane());
             }
-        }*/
+            }
+            }*/
         }
     }
 }
