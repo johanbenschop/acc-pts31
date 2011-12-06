@@ -459,15 +459,28 @@ public final class atc2 extends atc {
                     this.getWwd(), AirportRenderable.class, 20000));
 
             
-            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                ACC acc = it.next();
-            ListIterator<Airport> litr = acc.GetCTA().GetAirports();
+//            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+//                ACC acc = it.next();
+            //airspace.setCurrentACC(0);
+            ACC acc = airspace.getCurrentACC();
+            CTA cta = acc.GetCTA();
+            if (cta.GetAirports() != null) {
+                ListIterator<Airport> litr = cta.GetAirports();
+                while (litr.hasNext()) {
+                    Airport airport = litr.next();
+                    addAirportToLayer(airportLayer, airport);
+                    System.err.println(airport.getAirportID());
+                }
 
-            while (litr.hasNext()) {
-                addAirportToLayer(airportLayer, litr.next());
+            } else {
+                System.err.println("it dun work");
+            }
+
+//            while (litr.hasNext()) {
+//                addAirportToLayer(airportLayer, litr.next());
             
-          }
-        }
+          
+//        }
       }
 
         /**

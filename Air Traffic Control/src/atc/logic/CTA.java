@@ -29,7 +29,7 @@ public class CTA {
     /**
      * A list used for collecting all the airports within the CTA
      */
-    private ArrayList<Airport> airportList;
+    private ArrayList<Airport> airportList = new ArrayList<Airport>();
 
     /***************Constructor**********/
     /**
@@ -38,19 +38,19 @@ public class CTA {
      * @param Width is the width of the CTA
      * @param Length is the length of the CTA
      */
-    public CTA(GeoSector location) {
+    public CTA(GeoSector location, ArrayList<Airport> airportlist) {
         this.sector = location;
 
         airplaneList = new ArrayList<>();
-        airportList = new ArrayList<>();
+        this.airportList = airportlist;
 
-        try {
-            loadAirportList(sector);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            loadAirportList(sector);
+//        } catch (FileNotFoundException ex) {
+//            ex.printStackTrace();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     /**
@@ -182,107 +182,6 @@ public class CTA {
                                         crashobject.setStatus(Airplane.Statusses.CRASHING1);
                                     }
                                 }
-                                //haxxorz method but it works for 2 airplanes.
-                                //more then 2 doesnt though same issue random collisions, less then the first though.
-                                //numbers are based on trial and error.
-//                                if (time1 >= time2) {
-//                                    if (time1 - time2 <= 1 && time1 - time2 >= -1) {
-//                                        target.setStatus(Airplane.Statusses.CRASHED);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
-//                                    } else if (time1 - time2 <= 400 && time1 - time2 >= -400) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING2);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
-//                                    } else if (time1 - time2 <= 450 && time1 - time2 >= -450) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING1);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
-//                                    }
-//                                } else {
-//                                    if (time1 - time2 <= 1 && time1 - time2 >= -1) {
-//                                        target.setStatus(Airplane.Statusses.CRASHED);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
-//                                    } else if (time1 - time2 <= 400 && time1 - time2 >= -400) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING2);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
-//                                    } else if (time1 - time2 <= 450 && time1 - time2 >= -450) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING1);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
-//                                    }
-//                                }
-
-//                                    if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
-//                                            target.setStatus(Airplane.Statusses.CRASHED);
-//                                            crashobject.setStatus(Airplane.Statusses.CRASHED);
-//                                            System.out.println("boem optie1");
-//                                            System.out.println(Double.toString(time1 - time2));
-//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                    } else {
-//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
-//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
-//                                        System.out.println("Blijven vliegen optie 1");
-//                                        System.out.println(Double.toString(time1 - time2));
-//                                        System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                        System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                    }
-//                                } else if (time1 - time2 <= 3 / ((double) crashobject.getSpeed() / 3600) && time1 - time2 >= -3000 / ((double) crashobject.getSpeed() / 3.6)) {
-//                                    if (time1 - time2 <= 3 / ((double) target.getSpeed() / 3.6) && time1 - time2 >= -3000 / ((double) target.getSpeed() / 3.6)) {
-//                                        if (time1 - time2 <= 0.5 / ((double) target.getSpeed() / 3.6)) {
-//                                            target.setStatus(Airplane.Statusses.CRASHED);
-//                                            crashobject.setStatus(Airplane.Statusses.CRASHED);
-//                                            System.out.println("boem optie 2");
-//                                            System.out.println(Double.toString(time1 - time2));
-//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                            System.out.println(0.5 / ((double) target.getSpeed() / 3.6));
-//                                        } else if (time1 - time2 <= 1 / ((double) target.getSpeed() / 3.6)) {
-//                                            target.setStatus(Airplane.Statusses.CRASHING2);
-//                                            crashobject.setStatus(Airplane.Statusses.CRASHING2);
-//                                            System.out.println("nog net geen boem optie 2");
-//                                            System.out.println(Double.toString(time1 - time2));
-//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                        } else {
-//                                            target.setStatus(Airplane.Statusses.CRASHING1);
-//                                            crashobject.setStatus(Airplane.Statusses.CRASHING1);
-//                                            System.out.println("nog lang geen boem optie 2");
-//                                            System.out.println(Double.toString(time1 - time2));
-//                                            System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                            System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                        }
-//                                    } else {
-//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
-//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
-//                                        System.out.println("Wij blijven vliegen optie 2");
-//                                        System.out.println(Double.toString(time1 - time2));
-//                                        System.out.println(30 / ((double) crashobject.getSpeed() / 3600));
-//                                        System.out.println(-30000 / ((double) crashobject.getSpeed() / 3.6));
-//                                    }
-//                                }
-
-//                                if ((time1 == time2) && time1 <= 12000) {
-//                                    if (time1 <= 5) {
-//                                        target.setStatus(Airplane.Statusses.CRASHED);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHED);
-//                                    } else if (time1 <= 3600) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING2);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING2);
-//                                    } else if (time1 <= 12000) {
-//                                        target.setStatus(Airplane.Statusses.CRASHING1);
-//                                        crashobject.setStatus(Airplane.Statusses.CRASHING1);
-//                                    } 
-//                                    else if ((time1 >= 12000) || !target.getStatus().equals(Airplane.Statusses.CRASHING1) || !target.getStatus().equals(Airplane.Statusses.CRASHING2) || !target.getStatus().equals(Airplane.Statusses.CRASHED)) {
-//                                        target.setStatus(Airplane.Statusses.INFLIGHT);
-//                                        crashobject.setStatus(Airplane.Statusses.INFLIGHT);
-//                                    }
-//                                } else if (time1 != time2) {
-//                                    System.err.println("time not equal!");
-//                                    System.err.println(time1);
-//                                    System.err.println(time2);
-//                                }
-
-//                            } else {
-//                                target.setStatus(Airplane.Statusses.INFLIGHT);
-//                                crashobject.setStatus(Airplane.Statusses.INFLIGHT);
                             }
                         }
                     }
@@ -311,17 +210,6 @@ public class CTA {
                 * Math.cos(lon2 - lon1)) * earthRadius;
         distance = distance * 1000;
         return distance;
-//        double dLat = Math.toRadians(lat2 - lat1);
-//        double dLng = Math.toRadians(lon2 - lon1);
-//        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-//                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-//                * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//        double dist = earthRadius * c;
-
-//        int meterConversion = 1609;
-
-//        return dist;
     }
 
     /**
@@ -357,77 +245,77 @@ public class CTA {
      * @throws FileNotFoundException if the file doesn't exist
      * @throws IOException 
      */
-    public void loadAirportList() throws FileNotFoundException, IOException {
-        FileInputStream fstream = new FileInputStream("airports.dat");
-
-        DataInputStream in = new DataInputStream(fstream);
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        String strline;
-        while ((strline = br.readLine()) != null) {
-            try {
-                String[] props = strline.split(",");
-                int id = Integer.parseInt(props[0]);
-                String name = props[1].replaceAll("\"", "");
-                String city = props[2].replaceAll("\"", "");
-                String country = props[3].replaceAll("\"", "");
-                String iata_faa = props[4].replaceAll("\"", "");
-                String icao = props[5].replaceAll("\"", "");
-                double latitude = Double.parseDouble(props[6]);
-                double longitude = Double.parseDouble(props[7]);
-                int altitude = Integer.parseInt(props[8]);
-                double timezone = Double.parseDouble(props[9]);
-                String dst = props[10].replaceAll("\"", "");
-
-                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
-
-                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
-                airportList.add(airport);
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Corrupt data line on airports.dat...");
-            }
-        }
-    }
+//    public void loadAirportList() throws FileNotFoundException, IOException {
+//        FileInputStream fstream = new FileInputStream("airports.dat");
+//
+//        DataInputStream in = new DataInputStream(fstream);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//
+//        String strline;
+//        while ((strline = br.readLine()) != null) {
+//            try {
+//                String[] props = strline.split(",");
+//                int id = Integer.parseInt(props[0]);
+//                String name = props[1].replaceAll("\"", "");
+//                String city = props[2].replaceAll("\"", "");
+//                String country = props[3].replaceAll("\"", "");
+//                String iata_faa = props[4].replaceAll("\"", "");
+//                String icao = props[5].replaceAll("\"", "");
+//                double latitude = Double.parseDouble(props[6]);
+//                double longitude = Double.parseDouble(props[7]);
+//                int altitude = Integer.parseInt(props[8]);
+//                double timezone = Double.parseDouble(props[9]);
+//                String dst = props[10].replaceAll("\"", "");
+//
+//                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+//
+//                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+//                airportList.add(airport);
+//            } catch (NumberFormatException | InputMismatchException e) {
+//                System.out.println("Corrupt data line on airports.dat...");
+//            }
+//        }
+//    }
 
     /**
      * Loads airports from the airports.dat file and filters the data for the GeoSecor
      * @throws FileNotFoundException if the file doesn't exist
      * @throws IOException 
      */
-    public void loadAirportList(GeoSector sector) throws FileNotFoundException, IOException {
-        FileInputStream fstream = new FileInputStream("airports.dat");
-
-        DataInputStream in = new DataInputStream(fstream);
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-        String strline;
-        while ((strline = br.readLine()) != null) {
-            try {
-                String[] props = strline.split(",");
-                int id = Integer.parseInt(props[0]);
-                String name = props[1].replaceAll("\"", "");
-                String city = props[2].replaceAll("\"", "");
-                String country = props[3].replaceAll("\"", "");
-                String iata_faa = props[4].replaceAll("\"", "");
-                String icao = props[5].replaceAll("\"", "");
-                double latitude = Double.parseDouble(props[6]);
-                double longitude = Double.parseDouble(props[7]);
-                int altitude = Integer.parseInt(props[8]);
-                double timezone = Double.parseDouble(props[9]);
-                String dst = props[10].replaceAll("\"", "");
-
-                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
-                if (!sector.containsGeoLocation(location)) {
-                    continue; // The airport is not within the CTA
-                }
-
-                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
-                airportList.add(airport);
-            } catch (NumberFormatException | InputMismatchException e) {
-                System.out.println("Corrupt data line on airports.dat...");
-            }
-        }
-    }
+//    public void loadAirportList(GeoSector sector) throws FileNotFoundException, IOException {
+//        FileInputStream fstream = new FileInputStream("airports.dat");
+//
+//        DataInputStream in = new DataInputStream(fstream);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//
+//        String strline;
+//        while ((strline = br.readLine()) != null) {
+//            try {
+//                String[] props = strline.split(",");
+//                int id = Integer.parseInt(props[0]);
+//                String name = props[1].replaceAll("\"", "");
+//                String city = props[2].replaceAll("\"", "");
+//                String country = props[3].replaceAll("\"", "");
+//                String iata_faa = props[4].replaceAll("\"", "");
+//                String icao = props[5].replaceAll("\"", "");
+//                double latitude = Double.parseDouble(props[6]);
+//                double longitude = Double.parseDouble(props[7]);
+//                int altitude = Integer.parseInt(props[8]);
+//                double timezone = Double.parseDouble(props[9]);
+//                String dst = props[10].replaceAll("\"", "");
+//
+//                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+//                if (!sector.containsGeoLocation(location)) {
+//                    continue; // The airport is not within the CTA
+//                }
+//
+//                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+//                airportList.add(airport);
+//            } catch (NumberFormatException | InputMismatchException e) {
+//                System.out.println("Corrupt data line on airports.dat...");
+//            }
+//        }
+//    }
 
     public void CreateGreaterSector()
     { 
