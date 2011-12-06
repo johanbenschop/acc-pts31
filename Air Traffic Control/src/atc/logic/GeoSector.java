@@ -8,13 +8,40 @@ import gov.nasa.worldwind.geom.Sector;
  */
 public class GeoSector {
 
+    /**************Datafields***********/
+    /**
+     * The minimal latitude of the GeoSector
+     */
     private final double minLatitude;
+    /**
+     * The maximal latitude of the GeoSector
+     */
     private final double maxLatitude;
+    /**
+     * The minimal longitude of the GeoSector
+     */
     private final double minLongitude;
+    /**
+     * The maximal longitude of the GeoSector
+     */
     private final double maxLongitude;
+    /**
+     * The angular difference between the sector's minimum and maximum latitudes.
+     */
     private final double deltaLatitude;
+    /**
+     * The angular difference between the sector's minimum and maximum longitudes
+     */
     private final double deltaLongitude;
 
+    /***************Constructor**********/
+    /**
+     * This is a constructor used for making a GeoSector it contains a min/max Latitude and min/max Longitude
+     * @param minLatitude is the minimal latitude of the GeoSector
+     * @param maxLatitude is the maximal latitude of the GeoSector
+     * @param minLongitude is the minimal longitude of the GeoSector
+     * @param maxLongitude is the maximal longitude of the GeoSector
+     */
     public GeoSector(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude) {
         this.minLatitude = minLatitude;
         this.maxLatitude = maxLatitude;
@@ -25,39 +52,10 @@ public class GeoSector {
     }
 
     /**
-     * Returns the angular difference between the sector's minimum and maximum latitudes: max - min
+     * 
      *
-     * @return The angular difference between the sector's minimum and maximum latitudes.
+     * 
      */
-    public double getDeltaLatitude() {
-        return deltaLatitude;
-    }
-
-    /**
-     * Returns the angular difference between the sector's minimum and maximum longitudes: max - min.
-     *
-     * @return The angular difference between the sector's minimum and maximum longitudes
-     */
-    public double getDeltaLongitude() {
-        return deltaLongitude;
-    }
-
-    public double getMaxLatitude() {
-        return maxLatitude;
-    }
-
-    public double getMaxLongitude() {
-        return maxLongitude;
-    }
-
-    public double getMinLatitude() {
-        return minLatitude;
-    }
-
-    public double getMinLongitude() {
-        return minLongitude;
-    }
-
     public boolean isWithinLatLonLimits() {
         return minLatitude >= -90 && maxLatitude <= 90
                 && minLongitude >= -180 && maxLongitude <= 180;
@@ -103,7 +101,6 @@ public class GeoSector {
         if (that.minLatitude > this.maxLatitude) {
             return false;
         }
-
         return true;
     }
 
@@ -137,7 +134,6 @@ public class GeoSector {
         if (that.minLatitude >= this.maxLatitude) {
             return false;
         }
-
         return true;
     }
 
@@ -206,7 +202,6 @@ public class GeoSector {
         if (minLongitude != sector.minLongitude) {
             return false;
         }
-
         return true;
     }
 
@@ -220,5 +215,30 @@ public class GeoSector {
                 && location.getLatitude() <= maxLatitude
                 && location.getLongitude() >= minLongitude
                 && location.getLongitude() <= maxLongitude);
+    }
+
+    /**************Getters**************/
+    public double getDeltaLatitude() {
+        return deltaLatitude;
+    }
+
+    public double getDeltaLongitude() {
+        return deltaLongitude;
+    }
+
+    public double getMaxLatitude() {
+        return maxLatitude;
+    }
+
+    public double getMaxLongitude() {
+        return maxLongitude;
+    }
+
+    public double getMinLatitude() {
+        return minLatitude;
+    }
+
+    public double getMinLongitude() {
+        return minLongitude;
     }
 }
