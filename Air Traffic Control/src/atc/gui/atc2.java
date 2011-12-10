@@ -3,7 +3,7 @@ package atc.gui;
 import SysBar.UnityBar;
 import SysBar.UnityItem;
 import atc.cli.jpTerminal;
-import atc.gui.Audio.Statusses;
+import atc.gui.Audio.Sound;
 import atc.logic.ACC;
 import atc.logic.Airplane;
 import atc.logic.Airport;
@@ -332,7 +332,7 @@ public final class atc2 extends atc {
             menuBar.clearAlerts();
             for (final Airplane p : addedAirplanes) {
                 if (p.getStatus() == Airplane.Statusses.CRASHING2) {
-                    Audio.play(Statusses.ALARM5);
+                    Audio.play(Sound.ALARM5, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -352,7 +352,7 @@ public final class atc2 extends atc {
                                 }
                             });
                 } else if (p.getStatus() == Airplane.Statusses.CRASHING1) {
-                    Audio.play(Statusses.ALARM4);
+                    Audio.play(Sound.ALARM4, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -372,7 +372,7 @@ public final class atc2 extends atc {
                                 }
                             });
                 } else if (p.getStatus() == Airplane.Statusses.CRASHED) {
-                    Audio.play(Statusses.ALARM3);
+                    Audio.play(Sound.ALARM3, 3);
                 }
             }
         }
