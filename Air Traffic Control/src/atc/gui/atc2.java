@@ -429,9 +429,13 @@ public final class atc2 extends atc {
                             SurfaceSector surfaceSector = (SurfaceSector) o;
                             Object o2 = surfaceSector.getValue("ACC");
                             if (o2 != null && o2 instanceof ACC) {
+                                // We found the correct object! Now we need to cast and build the needed layer.
                                 ACC acc = (ACC) o2;
                                 buildAirspaceLayer(acc);
+                                // Since the user has selected his or hers CTA we don't need to show this layer anymore.
                                 airspacesLayer.setEnabled(false);
+                                // NOTE: we keep this alive since RAM is more abundant than CPU.
+                                // The user can always decide to switch CTA and then we would need to remake the CTA, wich is CPU intesive.
                             }
                         }
                     }
