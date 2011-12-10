@@ -10,20 +10,22 @@ import atc.logic.Airport;
 import atc.logic.Airspace;
 import atc.logic.CTA;
 import atc.logic.Flightplan;
-import atc.logic.GeoSector;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.SurfaceSector;
+import gov.nasa.worldwind.view.orbit.BasicOrbitViewLimits;
+import gov.nasa.worldwind.view.orbit.OrbitView;
+import gov.nasa.worldwind.view.orbit.OrbitViewLimits;
 import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
 import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.Color;
@@ -61,6 +63,7 @@ public final class atc2 extends atc {
         private AirportRenderable currentAirportAnnotation;
         private AirplaneRenderable currentAirplaneAnnotation;
         protected RenderableLayer airspaceLayer;
+        protected RenderableLayer airspacesLayer;
         protected RenderableLayer airportLayer;
         protected RenderableLayer airplaneLayer;
         private GlobeAnnotation tooltipAnnotation;
@@ -281,7 +284,7 @@ public final class atc2 extends atc {
 //                                airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
 //                            removeAirplaneFromLayer(airplaneLayer, fp);
 //                        }
-                        
+
                     }
                     findCollisions();
                     getWwd().redraw();
@@ -297,7 +300,7 @@ public final class atc2 extends atc {
 
             // Add the airport & airspace layers
             buildAirportLayer();
-            buildAirspaceLayer();
+            buildSelectebleAirspaceLayer();
             buildAirplaneLayer();
 
             // Init tooltip annotation
@@ -387,59 +390,109 @@ public final class atc2 extends atc {
 
         /**
          * Build the airspace layer.
-         * TODO build the airspace according to the CTA and not directly as done.
          */
-        private void buildAirspaceLayer() {
+        private void buildSelectebleAirspaceLayer() {
+            // We make a new layer for the selecteble CTA's.
+            airspacesLayer = new RenderableLayer();
+            insertBeforePlacenames(this.getWwd(), airspacesLayer);
+            airspacesLayer.setName("Airspaces");
+            airspacesLayer.setPickEnabled(true); // This makes it selecteble....
 
+            // We define a set of attributes that all the SurfaceSectors share.
+            ShapeAttributes attr = new BasicShapeAttributes();
+            attr.setInteriorMaterial(Material.WHITE);
+            attr.setOutlineMaterial(Material.RED);
+            attr.setInteriorOpacity(0.5);
+            attr.setOutlineOpacity(0.7);
+            attr.setOutlineWidth(3);
+            attr.setEnableAntialiasing(true);
+
+            // We go through all the ACC's to draw the SurfaceSector inside the airspaceLayer.
             for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                 ACC acc = it.next();
-                ShapeAttributes attr = new BasicShapeAttributes();
-                ShapeAttributes attr2 = new BasicShapeAttributes();
-                //attr.setInteriorMaterial(Material.WHITE);
-                attr.setOutlineMaterial(Material.RED);
-                attr.setInteriorOpacity(0);
-                attr.setOutlineOpacity(0.7);
-                attr.setOutlineWidth(3);
-                acc.GetCTA().CreateGreaterSector();
-                SurfaceSector s2 = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
-                attr2.setOutlineMaterial(Material.GREEN);
-                attr2.setInteriorOpacity(0);
-                attr2.setOutlineOpacity(0.7);
-                attr2.setOutlineWidth(3);
-                s2.setAttributes(attr2);
-                s2.setPathType(AVKey.RHUMB_LINE);
-                attr.setEnableAntialiasing(true);
-
 
                 SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
-                //Temporarely
-
                 surfaceSector.setAttributes(attr);
                 surfaceSector.setPathType(AVKey.RHUMB_LINE);
-                airspaceLayer = new RenderableLayer();
-                airspaceLayer.setName("Airspaces");
-                airspaceLayer.setPickEnabled(false);
-                airspaceLayer.addRenderable(surfaceSector);
-                airspaceLayer.addRenderable(s2);
-                insertBeforePlacenames(this.getWwd(), airspaceLayer);
-
+                surfaceSector.setValue("ACC", acc); // We bind the surfaceSector and it's ACC together.
+                airspacesLayer.addRenderable(surfaceSector);
             }
 
+            // Add select listener for CTA picking
+            this.getWwd().addSelectListener(new SelectListener() {
 
+                public void selected(SelectEvent event) {
+                    if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
+                        // Let's check if we got the right object picked.
+                        Object o = event.getTopObject();
+                        if (o != null && o instanceof SurfaceSector) {
+                            SurfaceSector surfaceSector = (SurfaceSector) o;
+                            Object o2 = surfaceSector.getValue("ACC");
+                            if (o2 != null && o2 instanceof ACC) {
+                                ACC acc = (ACC) o2;
+                                buildAirspaceLayer(acc);
+                                airspacesLayer.setEnabled(false);
+                            }
+                        }
+                    }
+                    if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                    }
+                }
+            });
 
+        }
 
-//            OrbitView view = this.getOrbitView();
-//            if (view != null) {
-//                OrbitViewLimits limits = view.getOrbitViewLimits();
-//                if (limits != null) {
-//                    Globe globe = this.getWwd().getModel().getGlobe();
-//
-//                    limits.setCenterLocationLimits(acc.GetCTA().getSector().toSector());
-//                    limits.setZoomLimits(0, 5000000);
-//                    BasicOrbitViewLimits.applyLimits(view, limits);
-//                }
-//                surfaceSector.setSector(limits.getCenterLocationLimits());
-//            }
+        /**
+         * Build the airspace layer based on a ACC.
+         */
+        private void buildAirspaceLayer(ACC acc) {
+            // We make a new layer for the selected CTA.
+            airspaceLayer = new RenderableLayer();
+            insertBeforePlacenames(this.getWwd(), airspaceLayer);
+            airspaceLayer.setName("Airspace");
+            airspaceLayer.setPickEnabled(false); // We don't want picking.
+
+            // Set the attributes for the surfaceSector and instanciate the objects.
+            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+            ShapeAttributes attributesSector = new BasicShapeAttributes();
+            attributesSector.setOutlineMaterial(Material.RED);
+            attributesSector.setInteriorOpacity(0);
+            attributesSector.setOutlineOpacity(0.7);
+            attributesSector.setOutlineWidth(3);
+            attributesSector.setEnableAntialiasing(true);
+            surfaceSector.setAttributes(attributesSector);
+            surfaceSector.setPathType(AVKey.RHUMB_LINE);
+
+            // Set the attributes for the greater surfaceSector and instanciate the objects.
+            acc.GetCTA().CreateGreaterSector(); // TODO why do we need to do this manually?
+            SurfaceSector surfaceSectorGreater = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
+            ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
+            attributesGreaterSector.setOutlineMaterial(Material.GREEN);
+            attributesGreaterSector.setInteriorOpacity(0);
+            attributesGreaterSector.setOutlineOpacity(0.7);
+            attributesGreaterSector.setOutlineWidth(3);
+            attributesGreaterSector.setEnableAntialiasing(true);
+            surfaceSectorGreater.setAttributes(attributesGreaterSector);
+            surfaceSectorGreater.setPathType(AVKey.RHUMB_LINE);
+
+            // Add the two SurfaceSectors to the airspace layer.
+            airspaceLayer.addRenderable(surfaceSector);
+            airspaceLayer.addRenderable(surfaceSectorGreater);
+
+            // Playing the boss here. We limit the users ability to go outside of their job area.
+            // We don't want any FlightControllers spending time on useless stuff.
+            OrbitView view = this.getOrbitView();
+            if (view != null) {
+                OrbitViewLimits limits = view.getOrbitViewLimits();
+                if (limits != null) {
+                    Globe globe = this.getWwd().getModel().getGlobe();
+
+                    limits.setCenterLocationLimits(acc.GetCTA().getSector().toSector());
+                    limits.setZoomLimits(0, 5000000);
+                    BasicOrbitViewLimits.applyLimits(view, limits);
+                }
+                surfaceSector.setSector(limits.getCenterLocationLimits());
+            }
         }
 
         /**
@@ -485,9 +538,9 @@ public final class atc2 extends atc {
 
 //            while (litr.hasNext()) {
 //                addAirportToLayer(airportLayer, litr.next());
-            
-          
-       }
+
+
+        }
 
         /**
          * Adds an airport to the airport layer.
@@ -589,8 +642,8 @@ public final class atc2 extends atc {
         private void removeAirplaneFromLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
 
-            if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) | 
-                    airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+            if (airplane.getStatus().equals(Airplane.Statusses.CRASHED)
+                    | airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
                 if (addedAirplanes.contains(airplane)) {
                     addedAirplanes.remove(airplane);
                     layer.removeRenderable(currentAirplaneAnnotation);
@@ -600,7 +653,7 @@ public final class atc2 extends atc {
                 }
             }
         }
-              
+
         /** 
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
