@@ -491,11 +491,11 @@ public final class atc2 extends atc {
                 if (limits != null) {
                     Globe globe = this.getWwd().getModel().getGlobe();
 
-                    limits.setCenterLocationLimits(acc.GetCTA().getSector().toSector());
+                    limits.setCenterLocationLimits(acc.GetCTA().sectorGreater.toSector());
                     limits.setZoomLimits(0, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
                 }
-                surfaceSector.setSector(limits.getCenterLocationLimits());
+                surfaceSectorGreater.setSector(limits.getCenterLocationLimits());
             }
         }
 
