@@ -433,6 +433,7 @@ public final class atc2 extends atc {
                                 atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
                                 //
                                 // Since the user has selected his or hers CTA we don't need to show this layer anymore.
+                                buildAirportLayer();
                                 airspacesLayer.setEnabled(false);
                                 // NOTE: we keep this alive since RAM is more abundant than CPU.
                                 // The user can always decide to switch CTA and then we would need to remake the CTA, wich is CPU intesive.
