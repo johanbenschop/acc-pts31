@@ -589,7 +589,6 @@ public final class atc2 extends atc {
         
         //Teken nu voor de airplanes een lijn van 100 km.
          public void createAirplaneLines(){
-                         airplaneLayer.removeAllRenderables();
              RenderableLayer layerPlaneLines = new RenderableLayer();
              ShapeAttributes attrs = new BasicShapeAttributes();                 
             attrs.setOutlineMaterial(new Material(Color.WHITE));
