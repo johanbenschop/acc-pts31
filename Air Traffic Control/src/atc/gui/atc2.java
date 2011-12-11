@@ -611,7 +611,7 @@ public final class atc2 extends atc {
             ArrayList<Position> pathPositions = new ArrayList<Position>();           
             pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));               
             
-            double d = (a.getSpeed() / 60) * 5;
+            double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);;
             //double d = 100;
             //double d = (a.getSpeed() / 36000d)*300;
         double θ = a.getDirection() / 180d * Math.PI;
