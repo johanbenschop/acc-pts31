@@ -252,7 +252,7 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
             }
         }
 
-        if (evt.getComponent() == tfManafacturer) {
+        else if (evt.getComponent() == tfManafacturer) {
             if (evt.getKeyChar() == '\b') {
                 tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
                 if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
@@ -264,7 +264,7 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
                 }
             }
         }
-        
+
 //        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
 //        {
 //            continue;
