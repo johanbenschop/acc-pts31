@@ -266,7 +266,7 @@ public class Airplane extends Thread {
         location.setLongitude(r.getLocation().getLongitude());
         this.Status = Statusses.TAKINGOFF;
         setAimedDirection(direction);
-        setAimedAltitude(altitude);
+        setAimedAltitude(1000);
         setAimedSpeed(speed);
     }
 
