@@ -275,10 +275,10 @@ public class jfCommandFlight extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelFlightNumber)
-                    .addComponent(jLabelFlightCities)
-                    .addComponent(jLabelFlightAirports))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelFlightNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelFlightCities, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelFlightAirports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelAirplaneModel)
@@ -478,7 +478,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(230, 230, 230))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(btChangeParameter, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                        .addComponent(btChangeParameter, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         jPanel5Layout.setVerticalGroup(

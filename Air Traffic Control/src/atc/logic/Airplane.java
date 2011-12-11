@@ -1,6 +1,5 @@
 package atc.logic;
 
-import atc.gui.atc2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -179,7 +178,6 @@ public class Airplane extends Thread {
         this.destinationLocation = DestinationLocation;
         this.Status = Statusses.INTAKEOFFQUEUE;
         collcheck = false;
-
     }
 
     /**
@@ -190,7 +188,7 @@ public class Airplane extends Thread {
     public void run() {
         double SIM_SPEED = prefs.getDouble("SIM_SPEED", 1);
         try {
-            Thread.sleep(500); // I need this to let the plane leave...wierd...
+            Thread.sleep(1000); // I need this to let the plane leave...wierd...
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
@@ -202,7 +200,7 @@ public class Airplane extends Thread {
                 try {
                     Fly();
                     //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-                    Thread.sleep((int)(SIM_SPEED * 100));// er word telkens 1/10e seconde gewacht.
+                    Thread.sleep((int) (SIM_SPEED * 100));// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -318,7 +316,7 @@ public class Airplane extends Thread {
         //
         //              θ is the bearing (in radians, clockwise from north);
         //              d/R is the angular distance (in radians), where d is the distance travelled and R is the earth’s radius
-        
+
         double d = (this.Speed / 36000d);
         double θ = Direction / 180d * Math.PI;
         double R = 6371; // Mean radius / radius of the Earh
@@ -342,7 +340,7 @@ public class Airplane extends Thread {
      */
     public void ChangeSpeed() {
         //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-       double amountChangeSpeed = 1;
+        double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {
                 this.Speed += takeOffAccelerationSpeed;
@@ -397,7 +395,7 @@ public class Airplane extends Thread {
             }
         }
     }
-    
+
     /**
      * Method for calculating the current amount of fuel. Currently not in use.
      */
@@ -448,11 +446,10 @@ public class Airplane extends Thread {
     }
 
     //Getters
-    public int getFlightLevel()
-    {
+    public int getFlightLevel() {
         return (int) this.Altitude / 1000;
     }
-    
+
     public int getAirplaneNumber() {
         return AirplaneNumber;
     }
@@ -470,6 +467,7 @@ public class Airplane extends Thread {
     }
 
     public double getSpeed() {
+        //return 15000;
         return Speed;
     }
 
@@ -538,8 +536,7 @@ public class Airplane extends Thread {
     }
 
     public double getDistanceTravelled() {
-        //return d;
-        return 0;
+        return distanceTravelled;
     }
 
     public double getLatitudeTravelled() {
@@ -561,6 +558,4 @@ public class Airplane extends Thread {
     public void setCollcheck(boolean collcheck) {
         this.collcheck = collcheck;
     }
-    
-    
 }

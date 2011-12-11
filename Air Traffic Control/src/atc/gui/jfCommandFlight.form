@@ -59,10 +59,10 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelFlightNumber" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelFlightCities" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelFlightAirports" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jLabelFlightNumber" alignment="0" max="32767" attributes="1"/>
+                      <Component id="jLabelFlightCities" alignment="0" max="32767" attributes="1"/>
+                      <Component id="jLabelFlightAirports" alignment="0" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -351,7 +351,7 @@
                           <EmptySpace min="-2" pref="230" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="btChangeParameter" pref="550" max="32767" attributes="0"/>
+                          <Component id="btChangeParameter" pref="697" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
