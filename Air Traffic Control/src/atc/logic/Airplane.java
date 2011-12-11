@@ -1,6 +1,5 @@
 package atc.logic;
 
-import atc.cli.CommandLine;
 import atc.gui.atc2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -190,6 +189,11 @@ public class Airplane extends Thread {
     @Override
     public void run() {
         double SIM_SPEED = prefs.getDouble("SIM_SPEED", 1);
+        try {
+            Thread.sleep(500); // I need this to let the plane leave...wierd...
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
         while (true) {
             //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
             while (Status == Statusses.INFLIGHT || Status == Statusses.TAKINGOFF
@@ -306,25 +310,30 @@ public class Airplane extends Thread {
     }
 
     /**
-     * Change the longitude and lattitude based on the distance travelled and the direction in wich the airplane flies.
+     * Change the longitude and latitude based on the distance travelled and the direction in which the airplane flies.
      */
     public void ChangeGeoLocation() {
-        distanceTravelled = (this.Speed / 36000d);
-        double bearing = Direction / 180d * Math.PI;
-
-        double R = 6371;
+        // Formula:	lat2 = asin(sin(lat1)*cos(d/R) + cos(lat1)*sin(d/R)*cos(θ))
+        //              lon2 = lon1 + atan2(sin(θ)*sin(d/R)*cos(lat1), cos(d/R)−sin(lat1)*sin(lat2))
+        //
+        //              θ is the bearing (in radians, clockwise from north);
+        //              d/R is the angular distance (in radians), where d is the distance travelled and R is the earth’s radius
+        
+        double d = (this.Speed / 36000d);
+        double θ = Direction / 180d * Math.PI;
+        double R = 6371; // Mean radius / radius of the Earh
 
         double lat = location.getLatitude() / 180d * Math.PI;
         double lon = location.getLongitude() / 180d * Math.PI;
 
-        double destLat = Math.asin(Math.sin(lat) * Math.cos(distanceTravelled / R) + Math.cos(lat) * Math.sin(distanceTravelled / R) * Math.cos(bearing));
-        double destLon = lon + Math.atan2(Math.sin(bearing) * Math.sin(distanceTravelled / R) * Math.cos(lat), Math.cos(distanceTravelled / R) - Math.sin(lat) * Math.sin(destLat));
+        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
 
         location.setLatitude(destLat * 180 / Math.PI);
         location.setLongitude(destLon * 180 / Math.PI);
         location.setAltitude(Altitude);
-
-        // System.out.println(location.ToString());
     }
 
     /**
@@ -530,7 +539,8 @@ public class Airplane extends Thread {
     }
 
     public double getDistanceTravelled() {
-        return distanceTravelled;
+        //return d;
+        return 0;
     }
 
     public double getLatitudeTravelled() {
