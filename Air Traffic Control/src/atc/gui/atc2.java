@@ -278,7 +278,6 @@ public final class atc2 extends atc {
                 public void actionPerformed(ActionEvent event) {
                     for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                         ACC acc = it.next();
-                        acc.GetCTA().Collision();
                         // TODO have to be made working in order to delete inactive airplanes
 //                        Flightplan fp = currentAirplaneAnnotation.getFlightplan();
 //                        Airplane airplane = fp.getAirplane();
