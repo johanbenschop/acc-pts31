@@ -10,6 +10,7 @@ import atc.logic.Airport;
 import atc.logic.Airspace;
 import atc.logic.CTA;
 import atc.logic.Flightplan;
+import atc.logic.GeoLocation;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
@@ -21,6 +22,7 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
+import gov.nasa.worldwind.render.Path;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.SurfaceSector;
 import gov.nasa.worldwind.view.orbit.BasicOrbitViewLimits;
@@ -319,7 +321,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.setAlwaysOnTop(true);
             airportLayer.addRenderable(this.tooltipAnnotation);
 
-            atc2.airspace.setCurrentACC(atc2.airspace.getACC(0));
+            atc2.airspace.setCurrentACC(atc2.airspace.getACC(1000)); //DIT WAS 0 maar heeft paul verandert omdat het ID begint op 1000.
 
             // TODO Need to remove this and add the based on usage!
             airspace.getCurrentACC().addFlightController();
@@ -432,6 +434,11 @@ public final class atc2 extends atc {
                                 // We found the correct object! Now we need to cast and build the needed layer.
                                 ACC acc = (ACC) o2;
                                 buildAirspaceLayer(acc);
+                                
+                               //
+                                airspace.setCurrentACC(acc);
+                                atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
+                                //
                                 // Since the user has selected his or hers CTA we don't need to show this layer anymore.
                                 airspacesLayer.setEnabled(false);
                                 // NOTE: we keep this alive since RAM is more abundant than CPU.
@@ -455,7 +462,6 @@ public final class atc2 extends atc {
             insertBeforePlacenames(this.getWwd(), airspaceLayer);
             airspaceLayer.setName("Airspace");
             airspaceLayer.setPickEnabled(false); // We don't want picking.
-
             // Set the attributes for the surfaceSector and instanciate the objects.
             SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
             ShapeAttributes attributesSector = new BasicShapeAttributes();
@@ -578,6 +584,27 @@ public final class atc2 extends atc {
                 this.getWwd().repaint();
             }
         }
+        
+         public void createAirplaneLines(){
+             RenderableLayer layerPlaneLines = new RenderableLayer();
+             ShapeAttributes attrs = new BasicShapeAttributes();                 
+            attrs.setOutlineMaterial(new Material(Color.WHITE));
+            attrs.setOutlineWidth(2d);
+            attrs.setInteriorOpacity(0);
+            attrs.setOutlineOpacity(0.7);
+            attrs.setOutlineWidth(3);
+            for(Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList())
+            {
+            ArrayList<Position> pathPositions = new ArrayList<Position>();           
+            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
+            System.out.println("Lat: " + a.getLocation().getLatitude() + "Lon: " + a.getLocation().getLongitude());
+            GeoLocation newGeoLoc = GeoLocation.CalcPosition(a.getLocation().getLongitude(), a.getLocation().getLatitude(), 100, a.getDirection());
+                        System.out.println("Lat: " + newGeoLoc.getLatitude() + "Lon: " + newGeoLoc.getLongitude());
+            pathPositions.add(Position.fromDegrees(newGeoLoc.getLongitude(), newGeoLoc.getLatitude()));
+            Path path = new Path(pathPositions);
+            airplaneLayer.addRenderable(path);
+            }
+    }
 
         /**
          * Build the layer with all of the airplanes.
@@ -606,9 +633,14 @@ public final class atc2 extends atc {
                 }
             });
 
-            this.timerAirplane = new Timer(1000, new ActionListener() {
-
+            this.timerAirplane = new Timer(1000, new ActionListener() { 
                 public void actionPerformed(ActionEvent event) {
+                    createAirplaneLines();
+                    if(airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000)
+                    {
+                    System.out.println(airspace.getCurrentACC().GetID());
+                    airspace.BorderControl2();        
+                    }
                     for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                         ACC acc = it.next();
                         ListIterator<Flightplan> litr = acc.getFlightplans();

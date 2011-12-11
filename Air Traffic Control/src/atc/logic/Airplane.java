@@ -332,8 +332,9 @@ public class Airplane extends Thread {
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     public void ChangeSpeed() {
+        this.Speed = 15000;
         //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-       double amountChangeSpeed = 1;
+       /*double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {
                 this.Speed += takeOffAccelerationSpeed;
@@ -352,7 +353,7 @@ public class Airplane extends Thread {
             } else {
                 this.Speed = AimedSpeed;
             }
-        }
+        }*/
     }
 
     /**
