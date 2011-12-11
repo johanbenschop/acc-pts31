@@ -4,6 +4,8 @@
  */
 package atc.logic;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,6 +20,8 @@ import static org.junit.Assert.*;
  */
 public class AirspaceTest {
 
+    Airspace airspace = new Airspace();
+    
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -28,9 +32,21 @@ public class AirspaceTest {
 
     @Before
     public void setUp() {
+  
     }
 
     @After
     public void tearDown() {
     }
+       @Test
+    public void testloadAirportList() {
+        System.out.println("Load airportlist");
+        
+        try {
+            airspace.loadAirportList();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        Assert.assertEquals("Airportname should be Goraka", "Goroka", airspace.GetAirport(1).getAirportName());
+   }
 }
