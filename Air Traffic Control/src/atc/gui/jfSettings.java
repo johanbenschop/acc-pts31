@@ -5,12 +5,9 @@
  */
 package atc.gui;
 
-import SysBar.UnityItem;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.layers.Layer;
-import gov.nasa.worldwindx.examples.LayerPanel;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -18,13 +15,12 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -34,9 +30,10 @@ public class jfSettings extends javax.swing.JDialog {
 
     private WorldWindow wwd;
     protected JPanel layersPanel;
-     protected Font defaultFont;
-     protected JPanel westPanel;
+    protected Font defaultFont;
+    protected JPanel westPanel;
     protected JScrollPane scrollPane;
+    private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public void setWwd(WorldWindow wwd) {
         this.wwd = wwd;
@@ -53,10 +50,11 @@ public class jfSettings extends javax.swing.JDialog {
             Point p = parent.getLocation();
             setLocation(p.x + parentSize.width / 4, p.y + parentSize.height / 4);
         }
+
+        jTextFieldTimeOfLine.setText(String.valueOf(prefs.getDouble("APP_TIME_LINE", 5)));
     }
-    
-    protected void makePanel(WorldWindow wwd)
-    {
+
+    protected void makePanel(WorldWindow wwd) {
         // Make and fill the panel holding the layer titles.
         this.layersPanel = new JPanel(new GridLayout(0, 1, 0, 4));
         this.layersPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -77,32 +75,29 @@ public class jfSettings extends javax.swing.JDialog {
         jPanelLayers.setLayout(new BorderLayout());
         jPanelLayers.add(westPanel, BorderLayout.CENTER);
     }
-    
+
     public void fill(WorldWindow wwd) {
-        
+
         // Fill the layers panel with the titles of all layers in the world window's current model.
-        for (Layer layer : wwd.getModel().getLayers())
-        {
+        for (Layer layer : wwd.getModel().getLayers()) {
             LayerAction action = new LayerAction(layer, wwd, layer.isEnabled());
             JCheckBox jcb = new JCheckBox(action);
             jcb.setSelected(action.selected);
             this.layersPanel.add(jcb);
 
-            if (defaultFont == null)
-            {
+            if (defaultFont == null) {
                 this.defaultFont = jcb.getFont();
             }
         }
     }
-    
-    protected static class LayerAction extends AbstractAction
-    {
+
+    protected static class LayerAction extends AbstractAction {
+
         WorldWindow wwd;
         private Layer layer;
         private boolean selected;
 
-        public LayerAction(Layer layer, WorldWindow wwd, boolean selected)
-        {
+        public LayerAction(Layer layer, WorldWindow wwd, boolean selected) {
             super(layer.getName());
             this.wwd = wwd;
             this.layer = layer;
@@ -110,13 +105,13 @@ public class jfSettings extends javax.swing.JDialog {
             this.layer.setEnabled(this.selected);
         }
 
-        public void actionPerformed(ActionEvent actionEvent)
-        {
+        public void actionPerformed(ActionEvent actionEvent) {
             // Simply enable or disable the layer based on its toggle button.
-            if (((JCheckBox) actionEvent.getSource()).isSelected())
+            if (((JCheckBox) actionEvent.getSource()).isSelected()) {
                 this.layer.setEnabled(true);
-            else
+            } else {
                 this.layer.setEnabled(false);
+            }
 
             wwd.redraw();
         }
@@ -136,6 +131,8 @@ public class jfSettings extends javax.swing.JDialog {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelLayers = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldTimeOfLine = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
@@ -160,37 +157,49 @@ public class jfSettings extends javax.swing.JDialog {
         jPanelLayers.setLayout(jPanelLayersLayout);
         jPanelLayersLayout.setHorizontalGroup(
             jPanelLayersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
         jPanelLayersLayout.setVerticalGroup(
             jPanelLayersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 467, Short.MAX_VALUE)
+            .addGap(0, 461, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Layers", jPanelLayers);
+
+        jLabel1.setText("Time of distance to calculate the line");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldTimeOfLine, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 467, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldTimeOfLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(397, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Sound", jPanel1);
+        jTabbedPane1.addTab("Airplanes", jPanel1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 467, Short.MAX_VALUE)
+            .addGap(0, 461, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Network", jPanel2);
@@ -199,11 +208,11 @@ public class jfSettings extends javax.swing.JDialog {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 467, Short.MAX_VALUE)
+            .addGap(0, 461, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Video", jPanel3);
@@ -239,6 +248,12 @@ public class jfSettings extends javax.swing.JDialog {
 
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
         // TODO add your handling code here:
+        try {
+            double time = Double.parseDouble(jTextFieldTimeOfLine.getText());
+            prefs.putDouble("APP_TIME_LINE", time);
+        } catch (Exception e) {
+        }
+
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnAcceptActionPerformed
@@ -295,10 +310,12 @@ public class jfSettings extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccept;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelLayers;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextFieldTimeOfLine;
     // End of variables declaration//GEN-END:variables
 }

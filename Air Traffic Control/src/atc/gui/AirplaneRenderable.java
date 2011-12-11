@@ -2,6 +2,7 @@ package atc.gui;
 
 import atc.logic.Airplane;
 import atc.logic.Flightplan;
+import atc.logic.GeoSector;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
@@ -45,7 +46,6 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 ex.printStackTrace();
             }
         }
-
         this.flightplan = flightplan;
         this.airplane = this.flightplan.getAirplane();
 
@@ -67,7 +67,6 @@ public class AirplaneRenderable extends GlobeAnnotation {
         this.getAttributes().setTextColor(Color.WHITE);
         this.getAttributes().setTextAlign(AVKey.LEFT);
         //this.getAttributes().setDrawOffset(new Point(this.getAttributes().getSize().width / 2 , this.getAttributes().getSize().height / 2));
-
         // We update the icons position every 300 milisecond.
         locationUpdateTimer.schedule(new TimerTask() {
 
@@ -77,24 +76,36 @@ public class AirplaneRenderable extends GlobeAnnotation {
             public void run() {
                 double direction = airplane.getDirection();
                 Position position = airplane.getLocation().toPosition();
+                GeoSector sector = atc2.airspace.getCurrentACC().GetCTA().sector;
+                GeoSector greaterSector = atc2.airspace.getCurrentACC().GetCTA().sectorGreater;
 
                 try {
-                    if (airplane.getStatus().equals(Airplane.Statusses.INFLIGHT)) {
-                        originalImage = ImageIO.read(new File("src/atc/gui/resources/airplane.png"));
-                        getAttributes().setImageSource(drawHeading());
-                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING1)) {
-                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineyellow.png"));
-                        getAttributes().setImageSource(drawHeading());
-                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHING2)) {
-                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineorange.png"));
-                        getAttributes().setImageSource(drawHeading());
-                    } else if (airplane.getStatus().equals(Airplane.Statusses.CRASHED)) {
-                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plainered.png"));
-                        getAttributes().setImageSource(drawHeading());
-                    } else if (airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+                    // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
+                    if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
-                        getAttributes().setImageSource(drawHeading());
-                    } 
+                    } else if (!sector.containsGeoLocation(airplane.getLocation()) && !greaterSector.containsGeoLocation(airplane.getLocation())) {
+                        // The airplane is at a place where we don't care molucules about it, remove it.
+                        dispose(); // (Not sure what this does)
+                    } else {
+                        switch (airplane.getStatus()) {
+                            default:
+                                originalImage = ImageIO.read(new File("src/atc/gui/resources/airplane.png"));
+                                break;
+                            case CRASHING1:
+                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineyellow.png"));
+                                break;
+                            case CRASHING2:
+                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineorange.png"));
+                                break;
+                            case CRASHED:
+                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plainered.png"));
+                                break;
+                            case HASLANDED:
+                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
+                                break;
+                        }
+                    }
+                    getAttributes().setImageSource(drawHeading());
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
@@ -116,10 +127,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     }
                     airplane.interrupt();
                 }
-            } 
+            }
         }, 10, 300);
     }
-    
+
     public Airplane getAirplane() {
         return airplane;
     }
@@ -156,9 +167,9 @@ public class AirplaneRenderable extends GlobeAnnotation {
     }
 
     private String updateText() {
-        Locale l = new Locale("en_US"); 
+        Locale l = new Locale("en_US");
         NumberFormat NF = NumberFormat.getNumberInstance(l);
-        DecimalFormat DF = (DecimalFormat)NF;
+        DecimalFormat DF = (DecimalFormat) NF;
         DF.applyPattern("#.##");
         return "<p><b><font color=\"#664400\">Flight " + flightplan.getFlightnumber() + "</font></b>"
                 + "<br />Departure: "
@@ -178,7 +189,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + "<br />[Direction: " + DF.format(airplane.getDirection()) + "°]"
                 + "<br />Model: " + airplane.getManufacturer() + ", " + airplane.getType()
                 + "<br >Current state: " + airplane.getStatus()
-                + "<br> Lat/lon: (" + DF.format(airplane.getLocation().getLatitude())+ "," + DF.format(airplane.getLocation().getLongitude()) + ")"
+                + "<br> Lat/lon: (" + DF.format(airplane.getLocation().getLatitude()) + "," + DF.format(airplane.getLocation().getLongitude()) + ")"
                 + "</p>";
     }
 }

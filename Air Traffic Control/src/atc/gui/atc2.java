@@ -15,6 +15,7 @@ import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
@@ -53,10 +54,6 @@ import javax.swing.Timer;
  */
 public final class atc2 extends atc {
 
-//    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
-//    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
-//    public static ACC acc = new ACC(343, cta);
-//    public static ACC acc2 = new ACC(344, cta2);
     public static Airspace airspace = new Airspace();
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
@@ -75,7 +72,9 @@ public final class atc2 extends atc {
         private final UnityBar menuBar;
         private final View view;
         private final Timer timerCollision;
-        private double TimeOfLine;
+        private boolean initDoneAirportLayer;
+        private boolean initDoneAirplaneLayer;
+        private boolean initDoneAirspaceLayer;
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
@@ -170,6 +169,33 @@ public final class atc2 extends atc {
                                                 targetPos.getElevation() + 20000); // 1000 = 100 meter
                                     }
                                     uiGoToAirport.setActive(false);
+                                }
+                            });
+                        }
+                    });
+
+            final UnityItem uiSwitchCTA = menuBar.addItem(new UnityItem("Switch CTA", Color.BLUE, 0, "", UnityBar.Type.NORMAL));
+            uiSwitchCTA.addActionListener(
+                    new java.awt.event.ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // When we open a new dialog we should do it in it's own thread.
+                            // Doing so allows the main application to continue
+                            // it's work, like buzzing you when a collision is detected.
+                            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    getOrbitView().setOrbitViewLimits(new BasicOrbitViewLimits());
+                                    Position targetPos = new Position(Angle.ZERO, Angle.ZERO, 20000000); // 1000 = 100 meter
+                                    view.goTo(new Position(targetPos, 0), targetPos.getElevation());
+                                    airspaceLayer.removeAllRenderables();
+                                    addedAirplanes.clear();
+                                    airportLayer.removeAllRenderables();
+                                    airplaneLayer.removeAllRenderables();
+                                    timerAirplane.stop();
+                                    airspacesLayer.setEnabled(true);
                                 }
                             });
                         }
@@ -289,6 +315,7 @@ public final class atc2 extends atc {
 //                        }
 
                     }
+
                     findCollisions();
                     getWwd().redraw();
                 }
@@ -301,10 +328,8 @@ public final class atc2 extends atc {
             insertBeforePlacenames(getWwd(), graticuleLayer);
             graticuleLayer.setEnabled(false);
 
-            // Add the airport & airspace layers
-            buildAirportLayer();
+            // Add the selecteble airspaces/CTA layers
             buildSelectebleAirspaceLayer();
-            buildAirplaneLayer();
 
             // Init tooltip annotation
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
@@ -320,7 +345,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
-            airportLayer.addRenderable(this.tooltipAnnotation);
+
 
             atc2.airspace.setCurrentACC(atc2.airspace.getACC(1000)); //DIT WAS 0 maar heeft paul verandert omdat het ID begint op 1000.
         }
@@ -329,6 +354,10 @@ public final class atc2 extends atc {
          * Finds collisions and gives a warning about it.
          */
         public void findCollisions() {
+            if (addedAirplanes == null) {
+                return;
+            }
+
             menuBar.clearAlerts();
             for (final Airplane p : addedAirplanes) {
                 if (p.getStatus() == Airplane.Statusses.CRASHING2) {
@@ -429,13 +458,13 @@ public final class atc2 extends atc {
                                 // We found the correct object! Now we need to cast and build the needed layer.
                                 ACC acc = (ACC) o2;
                                 buildAirspaceLayer(acc);
-                                
-                               //
+
                                 airspace.setCurrentACC(acc);
                                 atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
-                                //
+
                                 // Since the user has selected his or hers CTA we don't need to show this layer anymore.
                                 buildAirportLayer();
+                                buildAirplaneLayer();
                                 airspacesLayer.setEnabled(false);
                                 // NOTE: we keep this alive since RAM is more abundant than CPU.
                                 // The user can always decide to switch CTA and then we would need to remake the CTA, wich is CPU intesive.
@@ -453,11 +482,16 @@ public final class atc2 extends atc {
          * Build the airspace layer based on a ACC.
          */
         private void buildAirspaceLayer(ACC acc) {
-            // We make a new layer for the selected CTA.
-            airspaceLayer = new RenderableLayer();
-            insertBeforePlacenames(this.getWwd(), airspaceLayer);
-            airspaceLayer.setName("Airspace");
-            airspaceLayer.setPickEnabled(false); // We don't want picking.
+            // Init part
+            if (!initDoneAirspaceLayer) {
+                // We make a new layer for the selected CTA.
+                airspaceLayer = new RenderableLayer();
+                insertBeforePlacenames(this.getWwd(), airspaceLayer);
+                airspaceLayer.setName("Airspace");
+                airspaceLayer.setPickEnabled(false); // We don't want picking.
+                initDoneAirspaceLayer = true;
+            }
+
             // Set the attributes for the surfaceSector and instanciate the objects.
             SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
             ShapeAttributes attributesSector = new BasicShapeAttributes();
@@ -487,12 +521,10 @@ public final class atc2 extends atc {
 
             // Set the current ACC to the selected one.
             airspace.setCurrentACC(acc);
-            
-            // TODO Need to remove this and add the based on usage!
+
+            // TODO We register a new controller. Need to get a refference of this!!!!
             airspace.getCurrentACC().addFlightController();
-            //airspace.getCurrentACC().addFlightController();
-            //airspace.getCurrentACC().addFlightController();
-            
+
             // Playing the boss here. We limit the users ability to go outside of their job area.
             // We don't want any FlightControllers spending time on useless stuff.
             OrbitView view = this.getOrbitView();
@@ -513,25 +545,30 @@ public final class atc2 extends atc {
          * Builds the airport layer.
          */
         private void buildAirportLayer() {
-            // Add the airport layer
-            this.airportLayer = new RenderableLayer();
-            this.airportLayer.setName("Airports");
-            insertBeforePlacenames(this.getWwd(), this.airportLayer);
+            // The init part
+            if (!initDoneAirportLayer) {
+                // Add the airport layer
+                this.airportLayer = new RenderableLayer();
+                this.airportLayer.setName("Airports");
+                insertBeforePlacenames(this.getWwd(), this.airportLayer);
+                airportLayer.addRenderable(this.tooltipAnnotation);
 
-            // Add select listener for airport picking
-            this.getWwd().addSelectListener(new SelectListener() {
+                // Add select listener for airport picking
+                this.getWwd().addSelectListener(new SelectListener() {
 
-                public void selected(SelectEvent event) {
-                    if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
-                        highlightAirport(event.getTopObject());
+                    public void selected(SelectEvent event) {
+                        if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                            highlightAirport(event.getTopObject());
+                        }
                     }
-                }
-            });
+                });
 
-            // Add click-and-go select listener for airports
-            this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                    this.getWwd(), AirportRenderable.class, 20000));
+                // Add click-and-go select listener for airports
+                this.getWwd().addSelectListener(new ClickAndGoSelectListener(
+                        this.getWwd(), AirportRenderable.class, 20000));
 
+                initDoneAirportLayer = true;
+            }
 
 //            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
 //                ACC acc = it.next();
@@ -588,9 +625,9 @@ public final class atc2 extends atc {
                 this.getWwd().repaint();
             }
         }
-        
+
         //Teken nu voor de airplanes een lijn van 100 km.
-         public void createAirplaneLines(){
+        public void createAirplaneLines() {
             // We make a new layer for the lines.
 
             airplaneLineLayer.removeAllRenderables();
@@ -605,44 +642,43 @@ public final class atc2 extends atc {
             attr.setOutlineOpacity(0.7);
             attr.setOutlineWidth(3);
             attr.setEnableAntialiasing(true);
-            
-            for(Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList())
-            {
-            ArrayList<Position> pathPositions = new ArrayList<Position>();           
-            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));               
-            
-            double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);;
-            //double d = 100;
-            //double d = (a.getSpeed() / 36000d)*300;
-        double θ = a.getDirection() / 180d * Math.PI;
-        double R = 6371; // Mean radius / radius of the Earh
 
-        double lat = a.getLocation().getLatitude() / 180d * Math.PI;
-        double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+            for (Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList()) {
+                ArrayList<Position> pathPositions = new ArrayList<>();
+                pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
 
-        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-        GeoLocation newGeoLoc;
-        newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-        pathPositions.add(newGeoLoc.toPosition());
-        
-                    Path path = new Path(pathPositions);
-            path.setAttributes(attr);
-            path.setPathType(AVKey.RHUMB_LINE);
-            airplaneLineLayer.addRenderable(path);
+                double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
+                //double d = 100;
+                //double d = (a.getSpeed() / 36000d)*300;
+                double θ = a.getDirection() / 180d * Math.PI;
+                double R = 6371; // Mean radius / radius of the Earh
+
+                double lat = a.getLocation().getLatitude() / 180d * Math.PI;
+                double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+
+                double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                        + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+                double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                        Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+                GeoLocation newGeoLoc;
+                newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+                pathPositions.add(newGeoLoc.toPosition());
+
+                Path path = new Path(pathPositions);
+                path.setAttributes(attr);
+                path.setPathType(AVKey.RHUMB_LINE);
+                airplaneLineLayer.addRenderable(path);
             }
-            
 
-        
-             
-             /*this.airplaneLineLayer = new RenderableLayer();
+
+
+
+            /*this.airplaneLineLayer = new RenderableLayer();
             this.airplaneLayer.setName("AirplaneLines");
             insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
             
             
-             ShapeAttributes attrs = new BasicShapeAttributes();                 
+            ShapeAttributes attrs = new BasicShapeAttributes();                 
             attrs.setOutlineMaterial(new Material(Color.WHITE));
             attrs.setOutlineWidth(2d);
             attrs.setInteriorOpacity(0);
@@ -655,71 +691,77 @@ public final class atc2 extends atc {
             
             double d = 100;
             //double d = (a.getSpeed() / 36000d)*300;
-        double θ = a.getDirection() / 180d * Math.PI;
-        double R = 6371; // Mean radius / radius of the Earh
-
-        double lat = a.getLocation().getLatitude() / 180d * Math.PI;
-        double lon = a.getLocation().getLongitude() / 180d * Math.PI;
-
-        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-        GeoLocation newGeoLoc;
-        newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-        pathPositions.add(newGeoLoc.toPosition());
+            double θ = a.getDirection() / 180d * Math.PI;
+            double R = 6371; // Mean radius / radius of the Earh
+            
+            double lat = a.getLocation().getLatitude() / 180d * Math.PI;
+            double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+            
+            double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+            double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+            GeoLocation newGeoLoc;
+            newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+            pathPositions.add(newGeoLoc.toPosition());
             Path path = new Path(pathPositions);
             airplaneLayer.addRenderable(path);
             //airplaneLineLayer.addRenderable(path);
             }*/
-    }
+        }
 
         /**
          * Build the layer with all of the airplanes.
          */
         private void buildAirplaneLayer() {
-            // Add the airplane layer
-            this.addedAirplanes = new ArrayList<>();
-            this.airplaneLayer = new RenderableLayer();
-            this.airplaneLayer.setName("Airplanes");
-            insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
+            // The init part
+            if (!initDoneAirplaneLayer) {
+                // Add the airplane layer
+                this.addedAirplanes = new ArrayList<>();
+                this.airplaneLayer = new RenderableLayer();
+                this.airplaneLayer.setName("Airplanes");
+                insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
 
-            // Add click-and-go select listener for airplanes
-            this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                    this.getWwd(), airplaneRenderableOLD.class, 500)); // last value is height
+                // Add click-and-go select listener for airplanes
+                this.getWwd().addSelectListener(new ClickAndGoSelectListener(
+                        this.getWwd(), airplaneRenderableOLD.class, 500)); // last value is height
 
-            // Add select listener for airport picking
-            this.getWwd().addSelectListener(new SelectListener() {
+                // Add select listener for airport picking
+                this.getWwd().addSelectListener(new SelectListener() {
 
-                public void selected(SelectEvent event) {
-                    if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
-                        clickAirplane(event.getTopObject());
-                    }
-                    if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
-                        highlightAirplane(event.getTopObject());
-                    }
-                }
-            });
-
-            this.timerAirplane = new Timer(1000, new ActionListener() { 
-                public void actionPerformed(ActionEvent event) {
-                    createAirplaneLines();
-                    if(airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000)
-                    {
-                    System.out.println(airspace.getCurrentACC().GetID());
-                    airspace.BorderControl2();        
-                    }
-                    for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                        ACC acc = it.next();
-                        ListIterator<Flightplan> litr = acc.getFlightplans();
-
-                        while (litr.hasNext()) {
-                            addAirplaneToLayer(airplaneLayer, litr.next());
+                    public void selected(SelectEvent event) {
+                        if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
+                            clickAirplane(event.getTopObject());
+                        }
+                        if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                            highlightAirplane(event.getTopObject());
                         }
                     }
-                }
-            });
-            timerAirplane.start();
+                });
+
+                this.timerAirplane = new Timer(1000, new ActionListener() {
+
+                    public void actionPerformed(ActionEvent event) {
+                        createAirplaneLines();
+                        if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
+                            System.out.println(airspace.getCurrentACC().GetID());
+                            airspace.BorderControl2();
+                        }
+                        for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
+                            ACC acc = it.next();
+                            ListIterator<Flightplan> litr = acc.getFlightplans();
+
+                            while (litr.hasNext()) {
+                                addAirplaneToLayer(airplaneLayer, litr.next());
+                            }
+                        }
+                    }
+                });
+                timerAirplane.start();
+
+                initDoneAirplaneLayer = true;
+            }
+
         }
 
         /**
