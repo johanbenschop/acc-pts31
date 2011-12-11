@@ -16,16 +16,34 @@ import java.util.InputMismatchException;
  */
 public class Airspace {
 
+    
+        /**************Datafields***********/
+    /**
+     * A list used for collecting all the airports within the CTA
+     */
     private ArrayList<Airport> airportList;
+     /**
+     * A list used for collecting all the ACCs
+     */
     private ArrayList<ACC> ACCs;
+     /**
+     * An ID used for identifying the ACCs
+     */
     private int ID = 0;
+     /**
+     * A starters value for the ACC ID numbering
+     */
     private int IDStart = 1000;
+    
+     /**
+     * Contains the selection of the ACC for the instance of this program.
+     */
     private ACC currentACC;
-    //    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
-//    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
-//    public static ACC acc = new ACC(343, cta);
-//    public static ACC acc2 = new ACC(344, cta2);
 
+   /***************Constructor**********/
+    /**
+     * This is a constructor used for making multiple ACCs and recording their information in a list
+     */
     public Airspace() {
         airportList = new ArrayList<Airport>();
         ACCs = new ArrayList<ACC>();
@@ -72,37 +90,8 @@ public class Airspace {
         //}
 //        
     }
-
-    public ACC getACC(int ID) {
-        for (ACC acc : ACCs) {
-            if (acc.GetID() == ID) {
-                return acc;
-            }
-        }
-        return null;
-    }
-
-    public ListIterator<ACC> GetACCs() {
-        return ACCs.listIterator();
-    }
-
-    public ACC getCurrentACC() {
-        return currentACC;
-    }
-
-    public void setCurrentACC(ACC currentACC) {
-        this.currentACC = currentACC;
-    }
-
-    public void setCurrentACC(int ID) {
-        for (ACC acc : ACCs) {
-            if (acc.GetID() == ID) {
-                this.currentACC = acc;
-            }
-        }
-        this.currentACC = null;
-    }
-
+       /**A list is loaded with all the airports in the airports.dat file
+     */
     public void loadAirportList() throws FileNotFoundException, IOException {
         FileInputStream fstream = new FileInputStream("airports.dat");
         DataInputStream in = new DataInputStream(fstream);
@@ -133,6 +122,26 @@ public class Airspace {
             }
         }
     }
+    
+  /**************Getters**************/
+    public ACC getACC(int ID) {
+        for (ACC acc : ACCs) {
+            if (acc.GetID() == ID) {
+                return acc;
+            }
+        }
+        return null;
+    }
+
+    public ListIterator<ACC> GetACCs() {
+        return ACCs.listIterator();
+    }
+
+    public ACC getCurrentACC() {
+        return currentACC;
+    }
+  
+
 
     public ArrayList<Airport> getAirportCTA(GeoSector sector) {
         ArrayList<Airport> airportlist = new ArrayList<Airport>();
@@ -175,7 +184,19 @@ public class Airspace {
         }
         return null;
     }
+    /**************Setters**************/
+    public void setCurrentACC(ACC currentACC) {
+        this.currentACC = currentACC;
+    }
 
+    public void setCurrentACC(int ID) {
+        for (ACC acc : ACCs) {
+            if (acc.GetID() == ID) {
+                this.currentACC = acc;
+            }
+        }
+        this.currentACC = null;
+    }
     /**
      * Gets all the adjacent ACC's from the current ACC and returns this ArrayList.
      * @param ACCID
