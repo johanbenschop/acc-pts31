@@ -600,9 +600,28 @@ public final class atc2 extends atc {
             ArrayList<Position> pathPositions = new ArrayList<Position>();           
             pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
             System.out.println("Lat: " + a.getLocation().getLatitude() + "Lon: " + a.getLocation().getLongitude());
-            GeoLocation newGeoLoc = GeoLocation.CalcPosition(a.getLocation().getLongitude(), a.getLocation().getLatitude(), 100, a.getDirection());
+            
+            
+            
+             double d = 100;
+        double θ = a.getDirection() / 180d * Math.PI;
+        double R = 6371; // Mean radius / radius of the Earh
+
+        double lat = a.getLocation().getLatitude() / 180d * Math.PI;
+        double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+
+        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+        GeoLocation newGeoLoc;
+        newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+        System.out.println("Lat: " + newGeoLoc.getLatitude() + "Lon" + newGeoLoc.getLongitude());
+            
+            /*GeoLocation newGeoLoc = GeoLocation.CalcPosition(a.getLocation().getLongitude(), a.getLocation().getLatitude(), 100, a.getDirection());
                         System.out.println("Lat: " + newGeoLoc.getLatitude() + "Lon: " + newGeoLoc.getLongitude());
-            pathPositions.add(Position.fromDegrees(newGeoLoc.getLongitude(), newGeoLoc.getLatitude()));
+            pathPositions.add(Position.fromDegrees(newGeoLoc.getLongitude(), newGeoLoc.getLatitude()));*/
+        pathPositions.add(newGeoLoc.toPosition());
             Path path = new Path(pathPositions);
             airplaneLayer.addRenderable(path);
             }
