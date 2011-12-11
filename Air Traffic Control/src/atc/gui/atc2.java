@@ -68,6 +68,7 @@ public final class atc2 extends atc {
         protected RenderableLayer airspacesLayer;
         protected RenderableLayer airportLayer;
         protected RenderableLayer airplaneLayer;
+        protected RenderableLayer airplaneLineLayer;
         private GlobeAnnotation tooltipAnnotation;
         private Timer timerAirplane;
         private ArrayList<Airplane> addedAirplanes;
@@ -77,7 +78,7 @@ public final class atc2 extends atc {
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
-
+            airplaneLineLayer = new RenderableLayer();
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
@@ -589,20 +590,25 @@ public final class atc2 extends atc {
         
         //Teken nu voor de airplanes een lijn van 100 km.
          public void createAirplaneLines(){
-             RenderableLayer layerPlaneLines = new RenderableLayer();
-             ShapeAttributes attrs = new BasicShapeAttributes();                 
-            attrs.setOutlineMaterial(new Material(Color.WHITE));
-            attrs.setOutlineWidth(2d);
-            attrs.setInteriorOpacity(0);
-            attrs.setOutlineOpacity(0.7);
-            attrs.setOutlineWidth(3);
+            // We make a new layer for the lines.
+
+            airplaneLineLayer.removeAllRenderables();
+            insertBeforePlacenames(this.getWwd(), airplaneLineLayer);
+            airplaneLineLayer.setName("AirplineLines");
+
+            // We define a set of attributes that all the SurfaceSectors share.
+            ShapeAttributes attr = new BasicShapeAttributes();
+            attr.setInteriorMaterial(Material.WHITE);
+            attr.setOutlineMaterial(Material.WHITE);
+            attr.setInteriorOpacity(0.5);
+            attr.setOutlineOpacity(0.7);
+            attr.setOutlineWidth(3);
+            attr.setEnableAntialiasing(true);
+            
             for(Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList())
             {
             ArrayList<Position> pathPositions = new ArrayList<Position>();           
-            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
-            System.out.println("Lat: " + a.getLocation().getLatitude() + "Lon: " + a.getLocation().getLongitude());
-            
-            
+            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));               
             
             double d = 100;
             //double d = (a.getSpeed() / 36000d)*300;
@@ -618,15 +624,52 @@ public final class atc2 extends atc {
                 Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
         GeoLocation newGeoLoc;
         newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-        System.out.println("Lat: " + newGeoLoc.getLatitude() + "Lon" + newGeoLoc.getLongitude());
+        pathPositions.add(newGeoLoc.toPosition());
+        
+                    Path path = new Path(pathPositions);
+            path.setAttributes(attr);
+            path.setPathType(AVKey.RHUMB_LINE);
+            airplaneLineLayer.addRenderable(path);
+            }
             
-            /*GeoLocation newGeoLoc = GeoLocation.CalcPosition(a.getLocation().getLongitude(), a.getLocation().getLatitude(), 100, a.getDirection());
-                        System.out.println("Lat: " + newGeoLoc.getLatitude() + "Lon: " + newGeoLoc.getLongitude());
-            pathPositions.add(Position.fromDegrees(newGeoLoc.getLongitude(), newGeoLoc.getLatitude()));*/
+
+        
+             
+             /*this.airplaneLineLayer = new RenderableLayer();
+            this.airplaneLayer.setName("AirplaneLines");
+            insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
+            
+            
+             ShapeAttributes attrs = new BasicShapeAttributes();                 
+            attrs.setOutlineMaterial(new Material(Color.WHITE));
+            attrs.setOutlineWidth(2d);
+            attrs.setInteriorOpacity(0);
+            attrs.setOutlineOpacity(0.7);
+            attrs.setOutlineWidth(3);
+            for(Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList())
+            {
+            ArrayList<Position> pathPositions = new ArrayList<Position>();           
+            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));               
+            
+            double d = 100;
+            //double d = (a.getSpeed() / 36000d)*300;
+        double θ = a.getDirection() / 180d * Math.PI;
+        double R = 6371; // Mean radius / radius of the Earh
+
+        double lat = a.getLocation().getLatitude() / 180d * Math.PI;
+        double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+
+        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+        GeoLocation newGeoLoc;
+        newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
         pathPositions.add(newGeoLoc.toPosition());
             Path path = new Path(pathPositions);
             airplaneLayer.addRenderable(path);
-            }
+            //airplaneLineLayer.addRenderable(path);
+            }*/
     }
 
         /**
