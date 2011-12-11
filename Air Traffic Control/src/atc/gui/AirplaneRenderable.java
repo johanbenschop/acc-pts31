@@ -4,6 +4,7 @@ import atc.logic.Airplane;
 import atc.logic.Flightplan;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -115,10 +116,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     }
                     airplane.interrupt();
                 }
-            }
+            } 
         }, 10, 300);
     }
-
+    
     public Airplane getAirplane() {
         return airplane;
     }

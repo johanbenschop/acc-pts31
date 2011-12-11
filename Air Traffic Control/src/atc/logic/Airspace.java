@@ -19,7 +19,7 @@ public class Airspace {
     private ArrayList<Airport> airportList;
     private ArrayList<ACC> ACCs;
     private int ID = 0;
-    ///!!!!!private int IDStart = 1000;
+    private int IDStart = 1000;
     private ACC currentACC;
     //    private static CTA cta2 = new CTA(new GeoSector(40, 60, -10, 10));
 //    private static CTA cta = new CTA(new GeoSector(40, 60, 10, 30));
@@ -38,16 +38,14 @@ public class Airspace {
         }
         GeoSector sector;
         for (int hori = -50; hori < 70; hori += 20) {
-
-
+            ID = IDStart;
             for (int verti = -180; verti < 180; verti += 20) {
                 sector = new GeoSector(hori, hori + 20, verti, verti + 20);
                 CTA cta = new CTA(sector, getAirportCTA(sector));
                 ACCs.add(new ACC(ID, cta));
                 ID++;
             }
-
-
+            IDStart += 100;
         }
         currentACC = ACCs.get(35);
         System.err.println(currentACC.GetID());
@@ -195,12 +193,35 @@ public class Airspace {
         }
         return adjacentACCList;
     }
+    
+    
+    //TODO HIER MOET DE CODE IN DIE ERVOOR ZORGT DAT EEN VLIEGTUIG NIET MEER ZICHTBAAR IS ALS IE BUITEN HET GROENE VAK KOMT EN DIE ERVOOR ZORGT DAT HET VLIEGTUIG GRIJS WORD ALS DEZE IN DE GROENE SECTOR KOMT
+    public void BorderControl2()
+    {
+            for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
+                Flightplan flightplan = it.next();
+                if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                    if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+
+                         System.out.println("Binnen: "+flightplan.getAirplane().getId());
+                    }
+                    else
+                    {
+                       System.out.println("Buiten"+flightplan.getAirplane().getId());
+                                                                               currentACC.unassignFlightFromController(flightplan);
+                                                                                                           currentACC.removeFlightPlan(flightplan);
+                    }
+                    }
+                }
+            }
 
     public void BorderControl() {
+        System.err.println("in borderControl");
         for (ACC adjacentACC : currentACC.getAdjacentACCList()) {
             for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
                 Flightplan flightplan = it.next();
                 if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                    System.out.println("Overgeven");
                     if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
                         if (!adjacentACC.ContainsFlightplan(flightplan)) {
                             currentACC.unassignFlightFromController(flightplan);
