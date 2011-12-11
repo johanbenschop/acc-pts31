@@ -281,7 +281,7 @@ public final class atc2 extends atc {
                         // TODO have to be made working in order to delete inactive airplanes
 //                        Flightplan fp = currentAirplaneAnnotation.getFlightplan();
 //                        Airplane airplane = fp.getAirplane();
-//                        if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) | 
+//                        if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) |
 //                                airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
 //                            removeAirplaneFromLayer(airplaneLayer, fp);
 //                        }
@@ -321,12 +321,6 @@ public final class atc2 extends atc {
             airportLayer.addRenderable(this.tooltipAnnotation);
 
             atc2.airspace.setCurrentACC(atc2.airspace.getACC(1000)); //DIT WAS 0 maar heeft paul verandert omdat het ID begint op 1000.
-
-            // TODO Need to remove this and add the based on usage!
-            airspace.getCurrentACC().addFlightController();
-            airspace.getCurrentACC().addFlightController();
-            airspace.getCurrentACC().addFlightController();
-
         }
 
         /**
@@ -488,6 +482,14 @@ public final class atc2 extends atc {
             airspaceLayer.addRenderable(surfaceSector);
             airspaceLayer.addRenderable(surfaceSectorGreater);
 
+            // Set the current ACC to the selected one.
+            airspace.setCurrentACC(acc);
+            
+            // TODO Need to remove this and add the based on usage!
+            airspace.getCurrentACC().addFlightController();
+            //airspace.getCurrentACC().addFlightController();
+            //airspace.getCurrentACC().addFlightController();
+            
             // Playing the boss here. We limit the users ability to go outside of their job area.
             // We don't want any FlightControllers spending time on useless stuff.
             OrbitView view = this.getOrbitView();
@@ -560,7 +562,7 @@ public final class atc2 extends atc {
             layer.addRenderable(new AirportRenderable(airport));
         }
 
-        /** 
+        /**
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */
@@ -656,7 +658,7 @@ public final class atc2 extends atc {
         /**
          * Adds an airplane to the airplane layer.
          * @param layer
-         * @param flightplan 
+         * @param flightplan
          */
         private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
@@ -672,7 +674,7 @@ public final class atc2 extends atc {
         /**
          * Removes an airplane from the airplane layer.
          * @param layer
-         * @param flightplan 
+         * @param flightplan
          */
         private void removeAirplaneFromLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
@@ -689,7 +691,7 @@ public final class atc2 extends atc {
             }
         }
 
-        /** 
+        /**
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */

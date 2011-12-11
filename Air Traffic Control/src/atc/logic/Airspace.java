@@ -16,31 +16,29 @@ import java.util.InputMismatchException;
  */
 public class Airspace {
 
-    
-        /**************Datafields***********/
+    /**************Datafields***********/
     /**
      * A list used for collecting all the airports within the CTA
      */
     private ArrayList<Airport> airportList;
-     /**
+    /**
      * A list used for collecting all the ACCs
      */
     private ArrayList<ACC> ACCs;
-     /**
+    /**
      * An ID used for identifying the ACCs
      */
     private int ID = 0;
-     /**
+    /**
      * A starters value for the ACC ID numbering
      */
     private int IDStart = 1000;
-    
-     /**
+    /**
      * Contains the selection of the ACC for the instance of this program.
      */
     private ACC currentACC;
 
-   /***************Constructor**********/
+    /***************Constructor**********/
     /**
      * This is a constructor used for making multiple ACCs and recording their information in a list
      */
@@ -90,7 +88,8 @@ public class Airspace {
         //}
 //        
     }
-       /**A list is loaded with all the airports in the airports.dat file
+
+    /**A list is loaded with all the airports in the airports.dat file
      */
     public void loadAirportList() throws FileNotFoundException, IOException {
         FileInputStream fstream = new FileInputStream("airports.dat");
@@ -122,8 +121,8 @@ public class Airspace {
             }
         }
     }
-    
-  /**************Getters**************/
+
+    /**************Getters**************/
     public ACC getACC(int ID) {
         for (ACC acc : ACCs) {
             if (acc.GetID() == ID) {
@@ -140,8 +139,6 @@ public class Airspace {
     public ACC getCurrentACC() {
         return currentACC;
     }
-  
-
 
     public ArrayList<Airport> getAirportCTA(GeoSector sector) {
         ArrayList<Airport> airportlist = new ArrayList<Airport>();
@@ -184,6 +181,7 @@ public class Airspace {
         }
         return null;
     }
+
     /**************Setters**************/
     public void setCurrentACC(ACC currentACC) {
         this.currentACC = currentACC;
@@ -197,6 +195,7 @@ public class Airspace {
         }
         this.currentACC = null;
     }
+
     /**
      * Gets all the adjacent ACC's from the current ACC and returns this ArrayList.
      * @param ACCID
@@ -214,27 +213,23 @@ public class Airspace {
         }
         return adjacentACCList;
     }
-    
-    
-    //TODO HIER MOET DE CODE IN DIE ERVOOR ZORGT DAT EEN VLIEGTUIG NIET MEER ZICHTBAAR IS ALS IE BUITEN HET GROENE VAK KOMT EN DIE ERVOOR ZORGT DAT HET VLIEGTUIG GRIJS WORD ALS DEZE IN DE GROENE SECTOR KOMT
-    public void BorderControl2()
-    {
-            for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
-                Flightplan flightplan = it.next();
-                if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                    if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
 
-                         System.out.println("Binnen: "+flightplan.getAirplane().getId());
-                    }
-                    else
-                    {
-                       System.out.println("Buiten"+flightplan.getAirplane().getId());
-                                                                               currentACC.unassignFlightFromController(flightplan);
-                                                                                                           currentACC.removeFlightPlan(flightplan);
-                    }
-                    }
+    //TODO HIER MOET DE CODE IN DIE ERVOOR ZORGT DAT EEN VLIEGTUIG NIET MEER ZICHTBAAR IS ALS IE BUITEN HET GROENE VAK KOMT EN DIE ERVOOR ZORGT DAT HET VLIEGTUIG GRIJS WORD ALS DEZE IN DE GROENE SECTOR KOMT
+    public void BorderControl2() {
+        for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
+            Flightplan flightplan = it.next();
+            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+
+                    System.out.println("Binnen: " + flightplan.getAirplane().getId());
+                } else {
+                    System.out.println("Buiten" + flightplan.getAirplane().getId());
+                    currentACC.unassignFlightFromController(flightplan);
+                    currentACC.removeFlightPlan(flightplan);
                 }
             }
+        }
+    }
 
     public void BorderControl() {
         System.err.println("in borderControl");
