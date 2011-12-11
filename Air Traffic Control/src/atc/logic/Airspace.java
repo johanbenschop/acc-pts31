@@ -224,7 +224,7 @@ public class Airspace {
                     System.out.println("Binnen: " + flightplan.getAirplane().getId());
                 } else {
                     System.out.println("Buiten" + flightplan.getAirplane().getId());
-                    currentACC.unassignFlightFromController(flightplan);
+                    //currentACC.unassignFlightFromController(flightplan);
                     currentACC.removeFlightPlan(flightplan);
                 }
             }
