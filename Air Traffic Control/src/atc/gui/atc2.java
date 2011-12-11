@@ -587,7 +587,9 @@ public final class atc2 extends atc {
             }
         }
         
+        //Teken nu voor de airplanes een lijn van 100 km.
          public void createAirplaneLines(){
+                         airplaneLayer.removeAllRenderables();
              RenderableLayer layerPlaneLines = new RenderableLayer();
              ShapeAttributes attrs = new BasicShapeAttributes();                 
             attrs.setOutlineMaterial(new Material(Color.WHITE));
@@ -603,7 +605,8 @@ public final class atc2 extends atc {
             
             
             
-             double d = 100;
+            double d = 100;
+            //double d = (a.getSpeed() / 36000d)*300;
         double θ = a.getDirection() / 180d * Math.PI;
         double R = 6371; // Mean radius / radius of the Earh
 
