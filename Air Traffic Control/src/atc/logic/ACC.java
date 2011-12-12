@@ -38,6 +38,7 @@ public class ACC {
      * an airplane factory
      */
     private AirplaneFactory airplaneFactory;
+    private FlightController flightcontroller;
     private ArrayList<FlightController> flightControllers;
     private ArrayList<ACC> adjacentACCList;
     
@@ -92,7 +93,28 @@ public class ACC {
     public ArrayList<Flightplan> getfp() {
         return fp;
     }
-
+    /**
+     * Method to get list of flight controllers
+     * 
+     * @return list of flight controllers
+     */
+    public ArrayList<FlightController> getfc() {
+        return flightControllers;
+    }
+    
+        /**
+     * Method to get the FlightController 
+     * 
+     * @return FlightController
+     */
+    public FlightController GetFlightController(int FlightControllerID) {
+        for (FlightController a : flightControllers) {
+            if (a.getID() == FlightControllerID) {
+                flightcontroller = a;
+            }
+        }
+        return flightcontroller;
+    }
     /**
      * Method to get the Airplane Factory
      * 
@@ -321,6 +343,7 @@ public class ACC {
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
+     * @deprecated 
      */
     public FlightController addFlightController() {
         FlightController controller = new FlightController();
