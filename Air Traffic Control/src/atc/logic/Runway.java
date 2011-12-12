@@ -32,9 +32,8 @@ public class Runway {
      * The geolocation of the runway. 
      */
     private GeoLocation location;
-
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
-    
+
     /**A runway is made with the following parameters:
      * @param Longitude: The longitude of the runway.
      * @param Latitude: The latitude of the runway.
@@ -50,23 +49,6 @@ public class Runway {
         this.Availability = availability;
     }
 
-    /**************Getters**************/
-    public GeoLocation getLocation() {
-        return location;
-    }
-
-    public int getLength() {
-        return Length;
-    }
-
-    public int getDirection() {
-        return Direction;
-    }
-
-    public boolean getAvailability() {
-        return Availability;
-    }
-
     /**
      * @param r is what the availability should become after calling this method.
      * @return Availability
@@ -74,7 +56,7 @@ public class Runway {
     public void ChangeAvailability(boolean r) {
         timer = new Timer();
         if (r) {
-            timer.schedule(new timerTask(r), (int)(prefs.getDouble("SIM_SPEED", 1) * 180000)); //180,000 milliseconds = 3 minutes
+            timer.schedule(new timerTask(r), (int) (prefs.getDouble("SIM_SPEED", 1) * 180000)); //180,000 milliseconds = 3 minutes
         } else {
             Availability = r;
         }
@@ -96,5 +78,22 @@ public class Runway {
             Availability = available;
             timer.cancel();
         }
+    }
+
+    /**************Getters**************/
+    public GeoLocation getLocation() {
+        return location;
+    }
+
+    public int getLength() {
+        return Length;
+    }
+
+    public int getDirection() {
+        return Direction;
+    }
+
+    public boolean getAvailability() {
+        return Availability;
     }
 }
