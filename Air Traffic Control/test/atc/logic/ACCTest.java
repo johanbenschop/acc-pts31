@@ -36,15 +36,12 @@ public class ACCTest {
     private Airport airport2;
     private AirplaneFactory airplaneFactory;
     private ArrayList<Airport> airportList = new ArrayList<Airport>();
-    private GeoSector geosector;
     private ACC acc;
-    private CTA cta;
     private Airplane airplane;
     private Airspace airspace;
     private GregorianCalendar gc1;
     private GregorianCalendar gc2;
     private Flightplan flightPlan;
-    private ArrayList<Runway> runways;
     private FlightController fc;
     
     @BeforeClass
@@ -70,13 +67,10 @@ public class ACCTest {
         //apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, Double.parseDouble("299"), 100, Double.parseDouble("640"), loc, loc2, 2);
         ra = new Runway(1,1,50, 300, 180, true);
         ru = new Runway(1,1,50,300, 270, false);
-        geosector = new GeoSector(0, 0, 0, 0);
         airplane = new Airplane(600, 400, 10000, "", "", 10, 10, 10, 10000, 500, 0, 0, 10000, 0 , loc, loc2, 9999);
-        cta = new CTA(geosector, airportList); // Hier moeten ook nog goede waardes in
         acc = new ACC(2, null);
         airspace = new Airspace();
         airspace.setCurrentACC(acc);
-        runways = new ArrayList<Runway>();
         airport1 = new Airport(1,"bla", "bla", "bla", "bla", "bla",loc, 1000, 10.0, "EU");
         airport2 = new Airport(2,"bla", "bla", "bla", "bla", "bla",loc, 1000, 10.0, "EU");
         airplaneFactory = new AirplaneFactory(900, 500, 100, "bla" , "bla", 20, 20, 50, 10000, 500);

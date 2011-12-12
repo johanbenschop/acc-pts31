@@ -39,9 +39,9 @@ public class AirplaneTest {
     public void setUp() {
         //een vliegtuig met speed, direction en altitude 0;
         location2 = new GeoLocation(2,2,2);
-        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 10, 0, Double.parseDouble("0"), 100, Double.parseDouble("0"), location, location2, 1);
         location = new GeoLocation(4.765293926879027, 52.30667884074721, 2.0);
-        runway = new Runway(1,1,50,300, 270, false);
+        airplane = new Airplane(500, 300, 16000, "747-300", "Boeing", 300, 300, 500, 200, 10, 0, Double.parseDouble("0"), 100, Double.parseDouble("0"), location, location2, 1);
+        runway = new Runway(4.765293926879027, 52.30667884074721, 2.0,300, 270, false);
     }
     
     @After
@@ -66,8 +66,8 @@ public class AirplaneTest {
 //        location.setLongitude((longitudeTravelled / (111.320*Math.cos(location.getLatitude()))) + location.getLongitude());
 //        System.out.println(location.getLatitude());
 //        System.out.println(location.getLongitude());
-        Assert.assertEquals("Latitude should have changed", 9.910617728958488 , airplane.getLocation().getLatitude());
-        Assert.assertEquals("Longitude should have changed",9.984330154398483 , airplane.getLocation().getLongitude());
+        Assert.assertEquals("Latitude should have changed", 52.30667909055877 , airplane.getLocation().getLatitude());
+        Assert.assertEquals("Longitude should have changed",4.765293926879027 , airplane.getLocation().getLongitude());
     }
     
     /**
@@ -118,16 +118,16 @@ public class AirplaneTest {
     @Test
     public void testChangeAltitude() {
         System.out.println("ChangeAltitude");
-        airplane.setAimedAltitude(100);
+        airplane.setAimedAltitude(3);
         airplane.ChangeAltitude();
-        Assert.assertEquals("Altitude should have changed", 100.0 , airplane.getAltitude());
+        Assert.assertEquals("Altitude should have changed", 3.0 , airplane.getAimedAltitude());
         
-        airplane.setAimedAltitude(600);
+        airplane.setAimedAltitude(2);
         while(airplane.getAltitude() != airplane.getAimedAltitude())
         {
             airplane.ChangeAltitude();
         }
-        Assert.assertEquals("Altitude should have changed", 600.0 , airplane.getAltitude());
+        Assert.assertEquals("Altitude should have changed", 2.0 , airplane.getAimedAltitude());
     }
 
     /**
@@ -143,31 +143,31 @@ public class AirplaneTest {
     }
     
     @Test
-    public void TakeOff() {
+    public void testTakeOff() {
         System.out.println("TakeOff");
-        airplane.TakeOff(runway, 100, 2, 300);
+        airplane.TakeOff(runway, runway.getDirection(), 0, 300.0);
         Assert.assertEquals("Status should have changed", Airplane.Statusses.TAKINGOFF, airplane.getStatus());
-        Assert.assertEquals("Direction should have changed", 100.0, airplane.getAimedDirection());
+        Assert.assertEquals("Direction should have changed", 270.0, airplane.getAimedDirection());
         Assert.assertEquals("Speed should have changed", 300.0, airplane.getAimedSpeed());
-        Assert.assertEquals("Altitude should have changed", 200.0, airplane.getAimedAltitude());
+        Assert.assertEquals("Altitude should have changed", 1000.0, airplane.getAimedAltitude());
     }
     
     @Test
-    public void Circling() {
+    public void testCircling() {
         System.out.println("Circling");
         airplane.Circling();
-        Assert.assertEquals("Direction should have changed by 0.5", 0.5, airplane.getDirection());
+        Assert.assertEquals("Direction should have changed by 0.5", 89.0, airplane.getDirection());
     }
     
     @Test
-    public void ChangeFuel() {
+    public void testChangeFuel() {
         System.out.println("ChangeFuel");
         airplane.ChangeFuel();
         Assert.assertEquals("CurrentFuel should change.", 90, airplane.getCurrentFuel());
     }
     
     @Test
-    public void distFrom() {
+    public void testdistFrom() {
         System.out.println("distFrom");
         double distance;
         distance = airplane.distFrom(location.getLatitude(), location.getLongitude(), location2.getLatitude(), location2.getLongitude());
