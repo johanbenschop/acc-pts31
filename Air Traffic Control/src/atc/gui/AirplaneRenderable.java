@@ -2,10 +2,12 @@ package atc.gui;
 
 import atc.logic.Airplane;
 import atc.logic.Flightplan;
+import atc.logic.GeoLocation;
 import atc.logic.GeoSector;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.GlobeAnnotation;
+import gov.nasa.worldwind.render.SurfacePolyline;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -17,9 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 
 /**
@@ -34,8 +38,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private BufferedImage originalImage;
     private GlobeAnnotation tooltip;
     private boolean mayControl;
+    private final SurfacePolyline path;
+    private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
-    public AirplaneRenderable(final Flightplan flightplan) {
+    public AirplaneRenderable(final Flightplan flightplan, SurfacePolyline path2) {
         super("", flightplan.getAirplane().getLocation().toPosition());
 
         if (originalImage == null) {
@@ -47,6 +53,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
         }
         this.flightplan = flightplan;
         this.airplane = this.flightplan.getAirplane();
+        this.path = path2;
 
         this.getAttributes().setLeader(AVKey.SHAPE_NONE);
         this.getAttributes().setDrawOffset(new Point(0, 0));
@@ -88,11 +95,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
                         originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
                         if (flightplan.getAssignedController() != atc2.AppFrame.getFlightController()) {
                             mayControl = false;
-                        }
-                        else {
+                        } else {
                             mayControl = true;
                         }
-                        
+
                     } else if (!sector.containsGeoLocation(airplane.getLocation()) && !greaterSector.containsGeoLocation(airplane.getLocation())) {
                         // The airplane is at a place where we don't care molucules about it, remove it.
                         dispose(); // (Not sure what this does)
@@ -137,6 +143,32 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     }
                     airplane.interrupt();
                 }
+                
+                Object o = getValue("TRUE_DRAW_LINE");
+                if (o != null && (boolean)o) {
+                    
+              
+                ArrayList<Position> pathPositions = new ArrayList<>();
+                pathPositions.add(Position.fromDegrees(flightplan.getAirplane().getLocation().getLatitude(), flightplan.getAirplane().getLocation().getLongitude()));
+
+                double d = (flightplan.getAirplane().getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
+                double θ = flightplan.getAirplane().getDirection() / 180d * Math.PI;
+                double R = 6371; // Mean radius / radius of the Earh
+
+                double lat = flightplan.getAirplane().getLocation().getLatitude() / 180d * Math.PI;
+                double lon = flightplan.getAirplane().getLocation().getLongitude() / 180d * Math.PI;
+
+                double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                        + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+                double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                        Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+                GeoLocation newGeoLoc;
+                newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+                pathPositions.add(newGeoLoc.toPosition());
+
+                path.setLocations(pathPositions);
+                }
+
             }
         }, 10, 300);
     }

@@ -200,7 +200,7 @@ public class Airplane extends Thread {
                 try {
                     Fly();
                     //System.out.println("Speed: " + Speed + "Status: " + Status.toString());
-                    Thread.sleep((int) (SIM_SPEED * 100));// er word telkens 1/10e seconde gewacht.
+                    Thread.sleep((int) (100 / prefs.getDouble("SIM_SPEED", 1)));// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
                 }
