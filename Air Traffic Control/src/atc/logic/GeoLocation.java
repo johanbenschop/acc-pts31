@@ -22,6 +22,7 @@ public class GeoLocation {
      */
     private double Altitude;
 
+    /***************Constructor**********/
     /**A GeoLocation is made with the following parameters:
      * @param Longitude: The longitude of GeoLocation.
      * @param Latitude: The latitude of GeoLocation.
