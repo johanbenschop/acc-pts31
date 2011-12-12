@@ -43,6 +43,9 @@ public class jfSelectAirplane extends javax.swing.JDialog {
 
         TableModel model = new DefaultTableModel(data, columnNames);
         jTable.setModel(model);
+        tfType.setText("");
+        tfManafacturer.setText("");
+        
     }
 
     /** This method is called from within the constructor to
@@ -128,6 +131,9 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         jLabel1.setText("Type");
 
         tfType.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfTypeKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfSearchKeyTyped(evt);
             }
@@ -140,6 +146,9 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         });
 
         tfManafacturer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfManafacturerKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfSearchKeyTyped(evt);
             }
@@ -156,12 +165,12 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -195,7 +204,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,100 +240,113 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSelectActionPerformed
 
 private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
-
-    data.clear(); // Empty the data so we can get the limited results in.
-    airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
-    retAirplanes.clear();
-    
-    while (airplanes.hasNext()) {
-        AirplaneFactory iter = airplanes.next();
-
-        /*if(tfType.getText() != null && tfManafacturer.getText() == null)
-        {
-            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-            if(!iter.getType().contains(tfType.getText()))
-            {
-                continue;
-            }else {
-                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
-                    continue;
-                }
-        }
-        }else if(tfManafacturer.getText() != null && tfType.getText() == null)
-        {
-            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if(!iter.getType().contains(tfManafacturer.getText()))
-            {
-                continue;
-            }else {
-                if (!iter.getType().contains(tfManafacturer.getText() + evt.getKeyChar())) {
-                    continue;
-                }
-        }
-        }else if(tfType.getText() != null && tfManafacturer.getText() != null)
-        {
-            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
-            {
-                continue;
-            }else {
-                if ((!iter.getType().contains(tfType.getText() + evt.getKeyChar())) && (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar()))) 
-                {
-                    continue;
-                }
-        }
-        }*/
-    
-        
-        if (evt.getComponent() == tfType) {
-            if (evt.getKeyChar() == '\b') {
-                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-                if (!iter.getType().contains(tfType.getText())) {
-                    continue;
-                }
-            } else {
-                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
-                    continue;
-                }
-            }
-        }
-
-        else if (evt.getComponent() == tfManafacturer) {
-            if (evt.getKeyChar() == '\b') {
-                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
-                    continue;
-                }
-            } else {
-                if (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar())) {
-                    continue;
-                }
-            }
-        } 
-
-//        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
+//    evt.getKeyChar(); // Key typed...
+//    data.clear(); // Empty the data so we can get the limited results in.
+//    airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+//    retAirplanes.clear();
+//    
+//    while (airplanes.hasNext()) {
+//        AirplaneFactory iter = airplanes.next();
+//        
+//        if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
 //        {
-//            continue;
+//            System.out.println("zoek Type met leeg/null manafacturer");
+//            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+//            if(!iter.getType().contains(tfType.getText()))
+//            {
+//                continue;
+//            }else {
+//                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
+//                    continue;
+//                }
 //        }
-//         //We don't have the airliner stuff implemented yet so we can't actually searh it.
-//        if (evt.getComponent() == tfAirliner) {
+//        } if(!tfManafacturer.getText().equals("") && tfType.getText().equals("") )
+//        {
+//            System.out.println("zoek manafacturer met leeg/null type");
+//            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+//            if(!iter.getType().contains(tfManafacturer.getText()))
+//            {
+//                continue;
+//            }else {
+//                if (!iter.getType().contains(tfManafacturer.getText() + evt.getKeyChar())) {
+//                    continue;
+//                }
+//        }
+//        }if(tfType.getText().equals("") && tfManafacturer.getText().equals(""))
+//        {
+//            System.out.println("zoek Type of manufacterer");
+//            System.out.println(tfManafacturer.getText() + "mana");
+//            System.out.println(tfType.getText() + "type");
+//            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+//            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+//            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
+//            {
+//                continue;
+//            }else {
+//                if ((!iter.getType().contains(tfType.getText() + evt.getKeyChar())) && (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar()))) 
+//                {
+//                    continue;
+//                }
+//        }
+//        }
+//    
+//        
+//        /*if (evt.getComponent() == tfType) {
 //            if (evt.getKeyChar() == '\b') {
-//                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
-//                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+//                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+//                if (!iter.getType().contains(tfType.getText())) {
 //                    continue;
 //                }
 //            } else {
-//                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+//                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
 //                    continue;
 //                }
 //            }
 //        }
-        fillVector(iter);
-    }
-
-    fillTable();
+//
+//        else if (evt.getComponent() == tfManafacturer) {
+//            if (evt.getKeyChar() == '\b') {
+//                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+//                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
+//                    continue;
+//                }
+//            } else {
+//                if (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar())) {
+//                    continue;
+//                }
+//            }
+//        } 
+//
+////        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
+////        {
+////            continue;
+////        }
+////         //We don't have the airliner stuff implemented yet so we can't actually searh it.
+////        if (evt.getComponent() == tfAirliner) {
+////            if (evt.getKeyChar() == '\b') {
+////                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
+////                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+////                    continue;
+////                }
+////            } else {
+////                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+////                    continue;
+////                }
+////            }
+////        }*/
+//        fillVector(iter);
+//    }
+//
+//    fillTable();
 }//GEN-LAST:event_tfSearchKeyTyped
+
+private void tfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyReleased
+    search();
+}//GEN-LAST:event_tfTypeKeyReleased
+
+private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfManafacturerKeyReleased
+    search();
+}//GEN-LAST:event_tfManafacturerKeyReleased
 
     public void fillVector(AirplaneFactory iter) {
         Vector<String> row = new Vector<>();
@@ -400,6 +422,66 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    private void search(){
+        data.clear(); // Empty the data so we can get the limited results in.
+    airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+    retAirplanes.clear();
+    
+    while (airplanes.hasNext()) {
+        AirplaneFactory iter = airplanes.next();
+        
+        if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
+        {
+            System.out.println("zoek Type met iets/null manafacturer");
+            System.out.println(tfType.getText());
+            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+            if(!iter.getType().contains(tfType.getText()))
+            {
+                continue;
+            }
+        
+        } else if(!tfManafacturer.getText().equals("") && tfType.getText().equals("") )
+        {
+            System.out.println("zoek manafacturer met iets /null type");
+            System.out.println(tfManafacturer.getText());
+            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if(!iter.getType().contains(tfManafacturer.getText()))
+            {
+                System.out.println("niet");
+                continue;
+            }
+        
+        }else if(tfType.getText().equals("") && tfManafacturer.getText().equals(""))
+        {
+            System.out.println("zoek Type of manufacterer");
+            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
+            {
+                continue;
+            }
+        }
+        
+        else if(!tfType.getText().equals("") && !tfManafacturer.getText().equals("")){
+            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+            if(!iter.getType().contains(tfType.getText()))
+            {
+                continue;
+            }
+            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if(!iter.getType().contains(tfManafacturer.getText()))
+            {
+                continue;
+            }
+        }
+        
+  
+        fillVector(iter);
+    }
+
+    fillTable();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
