@@ -37,6 +37,7 @@ public class Airspace {
     /***************Constructor**********/
     /**
      * This is a constructor used for making multiple ACCs and recording their information in a list
+     * 
      */
     public Airspace() {
         airportList = new ArrayList<Airport>();
@@ -85,7 +86,9 @@ public class Airspace {
 //        
     }
 
-    /**A list is loaded with all the airports in the airports.dat file
+    /**
+     * A method to load the list with all the airports in the airports.dat file
+     * 
      */
     public void loadAirportList() throws FileNotFoundException, IOException {
         FileInputStream fstream = new FileInputStream("airports.dat");
@@ -118,7 +121,11 @@ public class Airspace {
         }
     }
 
-    /**************Getters**************/
+    /**
+     * A method to get the ACC with the given ID
+     * 
+     * @return The acc with the given ID
+     */
     public ACC getACC(int ID) {
         for (ACC acc : ACCs) {
             if (acc.GetID() == ID) {
@@ -128,14 +135,11 @@ public class Airspace {
         return null;
     }
 
-    public ListIterator<ACC> GetACCs() {
-        return ACCs.listIterator();
-    }
-
-    public ACC getCurrentACC() {
-        return currentACC;
-    }
-
+    /**
+     * A method to get the airport list within the given GeoSector
+     * 
+     * @return An list with airports in the given GeoSector
+     */
     public ArrayList<Airport> getAirportCTA(GeoSector sector) {
         ArrayList<Airport> airportlist = new ArrayList<Airport>();
         for (Airport airport : airportList) {
@@ -147,16 +151,9 @@ public class Airspace {
     }
 
     /**
-     * Turns the airport list into a Iterator
-     * @return Iterator airportList
-     */
-    public ListIterator<Airport> GetAirports() {
-        return airportList.listIterator();
-    }
-
-    /**
-     * Returns the airport with the given AirportID
-     * @return
+     * A method to get the airport with the given AirportID
+     * 
+     * @return The airport with the given AirportID
      */
     public Airport GetAirport(int AirportID) throws NullPointerException {
         Airport airport = null;
@@ -178,20 +175,6 @@ public class Airspace {
         return null;
     }
 
-    /**************Setters**************/
-    public void setCurrentACC(ACC currentACC) {
-        this.currentACC = currentACC;
-    }
-
-    public void setCurrentACC(int ID) {
-        for (ACC acc : ACCs) {
-            if (acc.GetID() == ID) {
-                this.currentACC = acc;
-            }
-        }
-        this.currentACC = null;
-    }
-
     /**
      * Gets all the adjacent ACC's from the current ACC and returns this ArrayList.
      * @param ACCID
@@ -210,6 +193,11 @@ public class Airspace {
         return adjacentACCList;
     }
 
+    /**
+     *                                                                                      TODO
+     *
+     * 
+     */
     //TODO HIER MOET DE CODE IN DIE ERVOOR ZORGT DAT EEN VLIEGTUIG NIET MEER ZICHTBAAR IS ALS IE BUITEN HET GROENE VAK KOMT EN DIE ERVOOR ZORGT DAT HET VLIEGTUIG GRIJS WORD ALS DEZE IN DE GROENE SECTOR KOMT
     public void BorderControl2() {
         for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
@@ -237,6 +225,11 @@ public class Airspace {
         }
     }
 
+    /**
+     *                                                                                  TODO
+     * 
+     * 
+     */
     public void BorderControl() {
         System.err.println("in borderControl");
         for (ACC adjacentACC : currentACC.getAdjacentACCList()) {
@@ -259,27 +252,53 @@ public class Airspace {
                     }
                 }
             }
-
-            ///DIT BEWAREN (PAUL)
-        /*for(ACC adjacentACC : currentACC.getAdjacentACCList())
-            {
-            for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
-            Flightplan flightplan = it.next();
-            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-            if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-            currentACC.unassignFlightFromController(flightplan);
-            currentACC.assignFlightToController(flightplan);
-            adjacentACC.removeFlightPlan(flightplan);
-            currentACC.addFlightPlan(flightplan);
-            adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
-            currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-            //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
-            } else {
-            //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA())
-            currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-            }
-            }
-            }*/
         }
+    }
+
+    ///DIT BEWAREN (PAUL)
+        /*for(ACC adjacentACC : currentACC.getAdjacentACCList())
+    {
+    for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
+    Flightplan flightplan = it.next();
+    if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+    if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+    currentACC.unassignFlightFromController(flightplan);
+    currentACC.assignFlightToController(flightplan);
+    adjacentACC.removeFlightPlan(flightplan);
+    currentACC.addFlightPlan(flightplan);
+    adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
+    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
+    //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
+    } else {
+    //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA())
+    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
+    }
+    }
+    }*/
+    /**************Getters**************/
+    public ListIterator<ACC> GetACCs() {
+        return ACCs.listIterator();
+    }
+
+    public ACC getCurrentACC() {
+        return currentACC;
+    }
+
+    public ListIterator<Airport> GetAirports() {
+        return airportList.listIterator();
+    }
+
+    /**************Setters**************/
+    public void setCurrentACC(ACC currentACC) {
+        this.currentACC = currentACC;
+    }
+
+    public void setCurrentACC(int ID) {
+        for (ACC acc : ACCs) {
+            if (acc.GetID() == ID) {
+                this.currentACC = acc;
+            }
+        }
+        this.currentACC = null;
     }
 }
