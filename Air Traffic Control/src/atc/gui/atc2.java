@@ -638,7 +638,7 @@ public final class atc2 extends atc {
                             airspace.BorderControl2();
                             }
                             catch (Exception e) {
-                                
+                                System.err.println(e);
                             }
                         }
                         for (Iterator<Flightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
