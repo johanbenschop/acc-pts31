@@ -1,5 +1,6 @@
 package atc.logic;
 
+import atc.gui.atc2;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -199,17 +200,20 @@ public class Airspace {
             if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
                 if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
                 } else {
-                    ArrayList<ACC> surroundingACCs = this.getAdjacentACCs(this.currentACC.GetID());
-                    for (Iterator<ACC> ita = surroundingACCs.iterator(); ita.hasNext();) {
+                    for (Iterator<ACC> ita = this.getAdjacentACCs(this.currentACC.GetID()).iterator(); ita.hasNext();) {
                         ACC acc = ita.next();
-                        if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                            acc.addFlightController();
-                            acc.assignFlightToController(flightplan);
-                            acc.addFlightPlan(flightplan);
-                            currentACC.unassignFlightFromController(flightplan);
-                            currentACC.removeFlightPlan(flightplan);
-                            System.out.println("Removed from sending ACC: " + currentACC.GetID());
-                            System.out.println("Added to receiving ACC: " + acc.GetID());
+                        if (acc.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                            //Laat waarschuwing aan ontvangende ACC zien.
+                            //HOE?                            
+                            if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                                acc.addFlightController();
+                                acc.assignFlightToController(flightplan);
+                                acc.addFlightPlan(flightplan);
+                                currentACC.unassignFlightFromController(flightplan);
+                                currentACC.removeFlightPlan(flightplan);
+                                System.out.println("Removed from sending ACC: " + currentACC.GetID());
+                                System.out.println("Added to receiving ACC: " + acc.GetID());
+                            }
                         }
                     }
                 }

@@ -705,7 +705,7 @@ public final class atc2 extends atc {
 
                 // Add click-and-go select listener for airplanes
                 this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                        this.getWwd(), AirplaneRenderable.class, 500)); // last value is height
+                        this.getWwd(), AirplaneRenderable.class, 10000)); // last value is height
 
                 // Add select listener for airport picking
                 this.getWwd().addSelectListener(new SelectListener() {
@@ -812,7 +812,8 @@ public final class atc2 extends atc {
                 return; // The selected object isn't our airplane.
             }
             AirplaneRenderable rend = (AirplaneRenderable) o;
-            if (rend.isMayControl()) {
+            //Has to be !rend.isMayControl otherwise it can't have control....
+            if (!rend.isMayControl()) {
                 // The user may control this airplane.
                 Flightplan flightplan = rend.getFlightplan();
                 new jfCommandFlight(this, true).setFlightplan(flightplan);
