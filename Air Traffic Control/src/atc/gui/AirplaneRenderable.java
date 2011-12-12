@@ -73,11 +73,15 @@ public class AirplaneRenderable extends GlobeAnnotation {
 
             @Override
             public void run() {
+                if (atc2.airspace.getCurrentACC() == null) {
+                    return;
+                }
+                
                 double direction = airplane.getDirection();
                 Position position = airplane.getLocation().toPosition();
                 GeoSector sector = atc2.airspace.getCurrentACC().GetCTA().sector;
                 GeoSector greaterSector = atc2.airspace.getCurrentACC().GetCTA().sectorGreater;
-
+                
                 try {
                     // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
                     if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
@@ -148,8 +152,6 @@ public class AirplaneRenderable extends GlobeAnnotation {
     public boolean isMayControl() {
         return mayControl;
     }
-    
-    
 
     private BufferedImage drawHeading() {
         BufferedImage image = null;
@@ -183,7 +185,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
         NumberFormat NF = NumberFormat.getNumberInstance(l);
         DecimalFormat DF = (DecimalFormat) NF;
         DF.applyPattern("#.##");
-        return "<p><b><font color=\"#664400\">Flight " + flightplan.getFlightnumber() + "</font></b>"
+        return "<p><b><font>Flight " + flightplan.getFlightnumber() + "</font></b>"
                 + "<br />Departure: "
                 + flightplan.getTakeoffAirport().getCity() + ", "
                 + flightplan.getTakeoffAirport().getCountry() + " ["
