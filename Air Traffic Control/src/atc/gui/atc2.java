@@ -25,6 +25,7 @@ import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Path;
 import gov.nasa.worldwind.render.ShapeAttributes;
+import gov.nasa.worldwind.render.SurfacePolyline;
 import gov.nasa.worldwind.render.SurfaceSector;
 import gov.nasa.worldwind.view.orbit.BasicOrbitViewLimits;
 import gov.nasa.worldwind.view.orbit.OrbitView;
@@ -80,6 +81,8 @@ public final class atc2 extends atc {
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
             airplaneLineLayer = new RenderableLayer();
+            insertBeforePlacenames(this.getWwd(), airplaneLineLayer);
+            airplaneLineLayer.setName("AirplineLines");
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
@@ -597,29 +600,22 @@ public final class atc2 extends atc {
         /**
          * This method creates for each airplane a line based on the time that the user wants.
          * It shows the position where the airplane needs to be after that time.
+         * @deprecated 
          */
         public void createAirplaneLines(Object o) {
+            if (o.getClass() != AirplaneRenderable.class) {
+                return; // The selected object isn't our airplane.
+            }
+            AirplaneRenderable rend = (AirplaneRenderable) o;
+            Flightplan flightplan = rend.getFlightplan();
             // We make a new layer for the lines.
 
             airplaneLineLayer.removeAllRenderables();
-            insertBeforePlacenames(this.getWwd(), airplaneLineLayer);
-            airplaneLineLayer.setName("AirplineLines");
 
-            // We define a set of attributes that all the SurfaceSectors share.
-            ShapeAttributes attr = new BasicShapeAttributes();
-            attr.setInteriorMaterial(Material.WHITE);
-            attr.setOutlineMaterial(Material.WHITE);
-            attr.setInteriorOpacity(0.5);
-            attr.setOutlineOpacity(0.7);
-            attr.setOutlineWidth(3);
-            attr.setEnableAntialiasing(true);
+
+
             for (Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList()) {
 
-                if (o.getClass() != AirplaneRenderable.class) {
-                    return; // The selected object isn't our airplane.
-                }
-                AirplaneRenderable rend = (AirplaneRenderable) o;
-                Flightplan flightplan = rend.getFlightplan();
 
                 if (a.getId() == flightplan.getAirplane().getId()) {
                     ArrayList<Position> pathPositions = new ArrayList<>();
@@ -640,12 +636,10 @@ public final class atc2 extends atc {
                     newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
                     pathPositions.add(newGeoLoc.toPosition());
 
-                    Path path = new Path(pathPositions);
-                    path.setAttributes(attr);
-                    path.setPathType(AVKey.RHUMB_LINE);
-                    airplaneLineLayer.addRenderable(path);
+
                 }
             }
+
         }
 
         /**
@@ -673,8 +667,6 @@ public final class atc2 extends atc {
                         }
                         if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
                             highlightAirplane(event.getTopObject());
-                            //createAirplaneLines(event.getTopObject());
-
                         }
                     }
                 });
@@ -715,7 +707,20 @@ public final class atc2 extends atc {
 
             if (!addedAirplanes.contains(airplane)) {
                 addedAirplanes.add(airplane);
-                airplanerenderable = new AirplaneRenderable(flightplan);
+
+                // We define a set of attributes that all the SurfaceSectors share.
+                ShapeAttributes attr = new BasicShapeAttributes();
+                attr.setOutlineMaterial(Material.WHITE);
+                attr.setOutlineOpacity(0.7);
+                attr.setOutlineWidth(3);
+                attr.setEnableAntialiasing(true);
+                
+                SurfacePolyline path = new SurfacePolyline();
+                path.setAttributes(attr);
+                path.setPathType(AVKey.RHUMB_LINE);
+                airplaneLineLayer.addRenderable(path);
+
+                airplanerenderable = new AirplaneRenderable(flightplan, path);
                 layer.addRenderable(airplanerenderable);
             }
         }
@@ -760,6 +765,10 @@ public final class atc2 extends atc {
                 currentAirplaneAnnotation.getAttributes().setHighlighted(true);
                 tooltipAnnotation.getAttributes().setVisible(true);
                 currentAirplaneAnnotation.setHoverAnnotation(tooltipAnnotation);
+                
+                AirplaneRenderable rend = (AirplaneRenderable)o;
+                rend.setValue("TRUE_DRAW_LINE", true);
+                
                 this.getWwd().repaint();
             }
         }
