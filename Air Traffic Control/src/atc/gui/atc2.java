@@ -634,7 +634,12 @@ public final class atc2 extends atc {
 
                     public synchronized void actionPerformed(ActionEvent event) {
                         if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
+                            try {
                             airspace.BorderControl2();
+                            }
+                            catch (Exception e) {
+                                
+                            }
                         }
                         for (Iterator<Flightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
                             addAirplaneToLayer(airplaneLayer, it.next());
