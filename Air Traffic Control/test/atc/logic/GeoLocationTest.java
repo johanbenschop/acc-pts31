@@ -40,9 +40,50 @@ public class GeoLocationTest {
      * Test of ToString method, of class GeoLocation.
      */
     @Test
-    public void testToString() {
-        System.out.println("ToString");
+    public void testToLatLon() {
+        System.out.println("toLatLon");
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+    
+        /**
+     * Test of ToString method, of class GeoLocation.
+     */
+    @Test
+    public void testToPosition() {
+        System.out.println("toPosition");
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+        /**
+     * Test of ToString method, of class GeoLocation.
+     */
+    @Test
+    public void testCalcDirection() {
+        System.out.println("CalcDirection(Airport a, Airport b)");
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+        /**
+     * Test of ToString method, of class GeoLocation.
+     */
+    @Test
+    public void testCalcDirection2() {
+        System.out.println("CalcDirection(GeoLocation locationA, GeoLocation locationB)");
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+        /**
+     * Test of ToString method, of class GeoLocation.
+     */
+    @Test
+    public void testCalcPosition() {
+        System.out.println("CalcPosition");
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+    
 }
