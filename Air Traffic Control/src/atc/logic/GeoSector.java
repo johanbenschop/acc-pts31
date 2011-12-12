@@ -146,6 +146,8 @@ public class GeoSector {
     }
 
     /**
+     * Due to minimal importance of an unit test for this method there is none.
+     * 
      * Returns a string indicating the sector's angles.
      *
      * @return A string indicating the sector's angles.
