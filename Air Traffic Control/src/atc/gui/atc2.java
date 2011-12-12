@@ -198,7 +198,7 @@ public final class atc2 extends atc {
                                     airplaneLayer.removeAllRenderables();
                                     airplaneLineLayer.removeAllRenderables();
                                     timerAirplane.stop();
-                                    airspace.getCurrentACC().removeFlightCntroller(flightController);
+                                    airspace.getCurrentACC().removeFlightController(flightController);
                                     airspace.setCurrentACC(null);
                                     airspacesLayer.setEnabled(true);
                                 }

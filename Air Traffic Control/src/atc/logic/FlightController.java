@@ -30,10 +30,7 @@ public class FlightController {
         flights = new ArrayList<>();
     }
 
-    public int controllingFlights() {
-        return flights.size();
-    }
-
+    
     public void assignFlight(Flightplan flightplan) {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
