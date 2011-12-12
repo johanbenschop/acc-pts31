@@ -317,6 +317,7 @@ public class ACC {
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
+     * @deprecated 
      */
     public FlightController addFlightController() {
         FlightController controller = new FlightController();
@@ -325,11 +326,24 @@ public class ACC {
     }
     
     /**
+     * Creates and adds a new FlightController and add it to the list of controller.
+     * @return FlightController
+     */
+    public void addFlightController(FlightController flightController) {
+        flightControllers.add(flightController);
+    }
+    
+    /**
      * Unassign the flight from the controller.
      * @param flightplan 
      */
     public void unassignFlightFromController(Flightplan flightplan) {
         flightplan.getAssignedController().unassignFlight(flightplan);
+    }
+    
+    public void removeFlightCntroller(FlightController flightController) {
+        flightControllers.remove(flightController);
+        flightController.unassignAllFlights();
     }
     
     /**

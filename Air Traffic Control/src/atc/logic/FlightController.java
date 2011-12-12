@@ -9,10 +9,6 @@ import java.util.Iterator;
  */
 public class FlightController {
 
-    /**************Datafields***********/
-    /**
-     * The id of the flightcontroller 
-     */
     private int ID;
     /**
      * The last ID that was given to a flightcontroller (+1 = next free ID) 
@@ -34,10 +30,10 @@ public class FlightController {
         flights = new ArrayList<>();
     }
 
-    /**
-     * Method to assign a flightplan to this Flightcontroller
-     * 
-     */
+    public int controllingFlights() {
+        return flights.size();
+    }
+
     public void assignFlight(Flightplan flightplan) {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
@@ -54,9 +50,10 @@ public class FlightController {
         flightplan.setAssignedController(null);
     }
 
-    /**************Getters**************/
-    public int controllingFlights() {
-        return flights.size();
+    public void unassignAllFlights() {
+        for (Flightplan flightplan : flights) {
+            flightplan.setAssignedController(null);
+        }
     }
 
     public int getNumberAssignedFlights() {
