@@ -16,7 +16,6 @@ import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
-import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
@@ -76,7 +75,7 @@ public final class atc2 extends atc {
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
-        private FlightController flightController;
+        private static FlightController flightController;
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
@@ -190,7 +189,7 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     getOrbitView().setOrbitViewLimits(new BasicOrbitViewLimits());
-                                    Position targetPos = new Position(Angle.ZERO, Angle.ZERO, 20000000); // 1000 = 100 meter
+                                    Position targetPos = new Position(view.getCurrentEyePosition(), 20000000); // 1000 = 100 meter
                                     view.goTo(new Position(targetPos, 0), targetPos.getElevation());
                                     airspaceLayer.removeAllRenderables();
                                     addedAirplanes.clear();
@@ -418,6 +417,14 @@ public final class atc2 extends atc {
         }
 
         /**
+         * Static method to get the current flightCntroller object.
+         * @return 
+         */
+        public static FlightController getFlightController() {
+            return flightController;
+        }
+
+        /**
          * Build the airspace layer.
          */
         private void buildSelectebleAirspaceLayer() {
@@ -571,9 +578,9 @@ public final class atc2 extends atc {
 
                 initDoneAirportLayer = true;
             }
-            
+
             airportLayer.addRenderable(this.tooltipAnnotation);
-            
+
 //            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
 //                ACC acc = it.next();
             //airspace.setCurrentACC(0);
@@ -650,37 +657,36 @@ public final class atc2 extends atc {
             attr.setOutlineWidth(3);
             attr.setEnableAntialiasing(true);
             for (Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList()) {
-        
-                            if (o.getClass() != AirplaneRenderable.class) {
-                return; // The selected object isn't our airplane.
-            }
-            AirplaneRenderable rend = (AirplaneRenderable) o;
-            Flightplan flightplan = rend.getFlightplan();
-            
-                if(a.getId() == flightplan.getAirplane().getId())
-                {
-                ArrayList<Position> pathPositions = new ArrayList<>();
-                pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
 
-                double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
-                double θ = a.getDirection() / 180d * Math.PI;
-                double R = 6371; // Mean radius / radius of the Earh
+                if (o.getClass() != AirplaneRenderable.class) {
+                    return; // The selected object isn't our airplane.
+                }
+                AirplaneRenderable rend = (AirplaneRenderable) o;
+                Flightplan flightplan = rend.getFlightplan();
 
-                double lat = a.getLocation().getLatitude() / 180d * Math.PI;
-                double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+                if (a.getId() == flightplan.getAirplane().getId()) {
+                    ArrayList<Position> pathPositions = new ArrayList<>();
+                    pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
 
-                double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                        + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-                double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                        Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-                GeoLocation newGeoLoc;
-                newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-                pathPositions.add(newGeoLoc.toPosition());
+                    double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
+                    double θ = a.getDirection() / 180d * Math.PI;
+                    double R = 6371; // Mean radius / radius of the Earh
 
-                Path path = new Path(pathPositions);
-                path.setAttributes(attr);
-                path.setPathType(AVKey.RHUMB_LINE);
-                airplaneLineLayer.addRenderable(path);
+                    double lat = a.getLocation().getLatitude() / 180d * Math.PI;
+                    double lon = a.getLocation().getLongitude() / 180d * Math.PI;
+
+                    double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+                    double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+                    GeoLocation newGeoLoc;
+                    newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+                    pathPositions.add(newGeoLoc.toPosition());
+
+                    Path path = new Path(pathPositions);
+                    path.setAttributes(attr);
+                    path.setPathType(AVKey.RHUMB_LINE);
+                    airplaneLineLayer.addRenderable(path);
                 }
             }
         }
@@ -711,7 +717,7 @@ public final class atc2 extends atc {
                         if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
                             highlightAirplane(event.getTopObject());
                             createAirplaneLines(event.getTopObject());
-                            
+
                         }
                     }
                 });
@@ -733,10 +739,11 @@ public final class atc2 extends atc {
                         }
                     }
                 });
-                timerAirplane.start();
 
                 initDoneAirplaneLayer = true;
             }
+
+            timerAirplane.start();
 
         }
 
@@ -805,9 +812,11 @@ public final class atc2 extends atc {
                 return; // The selected object isn't our airplane.
             }
             AirplaneRenderable rend = (AirplaneRenderable) o;
-            Flightplan flightplan = rend.getFlightplan();
-
-            new jfCommandFlight(this, true).setFlightplan(flightplan);
+            if (rend.isMayControl()) {
+                // The user may control this airplane.
+                Flightplan flightplan = rend.getFlightplan();
+                new jfCommandFlight(this, true).setFlightplan(flightplan);
+            }
         }
     }
 
