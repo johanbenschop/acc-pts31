@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package atc.logic;
 
 import java.util.ArrayList;
@@ -223,9 +219,19 @@ public class Airspace {
 
                     System.out.println("Binnen: " + flightplan.getAirplane().getId());
                 } else {
-                    System.out.println("Buiten" + flightplan.getAirplane().getId());
-                    //currentACC.unassignFlightFromController(flightplan);
-                    currentACC.removeFlightPlan(flightplan);
+                    System.out.println("Buiten: " + flightplan.getAirplane().getId());
+                    ArrayList<ACC> surroundingACCs = this.getAdjacentACCs(this.currentACC.GetID());
+                    for (Iterator<ACC> ita = surroundingACCs.iterator(); ita.hasNext();) {
+                        ACC acc = ita.next();
+                        if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                            acc.addFlightController();
+                            acc.assignFlightToController(flightplan);
+                            acc.addFlightPlan(flightplan);
+                            currentACC.unassignFlightFromController(flightplan);
+                            currentACC.removeFlightPlan(flightplan);
+                            System.out.println("Added to receiving ACC: " + acc.GetID());
+                        }
+                    }
                 }
             }
         }
