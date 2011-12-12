@@ -192,7 +192,7 @@ public class Airspace {
         }
         return adjacentACCList;
     }
-    
+
     public void BorderControl2() {
         for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
             Flightplan flightplan = it.next();
@@ -202,20 +202,14 @@ public class Airspace {
                     ArrayList<ACC> surroundingACCs = this.getAdjacentACCs(this.currentACC.GetID());
                     for (Iterator<ACC> ita = surroundingACCs.iterator(); ita.hasNext();) {
                         ACC acc = ita.next();
-                        if (acc.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation()) ||
-                               acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                            acc.addFlightController();                            
-                        }
                         if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                            acc.addFlightController();
                             acc.assignFlightToController(flightplan);
                             acc.addFlightPlan(flightplan);
                             currentACC.unassignFlightFromController(flightplan);
                             currentACC.removeFlightPlan(flightplan);
                             System.out.println("Removed from sending ACC: " + currentACC.GetID());
                             System.out.println("Added to receiving ACC: " + acc.GetID());
-                        }
-                        if (acc.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                            flightplan.getAssignedController();
                         }
                     }
                 }
