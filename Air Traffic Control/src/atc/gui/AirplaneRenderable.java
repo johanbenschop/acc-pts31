@@ -83,12 +83,12 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 if (atc2.airspace.getCurrentACC() == null) {
                     return;
                 }
-                
+
                 double direction = airplane.getDirection();
                 Position position = airplane.getLocation().toPosition();
                 GeoSector sector = atc2.airspace.getCurrentACC().GetCTA().sector;
                 GeoSector greaterSector = atc2.airspace.getCurrentACC().GetCTA().sectorGreater;
-                
+
                 try {
                     // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
                     if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
@@ -143,30 +143,32 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     }
                     airplane.interrupt();
                 }
-                
+
                 Object o = getValue("TRUE_DRAW_LINE");
-                if (o != null && (boolean)o) {
-                    
-              
-                ArrayList<Position> pathPositions = new ArrayList<>();
-                pathPositions.add(Position.fromDegrees(flightplan.getAirplane().getLocation().getLatitude(), flightplan.getAirplane().getLocation().getLongitude()));
+                if (o != null && (boolean) o) {
+                    ArrayList<Position> pathPositions = new ArrayList<>();
+                    pathPositions.add(Position.fromDegrees(flightplan.getAirplane().getLocation().getLatitude(), flightplan.getAirplane().getLocation().getLongitude()));
 
-                double d = (flightplan.getAirplane().getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
-                double θ = flightplan.getAirplane().getDirection() / 180d * Math.PI;
-                double R = 6371; // Mean radius / radius of the Earh
+                    double d = (flightplan.getAirplane().getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
+                    double θ = flightplan.getAirplane().getDirection() / 180d * Math.PI;
+                    double R = 6371; // Mean radius / radius of the Earh
 
-                double lat = flightplan.getAirplane().getLocation().getLatitude() / 180d * Math.PI;
-                double lon = flightplan.getAirplane().getLocation().getLongitude() / 180d * Math.PI;
+                    double lat = flightplan.getAirplane().getLocation().getLatitude() / 180d * Math.PI;
+                    double lon = flightplan.getAirplane().getLocation().getLongitude() / 180d * Math.PI;
 
-                double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                        + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-                double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                        Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-                GeoLocation newGeoLoc;
-                newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-                pathPositions.add(newGeoLoc.toPosition());
+                    double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+                    double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+                    GeoLocation newGeoLoc;
+                    newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
+                    pathPositions.add(newGeoLoc.toPosition());
 
-                path.setLocations(pathPositions);
+                    path.setLocations(pathPositions);
+                    path.setVisible(true);
+                }
+                else {
+                    path.setVisible(false);
                 }
 
             }
