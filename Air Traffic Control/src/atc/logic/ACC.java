@@ -56,7 +56,7 @@ public class ACC {
         airplaneFactoryList = new ArrayList<>();
         flightControllers = new ArrayList<>();
         try {
-            loadAvailableAirplaneList();
+            loadAirplaneFactoryList();
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -120,7 +120,7 @@ public class ACC {
     /**
      * All airplanes in the AvailableAirplanes.dat list will be read into a list.
      */
-    public void loadAvailableAirplaneList() throws FileNotFoundException, IOException {
+    public void loadAirplaneFactoryList() throws FileNotFoundException, IOException {
         FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
         
         DataInputStream in2 = new DataInputStream(fstream2);
