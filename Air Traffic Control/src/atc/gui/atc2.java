@@ -699,7 +699,7 @@ public final class atc2 extends atc {
 
                 // Add click-and-go select listener for airplanes
                 this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                        this.getWwd(), airplaneRenderableOLD.class, 500)); // last value is height
+                        this.getWwd(), AirplaneRenderable.class, 500)); // last value is height
 
                 // Add select listener for airport picking
                 this.getWwd().addSelectListener(new SelectListener() {
