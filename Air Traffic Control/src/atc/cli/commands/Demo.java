@@ -76,6 +76,16 @@ public class Demo {
         atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
         return "Adding stuff....";
     }
+    
+    public static String addFlightBastogne() {
+        CommandLine.println("Adding flight: St.Hubert - Luxemburg Stad");
+        AirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        Airport ap_arr = atc2.airspace.GetAirport(313);
+        Airport ap_dest = atc2.airspace.GetAirport(629);
+        GregorianCalendar cal = new GregorianCalendar();
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        return "Adding stuff....";
+    }
 
     public static String addCrashEHVBUD() {
         addFlightEindhovenBudel();
