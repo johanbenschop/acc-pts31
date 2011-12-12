@@ -14,7 +14,7 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  *
- * @author Mateusz
+ * @author Johan & Mateusz
  */
 public class jfAddFlight extends javax.swing.JDialog {
 
@@ -282,6 +282,7 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirportDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportDepActionPerformed
         // TODO add your handling code here:
+        atc2.airspace.setOnlyOneACC(true);
         this.departureAirport = new jfSelectAirport(null, true).getValue();
         if (departureAirport != null) {
             tfDepartureAirport.setText(departureAirport.ToString());
@@ -292,6 +293,7 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirportArrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportArrActionPerformed
         // TODO add your handling code here:
+        atc2.airspace.setOnlyOneACC(false);
         this.arrivalAirport = new jfSelectAirport(null, true).getValue();
         if (arrivalAirport != null) {
             tfArrivalAirport.setText(arrivalAirport.ToString());
