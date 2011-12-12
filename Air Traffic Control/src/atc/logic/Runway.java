@@ -34,6 +34,7 @@ public class Runway {
     private GeoLocation location;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
+    /***************Constructor**********/
     /**A runway is made with the following parameters:
      * @param Longitude: The longitude of the runway.
      * @param Latitude: The latitude of the runway.
