@@ -41,6 +41,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         airports = atc2.airspace.GetAirports();
+        airports2 = atc2.airspace.GetAirports();
         createAirportList();
 
         columnNames.addElement("Airport ID");
@@ -317,6 +318,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
+        airports2 = null;
         createAirportList();
 
         while (airports.hasNext()) {
@@ -450,13 +452,10 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private ListIterator<Airport> createAirportList() {
         if (atc2.airspace.getOnlyOneACC() == true) {
-            for (Iterator<Airport> ap = airports; ap.hasNext();) {
-                Airport ar = ap.next();
-                if (atc2.airspace.getCurrentACC().GetCTA().sector.containsGeoLocation(ar.getLocation())) {
-                    airports2.add(ar);
-                }
-            }
+            airports2 = atc2.airspace.getAirportCTA(atc2.airspace.getCurrentACC().GetCTA().sector).listIterator();
             airports = airports2;
+        } else if (atc2.airspace.getOnlyOneACC() == false) {
+            return airports;
         }
         return airports;
     }
