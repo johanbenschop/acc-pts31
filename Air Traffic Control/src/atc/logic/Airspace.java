@@ -204,10 +204,7 @@ public class Airspace {
             Flightplan flightplan = it.next();
             if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
                 if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-
-                    System.out.println("Binnen: " + flightplan.getAirplane().getId());
                 } else {
-                    System.out.println("Buiten: " + flightplan.getAirplane().getId());
                     ArrayList<ACC> surroundingACCs = this.getAdjacentACCs(this.currentACC.GetID());
                     for (Iterator<ACC> ita = surroundingACCs.iterator(); ita.hasNext();) {
                         ACC acc = ita.next();

@@ -629,8 +629,11 @@ public final class atc2 extends atc {
             }
         }
 
-        //Teken nu voor de airplanes een lijn van 100 km.
-        public void createAirplaneLines() {
+        /**
+         * This method creates for each airplane a line based on the time that the user wants.
+         * It shows the position where the airplane needs to be after that time.
+         */
+        public void createAirplaneLines(Object o) {
             // We make a new layer for the lines.
 
             airplaneLineLayer.removeAllRenderables();
@@ -645,14 +648,20 @@ public final class atc2 extends atc {
             attr.setOutlineOpacity(0.7);
             attr.setOutlineWidth(3);
             attr.setEnableAntialiasing(true);
-
             for (Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList()) {
+        
+                            if (o.getClass() != AirplaneRenderable.class) {
+                return; // The selected object isn't our airplane.
+            }
+            AirplaneRenderable rend = (AirplaneRenderable) o;
+            Flightplan flightplan = rend.getFlightplan();
+            
+                if(a.getId() == flightplan.getAirplane().getId())
+                {
                 ArrayList<Position> pathPositions = new ArrayList<>();
                 pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
 
                 double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
-                //double d = 100;
-                //double d = (a.getSpeed() / 36000d)*300;
                 double θ = a.getDirection() / 180d * Math.PI;
                 double R = 6371; // Mean radius / radius of the Earh
 
@@ -671,46 +680,8 @@ public final class atc2 extends atc {
                 path.setAttributes(attr);
                 path.setPathType(AVKey.RHUMB_LINE);
                 airplaneLineLayer.addRenderable(path);
+                }
             }
-
-
-
-
-            /*this.airplaneLineLayer = new RenderableLayer();
-            this.airplaneLayer.setName("AirplaneLines");
-            insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
-            
-            
-            ShapeAttributes attrs = new BasicShapeAttributes();                 
-            attrs.setOutlineMaterial(new Material(Color.WHITE));
-            attrs.setOutlineWidth(2d);
-            attrs.setInteriorOpacity(0);
-            attrs.setOutlineOpacity(0.7);
-            attrs.setOutlineWidth(3);
-            for(Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList())
-            {
-            ArrayList<Position> pathPositions = new ArrayList<Position>();           
-            pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));               
-            
-            double d = 100;
-            //double d = (a.getSpeed() / 36000d)*300;
-            double θ = a.getDirection() / 180d * Math.PI;
-            double R = 6371; // Mean radius / radius of the Earh
-            
-            double lat = a.getLocation().getLatitude() / 180d * Math.PI;
-            double lon = a.getLocation().getLongitude() / 180d * Math.PI;
-            
-            double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-            double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-            GeoLocation newGeoLoc;
-            newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-            pathPositions.add(newGeoLoc.toPosition());
-            Path path = new Path(pathPositions);
-            airplaneLayer.addRenderable(path);
-            //airplaneLineLayer.addRenderable(path);
-            }*/
         }
 
         /**
@@ -738,6 +709,8 @@ public final class atc2 extends atc {
                         }
                         if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
                             highlightAirplane(event.getTopObject());
+                            createAirplaneLines(event.getTopObject());
+                            
                         }
                     }
                 });
@@ -745,9 +718,8 @@ public final class atc2 extends atc {
                 this.timerAirplane = new Timer(1000, new ActionListener() {
 
                     public void actionPerformed(ActionEvent event) {
-                        createAirplaneLines();
+                        //createAirplaneLines();
                         if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
-                            System.out.println(airspace.getCurrentACC().GetID());
                             airspace.BorderControl2();
                         }
                         for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
