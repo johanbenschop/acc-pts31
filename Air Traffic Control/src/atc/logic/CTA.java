@@ -105,6 +105,14 @@ public class CTA {
         }
         return airport;
     }
+  public Airplane GetAirplane(int AirplaneID) {
+        for (Airplane a : airplaneList) {
+            if (a.getAirplaneNumber() == AirplaneID) {
+                airplane = a;
+            }
+        }
+        return airplane;
+    }
 
     /**
      * Not yet implemented

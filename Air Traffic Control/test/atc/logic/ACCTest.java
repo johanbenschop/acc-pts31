@@ -4,6 +4,7 @@
  */
 package atc.logic;
 
+import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import junit.framework.Assert;
@@ -27,8 +28,15 @@ public class ACCTest {
     //private Airplane apt; //Airplane thats ready for takeoff
     private Runway ra; //available runway
     private Runway ru; //unavailable runway
+    private Flightplan fp; // flightplan
+    private Airport airport1;
+    private Airport airport2;
     private AirplaneFactory airplaneFactory;
-
+    private ArrayList<Airport> airportList = new ArrayList<Airport>();
+    private GeoSector geosector;
+    private ACC acc;
+    private CTA cta;
+    private Airplane airplane;
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
@@ -51,6 +59,12 @@ public class ACCTest {
         //apt = new Airplane(500, 300, 1600, "747-300", "Boeing", 300, 300, 500, 200, 1, 100, Double.parseDouble("299"), 100, Double.parseDouble("640"), loc, loc2, 2);
         ra = new Runway(1,1,50, 300, 180, true);
         ru = new Runway(1,1,50,300, 270, false);
+        geosector = new GeoSector(0, 0, 0, 0);
+        airplane = new Airplane(600, 400, 10000, "", "", 10, 10, 10, 10000, 500, 0, 0, 10000, 0 , loc, loc2, 9999);
+ 
+        cta = new CTA(geosector, airportList); // Hier moeten ook nog goede waardes in
+        acc = new ACC(2, null);
+        
     }
     
     @After
@@ -61,81 +75,50 @@ public class ACCTest {
      * Test of ChangeSpeed method, of class ACC.
      * Currently Airplane does not yet have a constructor. I will update the constructor and tests once this is done.
      */
-    @Test (expected = AssignmentException.class)
+    @Test
     public void testChangeSpeed() throws AssignmentException {
         System.out.println("ChangeSpeed");
-        //acc.ChangeSpeed(200, apa);
-        fail("AssignementException was expected");
+
+        acc.ChangeSpeed(500, airplane);
+        Assert.assertEquals("Current speed is expected to be changed to 500", 500, airplane.getSpeed());
         
-        //acc.ChangeSpeed(400, apa);
-        //Assert.assertEquals("Speed should have changed",400 , apa.getAimedSpeed());
-        
-        //acc.ChangeSpeed(800, apa);
-        fail("AssignmentException was expected");
     }
 
     /**
      * Test of ChangeDirection method, of class ACC.
      */
-    @Test (expected = AssignmentException.class)
+    @Test
     public void testChangeDirection() throws AssignmentException {
         System.out.println("ChangeDirection");
-        //acc.ChangeDirection(200, apa);
-        fail("AssignmentException was expected");
-        
-        //acc.ChangeDirection(90, apa);
-        //Assert.assertEquals("Direction should have been changed", 90, apa.getAimedDirection());
-        
-        //acc.ChangeDirection(-70, apa);
-        //Assert.assertEquals("Direction should have been changed", -70, apa.getAimedDirection());
-    }
+        acc.ChangeDirection(200, airplane);
+        Assert.assertEquals("Direction was expected to change to 200", 200, airplane.getDirection());
+       
+     }
     
     /**
      * Test of ChangeHeight method, of class ACC.
      * Assumed that this is done in flightlevels rather then actual feet.
      */
-    @Test (expected = AssignmentException.class)
+    @Test
     public void testChangeHeight() throws AssignmentException {
         System.out.println("ChangeHeight");
-        //acc.ChangeHeight(5, apa);
-        fail("AssignmentException was expected");
-        
-        //acc.ChangeHeight(2, apa);
-        //Assert.assertEquals("Height should have changed.", 600, apa.getAimedAltitude());
-    }
+        acc.ChangeHeight(3, airplane);
+        Assert.assertEquals("Height should have been changed to 3", 3, airplane.getAltitude()); 
+   }
 
-    /**
-     * Test of GiveRunwayLand method, of class ACC.
-     */
-    @Test (expected = AssignmentException.class)
-    public void GiveRunwayLand() throws AssignmentException {
-        System.out.println("GiveRunwayLand");
-        //acc.GiveRunwayLand(ru, apa, ru.getDirection());
-        fail("AssignmentException was expected because runway is unavailable.");
-        
-        //acc.GiveRunwayLand(ra, apa, 400);
-        fail("AssignementException was expected because the direction is not possible");
-        
-        //acc.GiveRunwayLand(ra, apa, ra.getDirection());
-        Assert.assertEquals("Runway did not change availability" ,false , ra.getAvailability());
-        //Assert.assertEquals("Airplane did not change direction.",180 ,apa.getAimedDirection());       
-    }
-    
-    /*
-     * Test of GIveRunwayTakeOff method, of class ACC.
-     */
-    @Test (expected = AssignmentException.class)
-    public void GiveRunwayTakeOff() throws AssignmentException {
-        System.out.println("GiveRunwayTakeOff");
-        //acc.GiveRunwayTakeOff(ru, apt, 180, 2, 350);
-        fail("AssignmentException was expected because runway is unavailable.");
-    }
         /**
      * Test of loadAvailableAirplaneList method, of class CTA.
      */
     @Test
-    public void testLoadAvailableAirplaneList() throws FileNotFoundException, IOException {
-        System.out.println("loadAvailableAirplaneList");
-        //assertEquals("This objects type should be 747", "Fokker", acc.GetAirplaneFactory(1).getManufacturer());
-    }
+    public void testLoadAirplaneFactoryList() throws FileNotFoundException, IOException {
+        System.out.println("Load airportlist");
+        
+        try {
+            acc.loadAirplaneFactoryList();
+            System.out.println(acc.GetAirplaneFactory(1).getType());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+     //   Assert.assertEquals("airplanename should be Goraka", "Goroka", airspace.GetAirport(1).getAirportName());
+   }
 }
