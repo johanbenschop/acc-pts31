@@ -554,7 +554,6 @@ public final class atc2 extends atc {
                 this.airportLayer = new RenderableLayer();
                 this.airportLayer.setName("Airports");
                 insertBeforePlacenames(this.getWwd(), this.airportLayer);
-                airportLayer.addRenderable(this.tooltipAnnotation);
 
                 // Add select listener for airport picking
                 this.getWwd().addSelectListener(new SelectListener() {
@@ -572,7 +571,9 @@ public final class atc2 extends atc {
 
                 initDoneAirportLayer = true;
             }
-
+            
+            airportLayer.addRenderable(this.tooltipAnnotation);
+            
 //            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
 //                ACC acc = it.next();
             //airspace.setCurrentACC(0);
