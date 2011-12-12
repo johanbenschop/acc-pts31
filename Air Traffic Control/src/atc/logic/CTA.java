@@ -42,8 +42,17 @@ public class CTA {
     private class collisionTimer extends TimerTask {
 
         public void run() {
-            for (Collision coll : collision) {
-                coll.colldetect();
+            Collision temp = null;
+            if (!collision.isEmpty()) {
+                for (Collision coll : collision) {
+                    coll.colldetect();
+                    if (coll.getTarget().getStatus().equals(Airplane.Statusses.CRASHED) || coll.getCrashobject().getStatus().equals(Airplane.Statusses.CRASHED)) {
+                        temp = coll;
+                    }
+                }
+            }
+            if (temp != null) {
+            collision.remove(temp);
             }
         }
     }
