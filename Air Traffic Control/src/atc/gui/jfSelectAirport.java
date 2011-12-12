@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Vector;
 import javax.swing.ListSelectionModel;
@@ -30,6 +31,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private Airport airport;
     private ListIterator<Airport> airports;
+    private ListIterator<Airport> airports2;
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
@@ -39,6 +41,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         airports = atc2.airspace.GetAirports();
+        createAirportList();
 
         columnNames.addElement("Airport ID");
         columnNames.addElement("Name");
@@ -314,6 +317,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
+        createAirportList();
 
         while (airports.hasNext()) {
             Airport iter = airports.next();
@@ -407,7 +411,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         }
         fillTable();
     }//GEN-LAST:event_tfSearchKeyTyped
-    
+
     public void fillVector(Airport iter) {
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getAirportID()));
@@ -442,6 +446,19 @@ public class jfSelectAirport extends javax.swing.JDialog {
             return airport;
         }
         return null;
+    }
+
+    private ListIterator<Airport> createAirportList() {
+        if (atc2.airspace.getOnlyOneACC() == true) {
+            for (Iterator<Airport> ap = airports; ap.hasNext();) {
+                Airport ar = ap.next();
+                if (atc2.airspace.getCurrentACC().GetCTA().sector.containsGeoLocation(ar.getLocation())) {
+                    airports2.add(ar);
+                }
+            }
+            airports = airports2;
+        }
+        return airports;
     }
 
     /**

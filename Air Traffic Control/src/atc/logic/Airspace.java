@@ -35,6 +35,7 @@ public class Airspace {
      */
     private ACC currentACC;
 
+    private boolean onlyOneACC;
     /***************Constructor**********/
     /**
      * This is a constructor used for making multiple ACCs and recording their information in a list
@@ -122,6 +123,10 @@ public class Airspace {
         }
     }
 
+    public boolean getOnlyOneACC() {
+        return onlyOneACC;
+    }
+    
     /**
      * A method to get the ACC with the given ID
      * 
@@ -290,5 +295,9 @@ public class Airspace {
             }
         }
         this.currentACC = null;
+    }
+    
+    public void setOnlyOneACC(boolean onlyOneAcc) {
+        onlyOneACC = onlyOneAcc;
     }
 }
