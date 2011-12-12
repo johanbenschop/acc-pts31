@@ -718,6 +718,7 @@ public final class atc2 extends atc {
          * Removes an airplane from the airplane layer.
          * @param layer
          * @param flightplan
+         * @deprecated 
          */
         private void removeAirplaneFromLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
