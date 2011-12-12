@@ -46,6 +46,8 @@ public class GeoLocation {
     }
 
     /**
+     * Due to minimal importance of an unit test for this method there is none.
+     * 
      * Method to return a string value with the longitude, latitude and altitude.
      * 
      * @return A string value with the longitude, latitude and altitude is returned.
