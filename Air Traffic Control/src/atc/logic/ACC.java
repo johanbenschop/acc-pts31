@@ -115,6 +115,10 @@ public class ACC {
     public ListIterator<AirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
+    
+    public ListIterator<FlightController> getFlightControllers() {
+        return flightControllers.listIterator();
+    }
 
     /**************Methods**************/
     /**
@@ -317,7 +321,6 @@ public class ACC {
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
-     * @deprecated 
      */
     public FlightController addFlightController() {
         FlightController controller = new FlightController();
@@ -341,7 +344,7 @@ public class ACC {
         flightplan.getAssignedController().unassignFlight(flightplan);
     }
     
-    public void removeFlightCntroller(FlightController flightController) {
+    public void removeFlightController(FlightController flightController) {
         flightControllers.remove(flightController);
         flightController.unassignAllFlights();
     }
