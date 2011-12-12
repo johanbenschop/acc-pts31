@@ -208,8 +208,6 @@ public class Airspace {
                             acc.addFlightPlan(flightplan);
                             currentACC.unassignFlightFromController(flightplan);
                             currentACC.removeFlightPlan(flightplan);
-                            System.out.println("Removed from sending ACC: " + currentACC.GetID());
-                            System.out.println("Added to receiving ACC: " + acc.GetID());
                         }
                     }
                 }
