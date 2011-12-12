@@ -34,8 +34,8 @@ public class Airspace {
      * Contains the selection of the ACC for the instance of this program.
      */
     private ACC currentACC;
-
     private boolean onlyOneACC;
+
     /***************Constructor**********/
     /**
      * This is a constructor used for making multiple ACCs and recording their information in a list
@@ -126,7 +126,7 @@ public class Airspace {
     public boolean getOnlyOneACC() {
         return onlyOneACC;
     }
-    
+
     /**
      * A method to get the ACC with the given ID
      * 
@@ -199,21 +199,19 @@ public class Airspace {
         return adjacentACCList;
     }
 
-    public void BorderControl2() {
+    public synchronized void BorderControl2() {
         for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
             Flightplan flightplan = it.next();
-            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                } else {
-                    for (Iterator<ACC> ita = this.getAdjacentACCs(this.currentACC.GetID()).iterator(); ita.hasNext();) {
-                        ACC acc = ita.next();
-                        if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                            acc.addFlightController();
-                            acc.assignFlightToController(flightplan);
-                            acc.addFlightPlan(flightplan);
-                            currentACC.unassignFlightFromController(flightplan);
-                            currentACC.removeFlightPlan(flightplan);
-                        }
+            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())
+                    && !this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                for (Iterator<ACC> ita = this.getAdjacentACCs(this.currentACC.GetID()).iterator(); ita.hasNext();) {
+                    ACC acc = ita.next();
+                    if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                        currentACC.unassignFlightFromController(flightplan);
+                        currentACC.removeFlightPlan(flightplan);
+                        acc.addFlightController();
+                        acc.assignFlightToController(flightplan);
+                        acc.addFlightPlan(flightplan);
                     }
                 }
             }
@@ -296,7 +294,7 @@ public class Airspace {
         }
         this.currentACC = null;
     }
-    
+
     public void setOnlyOneACC(boolean onlyOneAcc) {
         onlyOneACC = onlyOneAcc;
     }

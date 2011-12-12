@@ -11,7 +11,6 @@ import atc.logic.Airspace;
 import atc.logic.CTA;
 import atc.logic.FlightController;
 import atc.logic.Flightplan;
-import atc.logic.GeoLocation;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.SelectEvent;
@@ -23,7 +22,7 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.Path;
+import gov.nasa.worldwind.render.Renderable;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.SurfacePolyline;
 import gov.nasa.worldwind.render.SurfaceSector;
@@ -80,9 +79,6 @@ public final class atc2 extends atc {
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
-            airplaneLineLayer = new RenderableLayer();
-            insertBeforePlacenames(this.getWwd(), airplaneLineLayer);
-            airplaneLineLayer.setName("AirplineLines");
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
@@ -598,51 +594,6 @@ public final class atc2 extends atc {
         }
 
         /**
-         * This method creates for each airplane a line based on the time that the user wants.
-         * It shows the position where the airplane needs to be after that time.
-         * @deprecated 
-         */
-        public void createAirplaneLines(Object o) {
-            if (o.getClass() != AirplaneRenderable.class) {
-                return; // The selected object isn't our airplane.
-            }
-            AirplaneRenderable rend = (AirplaneRenderable) o;
-            Flightplan flightplan = rend.getFlightplan();
-            // We make a new layer for the lines.
-
-            airplaneLineLayer.removeAllRenderables();
-
-
-
-            for (Airplane a : atc2.airspace.getCurrentACC().GetCTA().getAirplaneList()) {
-
-
-                if (a.getId() == flightplan.getAirplane().getId()) {
-                    ArrayList<Position> pathPositions = new ArrayList<>();
-                    pathPositions.add(Position.fromDegrees(a.getLocation().getLatitude(), a.getLocation().getLongitude()));
-
-                    double d = (a.getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
-                    double θ = a.getDirection() / 180d * Math.PI;
-                    double R = 6371; // Mean radius / radius of the Earh
-
-                    double lat = a.getLocation().getLatitude() / 180d * Math.PI;
-                    double lon = a.getLocation().getLongitude() / 180d * Math.PI;
-
-                    double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-                    double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-                    GeoLocation newGeoLoc;
-                    newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
-                    pathPositions.add(newGeoLoc.toPosition());
-
-
-                }
-            }
-
-        }
-
-        /**
          * Build the layer with all of the airplanes.
          */
         private void buildAirplaneLayer() {
@@ -653,6 +604,11 @@ public final class atc2 extends atc {
                 this.airplaneLayer = new RenderableLayer();
                 this.airplaneLayer.setName("Airplanes");
                 insertBeforePlacenames(this.getWwd(), this.airplaneLayer);
+
+                // Add the airplane line layer
+                airplaneLineLayer = new RenderableLayer();
+                insertBeforePlacenames(this.getWwd(), airplaneLineLayer);
+                airplaneLineLayer.setName("Airpline lines");
 
                 // Add click-and-go select listener for airplanes
                 this.getWwd().addSelectListener(new ClickAndGoSelectListener(
@@ -668,23 +624,20 @@ public final class atc2 extends atc {
                         if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
                             highlightAirplane(event.getTopObject());
                         }
+                        if (event.getEventAction().equals(SelectEvent.RIGHT_CLICK)) {
+                            drawLineAirplane(event.getTopObject());
+                        }
                     }
                 });
 
                 this.timerAirplane = new Timer(1000, new ActionListener() {
 
                     public synchronized void actionPerformed(ActionEvent event) {
-                        //createAirplaneLines();
                         if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
                             airspace.BorderControl2();
                         }
-                        for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                            ACC acc = it.next();
-                            ListIterator<Flightplan> litr = acc.getFlightplans();
-
-                            while (litr.hasNext()) {
-                                addAirplaneToLayer(airplaneLayer, litr.next());
-                            }
+                        for (Iterator<Flightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
+                            addAirplaneToLayer(airplaneLayer, it.next());
                         }
                     }
                 });
@@ -703,7 +656,6 @@ public final class atc2 extends atc {
          */
         private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
             Airplane airplane = flightplan.getAirplane();
-            AirplaneRenderable airplanerenderable = null;
 
             if (!addedAirplanes.contains(airplane)) {
                 addedAirplanes.add(airplane);
@@ -714,14 +666,46 @@ public final class atc2 extends atc {
                 attr.setOutlineOpacity(0.7);
                 attr.setOutlineWidth(3);
                 attr.setEnableAntialiasing(true);
-                
+
                 SurfacePolyline path = new SurfacePolyline();
                 path.setAttributes(attr);
-                path.setPathType(AVKey.RHUMB_LINE);
                 airplaneLineLayer.addRenderable(path);
 
-                airplanerenderable = new AirplaneRenderable(flightplan, path);
-                layer.addRenderable(airplanerenderable);
+                layer.addRenderable(new AirplaneRenderable(flightplan, path));
+            } else if (true) {
+
+                for (Renderable renderable : airplaneLayer.getRenderables()) {
+                    AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
+
+                    if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
+                        if (!airspace.getCurrentACC().GetCTA().sectorGreater.containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
+                            System.out.println("Found one to remove!");
+                            airplaneLayer.removeRenderable(renderable);
+                        }
+
+                        return;
+                    }
+
+                }
+
+//                for (Airplane airplane1 : addedAirplanes) {
+//                    if (!airspace.getCurrentACC().GetCTA().sectorGreater.containsGeoLocation(airplane1.getLocation())) {
+//                        System.out.println("Out!");
+//                        // Airplane is not in the area, we may remove it from the GUI.
+//                        addedAirplanes.remove(airplane1);
+//                        //AirplaneRenderable airplaneRenderebleToRemove = null;
+//                        for (Renderable renderable : airplaneLayer.getRenderables()) {
+//                            AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
+//                            if (airplaneRendereble.getAirplane().equals(airplane1)) {
+//                                System.out.println("Found one to remove!");
+//                                //airplaneRenderebleToRemove = airplaneRendereble;
+//                                airplaneLayer.removeRenderable(renderable);
+//                                return;
+//                            }
+//                        }
+//                        System.out.println("No one found!!!");
+//                    }
+//                }
             }
         }
 
@@ -765,11 +749,36 @@ public final class atc2 extends atc {
                 currentAirplaneAnnotation.getAttributes().setHighlighted(true);
                 tooltipAnnotation.getAttributes().setVisible(true);
                 currentAirplaneAnnotation.setHoverAnnotation(tooltipAnnotation);
-                
-                AirplaneRenderable rend = (AirplaneRenderable)o;
-                rend.setValue("TRUE_DRAW_LINE", true);
-                
+
                 this.getWwd().repaint();
+            }
+        }
+
+        private void drawLineAirplane(Object o) {
+//            if (currentAirplaneAnnotation == o) {
+//                return; // same thing selected
+//            }
+            if (o != null && o instanceof AirplaneRenderable) {
+                AirplaneRenderable rend = (AirplaneRenderable) o;
+
+
+                boolean bool;
+
+                if (rend.getValue("TRUE_DRAW_LINE") == null) {
+                    rend.setValue("TRUE_DRAW_LINE", true);
+                    bool = false;
+                } else {
+                    bool = (boolean) rend.getValue("TRUE_DRAW_LINE");
+                }
+
+                System.out.println(bool);
+                if (bool == true) {
+                    rend.setValue("TRUE_DRAW_LINE", false);
+                    System.out.println("2");
+                } else {
+                    rend.setValue("TRUE_DRAW_LINE", true);
+                    System.out.println("3");
+                }
             }
         }
 
