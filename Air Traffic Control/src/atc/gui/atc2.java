@@ -544,7 +544,7 @@ public final class atc2 extends atc {
                     Globe globe = this.getWwd().getModel().getGlobe();
 
                     limits.setCenterLocationLimits(acc.GetCTA().sectorGreater.toSector());
-                    limits.setZoomLimits(0, 5000000);
+                    limits.setZoomLimits(10000, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
                 }
                 surfaceSectorGreater.setSector(limits.getCenterLocationLimits());
@@ -705,7 +705,7 @@ public final class atc2 extends atc {
 
                 // Add click-and-go select listener for airplanes
                 this.getWwd().addSelectListener(new ClickAndGoSelectListener(
-                        this.getWwd(), AirplaneRenderable.class, 10000)); // last value is height
+                        this.getWwd(), AirplaneRenderable.class, 50000)); // last value is height
 
                 // Add select listener for airport picking
                 this.getWwd().addSelectListener(new SelectListener() {
