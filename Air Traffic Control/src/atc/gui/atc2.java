@@ -188,6 +188,7 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
+                                    timerAirplane.stop();
                                     getOrbitView().setOrbitViewLimits(new BasicOrbitViewLimits());
                                     Position targetPos = new Position(view.getCurrentEyePosition(), 20000000); // 1000 = 100 meter
                                     view.goTo(new Position(targetPos, 0), targetPos.getElevation());
@@ -196,7 +197,6 @@ public final class atc2 extends atc {
                                     airportLayer.removeAllRenderables();
                                     airplaneLayer.removeAllRenderables();
                                     airplaneLineLayer.removeAllRenderables();
-                                    timerAirplane.stop();
                                     airspace.getCurrentACC().removeFlightController(flightController);
                                     airspace.setCurrentACC(null);
                                     airspacesLayer.setEnabled(true);
@@ -231,37 +231,6 @@ public final class atc2 extends atc {
                                     uiGoToFlight.setActive(false);
                                 }
                             });
-                        }
-                    });
-
-            final UnityItem uiCommandFlight = menuBar.addItem(new UnityItem("Command flight", Color.BLUE, 0, "src/atc/gui/resources/command.png", UnityBar.Type.NORMAL));
-            uiCommandFlight.addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // When we open a new dialog we should do it in it's own thread.
-                            // Doing so allows the main application to continue
-                            // it's work, like buzzing you when a collision is detected.
-                            java.awt.EventQueue.invokeLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    new jfCommandFlight(null, true).setVisible(true);
-                                    uiCommandFlight.setActive(false);
-                                }
-                            });
-                        }
-                    });
-
-            final UnityItem uiLandFlight = menuBar.addItem(new UnityItem("Land flight", Color.BLUE, 0, "src/atc/gui/resources/land.png", UnityBar.Type.NORMAL));
-            uiLandFlight.addActionListener(
-                    new java.awt.event.ActionListener() {
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // TODO
-                            uiLandFlight.setActive(false);
                         }
                     });
 
@@ -581,9 +550,6 @@ public final class atc2 extends atc {
 
             airportLayer.addRenderable(this.tooltipAnnotation);
 
-//            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-//                ACC acc = it.next();
-            //airspace.setCurrentACC(0);
             ACC acc = airspace.getCurrentACC();
             CTA cta = acc.GetCTA();
             if (cta.GetAirports() != null) {
@@ -591,17 +557,8 @@ public final class atc2 extends atc {
                 while (litr.hasNext()) {
                     Airport airport = litr.next();
                     addAirportToLayer(airportLayer, airport);
-                    System.err.println(airport.getAirportID());
                 }
-
-            } else {
-                System.err.println("it dun work");
             }
-
-//            while (litr.hasNext()) {
-//                addAirportToLayer(airportLayer, litr.next());
-
-
         }
 
         /**
@@ -716,7 +673,7 @@ public final class atc2 extends atc {
                         }
                         if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
                             highlightAirplane(event.getTopObject());
-                            createAirplaneLines(event.getTopObject());
+                            //createAirplaneLines(event.getTopObject());
 
                         }
                     }
@@ -724,7 +681,7 @@ public final class atc2 extends atc {
 
                 this.timerAirplane = new Timer(1000, new ActionListener() {
 
-                    public void actionPerformed(ActionEvent event) {
+                    public synchronized void actionPerformed(ActionEvent event) {
                         //createAirplaneLines();
                         if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
                             airspace.BorderControl2();
