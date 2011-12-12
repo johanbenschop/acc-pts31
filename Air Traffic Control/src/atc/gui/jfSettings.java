@@ -52,6 +52,7 @@ public class jfSettings extends javax.swing.JDialog {
         }
 
         jTextFieldTimeOfLine.setText(String.valueOf(prefs.getDouble("APP_TIME_LINE", 5)));
+        jTextFieldSimSpeedFactor.setText(String.valueOf(prefs.getDouble("SIM_SPEED", 1)));
     }
 
     protected void makePanel(WorldWindow wwd) {
@@ -133,6 +134,8 @@ public class jfSettings extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldTimeOfLine = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldSimSpeedFactor = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
@@ -168,6 +171,8 @@ public class jfSettings extends javax.swing.JDialog {
 
         jLabel1.setText("Time of distance to calculate the line in minutes");
 
+        jLabel2.setText("Simulation speed factor");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,8 +180,11 @@ public class jfSettings extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldTimeOfLine, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTextFieldSimSpeedFactor, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextFieldTimeOfLine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)))
                 .addContainerGap(307, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -186,7 +194,11 @@ public class jfSettings extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldTimeOfLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(426, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldSimSpeedFactor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(380, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Airplanes", jPanel1);
@@ -251,6 +263,9 @@ public class jfSettings extends javax.swing.JDialog {
         try {
             double time = Double.parseDouble(jTextFieldTimeOfLine.getText());
             prefs.putDouble("APP_TIME_LINE", time);
+            
+            double simFactor = Double.parseDouble(jTextFieldSimSpeedFactor.getText());
+            prefs.putDouble("SIM_SPEED", simFactor);
         } catch (Exception e) {
         }
 
@@ -311,11 +326,13 @@ public class jfSettings extends javax.swing.JDialog {
     private javax.swing.JButton btnAccept;
     private javax.swing.JButton btnCancel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelLayers;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextFieldSimSpeedFactor;
     private javax.swing.JTextField jTextFieldTimeOfLine;
     // End of variables declaration//GEN-END:variables
 }

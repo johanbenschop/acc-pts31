@@ -107,11 +107,15 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextFieldTimeOfLine" alignment="0" min="-2" pref="123" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jTextFieldSimSpeedFactor" alignment="0" max="32767" attributes="1"/>
+                              <Component id="jTextFieldTimeOfLine" alignment="0" pref="123" max="32767" attributes="1"/>
+                          </Group>
                       </Group>
                       <EmptySpace pref="307" max="32767" attributes="0"/>
                   </Group>
@@ -124,7 +128,11 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jTextFieldTimeOfLine" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="426" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jTextFieldSimSpeedFactor" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="380" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -136,6 +144,13 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldTimeOfLine">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Simulation speed factor"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextFieldSimSpeedFactor">
             </Component>
           </SubComponents>
         </Container>
