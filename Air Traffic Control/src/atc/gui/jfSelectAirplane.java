@@ -239,6 +239,44 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
     while (airplanes.hasNext()) {
         AirplaneFactory iter = airplanes.next();
 
+        /*if(tfType.getText() != null && tfManafacturer.getText() == null)
+        {
+            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+            if(!iter.getType().contains(tfType.getText()))
+            {
+                continue;
+            }else {
+                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
+                    continue;
+                }
+        }
+        }else if(tfManafacturer.getText() != null && tfType.getText() == null)
+        {
+            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if(!iter.getType().contains(tfManafacturer.getText()))
+            {
+                continue;
+            }else {
+                if (!iter.getType().contains(tfManafacturer.getText() + evt.getKeyChar())) {
+                    continue;
+                }
+        }
+        }else if(tfType.getText() != null && tfManafacturer.getText() != null)
+        {
+            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
+            {
+                continue;
+            }else {
+                if ((!iter.getType().contains(tfType.getText() + evt.getKeyChar())) && (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar()))) 
+                {
+                    continue;
+                }
+        }
+        }*/
+    
+        
         if (evt.getComponent() == tfType) {
             if (evt.getKeyChar() == '\b') {
                 tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
@@ -263,7 +301,7 @@ private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf
                     continue;
                 }
             }
-        }
+        } 
 
 //        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
 //        {
