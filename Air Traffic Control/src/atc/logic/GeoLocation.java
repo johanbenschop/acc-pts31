@@ -28,46 +28,20 @@ public class GeoLocation {
      * @param Altitude: The altitude of GeoLocation.
      */
     public GeoLocation(double Longitude, double Latitude, double Altitude) {
-        // TODO The long and lat are in the wrong order. (is a bit confusing)
+        // TODO The long and lat are in the wrong order. (is a bit confusing)                   TODO
         this.Longitude = Longitude;
         this.Latitude = Latitude;
         this.Altitude = Altitude;
     }
 
+    /**A GeoLocation is made with the following parameters:
+     * @param Longitude: The longitude of GeoLocation.
+     * @param Latitude: The latitude of GeoLocation.
+     */
     public GeoLocation(double Latitude, double Longitude) {
         this.Longitude = Longitude;
         this.Latitude = Latitude;
         this.Altitude = 0;
-    }
-
-    /**************Getters**************/
-    public double getAltitude() {
-        return Altitude;
-    }
-
-    public double getLatitude() {
-        return Latitude;
-    }
-
-    public double getLongitude() {
-        return Longitude;
-    }
-
-    public GeoLocation getNewGeoLocation() {
-        return new GeoLocation(Longitude, Latitude, Altitude);
-    }
-
-    /**************Setters**************/
-    public void setAltitude(double Altitude) {
-        this.Altitude = Altitude;
-    }
-
-    public void setLatitude(double Latitude) {
-        this.Latitude = Latitude;
-    }
-
-    public void setLongitude(double Longitude) {
-        this.Longitude = Longitude;
     }
 
     /**
@@ -101,6 +75,11 @@ public class GeoLocation {
         return LatLon.fromDegrees(Latitude, Longitude);
     }
 
+    /**
+     *                                                                                                  TODO
+     * 
+     * @return 
+     */
     public Position toPosition() {
         return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
     }
@@ -142,16 +121,50 @@ public class GeoLocation {
         double direction = Math.toDegrees(Math.atan2(y, x));
         return direction;
     }
-    
-    public static GeoLocation CalcPosition(double lon1, double lat1, double direction,  double distance)
-    {
+
+    /**
+     *                                                                                                              TODO
+     * 
+     * @return 
+     */
+    public static GeoLocation CalcPosition(double lon1, double lat1, double direction, double distance) {
         double Distance = distance / 3958.75;
         double Direction = direction;
 
         double Lat1 = Math.toRadians(lat1);
         double Lon1 = Math.toRadians(lon1);
-        double Lat2 = Math.asin(Math.sin(Lat1)*Math.cos(Distance) + Math.cos(Lat1)*Math.sin(Distance)*Math.cos(Direction));
-        double Lon2 = Lon1 + Math.atan2(Math.sin(Direction)*Math.sin(Distance)*Math.cos(Lat1), Math.cos(Distance)-Math.sin(Lat1)*Math.sin(Lat2));        
+        double Lat2 = Math.asin(Math.sin(Lat1) * Math.cos(Distance) + Math.cos(Lat1) * Math.sin(Distance) * Math.cos(Direction));
+        double Lon2 = Lon1 + Math.atan2(Math.sin(Direction) * Math.sin(Distance) * Math.cos(Lat1), Math.cos(Distance) - Math.sin(Lat1) * Math.sin(Lat2));
         return new GeoLocation(Math.toDegrees(Lon2), Math.toDegrees(Lat2));
+    }
+
+    /**************Getters**************/
+    public double getAltitude() {
+        return Altitude;
+    }
+
+    public double getLatitude() {
+        return Latitude;
+    }
+
+    public double getLongitude() {
+        return Longitude;
+    }
+
+    public GeoLocation getNewGeoLocation() {
+        return new GeoLocation(Longitude, Latitude, Altitude);
+    }
+
+    /**************Setters**************/
+    public void setAltitude(double Altitude) {
+        this.Altitude = Altitude;
+    }
+
+    public void setLatitude(double Latitude) {
+        this.Latitude = Latitude;
+    }
+
+    public void setLongitude(double Longitude) {
+        this.Longitude = Longitude;
     }
 }
