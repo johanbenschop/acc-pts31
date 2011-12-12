@@ -9,6 +9,7 @@ import atc.logic.Airplane;
 import atc.logic.Airport;
 import atc.logic.Airspace;
 import atc.logic.CTA;
+import atc.logic.FlightController;
 import atc.logic.Flightplan;
 import atc.logic.GeoLocation;
 import gov.nasa.worldwind.View;
@@ -75,6 +76,7 @@ public final class atc2 extends atc {
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
+        private FlightController flightController;
 
         public AppFrame() {
             prefs.putDouble("SIM_SPEED", 1);
@@ -195,6 +197,8 @@ public final class atc2 extends atc {
                                     airportLayer.removeAllRenderables();
                                     airplaneLayer.removeAllRenderables();
                                     timerAirplane.stop();
+                                    airspace.getCurrentACC().removeFlightCntroller(flightController);
+                                    airspace.setCurrentACC(null);
                                     airspacesLayer.setEnabled(true);
                                 }
                             });
@@ -323,7 +327,6 @@ public final class atc2 extends atc {
             timerCollision.start();
 
             // Add the graticule layer
-
             LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
             insertBeforePlacenames(getWwd(), graticuleLayer);
             graticuleLayer.setEnabled(false);
@@ -346,8 +349,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
 
-
-            atc2.airspace.setCurrentACC(atc2.airspace.getACC(1000)); //DIT WAS 0 maar heeft paul verandert omdat het ID begint op 1000.
+            flightController = new FlightController();
         }
 
         /**
@@ -522,8 +524,8 @@ public final class atc2 extends atc {
             // Set the current ACC to the selected one.
             airspace.setCurrentACC(acc);
 
-            // TODO We register a new controller. Need to get a refference of this!!!!
-            airspace.getCurrentACC().addFlightController();
+            // We register the controller to this ACC.
+            airspace.getCurrentACC().addFlightController(flightController);
 
             // Playing the boss here. We limit the users ability to go outside of their job area.
             // We don't want any FlightControllers spending time on useless stuff.
