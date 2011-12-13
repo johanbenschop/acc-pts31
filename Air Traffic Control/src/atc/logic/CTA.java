@@ -52,7 +52,7 @@ public class CTA {
                 }
             }
             if (temp != null) {
-            collision.remove(temp);
+                collision.remove(temp);
             }
         }
     }
@@ -83,14 +83,6 @@ public class CTA {
     }
 
     /**
-     * Returns the GeoSector of this CTA
-     * @return 
-     */
-    public GeoSector getSector() {
-        return sector;
-    }
-
-    /**
      * Returns airplane with the given airplaneNumber
      * @return 
      */
@@ -114,21 +106,14 @@ public class CTA {
         }
         return airport;
     }
-  public Airplane GetAirplane(int AirplaneID) {
+
+    public Airplane GetAirplane(int AirplaneID) {
         for (Airplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneID) {
                 airplane = a;
             }
         }
         return airplane;
-    }
-
-    /**
-     * Not yet implemented
-     * @return
-     */
-    public void DetectAirplane() {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -182,6 +167,55 @@ public class CTA {
         }
     }
 
+    public void CreateGreaterSector() {
+        double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
+        double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
+        double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
+        double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
+        sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
+    }
+
+    public void removeAirplane(Airplane airplane) {
+        airplaneList.remove(airplane);
+    }
+
+    /***************Getters**********/
+    public Airplane getCurrentSelectedAirplane() {
+        return airplane;
+    }
+
+    public ArrayList<Airplane> getAirplaneList() {
+        return airplaneList;
+    }
+
+    public ArrayList<Airport> getAirportList() {
+        return airportList;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public GeoSector getSector() {
+        return sector;
+    }
+
+    /**
+     * Turns the airport list into a Iterator
+     * @return Iterator airportList
+     */
+    public ListIterator<Airport> GetAirports() {
+        return airportList.listIterator();
+    }
+
+    public Airport getAirport() {
+        return airport;
+    }
+    
+    
+    
+    
+    
     /**
      * Loads airports from the airports.dat file
      * @throws FileNotFoundException if the file doesn't exist
@@ -257,14 +291,6 @@ public class CTA {
 //            }
 //        }
 //    }
-    public void CreateGreaterSector() {
-        double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
-        double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
-        double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
-        double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
-        sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
-    }
-
     /*public void CheckAirplaneATC()
     {
     for (Airplane airplane : airplaneList) {
@@ -276,55 +302,4 @@ public class CTA {
     }
     }
     }*/
-    /**
-     * Gets the current airplane
-     * @return airplane
-     */
-    public Airplane getCurrentSelectedAirplane() {
-        return airplane;
-    }
-
-    /**
-     * Gets the airplane list
-     * @return airplaneList
-     */
-    public ArrayList<Airplane> getAirplaneList() {
-        return airplaneList;
-    }
-
-    /**
-     * Gets the airport list
-     * @return airportList
-     */
-    public ArrayList<Airport> getAirportList() {
-        return airportList;
-    }
-
-    /**
-     * Might not be necessary
-     * @return airplane
-     */
-    public Airplane getAirplane() {
-        return airplane;
-    }
-
-    /**
-     * Turns the airport list into a Iterator
-     * @return Iterator airportList
-     */
-    public ListIterator<Airport> GetAirports() {
-        return airportList.listIterator();
-    }
-
-    /**
-     * might not be necessary
-     * @return airport
-     */
-    public Airport getAirport() {
-        return airport;
-    }
-
-    public void removeAirplane(Airplane airplane) {
-        airplaneList.remove(airplane);
-    }
 }
