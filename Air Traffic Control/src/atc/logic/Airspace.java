@@ -123,24 +123,6 @@ public class Airspace {
         }
     }
 
-    public boolean getOnlyOneACC() {
-        return onlyOneACC;
-    }
-
-    /**
-     * A method to get the ACC with the given ID
-     * 
-     * @return The acc with the given ID
-     */
-    public ACC getACC(int ID) {
-        for (ACC acc : ACCs) {
-            if (acc.GetID() == ID) {
-                return acc;
-            }
-        }
-        return null;
-    }
-
     /**
      * A method to get the airport list within the given GeoSector
      * 
@@ -279,6 +261,24 @@ public class Airspace {
 
     public ListIterator<Airport> GetAirports() {
         return airportList.listIterator();
+    }
+
+    public boolean getOnlyOneACC() {
+        return onlyOneACC;
+    }
+
+    /**
+     * A method to get the ACC with the given ID
+     * 
+     * @return The acc with the given ID
+     */
+    public ACC getACC(int ID) {
+        for (ACC acc : ACCs) {
+            if (acc.GetID() == ID) {
+                return acc;
+            }
+        }
+        return null;
     }
 
     /**************Setters**************/
