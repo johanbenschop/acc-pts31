@@ -428,8 +428,6 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         
         if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
         {
-            System.out.println("zoek Type met iets/null manafacturer");
-            System.out.println(tfType.getText());
             tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
             if(!iter.getType().contains(tfType.getText()))
             {
@@ -438,8 +436,6 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         
         } else if(!tfManafacturer.getText().equals("") && tfType.getText().equals("") )
         {
-            System.out.println("zoek manafacturer met iets /null type");
-            System.out.println(tfManafacturer.getText());
             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
             if(!iter.getManufacturer().contains(tfManafacturer.getText()))
             {
@@ -449,7 +445,6 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         
         }else if(tfType.getText().equals("") && tfManafacturer.getText().equals(""))
         {
-            System.out.println("zoek Type of manufacterer");
             tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
             if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
@@ -460,12 +455,8 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         
         else if(!tfType.getText().equals("") && !tfManafacturer.getText().equals("")){
             tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-            if(!iter.getType().contains(tfType.getText()))
-            {
-                continue;
-            }
-            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if(!iter.getType().contains(tfManafacturer.getText()))
+             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+            if((!iter.getType().contains(tfType.getText())) || (!iter.getManufacturer().contains(tfManafacturer.getText())))
             {
                 continue;
             }
