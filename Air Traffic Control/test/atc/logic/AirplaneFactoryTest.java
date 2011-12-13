@@ -37,14 +37,11 @@ public class AirplaneFactoryTest {
     }
 
     /**
-     * Test of getAirplanes method, of class AirplaneFactory.
+     * Test of a method, of class AirplaneFactory.
      */
     @Test
-    public void testGetAirplanes() {
-        System.out.println("getAirplanes");
-        AirplaneFactory instance = new AirplaneFactory(0,0,0,"test", "test", 0 ,0, 0, 0, 0);
-        //instance.getAirplanes();
-        // TODO review the generated test code and remove the default call to fail.
+    public void testAMethod() {
+        System.out.println("none");
         fail("The test case is a prototype.");
     }
 }
