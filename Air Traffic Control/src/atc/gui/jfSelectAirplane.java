@@ -441,7 +441,7 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
             System.out.println("zoek manafacturer met iets /null type");
             System.out.println(tfManafacturer.getText());
             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if(!iter.getType().contains(tfManafacturer.getText()))
+            if(!iter.getManufacturer().contains(tfManafacturer.getText()))
             {
                 System.out.println("niet");
                 continue;
