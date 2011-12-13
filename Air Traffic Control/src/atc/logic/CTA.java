@@ -82,7 +82,7 @@ public class CTA {
 //        }
     }
 
-    /**
+    /**                                                               
      * Returns airplane with the given airplaneNumber
      * @return 
      */
@@ -94,7 +94,7 @@ public class CTA {
         }
     }
 
-    /**
+    /**                                                                       TODO moet hier een unittest voor? nee toch?
      * Returns the airport with the given AirportID
      * @return
      */
@@ -107,7 +107,7 @@ public class CTA {
         return airport;
     }
 
-    public Airplane GetAirplane(int AirplaneID) {
+    public Airplane GetAirplane(int AirplaneID) {                   //         TODO moet hier een unittest voor? nee toch?                              
         for (Airplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneID) {
                 airplane = a;
@@ -156,6 +156,7 @@ public class CTA {
     }
 
     /**
+     *                              TODO...is dit niet dubbel met de methode die eronder staat?? 
      * Deletes the airplane with the corresponding AirplaneNumber from the airplaneList
      * @return
      */
@@ -167,16 +168,16 @@ public class CTA {
         }
     }
 
+    public void removeAirplane(Airplane airplane) {
+        airplaneList.remove(airplane);
+    }
+
     public void CreateGreaterSector() {
         double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
         double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
         double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
         double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
         sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
-    }
-
-    public void removeAirplane(Airplane airplane) {
-        airplaneList.remove(airplane);
     }
 
     /***************Getters**********/
@@ -211,11 +212,6 @@ public class CTA {
     public Airport getAirport() {
         return airport;
     }
-    
-    
-    
-    
-    
     /**
      * Loads airports from the airports.dat file
      * @throws FileNotFoundException if the file doesn't exist
