@@ -19,6 +19,10 @@ import static org.junit.Assert.*;
 public class GeoLocationTest {
 
     private GeoLocation geoLocation;
+    private GeoLocation geoLocationTakeoff;
+    private GeoLocation geoLocationDestination;
+    private Airport Innsbruck;
+    private Airport ZellAmZee;
 
     public GeoLocationTest() {
     }
@@ -34,6 +38,10 @@ public class GeoLocationTest {
     @Before
     public void setUp() {
         geoLocation = new GeoLocation(10.0, 15.0, 25.0);
+        geoLocationTakeoff = new GeoLocation(47.26021896305513, 11.413107452921505 );
+        geoLocationDestination = new GeoLocation(47.1734, 12.4719 );
+        Innsbruck = new Airport(0,"","","","","",geoLocationTakeoff,0,0.0,"");
+        ZellAmZee = new Airport(0,"","","","","",geoLocationDestination,0,0.0,"");
     }
 
     @After
@@ -67,8 +75,7 @@ public class GeoLocationTest {
     @Test
     public void testCalcDirection() {
         System.out.println("CalcDirection(Airport a, Airport b)");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assert.assertEquals("The direction has been calculated", 96.49485788698077 , geoLocation.CalcDirection(Innsbruck, ZellAmZee));
     }
 
     /**
@@ -77,8 +84,7 @@ public class GeoLocationTest {
     @Test
     public void testCalcDirection2() {
         System.out.println("CalcDirection(GeoLocation locationA, GeoLocation locationB)");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assert.assertEquals("The direction has been calculated", 96.49485788698077 , geoLocation.CalcDirection(geoLocationTakeoff, geoLocationDestination));
     }
 
     /**
