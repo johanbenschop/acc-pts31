@@ -103,9 +103,14 @@ public class FlightControllerTest {
         flightController.unassignAllFlights();
 
         flights = flightController.getFlights();
-        if (flights != null) {
-            allFlightsUnassigned = false;
+        
+        while (flights.hasNext()) {
+            bFlightplan = new Flightplan(null, null, 0, null, null, null);
+            bFlightplan = (Flightplan) flights.next();
+            if (bFlightplan.getAssignedController() != null) {
+                allFlightsUnassigned = false;
+            }
         }
-        Assert.assertEquals("The flight has been unassigned", true, flightUnassigned);
+        Assert.assertEquals("The flight has been unassigned", true, allFlightsUnassigned);
     }
 }
