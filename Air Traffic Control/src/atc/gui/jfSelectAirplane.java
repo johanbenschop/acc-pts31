@@ -136,12 +136,6 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             }
         });
 
-        tfAirliner.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tfSearchKeyTyped(evt);
-            }
-        });
-
         tfManafacturer.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tfManafacturerKeyReleased(evt);
@@ -232,107 +226,6 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnSelectActionPerformed
-
-private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
-//    evt.getKeyChar(); // Key typed...
-//    data.clear(); // Empty the data so we can get the limited results in.
-//    airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
-//    retAirplanes.clear();
-//    
-//    while (airplanes.hasNext()) {
-//        AirplaneFactory iter = airplanes.next();
-//        
-//        if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
-//        {
-//            System.out.println("zoek Type met leeg/null manafacturer");
-//            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-//            if(!iter.getType().contains(tfType.getText()))
-//            {
-//                continue;
-//            }else {
-//                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
-//                    continue;
-//                }
-//        }
-//        } if(!tfManafacturer.getText().equals("") && tfType.getText().equals("") )
-//        {
-//            System.out.println("zoek manafacturer met leeg/null type");
-//            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-//            if(!iter.getType().contains(tfManafacturer.getText()))
-//            {
-//                continue;
-//            }else {
-//                if (!iter.getType().contains(tfManafacturer.getText() + evt.getKeyChar())) {
-//                    continue;
-//                }
-//        }
-//        }if(tfType.getText().equals("") && tfManafacturer.getText().equals(""))
-//        {
-//            System.out.println("zoek Type of manufacterer");
-//            System.out.println(tfManafacturer.getText() + "mana");
-//            System.out.println(tfType.getText() + "type");
-//            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-//            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-//            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
-//            {
-//                continue;
-//            }else {
-//                if ((!iter.getType().contains(tfType.getText() + evt.getKeyChar())) && (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar()))) 
-//                {
-//                    continue;
-//                }
-//        }
-//        }
-//    
-//        
-//        /*if (evt.getComponent() == tfType) {
-//            if (evt.getKeyChar() == '\b') {
-//                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-//                if (!iter.getType().contains(tfType.getText())) {
-//                    continue;
-//                }
-//            } else {
-//                if (!iter.getType().contains(tfType.getText() + evt.getKeyChar())) {
-//                    continue;
-//                }
-//            }
-//        }
-//
-//        else if (evt.getComponent() == tfManafacturer) {
-//            if (evt.getKeyChar() == '\b') {
-//                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-//                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
-//                    continue;
-//                }
-//            } else {
-//                if (!iter.getManufacturer().contains(tfManafacturer.getText() + evt.getKeyChar())) {
-//                    continue;
-//                }
-//            }
-//        } 
-//
-////        if(!iter.getManufacturer().contains(tfManafacturer.getText()) && !iter.getType().contains(tfType.getText()))
-////        {
-////            continue;
-////        }
-////         //We don't have the airliner stuff implemented yet so we can't actually searh it.
-////        if (evt.getComponent() == tfAirliner) {
-////            if (evt.getKeyChar() == '\b') {
-////                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
-////                if (!iter.getAirliner().contains(tfAirliner.getText())) {
-////                    continue;
-////                }
-////            } else {
-////                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
-////                    continue;
-////                }
-////            }
-////        }*/
-//        fillVector(iter);
-//    }
-//
-//    fillTable();
-}//GEN-LAST:event_tfSearchKeyTyped
 
 private void tfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyReleased
     search();
@@ -439,7 +332,6 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
             if(!iter.getManufacturer().contains(tfManafacturer.getText()))
             {
-                System.out.println("niet");
                 continue;
             }
         
@@ -461,8 +353,6 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
                 continue;
             }
         }
-        
-  
         fillVector(iter);
     }
 

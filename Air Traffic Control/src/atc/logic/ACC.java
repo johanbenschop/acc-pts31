@@ -192,7 +192,7 @@ public class ACC {
      * @return false is returned if the speed was above/below the planes maximum/minimum speed.
      */
     public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
-        if (speed > a.getMinSpeed() && speed < a.getMaxSpeed()) {
+        if (speed >= a.getMinSpeed() && speed <= a.getMaxSpeed()) {
             a.setAimedSpeed(speed);
         } else {
             throw new AssignmentException("The speed given is too low or high.");
