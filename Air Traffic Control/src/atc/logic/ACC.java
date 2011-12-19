@@ -19,8 +19,12 @@ public class ACC {
      */
     private int ID;
     /**
-     * the CTA over which is has control
+     * logging file to write all the events that happen into a file
      */
+    private Logging logging;
+    /**
+     * the CTA over which is has control
+     */   
     private CTA cta;
     /**
      * an arrayList of flightplans
@@ -63,7 +67,7 @@ public class ACC {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+        logging = new Logging(ID);
     }
 
     /**************Getters**************/
@@ -194,6 +198,12 @@ public class ACC {
     public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
         if (speed >= a.getMinSpeed() && speed <= a.getMaxSpeed()) {
             a.setAimedSpeed(speed);
+            try{
+            logging.WriteCommand("sab", "change speed");
+            }
+            catch(IOException e){
+                System.out.println("logging failed");
+            }
         } else {
             throw new AssignmentException("The speed given is too low or high.");
         }
