@@ -82,17 +82,6 @@ public class CTA {
 //        }
     }
 
-    /**                                                               
-     * Returns airplane with the given airplaneNumber
-     * @return 
-     */
-    public void GetActiveAirplane(int AirplaneNumber) {
-        for (Airplane a : airplaneList) {
-            if (a.getAirplaneNumber() == AirplaneNumber) {
-                airplane = a;
-            }
-        }
-    }
 
     /**                                                                       TODO moet hier een unittest voor? nee toch?
      * Returns the airport with the given AirportID
@@ -107,6 +96,12 @@ public class CTA {
         return airport;
     }
 
+    /**
+     * 
+     * @param AirplaneID
+     * @return 
+     * @deprecated 
+     */
     public Airplane GetAirplane(int AirplaneID) {                   //         TODO moet hier een unittest voor? nee toch?                              
         for (Airplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneID) {
@@ -181,18 +176,29 @@ public class CTA {
     }
 
     /***************Getters**********/
-    public Airplane getCurrentSelectedAirplane() {
-        return airplane;
-    }
-
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
     public ArrayList<Airplane> getAirplaneList() {
         return airplaneList;
     }
 
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
     public ArrayList<Airport> getAirportList() {
         return airportList;
     }
 
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
     public Airplane getAirplane() {
         return airplane;
     }
@@ -209,6 +215,12 @@ public class CTA {
         return airportList.listIterator();
     }
 
+    
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
     public Airport getAirport() {
         return airport;
     }
