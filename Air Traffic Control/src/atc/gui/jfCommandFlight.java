@@ -521,8 +521,8 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeSpeedTo.getText())) {
             try {
                 atc2.airspace.getCurrentACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
-            } catch (AssignmentException ex) {
-                ex.printStackTrace();
+            } catch (AssignmentException ex) {             
+            JOptionPane.showMessageDialog(this, "The given speed is not in the range of this airplane.", "Error speed range", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -530,7 +530,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
             try {
                 atc2.airspace.getCurrentACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
             } catch (AssignmentException ex) {
-                ex.printStackTrace();
+             JOptionPane.showMessageDialog(this, "The given direction is not in the range", "Error direction range", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -538,7 +538,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
             try {
                 atc2.airspace.getCurrentACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
             } catch (AssignmentException ex) {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "The flightlevel is not correct", "Error incorrect flightlevel", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -558,7 +558,6 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
     private void btnTakeOffFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeOffFlightActionPerformed
         flightplan.getAirplane().setStatus(Statusses.TAKINGOFF);
-        System.out.println("TakeOff");
     }//GEN-LAST:event_btnTakeOffFlightActionPerformed
 
     private void jButtonSetHeadingDestinationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetHeadingDestinationActionPerformed
