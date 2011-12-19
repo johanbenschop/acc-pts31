@@ -51,6 +51,7 @@ public class GeoLocation {
      * Method to return a string value with the longitude, latitude and altitude.
      * 
      * @return A string value with the longitude, latitude and altitude is returned.
+     * @deprecated 
      */
     public String ToString() {
         StringBuilder sb = new StringBuilder();
@@ -73,15 +74,15 @@ public class GeoLocation {
      * Method to return the Latlon made from the latitude and longitude
      * 
      * @return A LatLon value in degrees.
+     * @deprecated 
      */
     public LatLon toLatLon() {
         return LatLon.fromDegrees(Latitude, Longitude);
     }
 
     /**
-     *                                                                                                  TODO
-     * 
-     * @return 
+     *Converts the geolocation to the location used in WWJ. 
+     * @return position.
      */
     public Position toPosition() {
         return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
@@ -91,6 +92,7 @@ public class GeoLocation {
      * Method to return a double value of the direction calculated between Airport a and Airport b.
      * 
      * @return A double value direction of Airport B from Airport A.
+     * @deprecated 
      */
     public static double CalcDirection(Airport a, Airport b) {
         GeoLocation locationA = new GeoLocation(0, 0, 0);
@@ -126,9 +128,8 @@ public class GeoLocation {
     }
 
     /**
-     *                                                                                                              TODO
-     * 
-     * @return 
+     * This calculates the new position based on the curren position, direction and distance.
+     * @return GeoLocation
      */
     public static GeoLocation CalcPosition(double lon1, double lat1, double direction, double distance) {
         double Distance = distance / 3958.75;
