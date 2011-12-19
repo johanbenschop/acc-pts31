@@ -86,6 +86,11 @@ public class Runway {
         return location;
     }
 
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
     public int getLength() {
         return Length;
     }
