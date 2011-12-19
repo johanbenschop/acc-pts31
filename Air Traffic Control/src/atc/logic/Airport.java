@@ -150,5 +150,11 @@ public class Airport {
     public GeoLocation getLocation() {
         return location;
     }
+
+    @Override
+    public String toString() {
+        return this.AirportName + ", " + this.City;
+    }
+    
     
 }
