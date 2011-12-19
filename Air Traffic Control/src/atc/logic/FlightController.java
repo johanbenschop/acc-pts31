@@ -31,6 +31,10 @@ public class FlightController {
     }
 
     
+    /**
+     * Assigns a flightcontroller to an flighplan and adds add to a list
+     * @param flightplan 
+     */
     public void assignFlight(Flightplan flightplan) {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
@@ -47,12 +51,19 @@ public class FlightController {
         flightplan.setAssignedController(null);
     }
 
+    /**
+     * Method to unassign all flightplan from this Flightcontroller
+     */
     public void unassignAllFlights() {
         for (Flightplan flightplan : flights) {
             flightplan.setAssignedController(null);
         }
     }
 
+    /**
+     * Gets the amount of flights from the Flightcontroller.
+     * @return 
+     */
     public int getNumberAssignedFlights() {
         return flights.size();
     }
