@@ -5,14 +5,11 @@
  */
 package atc.gui;
 
-import atc.logic.Airplane;
 import atc.logic.AirplaneFactory;
 import atc.logic.Flightplan;
-import atc.logic.Airspace;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.ListIterator;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -43,8 +40,8 @@ public class jfSelectFlight extends javax.swing.JDialog {
 
         columnNames.addElement("Flightnumber");
         columnNames.addElement("Airliner");
-        columnNames.addElement("Departure date");
-        columnNames.addElement("Arrival date");
+        columnNames.addElement("Departure");
+        columnNames.addElement("Arrival");
         columnNames.addElement("Airplane flying");
 
         TableModel model = new DefaultTableModel(data, columnNames);
@@ -382,9 +379,9 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getFlightnumber()));
         row.addElement("WDAL");
-        row.addElement(iter.getDepartureDate().toString());
-        row.addElement(iter.getArrivalDate().toString());
-        row.addElement(iter.getAirplane().toString());
+        row.addElement(iter.getTakeoffAirport().toString());
+        row.addElement(iter.getDestinationAirport().toString());
+        row.addElement(iter.getAirplane().getManufacturer());
         data.addElement(row);
     }
 
