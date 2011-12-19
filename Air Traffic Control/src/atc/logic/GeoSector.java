@@ -53,8 +53,8 @@ public class GeoSector {
 
     /**
      * 
-     *
-     * 
+     * @return 
+     * @deprecated 
      */
     public boolean isWithinLatLonLimits() {
         return minLatitude >= -90 && maxLatitude <= 90
@@ -66,6 +66,7 @@ public class GeoSector {
      * (minimum longitude + maximum longitude) / 2.
      *
      * @return The latitude and longitude of the sector's angular center
+     * @deprecated 
      */
     public GeoLocation getCenterLocation() {
         double latitude = 0.5 * (maxLatitude + minLatitude);
@@ -81,6 +82,7 @@ public class GeoSector {
      * @param that the sector to test for intersection.
      *
      * @return <code>true</code> if the sectors intersect, otherwise <code>false</code>.
+     * @deprecated 
      */
     public boolean intersects(GeoSector that) {
         if (that == null) {
@@ -114,6 +116,7 @@ public class GeoSector {
      * @return <code>true</code> if the sectors' interiors intersect, otherwise <code>false</code>.
      *
      * @see #intersects(Sector)
+     * @deprecated 
      */
     public boolean intersectsInterior(GeoSector that) {
         if (that == null) {
@@ -220,14 +223,23 @@ public class GeoSector {
     }
 
     /**************Getters**************/
+    /**
+     * @deprecated 
+     * @return 
+     */
     public double getDeltaLatitude() {
         return deltaLatitude;
     }
 
+    /**
+     * @deprecated 
+     * @return 
+     */
     public double getDeltaLongitude() {
         return deltaLongitude;
     }
 
+    
     public double getMaxLatitude() {
         return maxLatitude;
     }
