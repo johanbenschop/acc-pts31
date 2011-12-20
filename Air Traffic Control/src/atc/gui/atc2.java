@@ -6,6 +6,7 @@ import atc.cli.jpTerminal;
 import atc.gui.Audio.Sound;
 import atc.logic.ACC;
 import atc.logic.Airplane;
+import atc.logic.Airplane.Statusses;
 import atc.logic.Airport;
 import atc.logic.Airspace;
 import atc.logic.CTA;
@@ -18,6 +19,7 @@ import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
+import gov.nasa.worldwind.layers.Layer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.BasicShapeAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
@@ -42,6 +44,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.prefs.*;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -76,9 +79,10 @@ public final class atc2 extends atc {
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
         private static FlightController flightController;
+        private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
-            prefs.putDouble("SIM_SPEED", 1);
+            //prefs.putDouble("SIM_SPEED", 1);
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
@@ -276,46 +280,112 @@ public final class atc2 extends atc {
             this.timerCollision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                        ACC acc = it.next();
-                        // TODO have to be made working in order to delete inactive airplanes
-//                        Flightplan fp = currentAirplaneAnnotation.getFlightplan();
-//                        Airplane airplane = fp.getAirplane();
-//                        if (airplane.getStatus().equals(Airplane.Statusses.CRASHED) |
-//                                airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
-//                            removeAirplaneFromLayer(airplaneLayer, fp);
-//                        }
-
+                    // TODO fix this bug so all airplanes will die when crashed or haslanded...
+                    ACC acc = airspace.getCurrentACC();
+                    Flightplan temp = null;
+                    lock.lock();
+                    try {
+                        for (Iterator<Flightplan> it = acc.getFlightplans(); it.hasNext();) {
+                            Flightplan fp = it.next();
+                            Airplane ap = fp.getAirplane();
+                            if (fp.getAirplane().getStatus().equals(Statusses.CRASHED) || 
+                                    fp.getAirplane().getStatus().equals(Statusses.HASLANDED)) {
+                                removeAirplane(fp);
+                                if (fp.getAssignedController() != null) {
+                                    fp.getAssignedController().unassignFlight(fp);
+                                }
+                                temp = fp;
+                                addedAirplanes.remove(ap);
+                                acc.GetCTA().removeAirplane(ap);
+                            }                            
+                        }
+                        if (temp != null) {
+                            acc.removeFlightPlan(temp);
+                        }                        
                     }
-
+                    finally {
+                        lock.unlock();
+                    }
                     findCollisions();
                     getWwd().redraw();
                 }
             });
             timerCollision.start();
-
             // Add the graticule layer
             LatLonGraticuleLayer graticuleLayer = new LatLonGraticuleLayer();
+
             insertBeforePlacenames(getWwd(), graticuleLayer);
-            graticuleLayer.setEnabled(false);
+            graticuleLayer.setEnabled(
+                    false);
 
             // Add the selecteble airspaces/CTA layers
             buildSelectebleAirspaceLayer();
-
             // Init tooltip annotation
+
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
             Font font = Font.decode(prefs.get("TT_FONT", "Arial-Plain-16"));
+
+
             this.tooltipAnnotation.getAttributes().setFont(font);
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setBackgroundColor(new Color(0f, 0f, 0f, .7f));
             //this.tooltipAnnotation.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLES,
             //        (float) 0.1, Color.LIGHT_GRAY));
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
+
+
+
+
+
+
             this.tooltipAnnotation.getAttributes().setVisible(false);
-            this.tooltipAnnotation.setAlwaysOnTop(true);
+
+
+
+
+
+
+            this.tooltipAnnotation.setAlwaysOnTop(
+                    true);
 
             flightController = new FlightController();
         }
@@ -635,9 +705,8 @@ public final class atc2 extends atc {
                     public synchronized void actionPerformed(ActionEvent event) {
                         if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
                             try {
-                            airspace.BorderControl2();
-                            }
-                            catch (Exception e) {
+                                airspace.BorderControl();
+                            } catch (Exception e) {
                                 System.err.println(e);
                             }
                         }
@@ -715,27 +784,6 @@ public final class atc2 extends atc {
         }
 
         /**
-         * Removes an airplane from the airplane layer.
-         * @param layer
-         * @param flightplan
-         * @deprecated 
-         */
-        private void removeAirplaneFromLayer(RenderableLayer layer, Flightplan flightplan) {
-            Airplane airplane = flightplan.getAirplane();
-
-            if (airplane.getStatus().equals(Airplane.Statusses.CRASHED)
-                    | airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
-                if (addedAirplanes.contains(airplane)) {
-                    addedAirplanes.remove(airplane);
-                    layer.removeRenderable(currentAirplaneAnnotation);
-                    airplane.interrupt();
-                    currentAirplaneAnnotation = null;
-                    airplane = null;
-                }
-            }
-        }
-
-        /**
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */
@@ -798,6 +846,21 @@ public final class atc2 extends atc {
                 // The user may control this airplane.
                 Flightplan flightplan = rend.getFlightplan();
                 new jfCommandFlight(this, true).setFlightplan(flightplan);
+            }
+        }
+
+        private void removeAirplane(Flightplan flightplan) {
+            for (Iterator<Renderable> it = airplaneLayer.getRenderables().iterator(); it.hasNext();) {
+                Object object = it.next();
+                if (object instanceof AirplaneRenderable) {
+                    AirplaneRenderable ar = (AirplaneRenderable) object;
+                    if (ar.getFlightplan() == flightplan) {
+                        airplaneLayer.removeRenderable(ar);
+                        addedAirplanes.remove(flightplan.getAirplane());
+                        ar.dispose();
+                        return;
+                    }
+                }
             }
         }
     }
