@@ -94,7 +94,7 @@ public class AirspaceTest {
     }
 
     /**
-     * Test of the BorderControl2 method, of the class Airspace.
+     * Test of the BorderControl method, of the class Airspace.
      */
     @Test
     public void testBorderControl2() {

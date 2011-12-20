@@ -223,11 +223,11 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + "<br />Departure: "
                 + flightplan.getTakeoffAirport().getCity() + ", "
                 + flightplan.getTakeoffAirport().getCountry() + " ["
-                + flightplan.getTakeoffAirport().getIATA_FAA() + "]"
+                + flightplan.getTakeoffAirport().getICAO() + "]"
                 + "<br />Arrival: "
                 + flightplan.getDestinationAirport().getCity() + ", "
                 + flightplan.getDestinationAirport().getCountry() + " ["
-                + flightplan.getDestinationAirport().getIATA_FAA() + "]"
+                + flightplan.getDestinationAirport().getICAO() + "]"
                 + "<br />"
                 + "<br /><b>Airplane</b>"
                 + "<br />[Speed: "
@@ -235,9 +235,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + airplane.getAltitude() + " feet]"
                 //           +"<br />[Flightlevel: " + airplane.getFlightLevel() + "]"
                 + "<br />[Direction: " + DF.format(airplane.getDirection()) + "°]"
-                + "<br />Model: " + airplane.getManufacturer() + ", " + airplane.getType()
-                + "<br >Current state: " + airplane.getStatus()
-                + "<br> Lat/lon: (" + DF.format(airplane.getLocation().getLatitude()) + "," + DF.format(airplane.getLocation().getLongitude()) + ")"
+                + "<br />[Model: " + airplane.getManufacturer() + ", " + airplane.getType() + "]"
+                + "<br >[Current state: " + airplane.getStatus() + "]"
+                + "<br> [Lat/lon: (" + DF.format(airplane.getLocation().getLatitude()) + ", " 
+                + DF.format(airplane.getLocation().getLongitude()) + ")]"
                 + "</p>";
     }
 }

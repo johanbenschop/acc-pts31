@@ -181,7 +181,7 @@ public class Airspace {
         return adjacentACCList;
     }
 
-    public synchronized void BorderControl2() {
+    public synchronized void BorderControl() {
         for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
             Flightplan flightplan = it.next();
             if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())
@@ -199,57 +199,7 @@ public class Airspace {
             }
         }
     }
-
-    /**
-     *
-     * 
-     * @deprecated 
-     */
-    public void BorderControl() {
-        System.err.println("in borderControl");
-        for (ACC adjacentACC : currentACC.getAdjacentACCList()) {
-            for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
-                Flightplan flightplan = it.next();
-                if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                    System.out.println("Overgeven");
-                    if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                        if (!adjacentACC.ContainsFlightplan(flightplan)) {
-                            currentACC.unassignFlightFromController(flightplan);
-                            currentACC.assignFlightToController(flightplan);
-                            adjacentACC.removeFlightPlan(flightplan);
-                            adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
-                        }
-                    } else {
-                        if (!currentACC.ContainsFlightplan(flightplan)) {
-                            currentACC.addFlightPlan(flightplan);
-                            currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    ///DIT BEWAREN (PAUL)
-        /*for(ACC adjacentACC : currentACC.getAdjacentACCList())
-    {
-    for (Iterator<Flightplan> it = adjacentACC.getFlightplans(); it.hasNext();) {
-    Flightplan flightplan = it.next();
-    if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-    if (this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-    currentACC.unassignFlightFromController(flightplan);
-    currentACC.assignFlightToController(flightplan);
-    adjacentACC.removeFlightPlan(flightplan);
-    currentACC.addFlightPlan(flightplan);
-    adjacentACC.GetCTA().removeAirplane(flightplan.getAirplane());
-    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-    //flightplan.getAirplane().setControlCTA(this.currentACC.GetCTA());
-    } else {
-    //flightplan.getAirplane().setVisibleCTA(this.currentACC.GetCTA())
-    currentACC.GetCTA().addAirplane(flightplan.getAirplane());
-    }
-    }
-    }*/
+        
     /**************Getters**************/
     public ListIterator<ACC> GetACCs() {
         return ACCs.listIterator();
