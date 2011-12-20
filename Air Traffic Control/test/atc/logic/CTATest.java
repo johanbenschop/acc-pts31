@@ -61,8 +61,8 @@ public class CTATest {
     public void testGetActiveAirplane() {
         System.out.println("GetActiveAirplane");
         cta.addAirplane(airplane);
-        cta.GetActiveAirplane(9999);
-        Assert.assertEquals("Active Airplane has been set.", airplane, cta.getCurrentSelectedAirplane());
+        cta.GetAirplane(9999);
+        Assert.assertEquals("Active Airplane has been set.", airplane, cta.getAirplane());
     }
 
     /** 
