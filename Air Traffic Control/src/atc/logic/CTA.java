@@ -35,8 +35,13 @@ public class CTA {
      */
     private ArrayList<Collision> collision;
     /**
+     * logging file to write all the events that happen into a file
+     */
+    private Logging logging;
+    /**
      * Timer used to calculate the collision status every xx miliseconds
      */
+    
     private Timer timer;
 
     private class collisionTimer extends TimerTask {
