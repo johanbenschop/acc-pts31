@@ -141,6 +141,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
+                    path.setVisible(false);
                     airplane.interrupt();
                 }
 
