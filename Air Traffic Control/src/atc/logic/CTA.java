@@ -71,7 +71,7 @@ public class CTA {
      */
     public CTA(GeoSector location, ArrayList<Airport> airportlist) {
         this.sector = location;
-
+        CreateGreaterSector(); //need to do this here so a CTA will always have a sectorGreater when created!
         airplaneList = new ArrayList<>();
         collision = new ArrayList<>();
         this.airportList = airportlist;
@@ -219,7 +219,6 @@ public class CTA {
     public ListIterator<Airport> GetAirports() {
         return airportList.listIterator();
     }
-
     
     /**
      * 

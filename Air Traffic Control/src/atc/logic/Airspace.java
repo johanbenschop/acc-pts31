@@ -182,24 +182,36 @@ public class Airspace {
     }
 
     public synchronized void BorderControl() {
-        for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
-            Flightplan flightplan = it.next();
-            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())
-                    && !this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                for (Iterator<ACC> ita = this.getAdjacentACCs(this.currentACC.GetID()).iterator(); ita.hasNext();) {
-                    ACC acc = ita.next();
-                    if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                        currentACC.unassignFlightFromController(flightplan);
-                        currentACC.removeFlightPlan(flightplan);
-                        acc.addFlightController();
-                        acc.assignFlightToController(flightplan);
-                        acc.addFlightPlan(flightplan);
+        try {
+            for (Iterator<ACC> itla = this.GetACCs(); itla.hasNext();) {
+                ACC leavingACC = itla.next();
+                for (Iterator<Flightplan> itfp = leavingACC.getFlightplans(); itfp.hasNext();) {
+                    Flightplan flightplan = itfp.next();
+                    if (leavingACC.GetCTA().sectorGreater != null) {
+                        if (leavingACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())
+                                && !leavingACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                            for (Iterator<ACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
+                                ACC receivingACC = itra.next();
+                                if (receivingACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
+                                        leavingACC.unassignFlightFromController(flightplan);
+                                    }
+                                    leavingACC.removeFlightPlan(flightplan);
+                                    if (!receivingACC.getfc().isEmpty()) {
+                                        receivingACC.assignFlightToController(flightplan);
+                                    }
+                                    receivingACC.addFlightPlan(flightplan);
+                                }
+                            }
+                        }
                     }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
-        
+
     /**************Getters**************/
     public ListIterator<ACC> GetACCs() {
         return ACCs.listIterator();

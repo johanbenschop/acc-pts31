@@ -79,7 +79,6 @@ public final class atc2 extends atc {
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
         private static FlightController flightController;
-        private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
             //prefs.putDouble("SIM_SPEED", 1);
@@ -186,7 +185,7 @@ public final class atc2 extends atc {
                         public void actionPerformed(ActionEvent e) {
                             // When we open a new dialog we should do it in it's own thread.
                             // Doing so allows the main application to continue
-                            // it's work, like buzzing you when a collision is detected.
+                            // it works, like buzzing you when a collision is detected.
                             java.awt.EventQueue.invokeLater(new Runnable() {
 
                                 @Override
@@ -280,16 +279,14 @@ public final class atc2 extends atc {
             this.timerCollision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    // TODO fix this bug so all airplanes will die when crashed or haslanded...
-                    ACC acc = airspace.getCurrentACC();
                     Flightplan temp = null;
-                    lock.lock();
-                    try {
+                    for (Iterator<ACC> itc = airspace.GetACCs(); itc.hasNext();) {
+                        ACC acc = itc.next();
                         for (Iterator<Flightplan> it = acc.getFlightplans(); it.hasNext();) {
                             Flightplan fp = it.next();
                             Airplane ap = fp.getAirplane();
-                            if (fp.getAirplane().getStatus().equals(Statusses.CRASHED) || 
-                                    fp.getAirplane().getStatus().equals(Statusses.HASLANDED)) {
+                            if (fp.getAirplane().getStatus().equals(Statusses.CRASHED)
+                                    || fp.getAirplane().getStatus().equals(Statusses.HASLANDED)) {
                                 removeAirplane(fp);
                                 if (fp.getAssignedController() != null) {
                                     fp.getAssignedController().unassignFlight(fp);
@@ -297,14 +294,11 @@ public final class atc2 extends atc {
                                 temp = fp;
                                 addedAirplanes.remove(ap);
                                 acc.GetCTA().removeAirplane(ap);
-                            }                            
+                            }
                         }
                         if (temp != null) {
                             acc.removeFlightPlan(temp);
-                        }                        
-                    }
-                    finally {
-                        lock.unlock();
+                        }
                     }
                     findCollisions();
                     getWwd().redraw();
@@ -318,75 +312,23 @@ public final class atc2 extends atc {
             graticuleLayer.setEnabled(
                     false);
 
-            // Add the selecteble airspaces/CTA layers
-            buildSelectebleAirspaceLayer();
+            // Add the selectable airspaces/CTA layers
+            buildSelectableAirspaceLayer();
             // Init tooltip annotation
 
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
             Font font = Font.decode(prefs.get("TT_FONT", "Arial-Plain-16"));
-
-
             this.tooltipAnnotation.getAttributes().setFont(font);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setBackgroundColor(new Color(0f, 0f, 0f, .7f));
             //this.tooltipAnnotation.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLES,
             //        (float) 0.1, Color.LIGHT_GRAY));
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setVisible(false);
-
-
-
-
-
-
-            this.tooltipAnnotation.setAlwaysOnTop(
-                    true);
-
+            this.tooltipAnnotation.setAlwaysOnTop(true);
             flightController = new FlightController();
         }
 
@@ -465,7 +407,7 @@ public final class atc2 extends atc {
         /**
          * Build the airspace layer.
          */
-        private void buildSelectebleAirspaceLayer() {
+        private void buildSelectableAirspaceLayer() {
             // We make a new layer for the selecteble CTA's.
             airspacesLayer = new RenderableLayer();
             insertBeforePlacenames(this.getWwd(), airspacesLayer);
@@ -484,7 +426,6 @@ public final class atc2 extends atc {
             // We go through all the ACC's to draw the SurfaceSector inside the airspaceLayer.
             for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
                 ACC acc = it.next();
-
                 SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
                 surfaceSector.setAttributes(attr);
                 surfaceSector.setPathType(AVKey.RHUMB_LINE);
@@ -508,14 +449,14 @@ public final class atc2 extends atc {
                                 buildAirspaceLayer(acc);
 
                                 airspace.setCurrentACC(acc);
-                                atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
+                                airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
 
-                                // Since the user has selected his or hers CTA we don't need to show this layer anymore.
+                                // Since the user has selected his or her CTA we don't need to show this layer anymore.
                                 buildAirportLayer();
                                 buildAirplaneLayer();
                                 airspacesLayer.setEnabled(false);
                                 // NOTE: we keep this alive since RAM is more abundant than CPU.
-                                // The user can always decide to switch CTA and then we would need to remake the CTA, wich is CPU intesive.
+                                // The user can always decide to switch CTA and then we would need to remake the CTA, which is CPU intensive.
                             }
                         }
                     }
@@ -552,7 +493,6 @@ public final class atc2 extends atc {
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
 
             // Set the attributes for the greater surfaceSector and instanciate the objects.
-            acc.GetCTA().CreateGreaterSector(); // TODO why do we need to do this manually?
             SurfaceSector surfaceSectorGreater = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
             ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
             attributesGreaterSector.setOutlineMaterial(Material.GREEN);
@@ -580,7 +520,6 @@ public final class atc2 extends atc {
                 OrbitViewLimits limits = view.getOrbitViewLimits();
                 if (limits != null) {
                     Globe globe = this.getWwd().getModel().getGlobe();
-
                     limits.setCenterLocationLimits(acc.GetCTA().sectorGreater.toSector());
                     limits.setZoomLimits(10000, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
