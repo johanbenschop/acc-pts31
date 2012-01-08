@@ -62,7 +62,7 @@ public class Audio {
 
             if (clip.isOpen()) {
                 queue.add(new queueItem(fileName, times));
-                System.out.println("Adding to queu: " + fileName);
+                System.out.println("Adding to queue: " + fileName);
             } else {
                 _playSound(fileName, times);
             }
@@ -119,7 +119,7 @@ public class Audio {
                             clip.close();
                             queueItem item = queue.get(0);
                             queue.remove(item);
-                            System.out.println("Removing to queu: " + item.fileName);
+                            System.out.println("Removing from queue: " + item.fileName);
                             _playSound(item.fileName, item.times);
                         }
                         else if (event.getType() == LineEvent.Type.STOP && queue.isEmpty()) {
