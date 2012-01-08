@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package atc.logic;
+import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 import java.io.*;
 
 /**
@@ -21,7 +22,7 @@ public class Logging {
    public void WriteCommand(String Name, String Command)throws IOException{
        String name = Name;
        String command = Command;
-       String text = "\r" + AccID + " " + name + " " + command + " " + count;
+       String text = "\r" + AccID + " " + name + " " + command;
        String TextfileName = AccID + ".txt";
        Writer output = null;
        FileOutputStream fStream = new FileOutputStream(TextfileName, true);
@@ -30,8 +31,8 @@ public class Logging {
        output = new BufferedWriter(new OutputStreamWriter(dStream));
        //output.write(text);
        output.write(text);
+       output.write(java.security.AccessController.doPrivileged(new sun.security.action.GetPropertyAction("line.separator")));
        output.close();
        System.out.println("logged");
-       count++;
    }
 }

@@ -199,7 +199,8 @@ public class ACC {
         if (speed >= a.getMinSpeed() && speed <= a.getMaxSpeed()) {
             a.setAimedSpeed(speed);
             try{
-            logging.WriteCommand("sab", "change speed");
+                String command = "change speed to: " + speed;
+            logging.WriteCommand("sab", command);
             }
             catch(IOException e){
                 System.out.println("logging failed");
@@ -230,6 +231,13 @@ public class ACC {
     public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
         if (direction >= -360 && direction <= 360) {
             a.setAimedDirection(direction);
+            try{
+                String command = "change direction to: " + direction;
+            logging.WriteCommand("sab", command);
+            }
+            catch(IOException e){
+                System.out.println("logging failed");
+            }
         } else {
             throw new AssignmentException("The given direction is not possible.");
         }
@@ -262,6 +270,13 @@ public class ACC {
         } else {
             throw new AssignmentException();
         }
+        try{
+                String command = "change flightlevel to: " + flightlevel;
+            logging.WriteCommand("sab", command);
+            }
+            catch(IOException e){
+                System.out.println("logging failed");
+            }
     }
 
     /**
