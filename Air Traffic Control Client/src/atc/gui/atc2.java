@@ -28,7 +28,7 @@ import javax.swing.Timer;
  */
 public final class atc2 extends atc {
 
-    public static Airspace airspace = new Airspace();
+    public static IAirspace airspace = new Airspace();
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public static class AppFrame extends atc.AppFrame {
@@ -312,7 +312,7 @@ public final class atc2 extends atc {
 
             menuBar.clearAlerts();
             for (final IAirplane p : addedAirplanes) {
-                if (p.getStatus() == Airplane.Statusses.CRASHING2) {
+                if (p.getStatus() == IAirplane.Statusses.CRASHING2) {
                     Audio.play(Sound.ALARM5, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
@@ -332,7 +332,7 @@ public final class atc2 extends atc {
                                     }
                                 }
                             });
-                } else if (p.getStatus() == Airplane.Statusses.CRASHING1) {
+                } else if (p.getStatus() == IAirplane.Statusses.CRASHING1) {
                     Audio.play(Sound.ALARM4, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
@@ -352,7 +352,7 @@ public final class atc2 extends atc {
                                     }
                                 }
                             });
-                } else if (p.getStatus() == Airplane.Statusses.CRASHED) {
+                } else if (p.getStatus() == IAirplane.Statusses.CRASHED) {
                     Audio.play(Sound.ALARM3, 3);
                 }
             }

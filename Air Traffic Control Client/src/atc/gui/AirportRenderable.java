@@ -1,14 +1,11 @@
 package atc.gui;
 
 import atc.interfaces.*;
-import atc.logic.Airport;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.render.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.nio.DoubleBuffer;
-import javax.media.opengl.GL;
 
 /**
  *

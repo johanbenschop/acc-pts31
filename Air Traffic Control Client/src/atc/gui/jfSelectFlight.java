@@ -6,7 +6,6 @@
 package atc.gui;
 
 import atc.interfaces.*;
-import atc.logic.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.*;
