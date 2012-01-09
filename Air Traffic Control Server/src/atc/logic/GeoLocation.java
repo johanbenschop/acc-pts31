@@ -119,7 +119,8 @@ public class GeoLocation implements IGeoLoc {
      * 
      * @return A double value direction of GeoLocation B from GeoLocation A.
      */    
-    public static double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) {
+    @Override
+    public  double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) {
         double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
         double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
         double lat1 = Math.toRadians(locationA.getLatitude());
@@ -130,7 +131,7 @@ public class GeoLocation implements IGeoLoc {
         double direction = Math.toDegrees(Math.atan2(y, x));
         return direction;
     }
-
+    
     /**
      * This calculates the new position based on the curren position, direction and distance.
      * @return GeoLocation
