@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package atc.interfaces;
 
 import gov.nasa.worldwind.geom.LatLon;
@@ -42,7 +38,7 @@ public interface IGeoLoc {
     void setLatitude(double Latitude);
 
     void setLongitude(double Longitude);
-
+    
     /**
      * Method to return the Latlon made from the latitude and longitude
      *

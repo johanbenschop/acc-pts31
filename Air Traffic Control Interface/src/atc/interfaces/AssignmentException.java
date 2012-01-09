@@ -4,8 +4,6 @@
  */
 package atc.interfaces;
 
-import java.io.*;
-
 /**
  * Exception given if the ACC gives an assignment to the airplane that is not possible to fullfill.
  * @author Henk
