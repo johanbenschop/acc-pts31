@@ -1,6 +1,5 @@
 package atc.interfaces;
 
-import gov.nasa.worldwind.geom.Sector;
 import java.rmi.*;
 
 /**
@@ -66,7 +65,7 @@ public interface IGeoSec extends Remote {
      * Convets this GeoSector to an Sector for World Wind.
      * @return World Wind Sector
      */
-    Sector toSector() throws RemoteException;
+//    Sector toSector() throws RemoteException;
 
     /**
      * Due to minimal importance of an unit test for this method there is none.
