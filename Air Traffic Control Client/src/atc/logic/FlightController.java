@@ -45,12 +45,15 @@ public class FlightController implements IAirFC {
             }
             String url = "rmi://145.93.232.92/ATCServer";
             System.out.println(namingContext.lookup(url).toString());
+            iAirspace = (IAirspace) namingContext.lookup(url);
+            System.out.println("Loaded airspace");
         } catch (NamingException ex) {
             System.out.println(ex.toString());
         }
         ID = lastID++;
         flights = new ArrayList<>();
     }
+    
     public IAirspace getAirspace(){
         return iAirspace;
     }
