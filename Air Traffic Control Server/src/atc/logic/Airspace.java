@@ -1,11 +1,8 @@
+package atc.logic;
 
-
-import atc.gui.atc2;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
+import atc.interfaces.*;
 import java.io.*;
-import java.util.InputMismatchException;
+import java.util.*;
 
 /**
  *
@@ -17,11 +14,11 @@ public class Airspace implements IAirACC {
     /**
      * A list used for collecting all the airports within the CTA
      */
-    private ArrayList<Airport> airportList;
+    private ArrayList<IAirport> airportList;
     /**
      * A list used for collecting all the ACCs
      */
-    private ArrayList<ACC> ACCs;
+    private ArrayList<IACC> ACCs;
     /**
      * An ID used for identifying the ACCs
      */
@@ -33,7 +30,7 @@ public class Airspace implements IAirACC {
     /**
      * Contains the selection of the ACC for the instance of this program.
      */
-    private ACC currentACC;
+    private IACC currentACC;
     private boolean onlyOneACC;
 
     /***************Constructor**********/
@@ -42,8 +39,8 @@ public class Airspace implements IAirACC {
      * 
      */
     public Airspace() {
-        airportList = new ArrayList<Airport>();
-        ACCs = new ArrayList<ACC>();
+        airportList = new ArrayList<IAirport>();
+        ACCs = new ArrayList<IACC>();
         try {
             loadAirportList();
         } catch (FileNotFoundException ex) {
@@ -51,12 +48,12 @@ public class Airspace implements IAirACC {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        GeoSector sector;
+        IGeoSec sector;
         for (int hori = -50; hori < 70; hori += 20) {
             ID = IDStart;
             for (int verti = -180; verti < 180; verti += 20) {
                 sector = new GeoSector(hori, hori + 20, verti, verti + 20);
-                CTA cta = new CTA(sector, getAirportCTA(sector));
+                ICTA cta = new CTA(sector, getAirportCTA(sector));
                 ACCs.add(new ACC(ID, cta));
                 ID++;
             }
@@ -114,9 +111,9 @@ public class Airspace implements IAirACC {
                 double timezone = Double.parseDouble(props[9]);
                 String dst = props[10].replaceAll("\"", "");
 
-                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
+                IGeoLoc location = new GeoLocation(longitude, latitude, altitude);
 
-                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
+                IAirport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
                 airportList.add(airport);
             } catch (NumberFormatException | InputMismatchException e) {
                 System.out.println("Corrupt data line on airports.dat...");
@@ -130,9 +127,9 @@ public class Airspace implements IAirACC {
      * @return An list with airports in the given GeoSector
      */
     @Override
-    public ArrayList<Airport> getAirportCTA(GeoSector sector) {
-        ArrayList<Airport> airportlist = new ArrayList<Airport>();
-        for (Airport airport : airportList) {
+    public ArrayList<IAirport> getAirportCTA(IGeoSec sector) {
+        ArrayList<IAirport> airportlist = new ArrayList<IAirport>();
+        for (IAirport airport : airportList) {
             if (sector.containsGeoLocation(airport.getLocation())) {
                 airportlist.add(airport);
             }
@@ -146,9 +143,9 @@ public class Airspace implements IAirACC {
      * @return The airport with the given AirportID
      */
     @Override
-    public Airport GetAirport(int AirportID) throws NullPointerException {
-        Airport airport = null;
-        for (Airport a : airportList) {
+    public IAirport GetAirport(int AirportID) throws NullPointerException {
+        IAirport airport = null;
+        for (IAirport a : airportList) {
             if (a.getAirportID() == AirportID) {
                 airport = a;
             }
@@ -173,8 +170,8 @@ public class Airspace implements IAirACC {
      */
     @Override
     public ArrayList getAdjacentACCs(int CurrentACCID) {
-        ArrayList<ACC> adjacentACCList = new ArrayList();
-        for (ACC acc : ACCs) {
+        ArrayList<IACC> adjacentACCList = new ArrayList();
+        for (IACC acc : ACCs) {
             if (((CurrentACCID - 101) == acc.GetID()) || ((CurrentACCID - 100) == acc.GetID())
                     || ((CurrentACCID - 99) == acc.GetID()) || ((CurrentACCID - 1) == acc.GetID())
                     || ((CurrentACCID + 1) == acc.GetID()) || ((CurrentACCID + 99) == acc.GetID())
@@ -187,37 +184,49 @@ public class Airspace implements IAirACC {
 
     @Override
     public synchronized void BorderControl() {
-        for (Iterator<Flightplan> it = currentACC.getFlightplans(); it.hasNext();) {
-            Flightplan flightplan = it.next();
-            if (this.currentACC.GetCTA().sectorGreater.containsGeoLocation(flightplan.getAirplane().getLocation())
-                    && !this.currentACC.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                for (Iterator<ACC> ita = this.getAdjacentACCs(this.currentACC.GetID()).iterator(); ita.hasNext();) {
-                    ACC acc = ita.next();
-                    if (acc.GetCTA().sector.containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                        currentACC.unassignFlightFromController(flightplan);
-                        currentACC.removeFlightPlan(flightplan);
-                        acc.addFlightController();
-                        acc.assignFlightToController(flightplan);
-                        acc.addFlightPlan(flightplan);
+        try {
+            for (Iterator<IACC> itla = this.GetACCs(); itla.hasNext();) {
+                IACC leavingACC = itla.next();
+                for (Iterator<IFlightplan> itfp = leavingACC.getFlightplans(); itfp.hasNext();) {
+                    IFlightplan flightplan = itfp.next();
+                    if (leavingACC.GetCTA().getGreaterSector() != null) {
+                        if (leavingACC.GetCTA().getGreaterSector().containsGeoLocation(flightplan.getAirplane().getLocation())
+                                && !leavingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                            for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
+                                IACC receivingACC = itra.next();
+                                if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
+                                        leavingACC.unassignFlightFromController(flightplan);
+                                    }
+                                    leavingACC.removeFlightPlan(flightplan);
+                                    if (!receivingACC.getfc().isEmpty()) {
+                                        receivingACC.assignFlightToController(flightplan);
+                                    }
+                                    receivingACC.addFlightPlan(flightplan);
+                                }
+                            }
+                        }
                     }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
         
     /**************Getters**************/
     @Override
-    public ListIterator<ACC> GetACCs() {
+    public ListIterator<IACC> GetACCs() {
         return ACCs.listIterator();
     }
 
     @Override
-    public ACC getCurrentACC() {
+    public IACC getCurrentACC() {
         return currentACC;
     }
 
     @Override
-    public ListIterator<Airport> GetAirports() {
+    public ListIterator<IAirport> GetAirports() {
         return airportList.listIterator();
     }
 
@@ -232,8 +241,8 @@ public class Airspace implements IAirACC {
      * @return The acc with the given ID
      */
     @Override
-    public ACC getACC(int ID) {
-        for (ACC acc : ACCs) {
+    public IACC getACC(int ID) {
+        for (IACC acc : ACCs) {
             if (acc.GetID() == ID) {
                 return acc;
             }
@@ -243,13 +252,13 @@ public class Airspace implements IAirACC {
 
     /**************Setters**************/
     @Override
-    public void setCurrentACC(ACC currentACC) {
+    public void setCurrentACC(IACC currentACC) {
         this.currentACC = currentACC;
     }
 
     @Override
     public void setCurrentACC(int ID) {
-        for (ACC acc : ACCs) {
+        for (IACC acc : ACCs) {
             if (acc.GetID() == ID) {
                 this.currentACC = acc;
             }

@@ -1,5 +1,7 @@
+package atc.logic;
 
-
+import atc.interfaces.IGeoLoc;
+import atc.interfaces.IRunway;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
@@ -31,7 +33,7 @@ public class Runway implements IRunway {
     /**
      * The geolocation of the runway. 
      */
-    private GeoLocation location;
+    private IGeoLoc location;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     /***************Constructor**********/
@@ -62,7 +64,7 @@ public class Runway implements IRunway {
         } else {
             Availability = r;
         }
-    }
+    }    
 
     /**
      * A class for the timer.
@@ -84,7 +86,7 @@ public class Runway implements IRunway {
 
     /**************Getters**************/
     @Override
-    public GeoLocation getLocation() {
+    public IGeoLoc getLocation() {
         return location;
     }
 

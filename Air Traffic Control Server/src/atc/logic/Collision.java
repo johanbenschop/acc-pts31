@@ -1,8 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+package atc.logic;
 
+import atc.interfaces.IAirplane;
 
 /**
  *
@@ -10,10 +8,10 @@
  */
 public class Collision {
 
-    private Airplane target;
-    private Airplane crashobject;
+    private IAirplane target;
+    private IAirplane crashobject;
 
-    public Collision(Airplane target, Airplane crashobject) {
+    public Collision(IAirplane target, IAirplane crashobject) {
         this.target = target;
         this.crashobject = crashobject;
     }
@@ -130,11 +128,11 @@ public class Collision {
         return distance;
     }
 
-    public Airplane getCrashobject() {
+    public IAirplane getCrashobject() {
         return crashobject;
     }
 
-    public Airplane getTarget() {
+    public IAirplane getTarget() {
         return target;
     }    
 }

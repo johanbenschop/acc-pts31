@@ -1,28 +1,28 @@
+package atc.logic;
 
-
+import atc.interfaces.*;
 import java.util.*;
+
 /**
  * @author Robbert
  */
-
 public class Airport implements IAirport {
 
-   //ToDo: Change Strings to ints when the numbers can be correctly loaded into an int. 
-    
+    //ToDo: Change Strings to ints when the numbers can be correctly loaded into an int. 
     private int AirportID;//The ID of an airport.
     private String AirportName;//The name of an airport.
     private String City;//The city where an airport is builded.
     private String Country;//The country where an aiport is builded.
     private String IATA_FAA;//The IATA_FAA of an airpot.
     private String ICAO;//The ICAO of an aiport.
-    private GeoLocation location;//The geolocation of an aiport.
+    private IGeoLoc location;//The geolocation of an aiport.
     private int Altitude;//The Altitdue of an airport.
     private double Timezone;//The timezone.
     private String DST;//DST is a letter specifying the DST: E (Europe), 
     //A (US/Canada), S (South America), O (Australia), Z (New Zealand), N (None) or U (Unknown).
-    private ArrayList<Runway> runways;// A list with the runways.
+    private ArrayList<IRunway> runways;// A list with the runways.
 
-      /***************Constructor**********/
+    /***************Constructor**********/
     /**
      * This is the constructor to make an airport with its AirportID, AirportName, 
      * City, Country, ITATA_FAA, ICAO, Altitude, Timezone, DST and location.
@@ -37,7 +37,7 @@ public class Airport implements IAirport {
      * @param Timezone: The timezone of the aiport.
      * @param DST: The DST of the airport.
      */
-    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, GeoLocation location, int Altitude, double Timezone, String DST) {
+    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, IGeoLoc location, int Altitude, double Timezone, String DST) {
         this.AirportID = AirportID;
         this.AirportName = AirportName;
         this.City = City;
@@ -48,21 +48,19 @@ public class Airport implements IAirport {
         this.Timezone = Timezone;
         this.DST = DST;
         this.location = location;
-       runways = new ArrayList<>();
-        runways.add( new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, 90, true));
-        runways.add( new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, -90, true));
+        runways = new ArrayList<>();
+        runways.add(new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, 90, true));
+        runways.add(new Runway(location.getLongitude(), location.getLatitude(), Altitude, 100, -90, true));
     }
-    
-    
+
     /**
      * This gives information of an airport.
      * @return string with airport information.
      */
     @Override
-    public String ToString()
-    {
+    public String ToString() {
         String gegevens;
-        gegevens = "AirportID: "+this.getAirportID()+" , Airport name: " +this.getAirportName()+" , City: " +this.getCity()+" , Country: "+this.getCountry();
+        gegevens = "AirportID: " + this.getAirportID() + " , Airport name: " + this.getAirportName() + " , City: " + this.getCity() + " , Country: " + this.getCountry();
         return gegevens;
     }
 
@@ -71,11 +69,10 @@ public class Airport implements IAirport {
      * @return runway.
      */
     @Override
-    public Runway getRunway() {
-        for (Runway runway : runways) {
-            if (runway.getAvailability() == true)
-            {
-            return runway;
+    public IRunway getRunway() {
+        for (IRunway runway : runways) {
+            if (runway.getAvailability() == true) {
+                return runway;
             }
         }
         return null;
@@ -89,7 +86,7 @@ public class Airport implements IAirport {
     public int getAirportID() {
         return AirportID;
     }
-    
+
     /**
      * Gets the AirportName from an airport.
      * @return AirportName.
@@ -152,13 +149,13 @@ public class Airport implements IAirport {
     public String getDST() {
         return DST;
     }
-    
+
     /**
      * Gets the location of the airport.
      * @return Location.
      */
     @Override
-    public GeoLocation getLocation() {
+    public IGeoLoc getLocation() {
         return location;
     }
 
@@ -166,6 +163,4 @@ public class Airport implements IAirport {
     public String toString() {
         return this.AirportName + ", " + this.City;
     }
-    
-    
 }
