@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.naming.*;
@@ -13,10 +14,15 @@ import java.util.Enumeration;
 public class FlightController implements IAirFC {
 
     private int ID;
+    
+    private IAirspace iAirspace;
+   
+    
     /**
      * The last ID that was given to a flightcontroller (+1 = next free ID) 
      */
     private static int lastID;
+    
     /**
      * Arraylist of lightplans assigned to the flightcontroller
      */
@@ -28,7 +34,7 @@ public class FlightController implements IAirFC {
      * an ID and creates a new Arraylist to contain flightplans
      * 
      */
-    public FlightController() {
+    public FlightController() throws RemoteException {
         try {
             Context namingContext = new InitialContext();
 
@@ -44,6 +50,9 @@ public class FlightController implements IAirFC {
         }
         ID = lastID++;
         flights = new ArrayList<>();
+    }
+    public IAirspace getAirspace(){
+        return iAirspace;
     }
 
     

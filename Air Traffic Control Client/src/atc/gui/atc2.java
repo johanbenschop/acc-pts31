@@ -21,6 +21,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.prefs.*;
 import javax.swing.*;
 import javax.swing.Timer;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -776,7 +779,16 @@ public final class atc2 extends atc {
         }
     }
 
+
+    
     public static void main(String[] args) {
+        try {
+            FC = new FlightController();
+        } catch (RemoteException ex) {
+            Logger.getLogger(atc2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        airspace = FC.getAirspace();
+        
         // We need to force Java to use the native look and feel.
         // If we wish to use a Java theme see http://stackoverflow.com/questions/1656168/java-netbeans-how-come-the-gui-looks-different
         String laf = UIManager.getSystemLookAndFeelClassName();
