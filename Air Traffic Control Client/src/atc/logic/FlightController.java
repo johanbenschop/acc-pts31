@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +12,7 @@ import java.util.Enumeration;
  *
  * @author Johan Benschop & Jeanique van der Sanden
  */
-public class FlightController implements IFC {
+public class FlightController implements IFC, Serializable {
 
     private int ID;
     
