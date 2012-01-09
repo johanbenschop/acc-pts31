@@ -74,6 +74,6 @@ public interface IAirport extends Remote {
      */
     double getTimezone() throws RemoteException;
 
-    @Override
-    String toString();
+//    @Override
+//    String toString();
 }

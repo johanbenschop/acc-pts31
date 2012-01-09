@@ -24,7 +24,7 @@ public interface IGeoSec extends Remote {
      * @return <code>true</code> if the four corresponding angles of each sector are equal, <code>false</code>
      * otherwise.
      */
-    boolean equals(Object o);
+//    boolean equals(Object o);
 
     /**
      * Returns the latitude and longitude of the sector's angular center: (minimum latitude + maximum latitude) / 2,
@@ -75,5 +75,5 @@ public interface IGeoSec extends Remote {
      *
      * @return A string indicating the sector's angles.
      */
-    String toString();    
+//    String toString();    
 }

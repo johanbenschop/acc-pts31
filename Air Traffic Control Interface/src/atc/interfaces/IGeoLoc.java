@@ -17,7 +17,7 @@ public interface IGeoLoc extends Remote {
      * @return A string value with the longitude, latitude and altitude is returned.
      * @deprecated
      */
-    String ToString();
+//    String ToString();
 
     /**
      * Getters
