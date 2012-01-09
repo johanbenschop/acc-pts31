@@ -166,16 +166,16 @@ public interface IACC extends Remote {
      *
      * @return list of available airplanes
      */
-    ListIterator<IAirplaneFactory> getAvailableAirplanes() throws RemoteException;
+    ArrayList<IAirplaneFactory> getAvailableAirplanes() throws RemoteException;
 
-    ListIterator<IFC> getFlightControllers() throws RemoteException;
+    ArrayList<IFC> getFlightControllers() throws RemoteException;
 
     /**
      * Method to get all Flightplans
      *
      * @return a list with all Flightplans
      */
-    ListIterator<IFlightplan> getFlightplans() throws RemoteException;
+    ArrayList<IFlightplan> getFlightplans() throws RemoteException;
 
     /**
      * Method to get list of flight controllers
