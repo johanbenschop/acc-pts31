@@ -55,7 +55,7 @@ public final class atc2 extends atc {
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
-        private static IFC flightController;
+        private static FlightController flightController;
         private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
@@ -182,7 +182,7 @@ public final class atc2 extends atc {
                                         airportLayer.removeAllRenderables();
                                         airplaneLayer.removeAllRenderables();
                                         airplaneLineLayer.removeAllRenderables();
-                                        airspace.getCurrentACC().removeFlightController(flightController);
+                                        airspace.getCurrentACC().removeFlightController((IFC)flightController);
                                         airspace.setCurrentACC(null);
                                         airspacesLayer.setEnabled(true);
                                     } catch (RemoteException rex) {
@@ -331,7 +331,7 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
             try {
-                flightController = (IFC) new FlightController();
+                flightController = new FlightController();
             } catch (RemoteException rex) {
                 rex.printStackTrace();
             }
@@ -413,7 +413,7 @@ public final class atc2 extends atc {
          * Static method to get the current flightCntroller object.
          * @return 
          */
-        public static IFC getFlightController() {
+        public static FlightController getFlightController() {
             return flightController;
         }
 
@@ -531,7 +531,7 @@ public final class atc2 extends atc {
             airspace.setCurrentACC(acc);
 
             // We register the controller to this ACC.
-            airspace.getCurrentACC().addFlightController(flightController);
+            airspace.getCurrentACC().addFlightController((IFC)flightController);
 
             // Playing the boss here. We limit the users ability to go outside of their job area.
             // We don't want any FlightControllers spending time on useless stuff.
