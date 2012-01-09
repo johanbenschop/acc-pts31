@@ -1,5 +1,6 @@
+package atc.logic;
 
-
+import atc.interfaces.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -7,7 +8,7 @@ import java.util.Iterator;
  *
  * @author Johan Benschop & Jeanique van der Sanden
  */
-public class FlightController implements NewInterface {
+public class FlightController implements IAirFC {
 
     private int ID;
     /**
@@ -17,7 +18,7 @@ public class FlightController implements NewInterface {
     /**
      * Arraylist of lightplans assigned to the flightcontroller
      */
-    private ArrayList<Flightplan> flights;
+    private ArrayList<IFlightplan> flights;
 
     /***************Constructor**********/
     /**
@@ -36,10 +37,10 @@ public class FlightController implements NewInterface {
      * @param flightplan 
      */
     @Override
-    public void assignFlight(Flightplan flightplan) {
+    public void assignFlight(IFlightplan flightplan) {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
-            flightplan.setAssignedController(this);
+            flightplan.setAssignedController((IFC)this);
         }
     }
 
@@ -48,7 +49,7 @@ public class FlightController implements NewInterface {
      * 
      */
     @Override
-    public void unassignFlight(Flightplan flightplan) {
+    public void unassignFlight(IFlightplan flightplan) {
         flights.remove(flightplan);
         flightplan.setAssignedController(null);
     }
@@ -58,7 +59,7 @@ public class FlightController implements NewInterface {
      */
     @Override
     public void unassignAllFlights() {
-        for (Flightplan flightplan : flights) {
+        for (IFlightplan flightplan : flights) {
             flightplan.setAssignedController(null);
         }
     }
@@ -78,7 +79,7 @@ public class FlightController implements NewInterface {
     }
 
     @Override
-    public Iterator<Flightplan> getFlights() {
+    public Iterator<IFlightplan> getFlights() {
         return flights.iterator();
     }
 }

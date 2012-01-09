@@ -5,7 +5,7 @@
  */
 package atc.gui;
 
-import atc.logic.*;
+import atc.interfaces.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.util.GregorianCalendar;
@@ -18,9 +18,9 @@ import javax.swing.SpinnerNumberModel;
  */
 public class jfAddFlight extends javax.swing.JDialog {
 
-    private AirplaneFactory airplane;
-    private Airport departureAirport;
-    private Airport arrivalAirport;
+    private IAirplaneFactory airplane;
+    private IAirport departureAirport;
+    private IAirport arrivalAirport;
     private GregorianCalendar arrivalDate;
     private GregorianCalendar departureDate;
 

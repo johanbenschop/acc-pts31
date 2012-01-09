@@ -1,54 +1,25 @@
 package atc.gui;
 
-import SysBar.UnityBar;
-import SysBar.UnityItem;
+import SysBar.*;
 import atc.cli.jpTerminal;
 import atc.gui.Audio.Sound;
-import atc.logic.ACC;
-import atc.logic.Airplane;
-import atc.logic.Airplane.Statusses;
-import atc.logic.Airport;
-import atc.logic.Airspace;
-import atc.logic.CTA;
-import atc.logic.FlightController;
-import atc.logic.Flightplan;
+import atc.interfaces.*;
+import atc.logic.*;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
-import gov.nasa.worldwind.event.SelectEvent;
-import gov.nasa.worldwind.event.SelectListener;
+import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
-import gov.nasa.worldwind.layers.LatLonGraticuleLayer;
-import gov.nasa.worldwind.layers.Layer;
-import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.render.BasicShapeAttributes;
-import gov.nasa.worldwind.render.GlobeAnnotation;
-import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.Renderable;
-import gov.nasa.worldwind.render.ShapeAttributes;
-import gov.nasa.worldwind.render.SurfacePolyline;
-import gov.nasa.worldwind.render.SurfaceSector;
-import gov.nasa.worldwind.view.orbit.BasicOrbitViewLimits;
-import gov.nasa.worldwind.view.orbit.OrbitView;
-import gov.nasa.worldwind.view.orbit.OrbitViewLimits;
-import gov.nasa.worldwindx.examples.ClickAndGoSelectListener;
-import gov.nasa.worldwindx.examples.LayerPanel;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
+import gov.nasa.worldwind.layers.*;
+import gov.nasa.worldwind.render.*;
+import gov.nasa.worldwind.view.orbit.*;
+import gov.nasa.worldwindx.examples.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.prefs.*;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.Timer;
 
 /**
@@ -71,14 +42,14 @@ public final class atc2 extends atc {
         protected RenderableLayer airplaneLineLayer;
         private GlobeAnnotation tooltipAnnotation;
         private Timer timerAirplane;
-        private ArrayList<Airplane> addedAirplanes;
+        private ArrayList<IAirplane> addedAirplanes;
         private final UnityBar menuBar;
         private final View view;
         private final Timer timerCollision;
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
-        private static FlightController flightController;
+        private static IFC flightController;
         private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
@@ -162,7 +133,7 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    Airport goToAirport = new jfSelectAirport(null, true).getValue();
+                                    IAirport goToAirport = new jfSelectAirport(null, true).getValue();
 
                                     // Use a PanToIterator to iterate view to target position
                                     if (view != null && goToAirport != null) {
@@ -221,7 +192,7 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    Flightplan plan = new jfSelectFlight(null, true).getValue();
+                                    IFlightplan plan = new jfSelectFlight(null, true).getValue();
 
                                     // Use a PanToIterator to iterate view to target position
                                     if (view != null && plan != null) {
@@ -281,15 +252,13 @@ public final class atc2 extends atc {
 
                 public void actionPerformed(ActionEvent event) {
                     // TODO fix this bug so all airplanes will die when crashed or haslanded...
-                    ACC acc = airspace.getCurrentACC();
-                    Flightplan temp = null;
-                    lock.lock();
-                    try {
-                        for (Iterator<Flightplan> it = acc.getFlightplans(); it.hasNext();) {
-                            Flightplan fp = it.next();
-                            Airplane ap = fp.getAirplane();
-                            if (fp.getAirplane().getStatus().equals(Statusses.CRASHED) || 
-                                    fp.getAirplane().getStatus().equals(Statusses.HASLANDED)) {
+                    IACC acc = airspace.getCurrentACC();
+                    IFlightplan temp = null;
+                        for (Iterator<IFlightplan> it = acc.getFlightplans(); it.hasNext();) {
+                            IFlightplan fp = it.next();
+                            IAirplane ap = fp.getAirplane();
+                            if (fp.getAirplane().getStatus().equals(IAirplane.Statusses.CRASHED) || 
+                                    fp.getAirplane().getStatus().equals(IAirplane.Statusses.HASLANDED)) {
                                 removeAirplane(fp);
                                 if (fp.getAssignedController() != null) {
                                     fp.getAssignedController().unassignFlight(fp);
@@ -301,11 +270,7 @@ public final class atc2 extends atc {
                         }
                         if (temp != null) {
                             acc.removeFlightPlan(temp);
-                        }                        
-                    }
-                    finally {
-                        lock.unlock();
-                    }
+                        }         
                     findCollisions();
                     getWwd().redraw();
                 }
@@ -324,70 +289,17 @@ public final class atc2 extends atc {
 
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
             Font font = Font.decode(prefs.get("TT_FONT", "Arial-Plain-16"));
-
-
             this.tooltipAnnotation.getAttributes().setFont(font);
-
-
-
-
-
-
-            this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);
-
-
-
-
-
-
-            this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
-
-
-
-
-
-
+            this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
             this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setBackgroundColor(new Color(0f, 0f, 0f, .7f));
             //this.tooltipAnnotation.getAttributes().setImageSource(PatternFactory.createPattern(PatternFactory.PATTERN_CIRCLES,
             //        (float) 0.1, Color.LIGHT_GRAY));
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
-
-
-
-
-
-
             this.tooltipAnnotation.getAttributes().setVisible(false);
-
-
-
-
-
-
-            this.tooltipAnnotation.setAlwaysOnTop(
-                    true);
-
-            flightController = new FlightController();
+            this.tooltipAnnotation.setAlwaysOnTop(true);
+            flightController = (IFC) new FlightController();
         }
 
         /**
@@ -399,7 +311,7 @@ public final class atc2 extends atc {
             }
 
             menuBar.clearAlerts();
-            for (final Airplane p : addedAirplanes) {
+            for (final IAirplane p : addedAirplanes) {
                 if (p.getStatus() == Airplane.Statusses.CRASHING2) {
                     Audio.play(Sound.ALARM5, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
@@ -458,7 +370,7 @@ public final class atc2 extends atc {
          * Static method to get the current flightCntroller object.
          * @return 
          */
-        public static FlightController getFlightController() {
+        public static IFC getFlightController() {
             return flightController;
         }
 
@@ -482,13 +394,13 @@ public final class atc2 extends atc {
             attr.setEnableAntialiasing(true);
 
             // We go through all the ACC's to draw the SurfaceSector inside the airspaceLayer.
-            for (Iterator<ACC> it = airspace.GetACCs(); it.hasNext();) {
-                ACC acc = it.next();
+            for (Iterator<IACC> it = airspace.GetACCs(); it.hasNext();) {
+                IACC acc = it.next();
 
                 SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
                 surfaceSector.setAttributes(attr);
                 surfaceSector.setPathType(AVKey.RHUMB_LINE);
-                surfaceSector.setValue("ACC", acc); // We bind the surfaceSector and it's ACC together.
+                surfaceSector.setValue("IACC", acc); // We bind the surfaceSector and it's ACC together.
                 airspacesLayer.addRenderable(surfaceSector);
             }
 
@@ -501,10 +413,10 @@ public final class atc2 extends atc {
                         Object o = event.getTopObject();
                         if (o != null && o instanceof SurfaceSector) {
                             SurfaceSector surfaceSector = (SurfaceSector) o;
-                            Object o2 = surfaceSector.getValue("ACC");
-                            if (o2 != null && o2 instanceof ACC) {
+                            Object o2 = surfaceSector.getValue("IACC");
+                            if (o2 != null && o2 instanceof IACC) {
                                 // We found the correct object! Now we need to cast and build the needed layer.
-                                ACC acc = (ACC) o2;
+                                IACC acc = (IACC) o2;
                                 buildAirspaceLayer(acc);
 
                                 airspace.setCurrentACC(acc);
@@ -529,7 +441,7 @@ public final class atc2 extends atc {
         /**
          * Build the airspace layer based on a ACC.
          */
-        private void buildAirspaceLayer(ACC acc) {
+        private void buildAirspaceLayer(IACC acc) {
             // Init part
             if (!initDoneAirspaceLayer) {
                 // We make a new layer for the selected CTA.
@@ -552,8 +464,7 @@ public final class atc2 extends atc {
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
 
             // Set the attributes for the greater surfaceSector and instanciate the objects.
-            acc.GetCTA().CreateGreaterSector(); // TODO why do we need to do this manually?
-            SurfaceSector surfaceSectorGreater = new SurfaceSector(acc.GetCTA().sectorGreater.toSector());
+            SurfaceSector surfaceSectorGreater = new SurfaceSector(acc.GetCTA().getGreaterSector().toSector());
             ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
             attributesGreaterSector.setOutlineMaterial(Material.GREEN);
             attributesGreaterSector.setInteriorOpacity(0);
@@ -581,7 +492,7 @@ public final class atc2 extends atc {
                 if (limits != null) {
                     Globe globe = this.getWwd().getModel().getGlobe();
 
-                    limits.setCenterLocationLimits(acc.GetCTA().sectorGreater.toSector());
+                    limits.setCenterLocationLimits(acc.GetCTA().getGreaterSector().toSector());
                     limits.setZoomLimits(10000, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
                 }
@@ -619,12 +530,12 @@ public final class atc2 extends atc {
 
             airportLayer.addRenderable(this.tooltipAnnotation);
 
-            ACC acc = airspace.getCurrentACC();
-            CTA cta = acc.GetCTA();
+            IACC acc = airspace.getCurrentACC();
+            ICTA cta = acc.GetCTA();
             if (cta.GetAirports() != null) {
-                ListIterator<Airport> litr = cta.GetAirports();
+                ListIterator<IAirport> litr = cta.GetAirports();
                 while (litr.hasNext()) {
-                    Airport airport = litr.next();
+                    IAirport airport = litr.next();
                     addAirportToLayer(airportLayer, airport);
                 }
             }
@@ -635,7 +546,7 @@ public final class atc2 extends atc {
          * @param layer Airport Layer
          * @param airport Airport
          */
-        private void addAirportToLayer(RenderableLayer layer, Airport airport) {
+        private void addAirportToLayer(RenderableLayer layer, IAirport airport) {
             layer.addRenderable(new AirportRenderable(airport));
         }
 
@@ -710,7 +621,7 @@ public final class atc2 extends atc {
                                 System.err.println(e);
                             }
                         }
-                        for (Iterator<Flightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
+                        for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
                             addAirplaneToLayer(airplaneLayer, it.next());
                         }
                     }
@@ -728,8 +639,8 @@ public final class atc2 extends atc {
          * @param layer
          * @param flightplan
          */
-        private void addAirplaneToLayer(RenderableLayer layer, Flightplan flightplan) {
-            Airplane airplane = flightplan.getAirplane();
+        private void addAirplaneToLayer(RenderableLayer layer, IFlightplan flightplan) {
+            IAirplane airplane = flightplan.getAirplane();
 
             if (!addedAirplanes.contains(airplane)) {
                 addedAirplanes.add(airplane);
@@ -752,7 +663,7 @@ public final class atc2 extends atc {
                     AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
 
                     if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
-                        if (!airspace.getCurrentACC().GetCTA().sectorGreater.containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
+                        if (!airspace.getCurrentACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
                             System.out.println("Found one to remove!");
                             airplaneLayer.removeRenderable(renderable);
                         }
@@ -844,12 +755,12 @@ public final class atc2 extends atc {
             //Has to be !rend.isMayControl otherwise it can't have control....
             if (!rend.isMayControl()) {
                 // The user may control this airplane.
-                Flightplan flightplan = rend.getFlightplan();
+                IFlightplan flightplan = rend.getFlightplan();
                 new jfCommandFlight(this, true).setFlightplan(flightplan);
             }
         }
 
-        private void removeAirplane(Flightplan flightplan) {
+        private void removeAirplane(IFlightplan flightplan) {
             for (Iterator<Renderable> it = airplaneLayer.getRenderables().iterator(); it.hasNext();) {
                 Object object = it.next();
                 if (object instanceof AirplaneRenderable) {

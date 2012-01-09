@@ -5,15 +5,12 @@
  */
 package atc.gui;
 
-import atc.logic.AirplaneFactory;
-import atc.logic.Flightplan;
+import atc.interfaces.*;
+import atc.logic.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import java.util.*;
+import javax.swing.table.*;
 
 /**
  *
@@ -21,13 +18,13 @@ import javax.swing.table.TableModel;
  */
 public class jfSelectFlight extends javax.swing.JDialog {
 
-    private Flightplan flightplan;
-    private ListIterator<Flightplan> flightplans;
+    private IFlightplan flightplan;
+    private ListIterator<IFlightplan> flightplans;
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
-    private AirplaneFactory selectedAirplane;
-    private ArrayList<Flightplan> bufFlightplans;
+    private IAirplaneFactory selectedAirplane;
+    private ArrayList<IFlightplan> bufFlightplans;
     private boolean eerstekeer = true;
 
     /** Creates new form jfSearchFlight */
@@ -288,7 +285,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         bufFlightplans.clear();
 
         while (flightplans.hasNext()) {
-            Flightplan iter = flightplans.next();
+            IFlightplan iter = flightplans.next();
             bufFlightplans.add(iter);
 
             try {
@@ -375,7 +372,7 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
 ////            }
 }//GEN-LAST:event_dpSearchDateChanged
 
-    public void fillVector(Flightplan iter) {
+    public void fillVector(IFlightplan iter) {
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getFlightnumber()));
         row.addElement("WDAL");
@@ -390,7 +387,7 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
         jTable.setModel(model);
     }
 
-    public Flightplan getValue() {
+    public IFlightplan getValue() {
         setVisible(true);
         if (!closed) {
             int id = jTable.getSelectedRow();
