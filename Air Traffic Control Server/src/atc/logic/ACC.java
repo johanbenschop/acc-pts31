@@ -13,9 +13,11 @@ import javax.swing.Timer;
  * 
  * @author Henk
  */
-public class ACC extends UnicastRemoteObject implements IACC {
+public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
 
-    /**************Datafields***********/
+    /**************Datafields***********/    
+    private ArrayList<RemoteListener> listeners;
+    private final Object lockListener = new Object();
     /**
      * unique identification number of the ACC
      */
@@ -478,5 +480,22 @@ public class ACC extends UnicastRemoteObject implements IACC {
     @Override
     public void addFlightPlan(IFlightplan flightplan) {
         fp.add(flightplan);
+    }
+
+    @Override
+    public void addListener(RemoteListener listener) throws RemoteException {
+        synchronized (lockListener) {
+            listeners.add(listener);
+            //listener.someNewKoers(koers);
+            System.out.println("Listener added");
+        }
+    }
+
+    @Override
+    public void removeListener(RemoteListener listener) throws RemoteException {
+        synchronized (lockListener) {
+            listeners.remove(listener);
+            System.out.println("Listener removed");
+        }
     }
 }
