@@ -187,7 +187,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
     @Override
     public synchronized void BorderControl() {
         try {
-            for (Iterator<IACC> itla = this.GetACCs(); itla.hasNext();) {
+            for (Iterator<IACC> itla = this.GetACCs().listIterator(); itla.hasNext();) {
                 IACC leavingACC = itla.next();
                 for (Iterator<IFlightplan> itfp = leavingACC.getFlightplans(); itfp.hasNext();) {
                     IFlightplan flightplan = itfp.next();
@@ -218,8 +218,8 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
         
     /**************Getters**************/
     @Override
-    public ListIterator<IACC> GetACCs() {
-        return ACCs.listIterator();
+    public ArrayList<IACC> GetACCs() {
+        return ACCs;
     }
 
     @Override
