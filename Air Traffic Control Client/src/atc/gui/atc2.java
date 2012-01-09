@@ -277,7 +277,7 @@ public final class atc2 extends atc {
                         // TODO fix this bug so all airplanes will die when crashed or haslanded...
                         IACC acc = airspace.getCurrentACC();
                         IFlightplan temp = null;
-                        for (Iterator<IFlightplan> it = acc.getFlightplans(); it.hasNext();) {
+                        for (Iterator<IFlightplan> it = acc.getFlightplans().listIterator(); it.hasNext();) {
                             IFlightplan fp = it.next();
                             IAirplane ap = fp.getAirplane();
                             if (fp.getAirplane().getStatus().equals(IAirplane.Statusses.CRASHED)
@@ -680,7 +680,7 @@ public final class atc2 extends atc {
                                     System.err.println(e);
                                 }
                             }
-                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
+                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans().listIterator(); it.hasNext();) {
                                 addAirplaneToLayer(airplaneLayer, it.next());
                             }
                         } catch (RemoteException rex) {

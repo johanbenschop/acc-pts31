@@ -30,7 +30,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();
+        airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes().listIterator();
         retAirplanes = new ArrayList<>();
         columnNames.addElement("Type");
         columnNames.addElement("Manafactuer");
@@ -322,7 +322,7 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
 
     private void search() throws RemoteException {
         data.clear(); // Empty the data so we can get the limited results in.
-        airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+        airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes().listIterator();  // we must get an new iterator, since the previus one is empty.
         retAirplanes.clear();
 
         while (airplanes.hasNext()) {
