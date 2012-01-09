@@ -31,6 +31,7 @@ import java.util.logging.Logger;
  */
 public final class atc2 extends atc {
     //haal Airspace ergens anders vandaan...
+
     public static IAirspace airspace = new Airspace();
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
@@ -136,17 +137,21 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    IAirport goToAirport = new jfSelectAirport(null, true).getValue();
+                                    try {
+                                        IAirport goToAirport = new jfSelectAirport(null, true).getValue();
 
-                                    // Use a PanToIterator to iterate view to target position
-                                    if (view != null && goToAirport != null) {
-                                        Position targetPos = goToAirport.getLocation().toPosition();
-                                        // The elevation component of 'targetPos' here is not the surface elevation,
-                                        // so we ignore it when specifying the view center position.
-                                        view.goTo(new Position(targetPos, 0),
-                                                targetPos.getElevation() + 20000); // 1000 = 100 meter
+                                        // Use a PanToIterator to iterate view to target position
+                                        if (view != null && goToAirport != null) {
+                                            Position targetPos = goToAirport.getLocation().toPosition();
+                                            // The elevation component of 'targetPos' here is not the surface elevation,
+                                            // so we ignore it when specifying the view center position.
+                                            view.goTo(new Position(targetPos, 0),
+                                                    targetPos.getElevation() + 20000); // 1000 = 100 meter
+                                        }
+                                        uiGoToAirport.setActive(false);
+                                    } catch (RemoteException rex) {
+                                        rex.printStackTrace();
                                     }
-                                    uiGoToAirport.setActive(false);
                                 }
                             });
                         }
@@ -165,18 +170,22 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    timerAirplane.stop();
-                                    getOrbitView().setOrbitViewLimits(new BasicOrbitViewLimits());
-                                    Position targetPos = new Position(view.getCurrentEyePosition(), 20000000); // 1000 = 100 meter
-                                    view.goTo(new Position(targetPos, 0), targetPos.getElevation());
-                                    airspaceLayer.removeAllRenderables();
-                                    addedAirplanes.clear();
-                                    airportLayer.removeAllRenderables();
-                                    airplaneLayer.removeAllRenderables();
-                                    airplaneLineLayer.removeAllRenderables();
-                                    airspace.getCurrentACC().removeFlightController(flightController);
-                                    airspace.setCurrentACC(null);
-                                    airspacesLayer.setEnabled(true);
+                                    try {
+                                        timerAirplane.stop();
+                                        getOrbitView().setOrbitViewLimits(new BasicOrbitViewLimits());
+                                        Position targetPos = new Position(view.getCurrentEyePosition(), 20000000); // 1000 = 100 meter
+                                        view.goTo(new Position(targetPos, 0), targetPos.getElevation());
+                                        airspaceLayer.removeAllRenderables();
+                                        addedAirplanes.clear();
+                                        airportLayer.removeAllRenderables();
+                                        airplaneLayer.removeAllRenderables();
+                                        airplaneLineLayer.removeAllRenderables();
+                                        airspace.getCurrentACC().removeFlightController(flightController);
+                                        airspace.setCurrentACC(null);
+                                        airspacesLayer.setEnabled(true);
+                                    } catch (RemoteException rex) {
+                                        rex.printStackTrace();
+                                    }
                                 }
                             });
                         }
@@ -195,17 +204,21 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    IFlightplan plan = new jfSelectFlight(null, true).getValue();
+                                    try {
+                                        IFlightplan plan = new jfSelectFlight(null, true).getValue();
 
-                                    // Use a PanToIterator to iterate view to target position
-                                    if (view != null && plan != null) {
-                                        Position targetPos = plan.getAirplane().getLocation().toPosition();
-                                        // The elevation component of 'targetPos' here is not the surface elevation,
-                                        // so we ignore it when specifying the view center position.
-                                        view.goTo(new Position(targetPos, 0),
-                                                targetPos.getElevation() + 100); // 1000 = 100 meter
+                                        // Use a PanToIterator to iterate view to target position
+                                        if (view != null && plan != null) {
+                                            Position targetPos = plan.getAirplane().getLocation().toPosition();
+                                            // The elevation component of 'targetPos' here is not the surface elevation,
+                                            // so we ignore it when specifying the view center position.
+                                            view.goTo(new Position(targetPos, 0),
+                                                    targetPos.getElevation() + 100); // 1000 = 100 meter
+                                        }
+                                        uiGoToFlight.setActive(false);
+                                    } catch (RemoteException rex) {
+                                        rex.printStackTrace();
                                     }
-                                    uiGoToFlight.setActive(false);
                                 }
                             });
                         }
@@ -254,14 +267,15 @@ public final class atc2 extends atc {
             this.timerCollision = new Timer(prefs.getInt("WWD_REFRESHRATE", 500), new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
-                    // TODO fix this bug so all airplanes will die when crashed or haslanded...
-                    IACC acc = airspace.getCurrentACC();
-                    IFlightplan temp = null;
+                    try {
+                        // TODO fix this bug so all airplanes will die when crashed or haslanded...
+                        IACC acc = airspace.getCurrentACC();
+                        IFlightplan temp = null;
                         for (Iterator<IFlightplan> it = acc.getFlightplans(); it.hasNext();) {
                             IFlightplan fp = it.next();
                             IAirplane ap = fp.getAirplane();
-                            if (fp.getAirplane().getStatus().equals(IAirplane.Statusses.CRASHED) || 
-                                    fp.getAirplane().getStatus().equals(IAirplane.Statusses.HASLANDED)) {
+                            if (fp.getAirplane().getStatus().equals(IAirplane.Statusses.CRASHED)
+                                    || fp.getAirplane().getStatus().equals(IAirplane.Statusses.HASLANDED)) {
                                 removeAirplane(fp);
                                 if (fp.getAssignedController() != null) {
                                     fp.getAssignedController().unassignFlight(fp);
@@ -269,13 +283,16 @@ public final class atc2 extends atc {
                                 temp = fp;
                                 addedAirplanes.remove(ap);
                                 acc.GetCTA().removeAirplane(ap);
-                            }                            
+                            }
                         }
                         if (temp != null) {
                             acc.removeFlightPlan(temp);
-                        }         
-                    findCollisions();
-                    getWwd().redraw();
+                        }
+                        findCollisions();
+                        getWwd().redraw();
+                    } catch (RemoteException rex) {
+                        rex.printStackTrace();
+                    }
                 }
             });
             timerCollision.start();
@@ -287,13 +304,18 @@ public final class atc2 extends atc {
                     false);
 
             // Add the selecteble airspaces/CTA layers
-            buildSelectebleAirspaceLayer();
+            try {
+                buildSelectebleAirspaceLayer();
+            } catch (RemoteException rex) {
+                rex.printStackTrace();
+            }
             // Init tooltip annotation
 
             this.tooltipAnnotation = new GlobeAnnotation("", Position.fromDegrees(0, 0, 0));
             Font font = Font.decode(prefs.get("TT_FONT", "Arial-Plain-16"));
             this.tooltipAnnotation.getAttributes().setFont(font);
-            this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
+            this.tooltipAnnotation.getAttributes().setTextColor(Color.WHITE);
+            this.tooltipAnnotation.getAttributes().setSize(new Dimension(270, 0));
             this.tooltipAnnotation.getAttributes().setDistanceMinScale(1);
             this.tooltipAnnotation.getAttributes().setDistanceMaxScale(1);
             this.tooltipAnnotation.getAttributes().setBackgroundColor(new Color(0f, 0f, 0f, .7f));
@@ -302,13 +324,17 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
-            flightController = (IFC) new FlightController();
+            try {
+                flightController = (IFC) new FlightController();
+            } catch (RemoteException rex) {
+                rex.printStackTrace();
+            }
         }
 
         /**
          * Finds collisions and gives a warning about it.
          */
-        public void findCollisions() {
+        public void findCollisions() throws RemoteException {
             if (addedAirplanes == null) {
                 return;
             }
@@ -322,16 +348,20 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    //.goTo(Position position, double distance);
-                                    // This object class we handle and we have an orbit view
-                                    Position targetPos = p.getLocation().toPosition();
+                                    try {
+                                        //.goTo(Position position, double distance);
+                                        // This object class we handle and we have an orbit view
+                                        Position targetPos = p.getLocation().toPosition();
 
-                                    // Use a PanToIterator to iterate view to target position
-                                    if (view != null) {
-                                        // The elevation component of 'targetPos' here is not the surface elevation,
-                                        // so we ignore it when specifying the view center position.
-                                        view.goTo(new Position(targetPos, 0),
-                                                targetPos.getElevation() + 300); // 1000 = 100 meter
+                                        // Use a PanToIterator to iterate view to target position
+                                        if (view != null) {
+                                            // The elevation component of 'targetPos' here is not the surface elevation,
+                                            // so we ignore it when specifying the view center position.
+                                            view.goTo(new Position(targetPos, 0),
+                                                    targetPos.getElevation() + 300); // 1000 = 100 meter
+                                        }
+                                    } catch (RemoteException rex) {
+                                        rex.printStackTrace();
                                     }
                                 }
                             });
@@ -342,16 +372,20 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    //.goTo(Position position, double distance);
-                                    // This object class we handle and we have an orbit view
-                                    Position targetPos = p.getLocation().toPosition();
+                                    try {
+                                        //.goTo(Position position, double distance);
+                                        // This object class we handle and we have an orbit view
+                                        Position targetPos = p.getLocation().toPosition();
 
-                                    // Use a PanToIterator to iterate view to target position
-                                    if (view != null) {
-                                        // The elevation component of 'targetPos' here is not the surface elevation,
-                                        // so we ignore it when specifying the view center position.
-                                        view.goTo(new Position(targetPos, 0),
-                                                targetPos.getElevation() + 300); // 1000 = 100 meter
+                                        // Use a PanToIterator to iterate view to target position
+                                        if (view != null) {
+                                            // The elevation component of 'targetPos' here is not the surface elevation,
+                                            // so we ignore it when specifying the view center position.
+                                            view.goTo(new Position(targetPos, 0),
+                                                    targetPos.getElevation() + 300); // 1000 = 100 meter
+                                        }
+                                    } catch (RemoteException rex) {
+                                        rex.printStackTrace();
                                     }
                                 }
                             });
@@ -380,7 +414,7 @@ public final class atc2 extends atc {
         /**
          * Build the airspace layer.
          */
-        private void buildSelectebleAirspaceLayer() {
+        private void buildSelectebleAirspaceLayer() throws RemoteException {
             // We make a new layer for the selecteble CTA's.
             airspacesLayer = new RenderableLayer();
             insertBeforePlacenames(this.getWwd(), airspacesLayer);
@@ -420,14 +454,17 @@ public final class atc2 extends atc {
                             if (o2 != null && o2 instanceof IACC) {
                                 // We found the correct object! Now we need to cast and build the needed layer.
                                 IACC acc = (IACC) o2;
-                                buildAirspaceLayer(acc);
+                                try {
+                                    buildAirspaceLayer(acc);
+                                    airspace.setCurrentACC(acc);
+                                    atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
 
-                                airspace.setCurrentACC(acc);
-                                atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
-
-                                // Since the user has selected his or hers CTA we don't need to show this layer anymore.
-                                buildAirportLayer();
-                                buildAirplaneLayer();
+                                    // Since the user has selected his or hers CTA we don't need to show this layer anymore.
+                                    buildAirportLayer();
+                                    buildAirplaneLayer();
+                                } catch (RemoteException rex) {
+                                    rex.printStackTrace();
+                                }
                                 airspacesLayer.setEnabled(false);
                                 // NOTE: we keep this alive since RAM is more abundant than CPU.
                                 // The user can always decide to switch CTA and then we would need to remake the CTA, wich is CPU intesive.
@@ -444,7 +481,7 @@ public final class atc2 extends atc {
         /**
          * Build the airspace layer based on a ACC.
          */
-        private void buildAirspaceLayer(IACC acc) {
+        private void buildAirspaceLayer(IACC acc) throws RemoteException {
             // Init part
             if (!initDoneAirspaceLayer) {
                 // We make a new layer for the selected CTA.
@@ -506,7 +543,7 @@ public final class atc2 extends atc {
         /**
          * Builds the airport layer.
          */
-        private void buildAirportLayer() {
+        private void buildAirportLayer() throws RemoteException {
             // The init part
             if (!initDoneAirportLayer) {
                 // Add the airport layer
@@ -518,8 +555,12 @@ public final class atc2 extends atc {
                 this.getWwd().addSelectListener(new SelectListener() {
 
                     public void selected(SelectEvent event) {
-                        if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
-                            highlightAirport(event.getTopObject());
+                        try {
+                            if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                                highlightAirport(event.getTopObject());
+                            }
+                        } catch (RemoteException rex) {
+                            rex.printStackTrace();
                         }
                     }
                 });
@@ -557,7 +598,7 @@ public final class atc2 extends atc {
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */
-        private void highlightAirport(Object o) {
+        private void highlightAirport(Object o) throws RemoteException {
             if (currentAirportAnnotation == o) {
                 return; // same thing selected
             }
@@ -602,14 +643,18 @@ public final class atc2 extends atc {
                 this.getWwd().addSelectListener(new SelectListener() {
 
                     public void selected(SelectEvent event) {
-                        if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
-                            clickAirplane(event.getTopObject());
-                        }
-                        if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
-                            highlightAirplane(event.getTopObject());
-                        }
-                        if (event.getEventAction().equals(SelectEvent.RIGHT_CLICK)) {
-                            drawLineAirplane(event.getTopObject());
+                        try {
+                            if (event.getEventAction().equals(SelectEvent.LEFT_DOUBLE_CLICK)) {
+                                clickAirplane(event.getTopObject());
+                            }
+                            if (event.getEventAction().equals(SelectEvent.ROLLOVER)) {
+                                highlightAirplane(event.getTopObject());
+                            }
+                            if (event.getEventAction().equals(SelectEvent.RIGHT_CLICK)) {
+                                drawLineAirplane(event.getTopObject());
+                            }
+                        } catch (RemoteException rex) {
+                            rex.printStackTrace();
                         }
                     }
                 });
@@ -617,15 +662,19 @@ public final class atc2 extends atc {
                 this.timerAirplane = new Timer(1000, new ActionListener() {
 
                     public synchronized void actionPerformed(ActionEvent event) {
-                        if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
-                            try {
-                                airspace.BorderControl();
-                            } catch (Exception e) {
-                                System.err.println(e);
+                        try {
+                            if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
+                                try {
+                                    airspace.BorderControl();
+                                } catch (Exception e) {
+                                    System.err.println(e);
+                                }
                             }
-                        }
-                        for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
-                            addAirplaneToLayer(airplaneLayer, it.next());
+                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans(); it.hasNext();) {
+                                addAirplaneToLayer(airplaneLayer, it.next());
+                            }
+                        } catch (RemoteException rex) {
+                            rex.printStackTrace();
                         }
                     }
                 });
@@ -642,7 +691,7 @@ public final class atc2 extends atc {
          * @param layer
          * @param flightplan
          */
-        private void addAirplaneToLayer(RenderableLayer layer, IFlightplan flightplan) {
+        private void addAirplaneToLayer(RenderableLayer layer, IFlightplan flightplan) throws RemoteException {
             IAirplane airplane = flightplan.getAirplane();
 
             if (!addedAirplanes.contains(airplane)) {
@@ -701,7 +750,7 @@ public final class atc2 extends atc {
          * Shows the annotation of an airport when param o is indeed a AirportRenderable.
          * @param o Object under the mouse
          */
-        private void highlightAirplane(Object o) {
+        private void highlightAirplane(Object o) throws RemoteException {
             if (currentAirplaneAnnotation == o) {
                 return; // same thing selected
             }
@@ -763,7 +812,7 @@ public final class atc2 extends atc {
             }
         }
 
-        private void removeAirplane(IFlightplan flightplan) {
+        private void removeAirplane(IFlightplan flightplan) throws RemoteException {
             for (Iterator<Renderable> it = airplaneLayer.getRenderables().iterator(); it.hasNext();) {
                 Object object = it.next();
                 if (object instanceof AirplaneRenderable) {
@@ -779,16 +828,14 @@ public final class atc2 extends atc {
         }
     }
 
-
-    
     public static void main(String[] args) {
         try {
             FC = new FlightController();
+            airspace = FC.getAirspace();
         } catch (RemoteException ex) {
             Logger.getLogger(atc2.class.getName()).log(Level.SEVERE, null, ex);
         }
-        airspace = FC.getAirspace();
-        
+
         // We need to force Java to use the native look and feel.
         // If we wish to use a Java theme see http://stackoverflow.com/questions/1656168/java-netbeans-how-come-the-gui-looks-different
         String laf = UIManager.getSystemLookAndFeelClassName();
