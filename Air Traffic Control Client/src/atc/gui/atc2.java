@@ -27,7 +27,7 @@ import javax.swing.Timer;
  * @author Johan Benschop
  */
 public final class atc2 extends atc {
-
+    //haal Airspace ergens anders vandaan...
     public static IAirspace airspace = new Airspace();
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
