@@ -9,6 +9,7 @@ import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.layers.*;
 import gov.nasa.worldwind.render.*;
@@ -439,7 +440,8 @@ public final class atc2 extends atc {
             for (Iterator<IACC> it = airspace.GetACCs().listIterator(); it.hasNext();) {
                 IACC acc = it.next();
 
-                SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+                SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
+                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()) );
                 surfaceSector.setAttributes(attr);
                 surfaceSector.setPathType(AVKey.RHUMB_LINE);
                 surfaceSector.setValue("IACC", acc); // We bind the surfaceSector and it's ACC together.
@@ -498,7 +500,8 @@ public final class atc2 extends atc {
             }
 
             // Set the attributes for the surfaceSector and instanciate the objects.
-            SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
+            SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
+                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
             ShapeAttributes attributesSector = new BasicShapeAttributes();
             attributesSector.setOutlineMaterial(Material.RED);
             attributesSector.setInteriorOpacity(0);
@@ -509,7 +512,8 @@ public final class atc2 extends atc {
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
 
             // Set the attributes for the greater surfaceSector and instanciate the objects.
-            SurfaceSector surfaceSectorGreater = new SurfaceSector(acc.GetCTA().getGreaterSector().toSector());
+            SurfaceSector surfaceSectorGreater = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
+                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
             ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
             attributesGreaterSector.setOutlineMaterial(Material.GREEN);
             attributesGreaterSector.setInteriorOpacity(0);
@@ -537,7 +541,8 @@ public final class atc2 extends atc {
                 if (limits != null) {
                     Globe globe = this.getWwd().getModel().getGlobe();
 
-                    limits.setCenterLocationLimits(acc.GetCTA().getGreaterSector().toSector());
+                    limits.setCenterLocationLimits(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
+                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
                     limits.setZoomLimits(10000, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
                 }
