@@ -22,6 +22,9 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,25 +49,29 @@ public class jfCommandFlight extends javax.swing.JDialog {
         this.timer = new Timer(50, new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                if (flightplan.getAirplane().getStatus() == Statusses.LANDING) {
-                    btnLandFlight.setEnabled(false);
+                try {
+                    if (flightplan.getAirplane().getStatus() == Statusses.LANDING) {
+                        btnLandFlight.setEnabled(false);
+                    }
+                    
+                    if (flightplan.getAirplane().getStatus() == Statusses.TAKINGOFF) {
+                        btnTakeOffFlight.setEnabled(false);
+                    }
+                    
+                    if (flightplan.getAirplane().getStatus() == Statusses.HASLANDED) {
+                        btChangeParameter.setEnabled(false);
+                    }
+                    
+                    updateLabels();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                if (flightplan.getAirplane().getStatus() == Statusses.TAKINGOFF) {
-                    btnTakeOffFlight.setEnabled(false);
-                }
-                
-                if (flightplan.getAirplane().getStatus() == Statusses.HASLANDED) {
-                    btChangeParameter.setEnabled(false);
-                }
-                
-                updateLabels();
             }
         });
         timer.start();
     }
 
-    public void setFlightplan(IFlightplan flightplan) {
+    public void setFlightplan(IFlightplan flightplan) throws RemoteException {
         this.flightplan = flightplan;
         
         // Static
@@ -82,7 +89,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         setVisible(true);
     }
     
-    private void updateLabels() {
+    private void updateLabels() throws RemoteException {
         // Dynamic
         jLabelAirplaneStatus.setText(flightplan.getAirplane().getStatus().toString());
         jLabelAltitude.setText("Altitude: " + DF.format(flightplan.getAirplane().getAltitude()));
@@ -519,7 +526,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
     private void btChangeParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChangeParameterActionPerformed
         if (!"".equals(txtChangeSpeedTo.getText())) {
             try {
-                atc2.airspace.getCurrentACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+                try {
+                    atc2.airspace.getCurrentACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (AssignmentException ex) {             
             JOptionPane.showMessageDialog(this, "The given speed is not in the range of this airplane.", "Error speed range", JOptionPane.ERROR_MESSAGE);
             }
@@ -527,7 +538,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         if (!"".equals(txtChangeDirectionTo.getText())) {
             try {
-                atc2.airspace.getCurrentACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+                try {
+                    atc2.airspace.getCurrentACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (AssignmentException ex) {
              JOptionPane.showMessageDialog(this, "The given direction is not in the range", "Error direction range", JOptionPane.ERROR_MESSAGE);
             }
@@ -535,7 +550,11 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         if (!"".equals(tfFlightlevel.getSelectedItem())) {
             try {
-                atc2.airspace.getCurrentACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+                try {
+                    atc2.airspace.getCurrentACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (AssignmentException ex) {
                 JOptionPane.showMessageDialog(this, "The flightlevel is not correct", "Error incorrect flightlevel", JOptionPane.ERROR_MESSAGE);
             }
@@ -549,24 +568,40 @@ public class jfCommandFlight extends javax.swing.JDialog {
         // TODO add your handling code here:
 
         try {
-            atc2.airspace.getCurrentACC().LandFlight(flightplan);
+            try {
+                atc2.airspace.getCurrentACC().LandFlight(flightplan);
+            } catch (RemoteException ex) {
+                Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (AssignmentException ex) {
             JOptionPane.showMessageDialog(this, "There are currently no runways available at destination airport.");
         }
     }//GEN-LAST:event_btnLandFlightActionPerformed
 
     private void btnTakeOffFlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTakeOffFlightActionPerformed
-        flightplan.getAirplane().setStatus(Statusses.TAKINGOFF);
+        try {
+            flightplan.getAirplane().setStatus(Statusses.TAKINGOFF);
+        } catch (RemoteException ex) {
+            Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnTakeOffFlightActionPerformed
 
     private void jButtonSetHeadingDestinationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetHeadingDestinationActionPerformed
-        double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getDestinationAirport().getLocation());
-        txtChangeDirectionTo.setText(String.valueOf(newHeading));
+        try {
+            double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getDestinationAirport().getLocation());
+            txtChangeDirectionTo.setText(String.valueOf(newHeading));
+        } catch (RemoteException ex) {
+            Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonSetHeadingDestinationActionPerformed
 
     private void jButtonSetHeadingArrivalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetHeadingArrivalActionPerformed
-        double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getTakeoffAirport().getLocation());
-        txtChangeDirectionTo.setText(String.valueOf(newHeading));
+        try {
+            double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getTakeoffAirport().getLocation());
+            txtChangeDirectionTo.setText(String.valueOf(newHeading));
+        } catch (RemoteException ex) {
+            Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonSetHeadingArrivalActionPerformed
 
     /**

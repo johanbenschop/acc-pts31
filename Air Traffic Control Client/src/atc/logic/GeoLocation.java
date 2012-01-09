@@ -2,6 +2,7 @@ package atc.logic;
 
 import atc.interfaces.*;
 import gov.nasa.worldwind.geom.*;
+import java.rmi.RemoteException;
 
 /**
  * The coordinates on WorldWind of an object
@@ -93,7 +94,7 @@ public class GeoLocation {
      * 
      * @return A double value direction of GeoLocation B from GeoLocation A.
      */    
-    public static double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) {
+    public static double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) throws RemoteException {
         double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
         double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
         double lat1 = Math.toRadians(locationA.getLatitude());

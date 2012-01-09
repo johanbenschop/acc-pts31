@@ -8,7 +8,10 @@ package atc.gui;
 import atc.interfaces.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.*;
 
 /**
@@ -27,7 +30,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private boolean eerstekeer = true;
 
     /** Creates new form jfSearchFlight */
-    public jfSelectFlight(java.awt.Frame parent, boolean modal) {
+    public jfSelectFlight(java.awt.Frame parent, boolean modal) throws RemoteException {
         super(parent, modal);
         initComponents();
         bufFlightplans = new ArrayList<>();
@@ -280,7 +283,11 @@ public class jfSelectFlight extends javax.swing.JDialog {
     private void tfDepartureDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDepartureDateKeyTyped
         // TODO add your handling code here:
         data.clear(); // Empty the data so we can get the limited results in.
-        flightplans = atc2.airspace.getCurrentACC().getFlightplans(); // we must get an new iterator, since the previus one is empty.
+        try {
+            flightplans = atc2.airspace.getCurrentACC().getFlightplans(); // we must get an new iterator, since the previus one is empty.
+        } catch (RemoteException ex) {
+            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+        }
         bufFlightplans.clear();
 
         while (flightplans.hasNext()) {
@@ -291,34 +298,45 @@ public class jfSelectFlight extends javax.swing.JDialog {
                 if (evt.getComponent() == tfFlightnumber) {
                     if (evt.getKeyChar() == '\b') {
                         tfFlightnumber.setText(tfFlightnumber.getText().substring(0, tfFlightnumber.getText().length()));
-                        if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
-                            continue;
+                        try {
+                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+                                continue;
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } else {
-                        if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText() + evt.getKeyChar())) {
-                            continue;
+                        try {
+                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText() + evt.getKeyChar())) {
+                                continue;
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             } catch (NumberFormatException e) {
                 tfFlightnumber.setText("");
             }
-
-            // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
-            //We don't have the airliner stuff implemented yet so we can't actually searh it.
-//        if (evt.getComponent() == tfAirliner) {
-//            if (evt.getKeyChar() == '\b') {
-//                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
-//                if (!iter.getAirliner().contains(tfAirliner.getText())) {
-//                    continue;
-//                }
-//            } else {
-//                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
-//                    continue;
-//                }
-//            }
-//        }
-            fillVector(iter);
+            try {
+                // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
+                //We don't have the airliner stuff implemented yet so we can't actually searh it.
+    //        if (evt.getComponent() == tfAirliner) {
+    //            if (evt.getKeyChar() == '\b') {
+    //                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
+    //                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+    //                    continue;
+    //                }
+    //            } else {
+    //                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+    //                    continue;
+    //                }
+    //            }
+    //        }
+                fillVector(iter);
+            } catch (RemoteException ex) {
+                Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         fillTable();
     }//GEN-LAST:event_tfDepartureDateKeyTyped
@@ -371,7 +389,7 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
 ////            }
 }//GEN-LAST:event_dpSearchDateChanged
 
-    public void fillVector(IFlightplan iter) {
+    public void fillVector(IFlightplan iter) throws RemoteException {
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getFlightnumber()));
         row.addElement("WDAL");
@@ -428,15 +446,19 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                jfSelectFlight dialog = new jfSelectFlight(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                try {
+                    jfSelectFlight dialog = new jfSelectFlight(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
