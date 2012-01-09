@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.io.*;
+import java.rmi.RemoteException;
 import java.text.*;
 import java.util.*;
 import java.util.prefs.Preferences;
@@ -29,7 +30,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private final SurfacePolyline path;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
-    public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) {
+    public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) throws RemoteException {
         super("", flightplan.getAirplane().getLocation().toPosition());
 
         if (originalImage == null) {
@@ -68,6 +69,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
 
             @Override
             public void run() {
+                try {
                 if (atc2.airspace.getCurrentACC() == null) {
                     return;
                 }
@@ -124,12 +126,13 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     tooltip.setText(updateText());
                 }
                 if (airplane.getStatus().equals(IAirplane.Statusses.HASLANDED)) {
-                    try {
-                        airplane.sleep(500);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    airplane.interrupt();
+                    // TODO
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                    airplane.interrupt();
                 }
 
                 Object o = getValue("TRUE_DRAW_LINE");
@@ -156,7 +159,9 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 else {
                     path.setVisible(false);
                 }
-
+            } catch (RemoteException rex) {
+                rex.printStackTrace();
+            }
             }
         }, 10, 300);
     }
@@ -187,7 +192,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
         return image;
     }
 
-    public void setHoverAnnotation(GlobeAnnotation tooltip) {
+    public void setHoverAnnotation(GlobeAnnotation tooltip) throws RemoteException {
         this.tooltip = tooltip;
         if (this.tooltip != null) {
 
@@ -200,7 +205,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
         this.tooltip = null;
     }
 
-    private String updateText() {
+    private String updateText() throws RemoteException {
         Locale l = new Locale("en_US");
         NumberFormat NF = NumberFormat.getNumberInstance(l);
         DecimalFormat DF = (DecimalFormat) NF;
