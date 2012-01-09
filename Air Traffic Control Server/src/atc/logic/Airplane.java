@@ -1,13 +1,14 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.rmi.RemoteException;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 
 /**
  * @author Paul
  */
-public class Airplane extends IAirplane {
+public class Airplane implements IAirplane {
 
     /**************Datafields***********/
     /**
@@ -196,7 +197,9 @@ public class Airplane extends IAirplane {
                     Thread.sleep((int) (100 / prefs.getDouble("SIM_SPEED", 1)));// er word telkens 1/10e seconde gewacht.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (RemoteException ex) 
+                {Logger.getLogger(Airplane.class.getName()).log(Level.SEVERE, null, ex);}
+                
             }
         }
 
@@ -206,7 +209,7 @@ public class Airplane extends IAirplane {
      * This will run the methods ChangeSpeed, ChangeDirection and ChangeAltitude,
      * which change the speed, direction and altitude from an airplane.
      */
-    public void Fly() {
+    public void Fly() throws RemoteException {
         if ((distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000 && this.Status != Statusses.LANDING)
                 || this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.INLANDINGQUEUE;
@@ -236,7 +239,7 @@ public class Airplane extends IAirplane {
      * This will make an airplane land on a runway.
      */
     @Override
-    public void Land() {
+    public void Land() throws RemoteException {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
             this.AimedDirection = destinationLocation.CalcDirection(location, destinationLocation);
@@ -252,7 +255,7 @@ public class Airplane extends IAirplane {
      * @param speed : The speed in km/h
      */
     @Override
-    public void TakeOff(IRunway r, double direction, double altitude, double speed) {
+    public void TakeOff(IRunway r, double direction, double altitude, double speed) throws RemoteException {
         System.out.println(direction);
         location.setAltitude(r.getLocation().getAltitude());
         location.setLatitude(r.getLocation().getLatitude());
@@ -266,7 +269,7 @@ public class Airplane extends IAirplane {
     /**
      * When the airplane is circling around an airport this method is called to change the direction in wich it flies.
      */
-    void Circling() {
+    void Circling() throws RemoteException {
         if (this.InLandingQueue == false) {
             this.Direction += 90;
             InLandingQueue = true;
@@ -305,7 +308,7 @@ public class Airplane extends IAirplane {
     /**
      * Change the longitude and latitude based on the distance travelled and the direction in which the airplane flies.
      */
-    public void ChangeGeoLocation() {
+    public void ChangeGeoLocation() throws RemoteException {
         // Formula:	lat2 = asin(sin(lat1)*cos(d/R) + cos(lat1)*sin(d/R)*cos(θ))
         //              lon2 = lon1 + atan2(sin(θ)*sin(d/R)*cos(lat1), cos(d/R)−sin(lat1)*sin(lat2))
         //
@@ -334,7 +337,7 @@ public class Airplane extends IAirplane {
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
     @Override
-    public void ChangeSpeed() {
+    public void ChangeSpeed() throws RemoteException {
         double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
             if (this.Speed < MinSpeed) {
