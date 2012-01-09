@@ -239,7 +239,7 @@ public class Airplane extends IAirplane {
     public void Land() {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
-            this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
+            this.AimedDirection = destinationLocation.CalcDirection(location, destinationLocation);
             setAimedAltitude(0);
         }
     }
@@ -342,7 +342,7 @@ public class Airplane extends IAirplane {
             } else {
                 // The airplane is up in the air and can go to it's destination
                 this.Status = Statusses.INFLIGHT;
-                this.AimedDirection = GeoLocation.CalcDirection(location, destinationLocation);
+                this.AimedDirection = destinationLocation.CalcDirection(location, destinationLocation);
             }
         } else if (this.Status == Statusses.CRASHED) {
             this.Speed = 0;
