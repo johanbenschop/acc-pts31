@@ -1,7 +1,7 @@
+package atc.logic;
 
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import atc.interfaces.*;
+import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import javax.swing.Timer;
@@ -11,7 +11,7 @@ import javax.swing.Timer;
  * 
  * @author Henk
  */
-public class ACC implements NewInterface {
+public class ACC implements IACC {
 
     /**************Datafields***********/
     /**
@@ -25,11 +25,11 @@ public class ACC implements NewInterface {
     /**
      * the CTA over which is has control
      */   
-    private CTA cta;
+    private ICTA cta;
     /**
      * an arrayList of flightplans
      */
-    private ArrayList<Flightplan> fp;
+    private ArrayList<IFlightplan> fp;
     /**
      * the identification number of a flightplan
      */
@@ -37,14 +37,14 @@ public class ACC implements NewInterface {
     /**
      * an arraylist of airplanefactories
      */
-    private ArrayList<AirplaneFactory> airplaneFactoryList;
+    private ArrayList<IAirplaneFactory> airplaneFactoryList;
     /**
      * an airplane factory
      */
-    private AirplaneFactory airplaneFactory;
-    private FlightController flightcontroller;
-    private ArrayList<FlightController> flightControllers;
-    private ArrayList<ACC> adjacentACCList;
+    private IAirplaneFactory airplaneFactory;
+    private IFC flightcontroller;
+    private ArrayList<IFC> flightControllers;
+    private ArrayList<IACC> adjacentACCList;
     
     /***************Constructor**********/
     /** 
@@ -54,7 +54,7 @@ public class ACC implements NewInterface {
      * 
      * @Param CTA is the Control Area over which this specific ACC has control.
      */
-    public ACC(int ID, CTA CTA) {
+    public ACC(int ID, ICTA CTA) {
         this.ID = ID;
         cta = CTA;
         fp = new ArrayList<>();
@@ -87,7 +87,7 @@ public class ACC implements NewInterface {
      * @return CTA
      */
     @Override
-    public CTA GetCTA() {
+    public ICTA GetCTA() {
         return cta;
     }
 
@@ -97,7 +97,7 @@ public class ACC implements NewInterface {
      * @return list of flightplans
      */
     @Override
-    public ArrayList<Flightplan> getfp() {
+    public ArrayList<IFlightplan> getfp() {
         return fp;
     }
     /**
@@ -106,7 +106,7 @@ public class ACC implements NewInterface {
      * @return list of flight controllers
      */
     @Override
-    public ArrayList<FlightController> getfc() {
+    public ArrayList<IFC> getfc() {
         return flightControllers;
     }
     
@@ -116,8 +116,8 @@ public class ACC implements NewInterface {
      * @return FlightController
      */
     @Override
-    public FlightController GetFlightController(int FlightControllerID) {
-        for (FlightController a : flightControllers) {
+    public IFC GetFlightController(int FlightControllerID) {
+        for (IFC a : flightControllers) {
             if (a.getID() == FlightControllerID) {
                 flightcontroller = a;
             }
@@ -130,8 +130,8 @@ public class ACC implements NewInterface {
      * @return airplane factory
      */
     @Override
-    public AirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) {
-        for (AirplaneFactory a : airplaneFactoryList) {
+    public IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) {
+        for (IAirplaneFactory a : airplaneFactoryList) {
             if (a.getID() == AirplaneFactoryID) {
                 airplaneFactory = a;
             }
@@ -145,12 +145,12 @@ public class ACC implements NewInterface {
      * @return list of available airplanes
      */
     @Override
-    public ListIterator<AirplaneFactory> getAvailableAirplanes() {
+    public ListIterator<IAirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
     
     @Override
-    public ListIterator<FlightController> getFlightControllers() {
+    public ListIterator<IFC> getFlightControllers() {
         return flightControllers.listIterator();
     }
 
@@ -181,7 +181,7 @@ public class ACC implements NewInterface {
                 int MaxFuel = Integer.parseInt(props2[8]);
                 int FuelUsage = Integer.parseInt(props2[9]);
                 
-                AirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
+                IAirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
                 
                 airplaneFactoryList.add(airplaneFactory);
             } catch (NumberFormatException | InputMismatchException e) {
@@ -205,7 +205,7 @@ public class ACC implements NewInterface {
      * @return false is returned if the speed was above/below the planes maximum/minimum speed.
      */
     @Override
-    public void ChangeSpeed(double speed, Airplane a) throws AssignmentException {
+    public void ChangeSpeed(double speed, IAirplane a) throws AssignmentException {
         if (speed >= a.getMinSpeed() && speed <= a.getMaxSpeed()) {
             a.setAimedSpeed(speed);
             try{
@@ -240,7 +240,7 @@ public class ACC implements NewInterface {
      * @return false is when it was not possible to set the new direction.
      */
     @Override
-    public void ChangeDirection(double direction, Airplane a) throws AssignmentException {
+    public void ChangeDirection(double direction, IAirplane a) throws AssignmentException {
         if (direction >= -360 && direction <= 360) {
             a.setAimedDirection(direction);
             try{
@@ -274,7 +274,7 @@ public class ACC implements NewInterface {
      * @return false if the change was incorrect and could not be made.
      */
     @Override
-    public void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException {
+    public void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException {
         if (flightlevel == 1) {
             a.setAimedAltitude(1000);
             cta.resetCollision(a);
@@ -311,7 +311,7 @@ public class ACC implements NewInterface {
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
     @Override
-    public void LandFlight(Flightplan fp) throws AssignmentException {
+    public void LandFlight(IFlightplan fp) throws AssignmentException {
 //        Runway runway = fp.getDestinationAirport().getRunway();
 //        if (runway.getAvailability() == true) {
 //            runway.ChangeAvailability(false);
@@ -329,7 +329,7 @@ public class ACC implements NewInterface {
      * @param a is the airplane that has to start circling the airport.
      */
     @Override
-    public void CircleAirplane(Airplane a) {
+    public void CircleAirplane(IAirplane a) {
         a.setStatus(Airplane.Statusses.INLANDINGQUEUE);
     }
 
@@ -349,20 +349,17 @@ public class ACC implements NewInterface {
      * @param flightnumber is the flightnumber of the airplane
      */
     @Override
-    public void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure) {
+    public void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure) {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(),
-                0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
-        
-        Flightplan flightplan = new Flightplan(end, start, flightnumber, departure, arrival, ap);
+                0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);        
+        IFlightplan flightplan = new Flightplan(end, start, flightnumber, departure, arrival, ap);
         fp.add(flightplan);
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        addRunwayTimer(start, ap);
-        
-        assignFlightToController(flightplan);
-        
+        addRunwayTimer(start, ap);        
+        assignFlightToController(flightplan);        
     }
 
     /**
@@ -370,10 +367,10 @@ public class ACC implements NewInterface {
      * @param flightplan 
      */
     @Override
-    public void assignFlightToController(Flightplan flightplan) {
+    public void assignFlightToController(IFlightplan flightplan) {
         // Assign an controller to an airplane.
-        FlightController assignedController = null;
-        for (FlightController flightController : flightControllers) {
+        IFC assignedController = null;
+        for (IFC flightController : flightControllers) {
             if (assignedController != null) {
                 if (flightController.getNumberAssignedFlights() < assignedController.getNumberAssignedFlights()) {
                     assignedController = flightController;
@@ -392,8 +389,8 @@ public class ACC implements NewInterface {
      * @deprecated 
      */
     @Override
-    public FlightController addFlightController() {
-        FlightController controller = new FlightController();
+    public IFC addFlightController() {
+        IFC controller = new FlightController();
         flightControllers.add(controller);
         return controller;
     }
@@ -403,7 +400,7 @@ public class ACC implements NewInterface {
      * @return FlightController
      */
     @Override
-    public void addFlightController(FlightController flightController) {
+    public void addFlightController(IFC flightController) {
         flightControllers.add(flightController);
     }
     
@@ -412,12 +409,12 @@ public class ACC implements NewInterface {
      * @param flightplan 
      */
     @Override
-    public void unassignFlightFromController(Flightplan flightplan) {
+    public void unassignFlightFromController(IFlightplan flightplan) {
         flightplan.getAssignedController().unassignFlight(flightplan);
     }
     
     @Override
-    public void removeFlightController(FlightController flightController) {
+    public void removeFlightController(IFC flightController) {
         flightControllers.remove(flightController);
         flightController.unassignAllFlights();
     }
@@ -428,16 +425,16 @@ public class ACC implements NewInterface {
      * @return a list with all Flightplans
      */
     @Override
-    public ListIterator<Flightplan> getFlightplans() {
+    public ListIterator<IFlightplan> getFlightplans() {
         return fp.listIterator();
     }
     
-    private void addRunwayTimer(final Airport airport, final Airplane airplane) {
+    private void addRunwayTimer(final IAirport airport, final IAirplane airplane) {
         final Timer timer = new Timer(300, null);
         timer.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent event) {
-                Runway runway = airport.getRunway();
+                IRunway runway = airport.getRunway();
                 if (runway != null && runway.getAvailability()) {
                     runway.ChangeAvailability(false);
                     
@@ -454,29 +451,29 @@ public class ACC implements NewInterface {
     }
 
     @Override
-    public void setAdjacentACCList(ArrayList<ACC> adjacentACCList) {
+    public void setAdjacentACCList(ArrayList<IACC> adjacentACCList) {
         this.adjacentACCList = adjacentACCList;
     }
 
     @Override
-    public ArrayList<ACC> getAdjacentACCList() {
+    public ArrayList<IACC> getAdjacentACCList() {
         return adjacentACCList;
     }
     
     @Override
-    public Boolean ContainsFlightplan(Flightplan flightplan)
+    public Boolean ContainsFlightplan(IFlightplan flightplan)
     {                
        return fp.contains(flightplan);
     }
     
     @Override
-    public void removeFlightPlan(Flightplan flightplan)
+    public void removeFlightPlan(IFlightplan flightplan)
     {
         fp.remove(flightplan);
     }
     
     @Override
-    public void addFlightPlan(Flightplan flightplan)
+    public void addFlightPlan(IFlightplan flightplan)
     {
         fp.add(flightplan);
     }

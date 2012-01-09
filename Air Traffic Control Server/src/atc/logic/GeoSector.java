@@ -1,5 +1,7 @@
+package atc.logic;
 
-
+import atc.interfaces.IGeoLoc;
+import atc.interfaces.IGeoSec;
 import gov.nasa.worldwind.geom.Sector;
 
 /**
@@ -56,7 +58,6 @@ public class GeoSector implements IGeoSec {
      * @return 
      * @deprecated 
      */
-    @Override
     public boolean isWithinLatLonLimits() {
         return minLatitude >= -90 && maxLatitude <= 90
                 && minLongitude >= -180 && maxLongitude <= 180;
@@ -69,7 +70,6 @@ public class GeoSector implements IGeoSec {
      * @return The latitude and longitude of the sector's angular center
      * @deprecated 
      */
-    @Override
     public GeoLocation getCenterLocation() {
         double latitude = 0.5 * (maxLatitude + minLatitude);
         double longitude = 0.5 * (maxLongitude + minLongitude);
@@ -86,7 +86,6 @@ public class GeoSector implements IGeoSec {
      * @return <code>true</code> if the sectors intersect, otherwise <code>false</code>.
      * @deprecated 
      */
-    @Override
     public boolean intersects(GeoSector that) {
         if (that == null) {
             return false;
@@ -121,7 +120,6 @@ public class GeoSector implements IGeoSec {
      * @see #intersects(Sector)
      * @deprecated 
      */
-    @Override
     public boolean intersectsInterior(GeoSector that) {
         if (that == null) {
             return false;
@@ -148,7 +146,6 @@ public class GeoSector implements IGeoSec {
      * Convets this GeoSector to an Sector for World Wind.
      * @return World Wind Sector
      */
-    @Override
     public Sector toSector() {
         return Sector.fromDegrees(minLatitude, maxLatitude, minLongitude, maxLongitude);
     }
@@ -221,7 +218,7 @@ public class GeoSector implements IGeoSec {
      * @return true if GeoPosition is within the GeoSecor, false otherwise.
      */
     @Override
-    public boolean containsGeoLocation(GeoLocation location) {
+    public boolean containsGeoLocation(IGeoLoc location){
         return (location.getLatitude() >= minLatitude
                 && location.getLatitude() <= maxLatitude
                 && location.getLongitude() >= minLongitude
@@ -233,7 +230,6 @@ public class GeoSector implements IGeoSec {
      * @deprecated 
      * @return 
      */
-    @Override
     public double getDeltaLatitude() {
         return deltaLatitude;
     }
@@ -242,28 +238,23 @@ public class GeoSector implements IGeoSec {
      * @deprecated 
      * @return 
      */
-    @Override
     public double getDeltaLongitude() {
         return deltaLongitude;
     }
 
     
-    @Override
     public double getMaxLatitude() {
         return maxLatitude;
     }
 
-    @Override
     public double getMaxLongitude() {
         return maxLongitude;
     }
 
-    @Override
     public double getMinLatitude() {
         return minLatitude;
     }
 
-    @Override
     public double getMinLongitude() {
         return minLongitude;
     }

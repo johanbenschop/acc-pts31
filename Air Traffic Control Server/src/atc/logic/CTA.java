@@ -1,10 +1,7 @@
+package atc.logic;
 
-
-import atc.gui.atc2;
-import java.io.FileNotFoundException;
+import atc.interfaces.*;
 import java.util.*;
-import java.io.*;
-import java.text.DecimalFormat;
 
 public class CTA implements ICTA {
 
@@ -12,24 +9,24 @@ public class CTA implements ICTA {
     /**
      * The GeoSector of the CTA
      */
-    public GeoSector sector;
-    public GeoSector sectorGreater;
+    public IGeoSec sector;
+    public IGeoSec sectorGreater;
     /**
      * A airplane used for getting focus of a selected airplane within the CTA
      */
-    private Airplane airplane;
+    private IAirplane airplane;
     /**
      * A airport used for getting focus of a selected airport within the CTA
      */
-    private Airport airport;
+    private IAirport airport;
     /**
      * A list used for collecting all the active airplanes within the CTA  
      */
-    private ArrayList<Airplane> airplaneList;
+    private ArrayList<IAirplane> airplaneList;
     /**
      * A list used for collecting all the airports within the CTA
      */
-    private ArrayList<Airport> airportList = new ArrayList<Airport>();
+    private ArrayList<IAirport> airportList = new ArrayList<IAirport>();
     /**
      * A class used to determine the status of an airplane for possible collision danger
      */
@@ -69,9 +66,9 @@ public class CTA implements ICTA {
      * @param Width is the width of the CTA
      * @param Length is the length of the CTA
      */
-    public CTA(GeoSector location, ArrayList<Airport> airportlist) {
+    public CTA(IGeoSec location, ArrayList<IAirport> airportlist) {
         this.sector = location;
-
+        CreateGreaterSector();
         airplaneList = new ArrayList<>();
         collision = new ArrayList<>();
         this.airportList = airportlist;
@@ -93,8 +90,8 @@ public class CTA implements ICTA {
      * @return
      */
     @Override
-    public Airport GetAirport(int AirportID) {
-        for (Airport a : airportList) {
+    public IAirport GetAirport(int AirportID) {
+        for (IAirport a : airportList) {
             if (a.getAirportID() == AirportID) {
                 airport = a;
             }
@@ -109,8 +106,8 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public Airplane GetAirplane(int AirplaneID) {                   //         TODO moet hier een unittest voor? nee toch?                              
-        for (Airplane a : airplaneList) {
+    public IAirplane GetAirplane(int AirplaneID) {                   //         TODO moet hier een unittest voor? nee toch?                              
+        for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneID) {
                 airplane = a;
             }
@@ -142,9 +139,9 @@ public class CTA implements ICTA {
      * @return
      */
     @Override
-    public void addAirplane(Airplane a) {
+    public void addAirplane(IAirplane a) {
         airplaneList.add(a);
-        for (Airplane crashobject : airplaneList) {
+        for (IAirplane crashobject : airplaneList) {
             if (crashobject != a) {
                 collision.add(new Collision(a, crashobject));
             }
@@ -156,7 +153,7 @@ public class CTA implements ICTA {
      * @return
      */
     @Override
-    public void addAirport(Airport a) {
+    public void addAirport(IAirport a) {
         airportList.add(a);
     }
 
@@ -167,7 +164,7 @@ public class CTA implements ICTA {
      */
     @Override
     public void deleteAirplane(int AirplaneNumber) {
-        for (Airplane a : airplaneList) {
+        for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneNumber) {
                 airplaneList.remove(a);
             }
@@ -175,8 +172,8 @@ public class CTA implements ICTA {
     }
 
     @Override
-    public void removeAirplane(Airplane airplane) {
-        airplaneList.remove(airplane);
+    public void removeAirplane(IAirplane airplane) {
+        airplaneList.remove((Airplane)airplane);
     }
 
     public void CreateGreaterSector() {
@@ -188,9 +185,9 @@ public class CTA implements ICTA {
     }
     
     @Override
-    public void resetCollision(Airplane airplane) {
+    public void resetCollision(IAirplane airplane) {
         for (Collision coll : collision) {
-            if (coll.getTarget() == airplane || coll.getCrashobject() == airplane) {
+            if (coll.getTarget() == (Airplane)airplane || coll.getCrashobject() == (Airplane)airplane) {
                 coll.getCrashobject().setStatus(Airplane.Statusses.INFLIGHT);
                 coll.getTarget().setStatus(Airplane.Statusses.INFLIGHT);
             }
@@ -204,7 +201,7 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public ArrayList<Airplane> getAirplaneList() {
+    public ArrayList<IAirplane> getAirplaneList() {
         return airplaneList;
     }
 
@@ -214,7 +211,7 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public ArrayList<Airport> getAirportList() {
+    public ArrayList<IAirport> getAirportList() {
         return airportList;
     }
 
@@ -224,21 +221,26 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public Airplane getAirplane() {
+    public IAirplane getAirplane() {
         return airplane;
     }
 
     @Override
-    public GeoSector getSector() {
+    public IGeoSec getSector() {
         return sector;
     }
 
+    @Override
+    public IGeoSec getGreaterSector() {
+        return sectorGreater;
+    }
+    
     /**
      * Turns the airport list into a Iterator
      * @return Iterator airportList
      */
     @Override
-    public ListIterator<Airport> GetAirports() {
+    public ListIterator<IAirport> GetAirports() {
         return airportList.listIterator();
     }
 
@@ -249,93 +251,7 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public Airport getAirport() {
-        return airport;
+    public IAirport getAirport() {
+        return (IAirport) airport;
     }
-    /**
-     * Loads airports from the airports.dat file
-     * @throws FileNotFoundException if the file doesn't exist
-     * @throws IOException 
-     */
-//    public void loadAirportList() throws FileNotFoundException, IOException {
-//        FileInputStream fstream = new FileInputStream("airports.dat");
-//
-//        DataInputStream in = new DataInputStream(fstream);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-//
-//        String strline;
-//        while ((strline = br.readLine()) != null) {
-//            try {
-//                String[] props = strline.split(",");
-//                int id = Integer.parseInt(props[0]);
-//                String name = props[1].replaceAll("\"", "");
-//                String city = props[2].replaceAll("\"", "");
-//                String country = props[3].replaceAll("\"", "");
-//                String iata_faa = props[4].replaceAll("\"", "");
-//                String icao = props[5].replaceAll("\"", "");
-//                double latitude = Double.parseDouble(props[6]);
-//                double longitude = Double.parseDouble(props[7]);
-//                int altitude = Integer.parseInt(props[8]);
-//                double timezone = Double.parseDouble(props[9]);
-//                String dst = props[10].replaceAll("\"", "");
-//
-//                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
-//
-//                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
-//                airportList.add(airport);
-//            } catch (NumberFormatException | InputMismatchException e) {
-//                System.out.println("Corrupt data line on airports.dat...");
-//            }
-//        }
-//    }
-    /**
-     * Loads airports from the airports.dat file and filters the data for the GeoSecor
-     * @throws FileNotFoundException if the file doesn't exist
-     * @throws IOException 
-     */
-//    public void loadAirportList(GeoSector sector) throws FileNotFoundException, IOException {
-//        FileInputStream fstream = new FileInputStream("airports.dat");
-//
-//        DataInputStream in = new DataInputStream(fstream);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-//
-//        String strline;
-//        while ((strline = br.readLine()) != null) {
-//            try {
-//                String[] props = strline.split(",");
-//                int id = Integer.parseInt(props[0]);
-//                String name = props[1].replaceAll("\"", "");
-//                String city = props[2].replaceAll("\"", "");
-//                String country = props[3].replaceAll("\"", "");
-//                String iata_faa = props[4].replaceAll("\"", "");
-//                String icao = props[5].replaceAll("\"", "");
-//                double latitude = Double.parseDouble(props[6]);
-//                double longitude = Double.parseDouble(props[7]);
-//                int altitude = Integer.parseInt(props[8]);
-//                double timezone = Double.parseDouble(props[9]);
-//                String dst = props[10].replaceAll("\"", "");
-//
-//                GeoLocation location = new GeoLocation(longitude, latitude, altitude);
-//                if (!sector.containsGeoLocation(location)) {
-//                    continue; // The airport is not within the CTA
-//                }
-//
-//                Airport airport = new Airport(id, name, city, country, iata_faa, icao, location, altitude, timezone, dst);
-//                airportList.add(airport);
-//            } catch (NumberFormatException | InputMismatchException e) {
-//                System.out.println("Corrupt data line on airports.dat...");
-//            }
-//        }
-//    }
-    /*public void CheckAirplaneATC()
-    {
-    for (Airplane airplane : airplaneList) {
-    if (sectorGreater.containsGeoLocation(airplane.getLocation())) {
-    airplane.setVisibleCTA(this.cta);
-    if (sector.containsGeoLocation(airplane.getLocation())) {
-    airplane.setControlCTA(this.cta);
-    }
-    }
-    }
-    }*/
 }

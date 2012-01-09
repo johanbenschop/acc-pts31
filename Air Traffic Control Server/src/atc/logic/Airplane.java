@@ -1,13 +1,13 @@
+package atc.logic;
 
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import atc.interfaces.*;
+import java.util.logging.*;
 import java.util.prefs.Preferences;
 
 /**
  * @author Paul
  */
-public class Airplane extends Thread implements IAirplane {
+public class Airplane extends IAirplane {
 
     /**************Datafields***********/
     /**
@@ -93,11 +93,11 @@ public class Airplane extends Thread implements IAirplane {
     /**
      * The destination location as a GeoLocation
      */
-    private GeoLocation destinationLocation;
+    private IGeoLoc destinationLocation;
     /**
      * The current location of the airplane as a GeoLocation
      */
-    private GeoLocation location;
+    private IGeoLoc location;
     /**
      * The distance the airplane has travelled per 1/10e sec in km/h
      */
@@ -113,7 +113,7 @@ public class Airplane extends Thread implements IAirplane {
     /**
      * Whether the airplane is in a landing queue
      */
-    private boolean InLandingQeueu = false;
+    private boolean InLandingQueue = false;
     /**
      * Whether the airplane is within radius of the destination                      klopt dit??
      */
@@ -126,15 +126,6 @@ public class Airplane extends Thread implements IAirplane {
      *                                                                              wat is dit?
      */
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
-
-    /**
-     * Enumerator of possible statusses a airplane can have
-     */
-    public enum Statusses {
-
-        STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING,
-        CRASHING1, CRASHING2, CRASHED, INTAKEOFFQUEUE, HASLANDED;
-    }
 
     /***************Constructor**********/
     /**
@@ -158,7 +149,7 @@ public class Airplane extends Thread implements IAirplane {
      * @param AirplaneNumber the number of the airplane.
      */
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
-            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, GeoLocation Location, GeoLocation DestinationLocation, int AirplaneNumber) {
+            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, IGeoLoc Location, IGeoLoc DestinationLocation, int AirplaneNumber) {
         this.MaxSpeed = MaxSpeed;
         this.MinSpeed = MinSpeed;
         this.Weight = Weight;
@@ -242,6 +233,7 @@ public class Airplane extends Thread implements IAirplane {
     /**
      * This will make an airplane land on a runway.
      */
+    @Override
     public void Land() {
         if (this.Status == Statusses.INLANDINGQUEUE) {
             this.Status = Statusses.LANDING;
@@ -257,7 +249,8 @@ public class Airplane extends Thread implements IAirplane {
      * @param altitude : The altitude in feet
      * @param speed : The speed in km/h
      */
-    public void TakeOff(Runway r, double direction, double altitude, double speed) {
+    @Override
+    public void TakeOff(IRunway r, double direction, double altitude, double speed) {
         System.out.println(direction);
         location.setAltitude(r.getLocation().getAltitude());
         location.setLatitude(r.getLocation().getLatitude());
@@ -272,11 +265,11 @@ public class Airplane extends Thread implements IAirplane {
      * When the airplane is circling around an airport this method is called to change the direction in wich it flies.
      */
     void Circling() {
-        if (this.InLandingQeueu == false) {
+        if (this.InLandingQueue == false) {
             this.Direction += 90;
-            InLandingQeueu = true;
+            InLandingQueue = true;
         }
-        if (InLandingQeueu == true) {
+        if (InLandingQueue == true) {
             if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) <= 20000) {
                 this.withinRadius = true;
             } else if (distFrom(this.getLocation().getLatitude(), this.getLocation().getLongitude(), destinationLocation.getLatitude(), destinationLocation.getLongitude()) > 20000) {
@@ -463,6 +456,7 @@ public class Airplane extends Thread implements IAirplane {
         return Altitude;
     }
 
+    @Override
     public int getCurrentFuel() {
         return CurrentFuel;
     }
@@ -499,10 +493,11 @@ public class Airplane extends Thread implements IAirplane {
     }
 
     @Override
-    public GeoLocation getLocation() {
+    public IGeoLoc getLocation() {
         return location;
     }
 
+    @Override
     public int getFuelUsage() {
         return FuelUsage;
     }
@@ -542,18 +537,21 @@ public class Airplane extends Thread implements IAirplane {
         return PlaneWidth;
     }
 
+    @Override
     public String getType() {
         return Type;
     }
 
+    @Override
     public int getWeight() {
         return Weight;
     }
 
-    public GeoLocation getDestinationLocation() {
+    public IGeoLoc getDestinationLocation() {
         return destinationLocation;
     }
 
+    @Override
     public double getDistanceTravelled() {
         return distanceTravelled;
     }
@@ -578,5 +576,5 @@ public class Airplane extends Thread implements IAirplane {
     @Override
     public void setCollcheck(boolean collcheck) {
         this.collcheck = collcheck;
-    }
+    }    
 }

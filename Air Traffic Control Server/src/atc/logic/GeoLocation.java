@@ -1,5 +1,6 @@
+package atc.logic;
 
-
+import atc.interfaces.IGeoLoc;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 
@@ -98,8 +99,8 @@ public class GeoLocation implements IGeoLoc {
      * @deprecated 
      */
     public static double CalcDirection(Airport a, Airport b) {
-        GeoLocation locationA = new GeoLocation(0, 0, 0);
-        GeoLocation locationB = new GeoLocation(0, 0, 0);
+        IGeoLoc locationA = new GeoLocation(0, 0, 0);
+        IGeoLoc locationB = new GeoLocation(0, 0, 0);
         locationA = a.getLocation();
         locationB = b.getLocation();
         double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
@@ -118,7 +119,7 @@ public class GeoLocation implements IGeoLoc {
      * 
      * @return A double value direction of GeoLocation B from GeoLocation A.
      */
-    public static double CalcDirection(GeoLocation locationA, GeoLocation locationB) {
+    public static double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) {
         double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
         double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
         double lat1 = Math.toRadians(locationA.getLatitude());
@@ -134,7 +135,7 @@ public class GeoLocation implements IGeoLoc {
      * This calculates the new position based on the curren position, direction and distance.
      * @return GeoLocation
      */
-    public static GeoLocation CalcPosition(double lon1, double lat1, double direction, double distance) {
+    public static IGeoLoc CalcPosition(double lon1, double lat1, double direction, double distance) {
         double Distance = distance / 3958.75;
         double Direction = direction;
 
@@ -162,7 +163,7 @@ public class GeoLocation implements IGeoLoc {
     }
 
     @Override
-    public GeoLocation getNewGeoLocation() {
+    public IGeoLoc getNewGeoLocation() {
         return new GeoLocation(Longitude, Latitude, Altitude);
     }
 

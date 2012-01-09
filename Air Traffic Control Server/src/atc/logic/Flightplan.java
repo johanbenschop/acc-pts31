@@ -1,5 +1,6 @@
+package atc.logic;
 
-
+import atc.interfaces.*;
 import java.util.*;
 
 /**
@@ -12,11 +13,11 @@ public class Flightplan implements IFlightplan {
     /**
      * The Airport where the flight is going to. 
      */
-    private Airport destinationAirport;
+    private IAirport destinationAirport;
     /**
      * The Airport where the flight is taking off from
      */
-    private Airport takeoffAirport;
+    private IAirport takeoffAirport;
     /**
      * Flightnumber of the flight.
      */
@@ -32,11 +33,11 @@ public class Flightplan implements IFlightplan {
     /**
      * The airplane that is gonna be used for the flight.
      */
-    private Airplane airplane;
+    private IAirplane airplane;
     /**
      * The assigned flightcontroller to this flightplan
      */
-    private FlightController assignedController;
+    private IFC assignedController;
 
     /***************Constructor**********/
     /**A flightplan is made with the following parameters:
@@ -47,7 +48,7 @@ public class Flightplan implements IFlightplan {
      * @param ArrivalDate: The date and time of when the flight arrives.
      * @param airplane: The airplane that is gonna be used for the flight.
      */
-    public Flightplan(Airport destination, Airport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, Airplane airplane) {
+    public Flightplan(IAirport destination, IAirport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, IAirplane airplane) {
         destinationAirport = destination;
         takeoffAirport = takeOff;
         this.Flightnumber = Flightnumber;
@@ -83,28 +84,28 @@ public class Flightplan implements IFlightplan {
     }
 
     @Override
-    public Airport getDestinationAirport() {
-        return destinationAirport;
-    }
-
-    @Override
-    public Airplane getAirplane() {
+    public IAirplane getAirplane() {
         return airplane;
     }
 
     @Override
-    public Airport getTakeoffAirport() {
-        return takeoffAirport;
-    }
-
-    @Override
-    public FlightController getAssignedController() {
+    public IFC getAssignedController() {
         return assignedController;
     }
 
+    @Override
+    public IAirport getDestinationAirport() {
+        return destinationAirport;
+    }
+
+    @Override
+    public IAirport getTakeoffAirport() {
+        return takeoffAirport;
+    }
+    
     /**************Setters**************/
     @Override
-    public void setAssignedController(FlightController assignedController) {
+    public void setAssignedController(IFC assignedController) {
         this.assignedController = assignedController;
     }
 }

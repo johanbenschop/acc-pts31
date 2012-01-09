@@ -1,9 +1,11 @@
+package atc.logic;
 
+import atc.interfaces.*;
 
 /**
  * @author Robbert
  */
-public class AirplaneFactory {
+public class AirplaneFactory implements IAirplaneFactory {
 
     /**************Datafields***********/
     private int Id, nr = 1;
@@ -55,6 +57,7 @@ public class AirplaneFactory {
      * 
      * @return A string value with the Manufacturer and type is returned.
      */
+    @Override
     public String ToString() {
         String gegevens;
         gegevens = "Manufacturer: " + this.getManufacturer() + ", type: " + this.getType();
@@ -62,46 +65,57 @@ public class AirplaneFactory {
     }
     
     /**************Getters**************/
+    @Override
     public int getID(){
         return Id;
     }
 
+    @Override
     public int getMaxSpeed() {
         return MaxSpeed;
     }
 
+    @Override
     public int getMinSpeed() {
         return MinSpeed;
     }
 
+    @Override
     public int getWeight() {
         return Weight;
     }
 
+    @Override
     public String getType() {
         return Type;
     }
 
+    @Override
     public String getManufacturer() {
         return Manufacturer;
     }
 
+    @Override
     public int getPlaneHeight() {
         return PlaneHeight;
     }
 
+    @Override
     public int getPlaneWidth() {
         return PlaneWidth;
     }
 
+    @Override
     public int getPlaneLength() {
         return PlaneLength;
     }
 
+    @Override
     public int getMaxFuel() {
         return MaxFuel;
     }
 
+    @Override
     public int getFuelUsage() {
         return FuelUsage;
     }

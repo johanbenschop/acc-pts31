@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+package atc.logic;
 
 import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 import java.io.*;
