@@ -27,6 +27,8 @@ public interface IGeoLoc {
     double getLatitude();
 
     double getLongitude();
+    
+    double CalcDirection(IGeoLoc pos, IGeoLoc pos2);
 
     IGeoLoc getNewGeoLocation();
 
