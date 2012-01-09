@@ -3,12 +3,13 @@ package atc.logic;
 import atc.interfaces.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 /**
  * @author Robbert
  */
-public class Airport implements IAirport, Serializable {
+public class Airport extends UnicastRemoteObject implements IAirport, Serializable {
 
     //ToDo: Change Strings to ints when the numbers can be correctly loaded into an int. 
     private int AirportID;//The ID of an airport.
@@ -60,7 +61,7 @@ public class Airport implements IAirport, Serializable {
      * @return string with airport information.
      */
     @Override
-    public String ToString() {
+    public String ToString() throws RemoteException {
         String gegevens;
         gegevens = "AirportID: " + this.getAirportID() + " , Airport name: " + this.getAirportName() + " , City: " + this.getCity() + " , Country: " + this.getCountry();
         return gegevens;

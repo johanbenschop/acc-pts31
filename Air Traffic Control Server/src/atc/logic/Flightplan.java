@@ -4,6 +4,7 @@ import atc.interfaces.*;
 import java.io.Serializable;
 import java.util.*;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +12,7 @@ import java.util.logging.Logger;
  * All information about a planned flight is found in Flightplan.
  * 
  */
-public class Flightplan implements IFlightplan, Serializable {
+public class Flightplan extends UnicastRemoteObject implements IFlightplan, Serializable {
 
     /**************Datafields***********/
     /**
@@ -52,7 +53,7 @@ public class Flightplan implements IFlightplan, Serializable {
      * @param ArrivalDate: The date and time of when the flight arrives.
      * @param airplane: The airplane that is gonna be used for the flight.
      */
-    public Flightplan(IAirport destination, IAirport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, IAirplane airplane) {
+    public Flightplan(IAirport destination, IAirport takeOff, int Flightnumber, GregorianCalendar departure, GregorianCalendar arrival, IAirplane airplane) throws RemoteException  {
         destinationAirport = destination;
         takeoffAirport = takeOff;
         this.Flightnumber = Flightnumber;

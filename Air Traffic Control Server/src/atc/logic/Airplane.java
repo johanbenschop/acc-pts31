@@ -3,13 +3,14 @@ package atc.logic;
 import atc.interfaces.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 
 /**
  * @author Paul
  */
-public class Airplane implements IAirplane, Serializable {
+public class Airplane extends UnicastRemoteObject implements IAirplane, Serializable {
 
     /**************Datafields***********/
     /**
@@ -153,7 +154,7 @@ public class Airplane implements IAirplane, Serializable {
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
             int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, 
             int Direction, double Speed, int CurrentFuel, double Altitude, IGeoLoc Location, 
-            IGeoLoc DestinationLocation, int AirplaneNumber) {
+            IGeoLoc DestinationLocation, int AirplaneNumber) throws RemoteException {
         this.MaxSpeed = MaxSpeed;
         this.MinSpeed = MinSpeed;
         this.Weight = Weight;

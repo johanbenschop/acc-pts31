@@ -3,13 +3,14 @@ package atc.logic;
 import atc.interfaces.*;
 import java.io.*;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 /**
  *
  * @author Robbert
  */
-public class Airspace implements IAirspace, Serializable {
+public class Airspace extends UnicastRemoteObject implements IAirspace, Serializable {
 
     /**************Datafields***********/
     /**

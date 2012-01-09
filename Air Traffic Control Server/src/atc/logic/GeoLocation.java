@@ -5,11 +5,12 @@ import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * The coordinates on WorldWind of an object
  */
-public class GeoLocation implements IGeoLoc, Serializable {
+public class GeoLocation extends UnicastRemoteObject implements IGeoLoc, Serializable {
 
     /**************Datafields***********/
     /**
@@ -31,7 +32,7 @@ public class GeoLocation implements IGeoLoc, Serializable {
      * @param Latitude: The latitude of GeoLocation.
      * @param Altitude: The altitude of GeoLocation.
      */
-    public GeoLocation(double Longitude, double Latitude, double Altitude) {
+    public GeoLocation(double Longitude, double Latitude, double Altitude) throws RemoteException {
         // TODO The long and lat are in the wrong order. (is a bit confusing)                   TODO
         this.Longitude = Longitude;
         this.Latitude = Latitude;
@@ -42,7 +43,7 @@ public class GeoLocation implements IGeoLoc, Serializable {
      * @param Longitude: The longitude of GeoLocation.
      * @param Latitude: The latitude of GeoLocation.
      */
-    public GeoLocation(double Latitude, double Longitude) {
+    public GeoLocation(double Latitude, double Longitude)  throws RemoteException {
         this.Longitude = Longitude;
         this.Latitude = Latitude;
         this.Altitude = 0;
@@ -56,23 +57,23 @@ public class GeoLocation implements IGeoLoc, Serializable {
      * @return A string value with the longitude, latitude and altitude is returned.
      * @deprecated 
      */
-    @Override
-    public String ToString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        sb.append(this.Latitude);
-        sb.append(", ");
-        sb.append(this.Longitude);
-        sb.append(")");
-
-        sb.append(", ");
-
-        sb.append("[");
-        sb.append(this.Altitude);
-        sb.append("]");
-
-        return sb.toString();
-    }
+//    @Override
+//    public String ToString() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("(");
+//        sb.append(this.Latitude);
+//        sb.append(", ");
+//        sb.append(this.Longitude);
+//        sb.append(")");
+//
+//        sb.append(", ");
+//
+//        sb.append("[");
+//        sb.append(this.Altitude);
+//        sb.append("]");
+//
+//        return sb.toString();
+//    }
 
     /**
      * Method to return the Latlon made from the latitude and longitude
@@ -138,7 +139,7 @@ public class GeoLocation implements IGeoLoc, Serializable {
      * This calculates the new position based on the curren position, direction and distance.
      * @return GeoLocation
      */
-    public static IGeoLoc CalcPosition(double lon1, double lat1, double direction, double distance) {
+    public static IGeoLoc CalcPosition(double lon1, double lat1, double direction, double distance) throws RemoteException {
         double Distance = distance / 3958.75;
         double Direction = direction;
 
@@ -166,7 +167,7 @@ public class GeoLocation implements IGeoLoc, Serializable {
     }
 
     @Override
-    public IGeoLoc getNewGeoLocation() {
+    public IGeoLoc getNewGeoLocation() throws RemoteException {
         return new GeoLocation(Longitude, Latitude, Altitude);
     }
 
