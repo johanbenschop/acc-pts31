@@ -12,7 +12,6 @@ package atc.gui;
 
 import atc.interfaces.IAirplane.Statusses;
 import atc.interfaces.*;
-import atc.logic.GeoLocation;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -560,12 +559,12 @@ public class jfCommandFlight extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTakeOffFlightActionPerformed
 
     private void jButtonSetHeadingDestinationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetHeadingDestinationActionPerformed
-        double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getDestinationAirport().getLocation());
+        double newHeading = IGeoLoc.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getDestinationAirport().getLocation());
         txtChangeDirectionTo.setText(String.valueOf(newHeading));
     }//GEN-LAST:event_jButtonSetHeadingDestinationActionPerformed
 
     private void jButtonSetHeadingArrivalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSetHeadingArrivalActionPerformed
-        double newHeading = GeoLocation.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getTakeoffAirport().getLocation());
+        double newHeading = IGeoLoc.CalcDirection(flightplan.getAirplane().getLocation(), flightplan.getTakeoffAirport().getLocation());
         txtChangeDirectionTo.setText(String.valueOf(newHeading));
     }//GEN-LAST:event_jButtonSetHeadingArrivalActionPerformed
 

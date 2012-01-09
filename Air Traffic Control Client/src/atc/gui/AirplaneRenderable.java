@@ -1,7 +1,6 @@
 package atc.gui;
 
 import atc.interfaces.*;
-import atc.logic.*;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.*;
@@ -148,7 +147,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                             + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
                     double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
                             Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-                    GeoLocation newGeoLoc;
+                    IGeoLoc newGeoLoc;
                     newGeoLoc = new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI));
                     pathPositions.add(newGeoLoc.toPosition());
 
