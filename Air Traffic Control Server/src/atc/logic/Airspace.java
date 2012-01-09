@@ -8,7 +8,7 @@ import java.util.*;
  *
  * @author Robbert
  */
-public class Airspace implements IAirACC {
+public class Airspace implements IAirspace {
 
     /**************Datafields***********/
     /**

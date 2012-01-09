@@ -149,7 +149,9 @@ public class Airplane extends IAirplane {
      * @param AirplaneNumber the number of the airplane.
      */
     public Airplane(int MaxSpeed, int MinSpeed, int Weight, String Type, String Manufacturer,
-            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, int Direction, double Speed, int CurrentFuel, double Altitude, IGeoLoc Location, IGeoLoc DestinationLocation, int AirplaneNumber) {
+            int PlaneHeight, int PlaneWidth, int PlaneLength, int MaxFuel, int FuelUsage, 
+            int Direction, double Speed, int CurrentFuel, double Altitude, IGeoLoc Location, 
+            IGeoLoc DestinationLocation, int AirplaneNumber) {
         this.MaxSpeed = MaxSpeed;
         this.MinSpeed = MinSpeed;
         this.Weight = Weight;
@@ -331,6 +333,7 @@ public class Airplane extends IAirplane {
      * The speed at the takeoff will change with 6,67 km/h every second.
      * If it finished the takeoff then the speed wil increase or decrease with 10 km/h every second.
      */
+    @Override
     public void ChangeSpeed() {
         double amountChangeSpeed = 1;
         if (this.Status == Statusses.TAKINGOFF) {
