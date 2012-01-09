@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -37,7 +38,7 @@ public class Airport implements IAirport {
      * @param Timezone: The timezone of the aiport.
      * @param DST: The DST of the airport.
      */
-    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, IGeoLoc location, int Altitude, double Timezone, String DST) {
+    public Airport(int AirportID, String AirportName, String City, String Country, String ITATA_FAA, String ICAO, IGeoLoc location, int Altitude, double Timezone, String DST) throws RemoteException {
         this.AirportID = AirportID;
         this.AirportName = AirportName;
         this.City = City;
@@ -69,7 +70,7 @@ public class Airport implements IAirport {
      * @return runway.
      */
     @Override
-    public IRunway getRunway() {
+    public IRunway getRunway() throws RemoteException {
         for (IRunway runway : runways) {
             if (runway.getAvailability() == true) {
                 return runway;

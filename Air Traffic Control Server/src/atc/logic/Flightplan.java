@@ -2,6 +2,9 @@ package atc.logic;
 
 import atc.interfaces.*;
 import java.util.*;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * All information about a planned flight is found in Flightplan.
@@ -64,7 +67,12 @@ public class Flightplan implements IFlightplan {
      */
     @Override
     public String toString() {
-        return "[" + Flightnumber + "] " + takeoffAirport.getIATA_FAA() + "- " + destinationAirport.getIATA_FAA();
+        try {
+            return "[" + Flightnumber + "] " + takeoffAirport.getIATA_FAA() + "- " + destinationAirport.getIATA_FAA();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Flightplan.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     /**************Getters**************/
