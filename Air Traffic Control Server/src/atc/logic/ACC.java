@@ -151,13 +151,13 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
      * @return list of available airplanes
      */
     @Override
-    public ListIterator<IAirplaneFactory> getAvailableAirplanes() {
-        return airplaneFactoryList.listIterator();
+    public ArrayList<IAirplaneFactory> getAvailableAirplanes() {
+        return airplaneFactoryList;
     }
 
     @Override
-    public ListIterator<IFC> getFlightControllers() {
-        return flightControllers.listIterator();
+    public ArrayList<IFC> getFlightControllers() {
+        return flightControllers;
     }
 
     /**************Methods**************/
@@ -428,8 +428,8 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
      * @return a list with all Flightplans
      */
     @Override
-    public ListIterator<IFlightplan> getFlightplans() {
-        return fp.listIterator();
+    public ArrayList<IFlightplan> getFlightplans() {
+        return fp;
     }
 
     private void addRunwayTimer(final IAirport airport, final IAirplane airplane) throws RemoteException {
