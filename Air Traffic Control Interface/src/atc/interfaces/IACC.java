@@ -2,6 +2,7 @@ package atc.interfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.ListIterator;
@@ -10,7 +11,7 @@ import java.util.ListIterator;
  *
  * @author Henk
  */
-public interface IACC {
+public interface IACC extends Remote {
 
     /**
      * Method to change the direction of the airplane. This is done through setting
@@ -30,7 +31,7 @@ public interface IACC {
      *
      * @return false is when it was not possible to set the new direction.
      */
-    void ChangeDirection(double direction, IAirplane a) throws AssignmentException;
+    void ChangeDirection(double direction, IAirplane a) throws AssignmentException, RemoteException;
 
     /**
      * Method to change the height of an airplane. This is done by setting the
@@ -49,7 +50,7 @@ public interface IACC {
      *
      * @return false if the change was incorrect and could not be made.
      */
-    void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException;
+    void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException, RemoteException;
 
     /**
      * Method to change the speed of the airplane. First its set to the Aimed
@@ -64,7 +65,7 @@ public interface IACC {
      *
      * @return false is returned if the speed was above/below the planes maximum/minimum speed.
      */
-    void ChangeSpeed(double speed, IAirplane a) throws AssignmentException;
+    void ChangeSpeed(double speed, IAirplane a) throws AssignmentException, RemoteException;
 
     /**
      * Method has to be called when assignmentexception is given on the
@@ -72,9 +73,9 @@ public interface IACC {
      *
      * @param a is the airplane that has to start circling the airport.
      */
-    void CircleAirplane(IAirplane a);
+    void CircleAirplane(IAirplane a) throws RemoteException;
 
-    Boolean ContainsFlightplan(IFlightplan flightplan);
+    Boolean ContainsFlightplan(IFlightplan flightplan) throws RemoteException;
 
     /**
      * Method to create a flightplan
@@ -91,35 +92,35 @@ public interface IACC {
      *
      * @param flightnumber is the flightnumber of the airplane
      */
-    void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure);
+    void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure) throws RemoteException;
 
     /**
      * Method to get the Airplane Factory
      *
      * @return airplane factory
      */
-    IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID);
+    IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) throws RemoteException;
 
     /**
      * Method to get a CTA
      *
      * @return CTA
      */
-    ICTA GetCTA();
+    ICTA GetCTA() throws RemoteException;
 
     /**
      * Method to get the FlightController
      *
      * @return FlightController
      */
-    IFC GetFlightController(int FlightControllerID);
+    IFC GetFlightController(int FlightControllerID) throws RemoteException;
 
     /**
      * Method to get ID of this ACC
      *
      * @return ID
      */
-    int GetID();
+    int GetID() throws RemoteException;
 
     /**
      * Method to give the airplane the direction in which it has to approach
@@ -135,75 +136,75 @@ public interface IACC {
      *
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
-    void LandFlight(IFlightplan fp) throws AssignmentException;
+    void LandFlight(IFlightplan fp) throws AssignmentException, RemoteException;
 
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
      * @deprecated
      */
-    IFC addFlightController();
+    IFC addFlightController() throws RemoteException;
 
     /**
      * Creates and adds a new FlightController and add it to the list of controller.
      * @return FlightController
      */
-    void addFlightController(IFC flightController);
+    void addFlightController(IFC flightController) throws RemoteException;
 
-    void addFlightPlan(IFlightplan flightplan);
+    void addFlightPlan(IFlightplan flightplan) throws RemoteException;
 
     /**
      * Assign a controller to a flightplan based on the contollers busyness.
      * @param flightplan
      */
-    void assignFlightToController(IFlightplan flightplan);
+    void assignFlightToController(IFlightplan flightplan) throws RemoteException;
 
-    ArrayList<IACC> getAdjacentACCList();
+    ArrayList<IACC> getAdjacentACCList() throws RemoteException;
 
     /**
      * Method to get all Available Airplanes
      *
      * @return list of available airplanes
      */
-    ListIterator<IAirplaneFactory> getAvailableAirplanes();
+    ListIterator<IAirplaneFactory> getAvailableAirplanes() throws RemoteException;
 
-    ListIterator<IFC> getFlightControllers();
+    ListIterator<IFC> getFlightControllers() throws RemoteException;
 
     /**
      * Method to get all Flightplans
      *
      * @return a list with all Flightplans
      */
-    ListIterator<IFlightplan> getFlightplans();
+    ListIterator<IFlightplan> getFlightplans() throws RemoteException;
 
     /**
      * Method to get list of flight controllers
      *
      * @return list of flight controllers
      */
-    ArrayList<IFC> getfc();
+    ArrayList<IFC> getfc() throws RemoteException;
 
     /**
      * Method to get list of flightplans
      *
      * @return list of flightplans
      */
-    ArrayList<IFlightplan> getfp();
+    ArrayList<IFlightplan> getfp() throws RemoteException;
 
     /**
      * All airplanes in the AvailableAirplanes.dat list will be read into a list.
      */
-    void loadAirplaneFactoryList() throws FileNotFoundException, IOException;
+    void loadAirplaneFactoryList() throws FileNotFoundException, IOException, RemoteException;
 
-    void removeFlightController(IFC flightController);
+    void removeFlightController(IFC flightController) throws RemoteException;
 
-    void removeFlightPlan(IFlightplan flightplan);
+    void removeFlightPlan(IFlightplan flightplan) throws RemoteException;
 
-    void setAdjacentACCList(ArrayList<IACC> adjacentACCList);
+    void setAdjacentACCList(ArrayList<IACC> adjacentACCList) throws RemoteException;
 
     /**
      * Unassign the flight from the controller.
      * @param flightplan
      */
-    void unassignFlightFromController(IFlightplan flightplan);
+    void unassignFlightFromController(IFlightplan flightplan) throws RemoteException;
 }
