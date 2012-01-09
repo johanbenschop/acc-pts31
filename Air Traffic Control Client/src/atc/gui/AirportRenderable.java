@@ -6,6 +6,7 @@ import gov.nasa.worldwind.render.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -15,7 +16,7 @@ public class AirportRenderable extends GlobeAnnotation {
 
     public IAirport airport;
 
-    public AirportRenderable(IAirport airport) {
+    public AirportRenderable(IAirport airport) throws RemoteException {
         super("", airport.getLocation().toPosition());
         this.airport = airport;
 
@@ -65,7 +66,7 @@ public class AirportRenderable extends GlobeAnnotation {
 //    }
     
     
-    public String getAnnotationText() {
+    public String getAnnotationText() throws RemoteException {
         return "<p><b><font>"
                 + "" + airport.getAirportName() + " (" + airport.getAirportID() + ")"
                 + "</font></b>"

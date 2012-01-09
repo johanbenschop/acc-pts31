@@ -61,7 +61,7 @@ public class FlightController implements IAirFC {
      * @param flightplan 
      */
     @Override
-    public void assignFlight(IFlightplan flightplan) {
+    public void assignFlight(IFlightplan flightplan) throws RemoteException {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
             flightplan.setAssignedController((IFC)this);
@@ -73,7 +73,7 @@ public class FlightController implements IAirFC {
      * 
      */
     @Override
-    public void unassignFlight(IFlightplan flightplan) {
+    public void unassignFlight(IFlightplan flightplan) throws RemoteException {
         flights.remove(flightplan);
         flightplan.setAssignedController(null);
     }
@@ -82,7 +82,7 @@ public class FlightController implements IAirFC {
      * Method to unassign all flightplan from this Flightcontroller
      */
     @Override
-    public void unassignAllFlights() {
+    public void unassignAllFlights() throws RemoteException {
         for (IFlightplan flightplan : flights) {
             flightplan.setAssignedController(null);
         }
