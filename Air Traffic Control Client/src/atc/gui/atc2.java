@@ -436,7 +436,7 @@ public final class atc2 extends atc {
             attr.setEnableAntialiasing(true);
 
             // We go through all the ACC's to draw the SurfaceSector inside the airspaceLayer.
-            for (Iterator<IACC> it = airspace.GetACCs(); it.hasNext();) {
+            for (Iterator<IACC> it = airspace.GetACCs().listIterator(); it.hasNext();) {
                 IACC acc = it.next();
 
                 SurfaceSector surfaceSector = new SurfaceSector(acc.GetCTA().getSector().toSector());
