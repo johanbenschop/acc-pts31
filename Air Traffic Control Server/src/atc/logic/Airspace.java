@@ -2,6 +2,7 @@ package atc.logic;
 
 import atc.interfaces.*;
 import java.io.*;
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -38,7 +39,7 @@ public class Airspace implements IAirspace {
      * This is a constructor used for making multiple ACCs and recording their information in a list
      * 
      */
-    public Airspace() {
+    public Airspace() throws RemoteException {
         airportList = new ArrayList<IAirport>();
         ACCs = new ArrayList<IACC>();
         try {
@@ -127,7 +128,7 @@ public class Airspace implements IAirspace {
      * @return An list with airports in the given GeoSector
      */
     @Override
-    public ArrayList<IAirport> getAirportCTA(IGeoSec sector) {
+    public ArrayList<IAirport> getAirportCTA(IGeoSec sector) throws RemoteException {
         ArrayList<IAirport> airportlist = new ArrayList<IAirport>();
         for (IAirport airport : airportList) {
             if (sector.containsGeoLocation(airport.getLocation())) {
@@ -143,7 +144,7 @@ public class Airspace implements IAirspace {
      * @return The airport with the given AirportID
      */
     @Override
-    public IAirport GetAirport(int AirportID) throws NullPointerException {
+    public IAirport GetAirport(int AirportID) throws NullPointerException, RemoteException {
         IAirport airport = null;
         for (IAirport a : airportList) {
             if (a.getAirportID() == AirportID) {
@@ -169,7 +170,7 @@ public class Airspace implements IAirspace {
      * @return Arraylist with adjacent ACC's
      */
     @Override
-    public ArrayList getAdjacentACCs(int CurrentACCID) {
+    public ArrayList getAdjacentACCs(int CurrentACCID) throws RemoteException {
         ArrayList<IACC> adjacentACCList = new ArrayList();
         for (IACC acc : ACCs) {
             if (((CurrentACCID - 101) == acc.GetID()) || ((CurrentACCID - 100) == acc.GetID())
@@ -241,7 +242,7 @@ public class Airspace implements IAirspace {
      * @return The acc with the given ID
      */
     @Override
-    public IACC getACC(int ID) {
+    public IACC getACC(int ID) throws RemoteException {
         for (IACC acc : ACCs) {
             if (acc.GetID() == ID) {
                 return acc;
@@ -257,7 +258,7 @@ public class Airspace implements IAirspace {
     }
 
     @Override
-    public void setCurrentACC(int ID) {
+    public void setCurrentACC(int ID) throws RemoteException {
         for (IACC acc : ACCs) {
             if (acc.GetID() == ID) {
                 this.currentACC = acc;
