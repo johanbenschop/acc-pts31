@@ -8,6 +8,7 @@ package atc.gui;
 import atc.interfaces.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -272,31 +273,47 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirplaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplaneActionPerformed
         // TODO add your handling code here:
-        this.airplane = new jfSelectAirplane(null, true).getValue();
-        if (airplane != null) {
-            tfAirplane.setText(airplane.ToString());
-        } else {
-            tfAirplane.setText("No airplane selected!");
+        try {
+            this.airplane = new jfSelectAirplane(null, true).getValue();
+            if (airplane != null) {
+                tfAirplane.setText(airplane.ToString());
+            } else {
+                tfAirplane.setText("No airplane selected!");
+            }
+        } catch (RemoteException rex) {
+            rex.printStackTrace();
         }
     }//GEN-LAST:event_btnSelectAirplaneActionPerformed
 
     private void btnSelectAirportDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportDepActionPerformed
-        // TODO add your handling code here:
-        atc2.airspace.setOnlyOneACC(true);
-        this.departureAirport = new jfSelectAirport(null, true).getValue();
-        if (departureAirport != null) {
-            tfDepartureAirport.setText(departureAirport.ToString());
-        } else {
-            tfDepartureAirport.setText("No airport selected!");
+        try {
+            // TODO add your handling code here:           
+            atc2.airspace.setOnlyOneACC(true);
+            this.departureAirport = new jfSelectAirport(null, true).getValue();
+            if (departureAirport != null) {
+                tfDepartureAirport.setText(departureAirport.ToString());
+            } else {
+                tfDepartureAirport.setText("No airport selected!");
+            }
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_btnSelectAirportDepActionPerformed
 
     private void btnSelectAirportArrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportArrActionPerformed
-        // TODO add your handling code here:
-        atc2.airspace.setOnlyOneACC(false);
+        try {
+            // TODO add your handling code here:
+            atc2.airspace.setOnlyOneACC(false);
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
         this.arrivalAirport = new jfSelectAirport(null, true).getValue();
         if (arrivalAirport != null) {
-            tfArrivalAirport.setText(arrivalAirport.ToString());
+            try {
+                tfArrivalAirport.setText(arrivalAirport.ToString());
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         } else {
             tfArrivalAirport.setText("No airport selected!");
         }
@@ -318,12 +335,15 @@ public class jfAddFlight extends javax.swing.JDialog {
                     (int) spHoursDep.getValue(),
                     (int) spMinutesDep.getValue(),
                     (int) spSecondsDep.getValue());
-
-            atc2.airspace.getCurrentACC().CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
+            try {
+                atc2.airspace.getCurrentACC().CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "Not all fields have been satisfied.");
         }
-        
+
         WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
     }//GEN-LAST:event_btnAddFlightActionPerformed

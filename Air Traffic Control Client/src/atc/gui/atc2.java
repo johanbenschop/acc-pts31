@@ -32,7 +32,8 @@ import java.util.logging.Logger;
 public final class atc2 extends atc {
     //haal Airspace ergens anders vandaan...
 
-    public static IAirspace airspace = new Airspace();
+    public static IAirspace airspace;
+    public static FlightController FC;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public static class AppFrame extends atc.AppFrame {
@@ -590,7 +591,7 @@ public final class atc2 extends atc {
          * @param layer Airport Layer
          * @param airport Airport
          */
-        private void addAirportToLayer(RenderableLayer layer, IAirport airport) {
+        private void addAirportToLayer(RenderableLayer layer, IAirport airport) throws RemoteException {
             layer.addRenderable(new AirportRenderable(airport));
         }
 
@@ -799,7 +800,7 @@ public final class atc2 extends atc {
             }
         }
 
-        private void clickAirplane(Object o) {
+        private void clickAirplane(Object o) throws RemoteException {
             if (o.getClass() != AirplaneRenderable.class) {
                 return; // The selected object isn't our airplane.
             }
