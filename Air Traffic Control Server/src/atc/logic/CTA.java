@@ -50,7 +50,11 @@ public class CTA implements ICTA {
             Collision temp = null;
             if (!collision.isEmpty()) {
                 for (Collision coll : collision) {
-                    coll.colldetect();
+                    try {
+                        coll.colldetect();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                     try {
                         if (coll.getTarget().getStatus().equals(Airplane.Statusses.CRASHED) || coll.getCrashobject().getStatus().equals(Airplane.Statusses.CRASHED)) {
                             temp = coll;
