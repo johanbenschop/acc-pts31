@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,23 +20,23 @@ public interface IAirACC {
     /**
      * Getters
      */
-    ListIterator<ACC> GetACCs();
+    ListIterator<IACC> GetACCs();
 
     /**
      * A method to get the airport with the given AirportID
      *
      * @return The airport with the given AirportID
      */
-    Airport GetAirport(int AirportID) throws NullPointerException;
+    IAirport GetAirport(int AirportID) throws NullPointerException;
 
-    ListIterator<Airport> GetAirports();
+    ListIterator<IAirport> GetAirports();
 
     /**
      * A method to get the ACC with the given ID
      *
      * @return The acc with the given ID
      */
-    ACC getACC(int ID);
+    IACC getACC(int ID);
 
     /**
      * Gets all the adjacent ACC's from the current ACC and returns this ArrayList.
@@ -50,9 +50,9 @@ public interface IAirACC {
      *
      * @return An list with airports in the given GeoSector
      */
-    ArrayList<Airport> getAirportCTA(GeoSector sector);
+    ArrayList<IAirport> getAirportCTA(IGeoSec sector);
 
-    ACC getCurrentACC();
+    IACC getCurrentACC();
 
     boolean getOnlyOneACC();
 
@@ -65,7 +65,7 @@ public interface IAirACC {
     /**
      * Setters
      */
-    void setCurrentACC(ACC currentACC);
+    void setCurrentACC(IACC currentACC);
 
     void setCurrentACC(int ID);
 

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 import java.util.GregorianCalendar;
 
@@ -12,27 +12,27 @@ import java.util.GregorianCalendar;
  */
 public interface IFlightplan {
 
-    Airplane getAirplane();
+    IAirplane getAirplane();
 
     /**
      * Getters
      */
     GregorianCalendar getArrivalDate();
 
-    FlightController getAssignedController();
+    IFC getAssignedController();
 
     GregorianCalendar getDepartureDate();
 
-    Airport getDestinationAirport();
+    IAirport getDestinationAirport();
 
     int getFlightnumber();
 
-    Airport getTakeoffAirport();
+    IAirport getTakeoffAirport();
 
     /**
      * Setters
      */
-    void setAssignedController(FlightController assignedController);
+    void setAssignedController(IFC assignedController);
 
     /**
      * Method to return a string value of the Flightplan with its Flightnumber, takeoffAirport and destinationAirport

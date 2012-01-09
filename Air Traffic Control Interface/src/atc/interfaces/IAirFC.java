@@ -16,9 +16,9 @@ public interface IAirFC {
      * Assigns a flightcontroller to an flighplan and adds add to a list
      * @param flightplan
      */
-    void assignFlight(Flightplan flightplan);
+    void assignFlight(IFlightplan flightplan);
 
-    Iterator<Flightplan> getFlights();
+    Iterator<IFlightplan> getFlights();
 
     int getID();
 
@@ -37,6 +37,6 @@ public interface IAirFC {
      * Method to unassign a flightplan from this Flightcontroller
      *
      */
-    void unassignFlight(Flightplan flightplan);
+    void unassignFlight(IFlightplan flightplan);
     
 }

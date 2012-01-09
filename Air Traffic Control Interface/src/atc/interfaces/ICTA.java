@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -19,32 +19,32 @@ public interface ICTA {
      * @return
      * @deprecated
      */
-    Airplane GetAirplane(int AirplaneID);
+    IAirplane GetAirplane(int AirplaneID);
 
     /**
      * TODO moet hier een unittest voor? nee toch?
      * Returns the airport with the given AirportID
      * @return
      */
-    Airport GetAirport(int AirportID);
+    IAirport GetAirport(int AirportID);
 
     /**
      * Turns the airport list into a Iterator
      * @return Iterator airportList
      */
-    ListIterator<Airport> GetAirports();
+    ListIterator<IAirport> GetAirports();
 
     /**
      * Adds a airplane to the airplaneList
      * @return
      */
-    void addAirplane(Airplane a);
+    void addAirplane(IAirplane a);
 
     /**
      * Adds a airport to the airportList
      * @return
      */
-    void addAirport(Airport a);
+    void addAirport(IAirport a);
 
     /**
      * TODO...is dit niet dubbel met de methode die eronder staat??
@@ -68,33 +68,35 @@ public interface ICTA {
      * @return
      * @deprecated
      */
-    Airplane getAirplane();
+    IAirplane getAirplane();
 
     /**
      *
      * @return
      * @deprecated
      */
-    ArrayList<Airplane> getAirplaneList();
+    ArrayList<IAirplane> getAirplaneList();
 
     /**
      *
      * @return
      * @deprecated
      */
-    Airport getAirport();
+    IAirport getAirport();
 
     /**
      *
      * @return
      * @deprecated
      */
-    ArrayList<Airport> getAirportList();
+    ArrayList<IAirport> getAirportList();
 
-    GeoSector getSector();
+    IGeoSec getSector();
+    
+    IGeoSec getGreaterSector();
 
-    void removeAirplane(Airplane airplane);
+    void removeAirplane(IAirplane airplane);
 
-    void resetCollision(Airplane airplane);
+    void resetCollision(IAirplane airplane);
     
 }
