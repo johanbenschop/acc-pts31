@@ -8,6 +8,7 @@ package atc.gui;
 import atc.interfaces.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.*;
 import javax.swing.table.*;
 
@@ -25,7 +26,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private boolean closed;
 
     /** Creates new form jfSearchAirport */
-    public jfSelectAirport(java.awt.Frame parent, boolean modal) {
+    public jfSelectAirport(java.awt.Frame parent, boolean modal) throws RemoteException {
         super(parent, modal);
         initComponents();
         airports = atc2.airspace.GetAirports();
@@ -305,9 +306,17 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
-        airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
+        try {
+            airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
         airports2 = null;
-        createAirportList();
+        try {
+            createAirportList();
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
 
         while (airports.hasNext()) {
             IAirport iter = airports.next();
@@ -317,12 +326,20 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 if (evt.getComponent() == tfAirportID) {
                     if (evt.getKeyChar() == '\b') {
                         tfAirportID.setText(tfAirportID.getText().substring(0, tfAirportID.getText().length()));
-                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
-                            continue;
+                        try {
+                            if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
+                                continue;
+                            }
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
                         }
                     } else {
-                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
-                            continue;
+                        try {
+                            if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
+                                continue;
+                            }
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
                         }
                     }
                 }
@@ -333,13 +350,21 @@ public class jfSelectAirport extends javax.swing.JDialog {
             if (evt.getComponent() == tfAirportName) {
                 if (evt.getKeyChar() == '\b') {
                     tfAirportName.setText(tfAirportName.getText().substring(0, tfAirportName.getText().length()));
-                    if (!iter.getAirportName().contains(tfAirportName.getText())) {
-                        continue;
+                    try {
+                        if (!iter.getAirportName().contains(tfAirportName.getText())) {
+                            continue;
 
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 } else {
-                    if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
-                        continue;
+                    try {
+                        if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -348,12 +373,20 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
                 if (evt.getKeyChar() == '\b') {
                     tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
-                    if (!iter.getCountry().contains(tfCountry.getText())) {
-                        continue;
+                    try {
+                        if (!iter.getCountry().contains(tfCountry.getText())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 } else {
-                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
-                        continue;
+                    try {
+                        if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -361,12 +394,20 @@ public class jfSelectAirport extends javax.swing.JDialog {
             if (evt.getComponent() == tfCity) {
                 if (evt.getKeyChar() == '\b') {
                     tfCity.setText(tfCity.getText().substring(0, tfCity.getText().length()));
-                    if (!iter.getCity().contains(tfCity.getText())) {
-                        continue;
+                    try {
+                        if (!iter.getCity().contains(tfCity.getText())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 } else {
-                    if (!iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
-                        continue;
+                    try {
+                        if (!iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -375,12 +416,20 @@ public class jfSelectAirport extends javax.swing.JDialog {
             if (evt.getComponent() == tfIATA_FAA) {
                 if (evt.getKeyChar() == '\b') {
                     tfIATA_FAA.setText(tfIATA_FAA.getText().substring(0, tfIATA_FAA.getText().length()));
-                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
-                        continue;
+                    try {
+                        if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 } else {
-                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
-                        continue;
+                    try {
+                        if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -388,21 +437,33 @@ public class jfSelectAirport extends javax.swing.JDialog {
             if (evt.getComponent() == tfICAO) {
                 if (evt.getKeyChar() == '\b') {
                     tfICAO.setText(tfICAO.getText().substring(0, tfICAO.getText().length()));
-                    if (!iter.getICAO().contains(tfICAO.getText())) {
-                        continue;
+                    try {
+                        if (!iter.getICAO().contains(tfICAO.getText())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 } else {
-                    if (!iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
-                        continue;
+                    try {
+                        if (!iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
-            fillVector(iter);
+            try {
+                fillVector(iter);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         }
         fillTable();
     }//GEN-LAST:event_tfSearchKeyTyped
 
-    public void fillVector(IAirport iter) {
+    public void fillVector(IAirport iter) throws RemoteException {
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getAirportID()));
         row.addElement(iter.getAirportName());
@@ -428,7 +489,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
      * Gets the value of this dialog.
      * @return Airport
      */
-    IAirport getValue() {
+    IAirport getValue() throws RemoteException {
         setVisible(true);
         if (!closed) {
             int id = Integer.parseInt((String) data.get(jTable.getSelectedRow()).get(0));
@@ -438,7 +499,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         return null;
     }
 
-    private ListIterator<IAirport> createAirportList() {
+    private ListIterator<IAirport> createAirportList() throws RemoteException {
         if (atc2.airspace.getOnlyOneACC() == true) {
             airports2 = atc2.airspace.getAirportCTA(atc2.airspace.getCurrentACC().GetCTA().getSector()).listIterator();
             airports = airports2;
@@ -483,15 +544,19 @@ public class jfSelectAirport extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                jfSelectAirport dialog = new jfSelectAirport(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                try {
+                    jfSelectAirport dialog = new jfSelectAirport(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                } catch (RemoteException rex) {
+                    rex.printStackTrace();
+                }
             }
         });
     }

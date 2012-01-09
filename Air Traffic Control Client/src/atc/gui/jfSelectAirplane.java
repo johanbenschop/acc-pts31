@@ -8,6 +8,7 @@ package atc.gui;
 import atc.interfaces.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.*;
 import javax.swing.table.*;
 
@@ -25,7 +26,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     private ArrayList<IAirplaneFactory> retAirplanes;
 
     /** Creates new form jfSelectAirplane */
-    public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
+    public jfSelectAirplane(java.awt.Frame parent, boolean modal) throws RemoteException {
         super(parent, modal);
         initComponents();
 
@@ -41,7 +42,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         jTable.setModel(model);
         tfType.setText("");
         tfManafacturer.setText("");
-        
+
     }
 
     /** This method is called from within the constructor to
@@ -224,14 +225,22 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSelectActionPerformed
 
 private void tfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyReleased
-    search();
+        try {
+            search();
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
 }//GEN-LAST:event_tfTypeKeyReleased
 
 private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfManafacturerKeyReleased
-    search();
+        try {
+            search();
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
 }//GEN-LAST:event_tfManafacturerKeyReleased
 
-    public void fillVector(IAirplaneFactory iter) {
+    public void fillVector(IAirplaneFactory iter) throws RemoteException {
         Vector<String> row = new Vector<>();
         row.addElement(iter.getType());
         row.addElement(iter.getManufacturer());
@@ -294,65 +303,60 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                jfSelectAirplane dialog = new jfSelectAirplane(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                try {
+                    jfSelectAirplane dialog = new jfSelectAirplane(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                } catch (RemoteException rex) {
+                    rex.printStackTrace();
+                }
             }
         });
     }
-    
-    private void search(){
-        data.clear(); // Empty the data so we can get the limited results in.
-    airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
-    retAirplanes.clear();
-    
-    while (airplanes.hasNext()) {
-        IAirplaneFactory iter = airplanes.next();
-        
-        if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
-        {
-            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-            if(!iter.getType().contains(tfType.getText()))
-            {
-                continue;
-            }
-        
-        } else if(!tfManafacturer.getText().equals("") && tfType.getText().equals("") )
-        {
-            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if(!iter.getManufacturer().contains(tfManafacturer.getText()))
-            {
-                continue;
-            }
-        
-        }else if(tfType.getText().equals("") && tfManafacturer.getText().equals(""))
-        {
-            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-            tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText())))
-            {
-                continue;
-            }
-        }
-        
-        else if(!tfType.getText().equals("") && !tfManafacturer.getText().equals("")){
-            tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-             tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-            if((!iter.getType().contains(tfType.getText())) || (!iter.getManufacturer().contains(tfManafacturer.getText())))
-            {
-                continue;
-            }
-        }
-        fillVector(iter);
-    }
 
-    fillTable();
+    private void search() throws RemoteException {
+        data.clear(); // Empty the data so we can get the limited results in.
+        airplanes = atc2.airspace.getCurrentACC().getAvailableAirplanes();  // we must get an new iterator, since the previus one is empty.
+        retAirplanes.clear();
+
+        while (airplanes.hasNext()) {
+            IAirplaneFactory iter = airplanes.next();
+
+            if (!tfType.getText().equals("") && tfManafacturer.getText().equals("")) {
+                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+                if (!iter.getType().contains(tfType.getText())) {
+                    continue;
+                }
+
+            } else if (!tfManafacturer.getText().equals("") && tfType.getText().equals("")) {
+                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
+                    continue;
+                }
+
+            } else if (tfType.getText().equals("") && tfManafacturer.getText().equals("")) {
+                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+                if ((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText()))) {
+                    continue;
+                }
+            } else if (!tfType.getText().equals("") && !tfManafacturer.getText().equals("")) {
+                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
+                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
+                if ((!iter.getType().contains(tfType.getText())) || (!iter.getManufacturer().contains(tfManafacturer.getText()))) {
+                    continue;
+                }
+            }
+            fillVector(iter);
+        }
+
+        fillTable();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

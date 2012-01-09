@@ -3,6 +3,7 @@ package atc.cli.commands;
 import atc.cli.CommandLine;
 import atc.gui.atc2;
 import atc.interfaces.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -14,7 +15,7 @@ import java.util.Random;
  */
 public class Demo {
 
-    public static String collision() throws AssignmentException {
+    public static String collision() throws AssignmentException, RemoteException {
         try {
             atc2.airspace.getCurrentACC().CreateFlight(null, null, null, null, null);
 
@@ -26,7 +27,7 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String addFlightSchipholEindhoven() {
+    public static String addFlightSchipholEindhoven() throws RemoteException {
         CommandLine.println("Adding flight: Schiphol - Eindhoven");
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         IAirport ap_dept = atc2.airspace.GetAirport(580);
@@ -36,7 +37,7 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String addFlightEindhovenSchiphol() {
+    public static String addFlightEindhovenSchiphol() throws RemoteException {
         CommandLine.println("Adding flight: Eindhoven - Schiphol");
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         IAirport ap_dept = atc2.airspace.GetAirport(585);
@@ -46,13 +47,13 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String addCrashEHVAMS() {
+    public static String addCrashEHVAMS() throws RemoteException {
         addFlightEindhovenSchiphol();
         addFlightSchipholEindhoven();
         return "Added two planes that will crash....";
     }
 
-    public static String addFlightEindhovenBudel() {
+    public static String addFlightEindhovenBudel() throws RemoteException {
         CommandLine.println("Adding flight: Eindhoven - Budel");
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         IAirport ap_dept = atc2.airspace.GetAirport(585);
@@ -62,7 +63,7 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String addFlightBudelEindhoven() {
+    public static String addFlightBudelEindhoven() throws RemoteException {
         CommandLine.println("Adding flight: Budel - Eindhoven");
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         IAirport ap_dept = atc2.airspace.GetAirport(581);
@@ -72,7 +73,7 @@ public class Demo {
         return "Adding stuff....";
     }
     
-    public static String addFlightBastogne() {
+    public static String addFlightBastogne() throws RemoteException {
         CommandLine.println("Adding flight: St.Hubert - Luxemburg Stad");
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
         IAirport ap_dept = atc2.airspace.GetAirport(313);
@@ -82,13 +83,13 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String addCrashEHVBUD() {
+    public static String addCrashEHVBUD() throws RemoteException {
         addFlightEindhovenBudel();
         addFlightBudelEindhoven();
         return "Added two planes that will crash....";
     }
 
-    public static String addRandomFlights(int amount) {
+    public static String addRandomFlights(int amount) throws RemoteException {
         Random random = new Random();
         ArrayList<Integer> airportIDs = new ArrayList<>();
         IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
