@@ -2,6 +2,7 @@ package atc.logic;
 
 import atc.interfaces.IGeoLoc;
 import atc.interfaces.IRunway;
+import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
@@ -11,7 +12,7 @@ import java.util.prefs.Preferences;
  * 
  * @author Mateusz
  */
-public class Runway implements IRunway {
+public class Runway implements IRunway, Serializable {
 
     /**************Datafields***********/
     /**

@@ -1,11 +1,12 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 
 /**
  * @author Robbert
  */
-public class AirplaneFactory implements IAirplaneFactory {
+public class AirplaneFactory implements IAirplaneFactory, Serializable {
 
     /**************Datafields***********/
     private int Id, nr = 1;

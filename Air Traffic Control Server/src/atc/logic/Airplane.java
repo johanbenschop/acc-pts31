@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
@@ -8,7 +9,7 @@ import java.util.prefs.Preferences;
 /**
  * @author Paul
  */
-public class Airplane implements IAirplane {
+public class Airplane implements IAirplane, Serializable {
 
     /**************Datafields***********/
     /**

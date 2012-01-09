@@ -1,13 +1,14 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.*;
 
 /**
  * @author Robbert
  */
-public class Airport implements IAirport {
+public class Airport implements IAirport, Serializable {
 
     //ToDo: Change Strings to ints when the numbers can be correctly loaded into an int. 
     private int AirportID;//The ID of an airport.

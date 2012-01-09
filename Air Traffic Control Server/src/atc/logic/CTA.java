@@ -1,12 +1,13 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CTA implements ICTA {
+public class CTA implements ICTA, Serializable {
 
     /**************Datafields***********/
     /**

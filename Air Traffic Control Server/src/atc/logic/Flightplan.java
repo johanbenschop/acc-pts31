@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.io.Serializable;
 import java.util.*;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  * All information about a planned flight is found in Flightplan.
  * 
  */
-public class Flightplan implements IFlightplan {
+public class Flightplan implements IFlightplan, Serializable {
 
     /**************Datafields***********/
     /**

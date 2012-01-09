@@ -390,9 +390,10 @@ public class ACC extends UnicastRemoteObject implements IACC {
      */
     @Override
     public IFC addFlightController() throws RemoteException {
-        IFC controller = new FlightController();
-        flightControllers.add(controller);
-        return controller;
+//        IFC controller = new FlightController();
+//        flightControllers.add(controller);
+//        return controller;
+        return null;
     }
 
     /**
