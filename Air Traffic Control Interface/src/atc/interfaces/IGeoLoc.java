@@ -1,13 +1,13 @@
 package atc.interfaces;
 
-import gov.nasa.worldwind.geom.LatLon;
-import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.geom.*;
+import java.rmi.*;
 
 /**
  *
  * @author Henk
  */
-public interface IGeoLoc {
+public interface IGeoLoc extends Remote {
 
     /**
      * Due to minimal importance of an unit test for this method there is none.
@@ -22,24 +22,24 @@ public interface IGeoLoc {
     /**
      * Getters
      */
-    double getAltitude();
+    double getAltitude() throws RemoteException;
 
-    double getLatitude();
+    double getLatitude() throws RemoteException;
 
-    double getLongitude();
+    double getLongitude() throws RemoteException;
     
-    double CalcDirection(IGeoLoc pos, IGeoLoc pos2);
+    double CalcDirection(IGeoLoc pos, IGeoLoc pos2) throws RemoteException;
 
-    IGeoLoc getNewGeoLocation();
+    IGeoLoc getNewGeoLocation() throws RemoteException;
 
     /**
      * Setters
      */
-    void setAltitude(double Altitude);
+    void setAltitude(double Altitude) throws RemoteException;
 
-    void setLatitude(double Latitude);
+    void setLatitude(double Latitude) throws RemoteException;
 
-    void setLongitude(double Longitude);
+    void setLongitude(double Longitude) throws RemoteException;
     
     /**
      * Method to return the Latlon made from the latitude and longitude
@@ -47,12 +47,11 @@ public interface IGeoLoc {
      * @return A LatLon value in degrees.
      * @deprecated
      */
-    LatLon toLatLon();
+    LatLon toLatLon() throws RemoteException;
 
     /**
      * Converts the geolocation to the location used in WWJ.
      * @return position.
      */
-    Position toPosition();
-    
+    Position toPosition() throws RemoteException;    
 }

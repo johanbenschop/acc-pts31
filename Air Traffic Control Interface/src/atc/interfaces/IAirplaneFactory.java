@@ -1,41 +1,42 @@
 package atc.interfaces;
 
+import java.rmi.*;
+
 /**
  *
  * @author Mateusz
  */
-public interface IAirplaneFactory {
+public interface IAirplaneFactory extends Remote {
 
     /**
      * Method to return a string value of the Manufacturer and type.
      *
      * @return A string value with the Manufacturer and type is returned.
      */
-    String ToString();
+    String ToString() throws RemoteException;
 
-    int getFuelUsage();
+    int getFuelUsage() throws RemoteException;
 
     /**
      * Getters
      */
-    int getID();
+    int getID() throws RemoteException;
 
-    String getManufacturer();
+    String getManufacturer() throws RemoteException;
 
-    int getMaxFuel();
+    int getMaxFuel() throws RemoteException;
 
-    int getMaxSpeed();
+    int getMaxSpeed() throws RemoteException;
 
-    int getMinSpeed();
+    int getMinSpeed() throws RemoteException;
 
-    int getPlaneHeight();
+    int getPlaneHeight() throws RemoteException;
 
-    int getPlaneLength();
+    int getPlaneLength() throws RemoteException;
 
-    int getPlaneWidth();
+    int getPlaneWidth() throws RemoteException;
 
-    String getType();
+    String getType() throws RemoteException;
 
-    int getWeight();
-    
+    int getWeight() throws RemoteException;    
 }

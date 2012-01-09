@@ -1,40 +1,40 @@
 package atc.interfaces;
 
+import java.rmi.*;
 import java.util.GregorianCalendar;
 
 /**
  *
  * @author Henk
  */
-public interface IFlightplan {
+public interface IFlightplan extends Remote {
 
-    IAirplane getAirplane();
+    IAirplane getAirplane() throws RemoteException;
 
     /**
      * Getters
      */
-    GregorianCalendar getArrivalDate();
+    GregorianCalendar getArrivalDate() throws RemoteException;
 
-    IFC getAssignedController();
+    IFC getAssignedController() throws RemoteException;
 
-    GregorianCalendar getDepartureDate();
+    GregorianCalendar getDepartureDate() throws RemoteException;
 
-    IAirport getDestinationAirport();
+    IAirport getDestinationAirport() throws RemoteException;
 
-    int getFlightnumber();
+    int getFlightnumber() throws RemoteException;
 
-    IAirport getTakeoffAirport();
+    IAirport getTakeoffAirport() throws RemoteException;
 
     /**
      * Setters
      */
-    void setAssignedController(IFC assignedController);
+    void setAssignedController(IFC assignedController) throws RemoteException;
 
     /**
      * Method to return a string value of the Flightplan with its Flightnumber, takeoffAirport and destinationAirport
      *
      * @return A string value of the Flightplan with its Flightnumber, takeoffAirport and destinationAirport
      */
-    String toString();
-    
+    String toString();    
 }

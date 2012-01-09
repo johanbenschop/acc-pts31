@@ -1,19 +1,20 @@
 package atc.interfaces;
 
 import gov.nasa.worldwind.geom.Sector;
+import java.rmi.*;
 
 /**
  *
  * @author Henk
  */
-public interface IGeoSec {
+public interface IGeoSec extends Remote {
 
     /**
      * Determines whether a GeoLocation is within the GeoSector.
      * @param location
      * @return true if GeoPosition is within the GeoSecor, false otherwise.
      */
-    boolean containsGeoLocation(IGeoLoc location);
+    boolean containsGeoLocation(IGeoLoc location) throws RemoteException;
 
     /**
      * Tests the equality of the sectors' angles. Sectors are equal if all of their corresponding angles are equal.
@@ -32,40 +33,40 @@ public interface IGeoSec {
      * @return The latitude and longitude of the sector's angular center
      * @deprecated
      */
-    IGeoLoc getCenterLocation();
+    IGeoLoc getCenterLocation() throws RemoteException;
 
     /**
      * @deprecated
      * @return
      */
-    double getDeltaLatitude();
+    double getDeltaLatitude() throws RemoteException;
 
     /**
      * @deprecated
      * @return
      */
-    double getDeltaLongitude();
+    double getDeltaLongitude() throws RemoteException;
 
-    double getMaxLatitude();
+    double getMaxLatitude() throws RemoteException;
 
-    double getMaxLongitude();
+    double getMaxLongitude() throws RemoteException;
 
-    double getMinLatitude();
+    double getMinLatitude() throws RemoteException;
 
-    double getMinLongitude();
+    double getMinLongitude() throws RemoteException;
 
     /**
      *
      * @return
      * @deprecated
      */
-    boolean isWithinLatLonLimits();
+    boolean isWithinLatLonLimits() throws RemoteException;
 
     /**
      * Convets this GeoSector to an Sector for World Wind.
      * @return World Wind Sector
      */
-    Sector toSector();
+    Sector toSector() throws RemoteException;
 
     /**
      * Due to minimal importance of an unit test for this method there is none.
@@ -74,6 +75,5 @@ public interface IGeoSec {
      *
      * @return A string indicating the sector's angles.
      */
-    String toString();
-    
+    String toString();    
 }

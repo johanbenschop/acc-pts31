@@ -1,31 +1,33 @@
 package atc.interfaces;
 
+import java.rmi.*;
+
 /**
  *
  * @author Henk
  */
-public interface IRunway {
+public interface IRunway extends Remote {
 
     /**
      * @param r is what the availability should become after calling this method.
      * @return Availability
      */
-    void ChangeAvailability(boolean r);
+    void ChangeAvailability(boolean r) throws RemoteException;
 
-    boolean getAvailability();
+    boolean getAvailability() throws RemoteException;
 
-    int getDirection();
+    int getDirection() throws RemoteException;
 
     /**
      *
      * @return
      * @deprecated
      */
-    int getLength();
+    int getLength() throws RemoteException;
 
     /**
      * Getters
      */
-    IGeoLoc getLocation();
+    IGeoLoc getLocation() throws RemoteException;
     
 }
