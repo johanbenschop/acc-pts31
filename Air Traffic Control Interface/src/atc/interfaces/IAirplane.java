@@ -6,6 +6,8 @@ package atc.interfaces;
  */
 public abstract class IAirplane extends Thread {
 
+    public abstract void ChangeSpeed();
+    
     public abstract void Land();
     
     public abstract void TakeOff(IRunway r, double direction, double altitude, double speed);
@@ -65,7 +67,7 @@ public abstract class IAirplane extends Thread {
     public abstract void setStatus(Statusses Status);
     
     /**
-     * Enumerator of possible statusses a airplane can have
+     * Enumerator of possible statusses a airplane can have 
      */
     public enum Statusses {
         STANDINGONAIRPORT, TAKINGOFF, INFLIGHT, INLANDINGQUEUE, LANDING,
