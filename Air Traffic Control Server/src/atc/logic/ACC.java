@@ -4,6 +4,8 @@ import atc.interfaces.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import javax.swing.Timer;
 
 /**
@@ -11,7 +13,7 @@ import javax.swing.Timer;
  * 
  * @author Henk
  */
-public class ACC implements IACC {
+public class ACC extends UnicastRemoteObject implements IACC {
 
     /**************Datafields***********/
     /**
@@ -24,7 +26,7 @@ public class ACC implements IACC {
     private Logging logging;
     /**
      * the CTA over which is has control
-     */   
+     */
     private ICTA cta;
     /**
      * an arrayList of flightplans
@@ -45,7 +47,7 @@ public class ACC implements IACC {
     private IFC flightcontroller;
     private ArrayList<IFC> flightControllers;
     private ArrayList<IACC> adjacentACCList;
-    
+
     /***************Constructor**********/
     /** 
      * An ACC is made with its own unique ID linked to a Control Area (CTA).
@@ -54,7 +56,7 @@ public class ACC implements IACC {
      * 
      * @Param CTA is the Control Area over which this specific ACC has control.
      */
-    public ACC(int ID, ICTA CTA) {
+    public ACC(int ID, ICTA CTA) throws RemoteException {
         this.ID = ID;
         cta = CTA;
         fp = new ArrayList<>();
@@ -100,6 +102,7 @@ public class ACC implements IACC {
     public ArrayList<IFlightplan> getfp() {
         return fp;
     }
+
     /**
      * Method to get list of flight controllers
      * 
@@ -109,14 +112,14 @@ public class ACC implements IACC {
     public ArrayList<IFC> getfc() {
         return flightControllers;
     }
-    
-        /**
+
+    /**
      * Method to get the FlightController 
      * 
      * @return FlightController
      */
     @Override
-    public IFC GetFlightController(int FlightControllerID) {
+    public IFC GetFlightController(int FlightControllerID) throws RemoteException {
         for (IFC a : flightControllers) {
             if (a.getID() == FlightControllerID) {
                 flightcontroller = a;
@@ -124,13 +127,14 @@ public class ACC implements IACC {
         }
         return flightcontroller;
     }
+
     /**
      * Method to get the Airplane Factory
      * 
      * @return airplane factory
      */
     @Override
-    public IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) {
+    public IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) throws RemoteException {
         for (IAirplaneFactory a : airplaneFactoryList) {
             if (a.getID() == AirplaneFactoryID) {
                 airplaneFactory = a;
@@ -148,7 +152,7 @@ public class ACC implements IACC {
     public ListIterator<IAirplaneFactory> getAvailableAirplanes() {
         return airplaneFactoryList.listIterator();
     }
-    
+
     @Override
     public ListIterator<IFC> getFlightControllers() {
         return flightControllers.listIterator();
@@ -161,15 +165,15 @@ public class ACC implements IACC {
     @Override
     public void loadAirplaneFactoryList() throws FileNotFoundException, IOException {
         FileInputStream fstream2 = new FileInputStream("AvailableAirplanes.dat");
-        
+
         DataInputStream in2 = new DataInputStream(fstream2);
         BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-        
+
         String strline2;
         while ((strline2 = br2.readLine()) != null) {
             try {
                 String[] props2 = strline2.split(",");
-                
+
                 int MaxSpeed = Integer.parseInt(props2[0]);
                 int MinSpeed = Integer.parseInt(props2[1]);
                 int Weight = Integer.parseInt(props2[2]);
@@ -180,9 +184,9 @@ public class ACC implements IACC {
                 int PlaneLength = Integer.parseInt(props2[7]);
                 int MaxFuel = Integer.parseInt(props2[8]);
                 int FuelUsage = Integer.parseInt(props2[9]);
-                
+
                 IAirplaneFactory airplaneFactory = new AirplaneFactory(MaxSpeed, MinSpeed, Weight, Type, Manufacturer, PlaneHeight, PlanWidth, PlaneLength, MaxFuel, FuelUsage);
-                
+
                 airplaneFactoryList.add(airplaneFactory);
             } catch (NumberFormatException | InputMismatchException e) {
                 System.out.println("Corrupt data line...");
@@ -205,14 +209,13 @@ public class ACC implements IACC {
      * @return false is returned if the speed was above/below the planes maximum/minimum speed.
      */
     @Override
-    public void ChangeSpeed(double speed, IAirplane a) throws AssignmentException {
+    public void ChangeSpeed(double speed, IAirplane a) throws AssignmentException, RemoteException {
         if (speed >= a.getMinSpeed() && speed <= a.getMaxSpeed()) {
             a.setAimedSpeed(speed);
-            try{
+            try {
                 String command = "change speed to: " + speed;
-            logging.WriteCommand("sab", command);
-            }
-            catch(IOException e){
+                logging.WriteCommand("sab", command);
+            } catch (IOException e) {
                 System.out.println("logging failed");
             }
             cta.resetCollision(a);
@@ -240,14 +243,13 @@ public class ACC implements IACC {
      * @return false is when it was not possible to set the new direction.
      */
     @Override
-    public void ChangeDirection(double direction, IAirplane a) throws AssignmentException {
+    public void ChangeDirection(double direction, IAirplane a) throws AssignmentException, RemoteException {
         if (direction >= -360 && direction <= 360) {
             a.setAimedDirection(direction);
-            try{
+            try {
                 String command = "change direction to: " + direction;
-            logging.WriteCommand("sab", command);
-            }
-            catch(IOException e){
+                logging.WriteCommand("sab", command);
+            } catch (IOException e) {
                 System.out.println("logging failed");
             }
             cta.resetCollision(a);
@@ -274,7 +276,7 @@ public class ACC implements IACC {
      * @return false if the change was incorrect and could not be made.
      */
     @Override
-    public void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException {
+    public void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException, RemoteException {
         if (flightlevel == 1) {
             a.setAimedAltitude(1000);
             cta.resetCollision(a);
@@ -287,13 +289,12 @@ public class ACC implements IACC {
         } else {
             throw new AssignmentException();
         }
-        try{
-                String command = "change flightlevel to: " + flightlevel;
+        try {
+            String command = "change flightlevel to: " + flightlevel;
             logging.WriteCommand("sab", command);
-            }
-            catch(IOException e){
-                System.out.println("logging failed");
-            }
+        } catch (IOException e) {
+            System.out.println("logging failed");
+        }
     }
 
     /**
@@ -311,7 +312,7 @@ public class ACC implements IACC {
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
     @Override
-    public void LandFlight(IFlightplan fp) throws AssignmentException {
+    public void LandFlight(IFlightplan fp) throws AssignmentException, RemoteException {
 //        Runway runway = fp.getDestinationAirport().getRunway();
 //        if (runway.getAvailability() == true) {
 //            runway.ChangeAvailability(false);
@@ -329,7 +330,7 @@ public class ACC implements IACC {
      * @param a is the airplane that has to start circling the airport.
      */
     @Override
-    public void CircleAirplane(IAirplane a) {
+    public void CircleAirplane(IAirplane a) throws RemoteException {
         a.setStatus(Airplane.Statusses.INLANDINGQUEUE);
     }
 
@@ -349,17 +350,17 @@ public class ACC implements IACC {
      * @param flightnumber is the flightnumber of the airplane
      */
     @Override
-    public void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure) {
+    public void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure) throws RemoteException {
         Airplane ap = new Airplane(a.getMaxSpeed(), a.getMinSpeed(), a.getWeight(), a.getType(), a.getManufacturer(),
                 a.getPlaneHeight(), a.getPlaneWidth(), a.getPlaneLength(), a.getMaxFuel(), a.getFuelUsage(),
-                0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);        
+                0, 0, 300, 0, start.getLocation().getNewGeoLocation(), end.getLocation().getNewGeoLocation(), flightnumber);
         IFlightplan flightplan = new Flightplan(end, start, flightnumber, departure, arrival, ap);
         fp.add(flightplan);
         flightnumber++;
         cta.addAirplane(ap);
         new Thread(ap).start();
-        addRunwayTimer(start, ap);        
-        assignFlightToController(flightplan);        
+        addRunwayTimer(start, ap);
+        assignFlightToController(flightplan);
     }
 
     /**
@@ -367,7 +368,7 @@ public class ACC implements IACC {
      * @param flightplan 
      */
     @Override
-    public void assignFlightToController(IFlightplan flightplan) {
+    public void assignFlightToController(IFlightplan flightplan) throws RemoteException {
         // Assign an controller to an airplane.
         IFC assignedController = null;
         for (IFC flightController : flightControllers) {
@@ -375,50 +376,49 @@ public class ACC implements IACC {
                 if (flightController.getNumberAssignedFlights() < assignedController.getNumberAssignedFlights()) {
                     assignedController = flightController;
                 }
-            }
-            else {
+            } else {
                 assignedController = flightController;
             }
         }
         assignedController.assignFlight(flightplan);
     }
-    
+
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
      * @deprecated 
      */
     @Override
-    public IFC addFlightController() {
+    public IFC addFlightController() throws RemoteException {
         IFC controller = new FlightController();
         flightControllers.add(controller);
         return controller;
     }
-    
+
     /**
      * Creates and adds a new FlightController and add it to the list of controller.
      * @return FlightController
      */
     @Override
-    public void addFlightController(IFC flightController) {
+    public void addFlightController(IFC flightController) throws RemoteException {
         flightControllers.add(flightController);
     }
-    
+
     /**
      * Unassign the flight from the controller.
      * @param flightplan 
      */
     @Override
-    public void unassignFlightFromController(IFlightplan flightplan) {
+    public void unassignFlightFromController(IFlightplan flightplan) throws RemoteException {
         flightplan.getAssignedController().unassignFlight(flightplan);
     }
-    
+
     @Override
-    public void removeFlightController(IFC flightController) {
+    public void removeFlightController(IFC flightController) throws RemoteException {
         flightControllers.remove(flightController);
         flightController.unassignAllFlights();
     }
-    
+
     /**
      * Method to get all Flightplans
      * 
@@ -428,22 +428,26 @@ public class ACC implements IACC {
     public ListIterator<IFlightplan> getFlightplans() {
         return fp.listIterator();
     }
-    
-    private void addRunwayTimer(final IAirport airport, final IAirplane airplane) {
+
+    private void addRunwayTimer(final IAirport airport, final IAirplane airplane) throws RemoteException {
         final Timer timer = new Timer(300, null);
         timer.addActionListener(new ActionListener() {
-            
+
             public void actionPerformed(ActionEvent event) {
-                IRunway runway = airport.getRunway();
-                if (runway != null && runway.getAvailability()) {
-                    runway.ChangeAvailability(false);
-                    
-                    if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
-                        airplane.TakeOff(runway, runway.getDirection(), 0, (0.7 * airplane.getMaxSpeed()));
-                    } else if (airplane.getStatus() == Airplane.Statusses.INLANDINGQUEUE) {
-                        airplane.Land();
+                try {
+                    IRunway runway = airport.getRunway();
+                    if (runway != null && runway.getAvailability()) {
+                        runway.ChangeAvailability(false);
+
+                        if (airplane.getStatus() == Airplane.Statusses.INTAKEOFFQUEUE) {
+                            airplane.TakeOff(runway, runway.getDirection(), 0, (0.7 * airplane.getMaxSpeed()));
+                        } else if (airplane.getStatus() == Airplane.Statusses.INLANDINGQUEUE) {
+                            airplane.Land();
+                        }
+                        timer.stop();
                     }
-                    timer.stop();
+                } catch (RemoteException rex) {
+                    rex.printStackTrace();
                 }
             }
         });
@@ -459,22 +463,19 @@ public class ACC implements IACC {
     public ArrayList<IACC> getAdjacentACCList() {
         return adjacentACCList;
     }
-    
+
     @Override
-    public Boolean ContainsFlightplan(IFlightplan flightplan)
-    {                
-       return fp.contains(flightplan);
+    public Boolean ContainsFlightplan(IFlightplan flightplan) {
+        return fp.contains(flightplan);
     }
-    
+
     @Override
-    public void removeFlightPlan(IFlightplan flightplan)
-    {
+    public void removeFlightPlan(IFlightplan flightplan) {
         fp.remove(flightplan);
     }
-    
+
     @Override
-    public void addFlightPlan(IFlightplan flightplan)
-    {
+    public void addFlightPlan(IFlightplan flightplan) {
         fp.add(flightplan);
     }
 }
