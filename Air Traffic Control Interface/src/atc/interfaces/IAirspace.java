@@ -15,7 +15,7 @@ public interface IAirspace extends Remote{
     /**
      * Getters
      */
-    ListIterator<IACC> GetACCs() throws RemoteException;
+    ArrayList<IACC> GetACCs() throws RemoteException;
 
     /**
      * A method to get the airport with the given AirportID
