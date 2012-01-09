@@ -11,7 +11,7 @@ import java.util.Enumeration;
  *
  * @author Johan Benschop & Jeanique van der Sanden
  */
-public class FlightController implements IAirFC {
+public class FlightController implements IFC {
 
     private int ID;
     
