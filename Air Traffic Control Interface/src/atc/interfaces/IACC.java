@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public interface IACC {
      *
      * @return false is when it was not possible to set the new direction.
      */
-    void ChangeDirection(double direction, Airplane a) throws AssignmentException;
+    void ChangeDirection(double direction, IAirplane a) throws AssignmentException;
 
     /**
      * Method to change the height of an airplane. This is done by setting the
@@ -53,7 +53,7 @@ public interface IACC {
      *
      * @return false if the change was incorrect and could not be made.
      */
-    void ChangeHeight(int flightlevel, Airplane a) throws AssignmentException;
+    void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException;
 
     /**
      * Method to change the speed of the airplane. First its set to the Aimed
@@ -68,7 +68,7 @@ public interface IACC {
      *
      * @return false is returned if the speed was above/below the planes maximum/minimum speed.
      */
-    void ChangeSpeed(double speed, Airplane a) throws AssignmentException;
+    void ChangeSpeed(double speed, IAirplane a) throws AssignmentException;
 
     /**
      * Method has to be called when assignmentexception is given on the
@@ -76,9 +76,9 @@ public interface IACC {
      *
      * @param a is the airplane that has to start circling the airport.
      */
-    void CircleAirplane(Airplane a);
+    void CircleAirplane(IAirplane a);
 
-    Boolean ContainsFlightplan(Flightplan flightplan);
+    Boolean ContainsFlightplan(IFlightplan flightplan);
 
     /**
      * Method to create a flightplan
@@ -95,28 +95,28 @@ public interface IACC {
      *
      * @param flightnumber is the flightnumber of the airplane
      */
-    void CreateFlight(AirplaneFactory a, Airport start, Airport end, GregorianCalendar arrival, GregorianCalendar departure);
+    void CreateFlight(IAirplaneFactory a, IAirport start, IAirport end, GregorianCalendar arrival, GregorianCalendar departure);
 
     /**
      * Method to get the Airplane Factory
      *
      * @return airplane factory
      */
-    AirplaneFactory GetAirplaneFactory(int AirplaneFactoryID);
+    IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID);
 
     /**
      * Method to get a CTA
      *
      * @return CTA
      */
-    CTA GetCTA();
+    ICTA GetCTA();
 
     /**
      * Method to get the FlightController
      *
      * @return FlightController
      */
-    FlightController GetFlightController(int FlightControllerID);
+    IFC GetFlightController(int FlightControllerID);
 
     /**
      * Method to get ID of this ACC
@@ -139,76 +139,75 @@ public interface IACC {
      *
      * @return false is given when the assignement has not been succesfully transferred to the airplane.
      */
-    void LandFlight(Flightplan fp) throws AssignmentException;
+    void LandFlight(IFlightplan fp) throws AssignmentException;
 
     /**
      * Creates and adds a new FlightController and add it to the list of controller as well as return it.
      * @return FlightController
      * @deprecated
      */
-    FlightController addFlightController();
+    IFC addFlightController();
 
     /**
      * Creates and adds a new FlightController and add it to the list of controller.
      * @return FlightController
      */
-    void addFlightController(FlightController flightController);
+    void addFlightController(IFC flightController);
 
-    void addFlightPlan(Flightplan flightplan);
+    void addFlightPlan(IFlightplan flightplan);
 
     /**
      * Assign a controller to a flightplan based on the contollers busyness.
      * @param flightplan
      */
-    void assignFlightToController(Flightplan flightplan);
+    void assignFlightToController(IFlightplan flightplan);
 
-    ArrayList<ACC> getAdjacentACCList();
+    ArrayList<IACC> getAdjacentACCList();
 
     /**
      * Method to get all Available Airplanes
      *
      * @return list of available airplanes
      */
-    ListIterator<AirplaneFactory> getAvailableAirplanes();
+    ListIterator<IAirplaneFactory> getAvailableAirplanes();
 
-    ListIterator<FlightController> getFlightControllers();
+    ListIterator<IFC> getFlightControllers();
 
     /**
      * Method to get all Flightplans
      *
      * @return a list with all Flightplans
      */
-    ListIterator<Flightplan> getFlightplans();
+    ListIterator<IFlightplan> getFlightplans();
 
     /**
      * Method to get list of flight controllers
      *
      * @return list of flight controllers
      */
-    ArrayList<FlightController> getfc();
+    ArrayList<IFC> getfc();
 
     /**
      * Method to get list of flightplans
      *
      * @return list of flightplans
      */
-    ArrayList<Flightplan> getfp();
+    ArrayList<IFlightplan> getfp();
 
     /**
      * All airplanes in the AvailableAirplanes.dat list will be read into a list.
      */
     void loadAirplaneFactoryList() throws FileNotFoundException, IOException;
 
-    void removeFlightController(FlightController flightController);
+    void removeFlightController(IFC flightController);
 
-    void removeFlightPlan(Flightplan flightplan);
+    void removeFlightPlan(IFlightplan flightplan);
 
-    void setAdjacentACCList(ArrayList<ACC> adjacentACCList);
+    void setAdjacentACCList(ArrayList<IACC> adjacentACCList);
 
     /**
      * Unassign the flight from the controller.
      * @param flightplan
      */
-    void unassignFlightFromController(Flightplan flightplan);
-    
+    void unassignFlightFromController(IFlightplan flightplan);
 }

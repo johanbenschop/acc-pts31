@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 import java.util.Iterator;
 
@@ -16,9 +16,9 @@ public interface IFC {
      * Assigns a flightcontroller to an flighplan and adds add to a list
      * @param flightplan
      */
-    void assignFlight(Flightplan flightplan);
+    void assignFlight(IFlightplan flightplan);
 
-    Iterator<Flightplan> getFlights();
+    Iterator<IFlightplan> getFlights();
 
     int getID();
 
@@ -37,6 +37,6 @@ public interface IFC {
      * Method to unassign a flightplan from this Flightcontroller
      *
      */
-    void unassignFlight(Flightplan flightplan);
+    void unassignFlight(IFlightplan flightplan);
     
 }

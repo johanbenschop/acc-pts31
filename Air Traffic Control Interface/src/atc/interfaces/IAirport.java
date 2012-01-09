@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
 
 /**
  *
@@ -62,13 +62,13 @@ public interface IAirport {
      * Gets the location of the airport.
      * @return Location.
      */
-    GeoLocation getLocation();
+    IGeoLoc getLocation();
 
     /**
      * If a runway is free, it returns that runway
      * @return runway.
      */
-    Runway getRunway();
+    IRunway getRunway();
 
     /**
      * Gets the Timezone of the airport.

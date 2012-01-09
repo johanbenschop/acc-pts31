@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
+
+import gov.nasa.worldwind.geom.Sector;
 
 /**
  *
@@ -15,7 +17,7 @@ public interface IGeoSec {
      * @param location
      * @return true if GeoPosition is within the GeoSecor, false otherwise.
      */
-    boolean containsGeoLocation(GeoLocation location);
+    boolean containsGeoLocation(IGeoLoc location);
 
     /**
      * Tests the equality of the sectors' angles. Sectors are equal if all of their corresponding angles are equal.
@@ -34,7 +36,7 @@ public interface IGeoSec {
      * @return The latitude and longitude of the sector's angular center
      * @deprecated
      */
-    GeoLocation getCenterLocation();
+    IGeoLoc getCenterLocation();
 
     /**
      * @deprecated
@@ -55,32 +57,6 @@ public interface IGeoSec {
     double getMinLatitude();
 
     double getMinLongitude();
-
-    /**
-     * Determines whether this sector intersects another sector's range of latitude and longitude. The sector's angles
-     * are assumed to be normalized to +/- 90 degrees latitude and +/- 180 degrees longitude. The result of the
-     * operation is undefined if they are not.
-     *
-     * @param that the sector to test for intersection.
-     *
-     * @return <code>true</code> if the sectors intersect, otherwise <code>false</code>.
-     * @deprecated
-     */
-    boolean intersects(GeoSector that);
-
-    /**
-     * Determines whether the interiors of this sector and another sector intersect. The sector's angles are assumed to
-     * be normalized to +/- 90 degrees latitude and +/- 180 degrees longitude. The result of the operation is undefined
-     * if they are not.
-     *
-     * @param that the sector to test for intersection.
-     *
-     * @return <code>true</code> if the sectors' interiors intersect, otherwise <code>false</code>.
-     *
-     * @see #intersects(Sector)
-     * @deprecated
-     */
-    boolean intersectsInterior(GeoSector that);
 
     /**
      *

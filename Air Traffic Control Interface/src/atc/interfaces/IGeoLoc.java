@@ -2,7 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package atc.logic;
+package atc.interfaces;
+
+import gov.nasa.worldwind.geom.LatLon;
+import gov.nasa.worldwind.geom.Position;
 
 /**
  *
@@ -29,7 +32,7 @@ public interface IGeoLoc {
 
     double getLongitude();
 
-    GeoLocation getNewGeoLocation();
+    IGeoLoc getNewGeoLocation();
 
     /**
      * Setters
