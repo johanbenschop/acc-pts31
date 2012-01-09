@@ -238,7 +238,11 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                                    new jfSelectAirplane(null, true).setVisible(true);
+                            try {
+                                new jfSelectAirplane(null, true).setVisible(true);
+                            } catch (RemoteException ex) {
+                                ex.printStackTrace();
+                            }
                                     uiInFlight.setActive(false);
                                 }
                             });
