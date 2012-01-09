@@ -122,4 +122,14 @@ public class Demo {
 
         return "Added " + amount + " of random flights.";
     }
+    
+    public static String addFlightTurkey() throws RemoteException {
+        CommandLine.println("Adding flight: Eindhoven - Ankara");
+        IAirplaneFactory af = atc2.airspace.getCurrentACC().GetAirplaneFactory(1);
+        IAirport ap_arr = atc2.airspace.GetAirport(585);
+        IAirport ap_dest = atc2.airspace.GetAirport(1684);
+        GregorianCalendar cal = new GregorianCalendar();
+        atc2.airspace.getCurrentACC().CreateFlight(af, ap_arr, ap_dest, cal, cal);
+        return "Adding stuff....";
+    }
 }
