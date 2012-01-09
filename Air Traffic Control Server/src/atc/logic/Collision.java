@@ -1,6 +1,7 @@
 package atc.logic;
 
 import atc.interfaces.IAirplane;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -16,7 +17,7 @@ public class Collision {
         this.crashobject = crashobject;
     }
 
-    public void colldetect() {
+    public void colldetect() throws RemoteException {
         //Check if airplane are within 50km of each other to see if making a collision detection is worhtwhile.
         if (!target.getStatus().equals(Airplane.Statusses.TAKINGOFF) || !crashobject.getStatus().equals(Airplane.Statusses.TAKINGOFF)) {
         double dist = distFrom(Math.toRadians(target.getLocation().getLatitude()), Math.toRadians(target.getLocation().getLongitude()), Math.toRadians(crashobject.getLocation().getLatitude()), Math.toRadians(crashobject.getLocation().getLongitude()));

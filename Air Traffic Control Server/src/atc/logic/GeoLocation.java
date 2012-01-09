@@ -3,6 +3,7 @@ package atc.logic;
 import atc.interfaces.IGeoLoc;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
+import java.rmi.RemoteException;
 
 /**
  * The coordinates on WorldWind of an object
@@ -98,7 +99,7 @@ public class GeoLocation implements IGeoLoc {
      * @return A double value direction of Airport B from Airport A.
      * @deprecated 
      */
-    public static double CalcDirection(Airport a, Airport b) {
+    public static double CalcDirection(Airport a, Airport b) throws RemoteException {
         IGeoLoc locationA = new GeoLocation(0, 0, 0);
         IGeoLoc locationB = new GeoLocation(0, 0, 0);
         locationA = a.getLocation();
@@ -120,7 +121,7 @@ public class GeoLocation implements IGeoLoc {
      * @return A double value direction of GeoLocation B from GeoLocation A.
      */    
     @Override
-    public  double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) {
+    public  double CalcDirection(IGeoLoc locationA, IGeoLoc locationB) throws RemoteException {
         double dLat = Math.toRadians(locationB.getLatitude() - locationA.getLatitude());
         double dLon = Math.toRadians(locationB.getLongitude() - locationA.getLongitude());
         double lat1 = Math.toRadians(locationA.getLatitude());

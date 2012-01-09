@@ -1,7 +1,10 @@
 package atc.logic;
 
 import atc.interfaces.*;
+import java.rmi.RemoteException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CTA implements ICTA {
 
@@ -48,8 +51,12 @@ public class CTA implements ICTA {
             if (!collision.isEmpty()) {
                 for (Collision coll : collision) {
                     coll.colldetect();
-                    if (coll.getTarget().getStatus().equals(Airplane.Statusses.CRASHED) || coll.getCrashobject().getStatus().equals(Airplane.Statusses.CRASHED)) {
-                        temp = coll;
+                    try {
+                        if (coll.getTarget().getStatus().equals(Airplane.Statusses.CRASHED) || coll.getCrashobject().getStatus().equals(Airplane.Statusses.CRASHED)) {
+                            temp = coll;
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(CTA.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -66,7 +73,7 @@ public class CTA implements ICTA {
      * @param Width is the width of the CTA
      * @param Length is the length of the CTA
      */
-    public CTA(IGeoSec location, ArrayList<IAirport> airportlist) {
+    public CTA(IGeoSec location, ArrayList<IAirport> airportlist) throws RemoteException {
         this.sector = location;
         CreateGreaterSector();
         airplaneList = new ArrayList<>();
@@ -90,7 +97,7 @@ public class CTA implements ICTA {
      * @return
      */
     @Override
-    public IAirport GetAirport(int AirportID) {
+    public IAirport GetAirport(int AirportID) throws RemoteException {
         for (IAirport a : airportList) {
             if (a.getAirportID() == AirportID) {
                 airport = a;
@@ -106,7 +113,7 @@ public class CTA implements ICTA {
      * @deprecated 
      */
     @Override
-    public IAirplane GetAirplane(int AirplaneID) {                   //         TODO moet hier een unittest voor? nee toch?                              
+    public IAirplane GetAirplane(int AirplaneID) throws RemoteException {                   //         TODO moet hier een unittest voor? nee toch?                              
         for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneID) {
                 airplane = a;
@@ -163,7 +170,7 @@ public class CTA implements ICTA {
      * @return
      */
     @Override
-    public void deleteAirplane(int AirplaneNumber) {
+    public void deleteAirplane(int AirplaneNumber) throws RemoteException {
         for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneNumber) {
                 airplaneList.remove(a);
@@ -176,7 +183,7 @@ public class CTA implements ICTA {
         airplaneList.remove((Airplane)airplane);
     }
 
-    public void CreateGreaterSector() {
+    public void CreateGreaterSector() throws RemoteException {
         double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
         double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
         double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
@@ -185,7 +192,7 @@ public class CTA implements ICTA {
     }
     
     @Override
-    public void resetCollision(IAirplane airplane) {
+    public void resetCollision(IAirplane airplane) throws RemoteException {
         for (Collision coll : collision) {
             if (coll.getTarget() == (Airplane)airplane || coll.getCrashobject() == (Airplane)airplane) {
                 coll.getCrashobject().setStatus(Airplane.Statusses.INFLIGHT);

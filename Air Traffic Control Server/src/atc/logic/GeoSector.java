@@ -3,6 +3,7 @@ package atc.logic;
 import atc.interfaces.IGeoLoc;
 import atc.interfaces.IGeoSec;
 import gov.nasa.worldwind.geom.Sector;
+import java.rmi.RemoteException;
 
 /**
  * Thanks to NASA for providing their Secor class as a basis for our GeoSector
@@ -218,7 +219,7 @@ public class GeoSector implements IGeoSec {
      * @return true if GeoPosition is within the GeoSecor, false otherwise.
      */
     @Override
-    public boolean containsGeoLocation(IGeoLoc location){
+    public boolean containsGeoLocation(IGeoLoc location) throws RemoteException{
         return (location.getLatitude() >= minLatitude
                 && location.getLatitude() <= maxLatitude
                 && location.getLongitude() >= minLongitude
