@@ -1,27 +1,16 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * jfSearchAirport.java
  *
  * Created on 6-okt-2011, 12:44:26
  */
 package atc.gui;
 
+import atc.interfaces.*;
 import atc.logic.*;
-import java.awt.Color;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Vector;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
+import java.util.*;
+import javax.swing.table.*;
 
 /**
  *
@@ -29,9 +18,9 @@ import javax.swing.table.TableModel;
  */
 public class jfSelectAirport extends javax.swing.JDialog {
 
-    private Airport airport;
-    private ListIterator<Airport> airports;
-    private ListIterator<Airport> airports2;
+    private IAirport airport;
+    private ListIterator<IAirport> airports;
+    private ListIterator<IAirport> airports2;
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
@@ -322,7 +311,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         createAirportList();
 
         while (airports.hasNext()) {
-            Airport iter = airports.next();
+            IAirport iter = airports.next();
 
             // Filter results bases on Airport ID
             try {
@@ -414,7 +403,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
         fillTable();
     }//GEN-LAST:event_tfSearchKeyTyped
 
-    public void fillVector(Airport iter) {
+    public void fillVector(IAirport iter) {
         Vector<String> row = new Vector<>();
         row.addElement(String.valueOf(iter.getAirportID()));
         row.addElement(iter.getAirportName());
@@ -440,7 +429,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
      * Gets the value of this dialog.
      * @return Airport
      */
-    Airport getValue() {
+    IAirport getValue() {
         setVisible(true);
         if (!closed) {
             int id = Integer.parseInt((String) data.get(jTable.getSelectedRow()).get(0));
@@ -450,9 +439,9 @@ public class jfSelectAirport extends javax.swing.JDialog {
         return null;
     }
 
-    private ListIterator<Airport> createAirportList() {
+    private ListIterator<IAirport> createAirportList() {
         if (atc2.airspace.getOnlyOneACC() == true) {
-            airports2 = atc2.airspace.getAirportCTA(atc2.airspace.getCurrentACC().GetCTA().sector).listIterator();
+            airports2 = atc2.airspace.getAirportCTA(atc2.airspace.getCurrentACC().GetCTA().getSector()).listIterator();
             airports = airports2;
         } else if (atc2.airspace.getOnlyOneACC() == false) {
             return airports;

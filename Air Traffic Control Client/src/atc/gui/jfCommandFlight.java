@@ -10,9 +10,8 @@
  */
 package atc.gui;
 
-import atc.logic.Airplane.Statusses;
-import atc.logic.AssignmentException;
-import atc.logic.Flightplan;
+import atc.interfaces.IAirplane.Statusses;
+import atc.interfaces.*;
 import atc.logic.GeoLocation;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,7 @@ import javax.swing.JOptionPane;
  */
 public class jfCommandFlight extends javax.swing.JDialog {
 
-    private Flightplan flightplan;
+    private IFlightplan flightplan;
     private final Timer timer;
     private final DecimalFormat DF;
 
@@ -65,7 +64,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         timer.start();
     }
 
-    public void setFlightplan(Flightplan flightplan) {
+    public void setFlightplan(IFlightplan flightplan) {
         this.flightplan = flightplan;
         
         // Static

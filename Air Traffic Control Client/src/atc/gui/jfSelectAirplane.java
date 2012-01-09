@@ -5,15 +5,12 @@
  */
 package atc.gui;
 
-import atc.logic.AirplaneFactory;
-import atc.logic.Airspace;
+import atc.interfaces.*;
+import atc.logic.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import java.util.*;
+import javax.swing.table.*;
 
 /**
  *
@@ -21,12 +18,12 @@ import javax.swing.table.TableModel;
  */
 public class jfSelectAirplane extends javax.swing.JDialog {
 
-    private AirplaneFactory airplane;
-    private ListIterator<AirplaneFactory> airplanes;
+    private IAirplaneFactory airplane;
+    private ListIterator<IAirplaneFactory> airplanes;
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
-    private ArrayList<AirplaneFactory> retAirplanes;
+    private ArrayList<IAirplaneFactory> retAirplanes;
 
     /** Creates new form jfSelectAirplane */
     public jfSelectAirplane(java.awt.Frame parent, boolean modal) {
@@ -235,7 +232,7 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
     search();
 }//GEN-LAST:event_tfManafacturerKeyReleased
 
-    public void fillVector(AirplaneFactory iter) {
+    public void fillVector(IAirplaneFactory iter) {
         Vector<String> row = new Vector<>();
         row.addElement(iter.getType());
         row.addElement(iter.getManufacturer());
@@ -255,7 +252,7 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
      * Get the return value of this dialog.
      * @return AirplaneFactory
      */
-    public AirplaneFactory getValue() {
+    public IAirplaneFactory getValue() {
         setVisible(true);
         if (!closed) {
             int id = jTable.getSelectedRow();
@@ -317,7 +314,7 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
     retAirplanes.clear();
     
     while (airplanes.hasNext()) {
-        AirplaneFactory iter = airplanes.next();
+        IAirplaneFactory iter = airplanes.next();
         
         if(!tfType.getText().equals("") && tfManafacturer.getText().equals(""))
         {

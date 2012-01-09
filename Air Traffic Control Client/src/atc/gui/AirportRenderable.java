@@ -1,5 +1,6 @@
 package atc.gui;
 
+import atc.interfaces.*;
 import atc.logic.Airport;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.render.*;
@@ -15,9 +16,9 @@ import javax.media.opengl.GL;
  */
 public class AirportRenderable extends GlobeAnnotation {
 
-    public Airport airport;
+    public IAirport airport;
 
-    public AirportRenderable(Airport airport) {
+    public AirportRenderable(IAirport airport) {
         super("", airport.getLocation().toPosition());
         this.airport = airport;
 

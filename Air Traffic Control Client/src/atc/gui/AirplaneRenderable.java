@@ -1,28 +1,16 @@
 package atc.gui;
 
-import atc.logic.Airplane;
-import atc.logic.Flightplan;
-import atc.logic.GeoLocation;
-import atc.logic.GeoSector;
+import atc.interfaces.*;
+import atc.logic.*;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
-import gov.nasa.worldwind.render.GlobeAnnotation;
-import gov.nasa.worldwind.render.SurfacePolyline;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import gov.nasa.worldwind.render.*;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.awt.image.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 
@@ -32,16 +20,16 @@ import javax.imageio.ImageIO;
  */
 public class AirplaneRenderable extends GlobeAnnotation {
 
-    private final Airplane airplane;
+    private final IAirplane airplane;
     private final static Timer locationUpdateTimer = new Timer();
-    private final Flightplan flightplan;
+    private final IFlightplan flightplan;
     private BufferedImage originalImage;
     private GlobeAnnotation tooltip;
     private boolean mayControl;
     private final SurfacePolyline path;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
-    public AirplaneRenderable(final Flightplan flightplan, SurfacePolyline path2) {
+    public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) {
         super("", flightplan.getAirplane().getLocation().toPosition());
 
         if (originalImage == null) {
@@ -86,8 +74,8 @@ public class AirplaneRenderable extends GlobeAnnotation {
 
                 double direction = airplane.getDirection();
                 Position position = airplane.getLocation().toPosition();
-                GeoSector sector = atc2.airspace.getCurrentACC().GetCTA().sector;
-                GeoSector greaterSector = atc2.airspace.getCurrentACC().GetCTA().sectorGreater;
+                IGeoSec sector = atc2.airspace.getCurrentACC().GetCTA().getSector();
+                IGeoSec greaterSector = atc2.airspace.getCurrentACC().GetCTA().getGreaterSector();
 
                 try {
                     // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
@@ -135,7 +123,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                     tooltip.moveTo(position);
                     tooltip.setText(updateText());
                 }
-                if (airplane.getStatus().equals(Airplane.Statusses.HASLANDED)) {
+                if (airplane.getStatus().equals(IAirplane.Statusses.HASLANDED)) {
                     try {
                         airplane.sleep(500);
                     } catch (InterruptedException ex) {
@@ -175,11 +163,11 @@ public class AirplaneRenderable extends GlobeAnnotation {
         }, 10, 300);
     }
 
-    public Airplane getAirplane() {
+    public IAirplane getAirplane() {
         return airplane;
     }
 
-    public Flightplan getFlightplan() {
+    public IFlightplan getFlightplan() {
         return flightplan;
     }
 
