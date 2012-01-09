@@ -266,7 +266,11 @@ public class jfSelectFlight extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelectAirplameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirplameActionPerformed
-        selectedAirplane = new jfSelectAirplane(null, true).getValue();
+        try {
+            selectedAirplane = new jfSelectAirplane(null, true).getValue();
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnSelectAirplameActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed

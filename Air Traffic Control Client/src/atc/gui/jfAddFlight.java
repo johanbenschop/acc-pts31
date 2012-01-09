@@ -307,7 +307,11 @@ public class jfAddFlight extends javax.swing.JDialog {
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
-        this.arrivalAirport = new jfSelectAirport(null, true).getValue();
+        try {
+            this.arrivalAirport = new jfSelectAirport(null, true).getValue();
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
         if (arrivalAirport != null) {
             try {
                 tfArrivalAirport.setText(arrivalAirport.ToString());
