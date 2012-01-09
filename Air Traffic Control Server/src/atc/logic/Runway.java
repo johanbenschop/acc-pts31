@@ -3,6 +3,8 @@ package atc.logic;
 import atc.interfaces.IGeoLoc;
 import atc.interfaces.IRunway;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
@@ -12,7 +14,7 @@ import java.util.prefs.Preferences;
  * 
  * @author Mateusz
  */
-public class Runway implements IRunway, Serializable {
+public class Runway extends UnicastRemoteObject implements IRunway, Serializable {
 
     /**************Datafields***********/
     /**
@@ -46,7 +48,7 @@ public class Runway implements IRunway, Serializable {
      * @param direction: The direction that the runway lies
      * @param availability: Checks if the runway is available
      */
-    public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) {
+    public Runway(double Longitude, double Latitude, double Altitude, int length, int direction, boolean availability) throws RemoteException {
         location = new GeoLocation(Longitude, Latitude, Altitude);
         this.Length = length;
         this.Direction = direction;

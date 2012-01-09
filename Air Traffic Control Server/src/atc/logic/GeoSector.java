@@ -5,12 +5,13 @@ import atc.interfaces.IGeoSec;
 import gov.nasa.worldwind.geom.Sector;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Thanks to NASA for providing their Secor class as a basis for our GeoSector
  * @author Johan Benschop
  */
-public class GeoSector implements IGeoSec, Serializable {
+public class GeoSector extends UnicastRemoteObject implements IGeoSec, Serializable {
 
     /**************Datafields***********/
     /**
@@ -46,7 +47,7 @@ public class GeoSector implements IGeoSec, Serializable {
      * @param minLongitude is the minimal longitude of the GeoSector
      * @param maxLongitude is the maximal longitude of the GeoSector
      */
-    public GeoSector(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude) {
+    public GeoSector(double minLatitude, double maxLatitude, double minLongitude, double maxLongitude) throws RemoteException {
         this.minLatitude = minLatitude;
         this.maxLatitude = maxLatitude;
         this.minLongitude = minLongitude;
@@ -72,7 +73,7 @@ public class GeoSector implements IGeoSec, Serializable {
      * @return The latitude and longitude of the sector's angular center
      * @deprecated 
      */
-    public GeoLocation getCenterLocation() {
+    public GeoLocation getCenterLocation() throws RemoteException {
         double latitude = 0.5 * (maxLatitude + minLatitude);
         double longitude = 0.5 * (maxLongitude + minLongitude);
         return new GeoLocation(latitude, longitude);
@@ -159,7 +160,6 @@ public class GeoSector implements IGeoSec, Serializable {
      *
      * @return A string indicating the sector's angles.
      */
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
@@ -187,7 +187,6 @@ public class GeoSector implements IGeoSec, Serializable {
      * @return <code>true</code> if the four corresponding angles of each sector are equal, <code>false</code>
      *         otherwise.
      */
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

@@ -24,7 +24,6 @@ public class ATCServer {
             IAirspace airspace = new Airspace();
             Context namingContext = new InitialContext();
             namingContext.bind("rmi:ATCServer", airspace);
-
         } catch (RemoteException re) {
             System.out.println("Problem with instantiation of server " + re.toString());
         }

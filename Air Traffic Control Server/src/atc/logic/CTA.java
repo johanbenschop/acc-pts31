@@ -3,11 +3,12 @@ package atc.logic;
 import atc.interfaces.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CTA implements ICTA, Serializable {
+public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
 
     /**************Datafields***********/
     /**
