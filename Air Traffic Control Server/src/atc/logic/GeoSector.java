@@ -3,13 +3,14 @@ package atc.logic;
 import atc.interfaces.IGeoLoc;
 import atc.interfaces.IGeoSec;
 import gov.nasa.worldwind.geom.Sector;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 /**
  * Thanks to NASA for providing their Secor class as a basis for our GeoSector
  * @author Johan Benschop
  */
-public class GeoSector implements IGeoSec {
+public class GeoSector implements IGeoSec, Serializable {
 
     /**************Datafields***********/
     /**

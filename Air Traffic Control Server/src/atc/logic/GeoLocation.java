@@ -3,12 +3,13 @@ package atc.logic;
 import atc.interfaces.IGeoLoc;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 /**
  * The coordinates on WorldWind of an object
  */
-public class GeoLocation implements IGeoLoc {
+public class GeoLocation implements IGeoLoc, Serializable {
 
     /**************Datafields***********/
     /**

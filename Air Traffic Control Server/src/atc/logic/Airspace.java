@@ -9,7 +9,7 @@ import java.util.*;
  *
  * @author Robbert
  */
-public class Airspace implements IAirspace {
+public class Airspace implements IAirspace, Serializable {
 
     /**************Datafields***********/
     /**
