@@ -12,10 +12,14 @@ public class Collision {
 
     private Airplane target;
     private Airplane crashobject;
+    private int AccID;
+    private Logging logging;
 
-    public Collision(Airplane target, Airplane crashobject) {
+    public Collision(Airplane target, Airplane crashobject, int AccID) {
         this.target = target;
         this.crashobject = crashobject;
+        this.AccID = AccID;
+        logging = new Logging(AccID);
     }
 
     public void colldetect() {
@@ -94,16 +98,37 @@ public class Collision {
 
                 //Decide what status the airplane should be set to.
                 if (distance1 <= 100 && distance2 <= 100) {
-                    if (distance1 <= 1 || distance2 <= 1) {
+                    if ((distance1 <= 1 && target.getStatus() != Airplane.Statusses.CRASHED) || (distance2 <= 1 && target.getStatus() != Airplane.Statusses.CRASHED)) {
                         target.setStatus(Airplane.Statusses.CRASHED);
+                        
                         crashobject.setStatus(Airplane.Statusses.CRASHED);
-                    } else if (distance1 <= 5 || distance2 <= 5) {
+                        try{
+                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashed" );
+                        }
+                        catch(Exception e){
+                            System.out.println("logging failed");
+                        }
+                    } 
+                    else if ((distance1 <= 5 && target.getStatus() != Airplane.Statusses.CRASHING2)|| (distance2 <= 5 && target.getStatus() != Airplane.Statusses.CRASHING2)) {
                         target.setStatus(Airplane.Statusses.CRASHING2);
                         crashobject.setStatus(Airplane.Statusses.CRASHING2);
-                    } else if (distance1 <= 10 || distance2 <= 10) {
+                        try{
+                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashing 2" );
+                        }
+                        catch(Exception e){
+                            System.out.println("logging failed");
+                        }
+                    } 
+                    else if ((distance1 <= 10 && target.getStatus() != Airplane.Statusses.CRASHING1) || (distance2 <= 10 && target.getStatus() != Airplane.Statusses.CRASHING1)) {
                         target.setStatus(Airplane.Statusses.CRASHING1);
                         crashobject.setStatus(Airplane.Statusses.CRASHING1);
-                    }
+                        try{
+                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashing 1" );
+                        }
+                        catch(Exception e){
+                            System.out.println("logging failed");
+                        }
+                    }                   
                 }
             }
         }

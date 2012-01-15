@@ -34,10 +34,13 @@ public class CTA {
      * A class used to determine the status of an airplane for possible collision danger
      */
     private ArrayList<Collision> collision;
+    
     /**
-     * logging file to write all the events that happen into a file
+     * The ID of the Acc to wich it belongs
      */
-    private Logging logging;
+    private int AccID;
+
+    
     /**
      * Timer used to calculate the collision status every xx miliseconds
      */
@@ -77,7 +80,6 @@ public class CTA {
         this.airportList = airportlist;
         timer = new Timer();
         timer.schedule(new collisionTimer(), 0, 100);
-
 //        try {
 //            loadAirportList(sector);
 //        } catch (FileNotFoundException ex) {
@@ -142,7 +144,7 @@ public class CTA {
         airplaneList.add(a);
         for (Airplane crashobject : airplaneList) {
             if (crashobject != a) {
-                collision.add(new Collision(a, crashobject));
+                collision.add(new Collision(a, crashobject, AccID));
             }
         }
     }
@@ -227,6 +229,22 @@ public class CTA {
      */
     public Airport getAirport() {
         return airport;
+    }
+    
+    /**
+     * returns the AccID
+     * @return 
+     */
+    public int getAccID() {
+        return AccID;
+    }
+
+    /**
+     * sets the AccID
+     * @param AccID 
+     */
+    public void setAccID(int AccID) {
+        this.AccID = AccID;
     }
     /**
      * Loads airports from the airports.dat file

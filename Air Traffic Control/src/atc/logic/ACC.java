@@ -57,6 +57,7 @@ public class ACC {
     public ACC(int ID, CTA CTA) {
         this.ID = ID;
         cta = CTA;
+        cta.setAccID(ID);
         fp = new ArrayList<>();
         airplaneFactoryList = new ArrayList<>();
         flightControllers = new ArrayList<>();
