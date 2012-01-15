@@ -10,7 +10,7 @@ import java.util.prefs.Preferences;
 /**
  * @author Paul
  */
-public class Airplane extends UnicastRemoteObject implements IAirplane, Serializable {
+public class Airplane extends UnicastRemoteObject implements IAirplane, Serializable, Runnable {
 
     /**************Datafields***********/
     /**

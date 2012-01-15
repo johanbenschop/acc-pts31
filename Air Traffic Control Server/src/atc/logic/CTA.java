@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +45,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     /**
      * Timer used to calculate the collision status every xx miliseconds
      */
+    ExecutorService pool;
     
     private Timer timer;
 
@@ -87,6 +90,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         this.airportList = airportlist;
         timer = new Timer();
         timer.schedule(new collisionTimer(), 0, 100);
+        pool = Executors.newCachedThreadPool();
 
 //        try {
 //            loadAirportList(sector);
@@ -154,6 +158,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     @Override
     public void addAirplane(IAirplane a) {
         airplaneList.add(a);
+        pool.submit(a);
         for (IAirplane crashobject : airplaneList) {
             if (crashobject != a) {
                 collision.add(new Collision(a, crashobject));
