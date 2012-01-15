@@ -67,11 +67,11 @@ public class FlightController implements IFC, Serializable {
             Context namingContext = new InitialContext();
 
             System.out.print("RMI registry bindings: ");
-            Enumeration<NameClassPair> e = namingContext.list("rmi://145.93.232.92");//subject to change the IP of the server, currently IP of Henk's laptop but yeah they change.
+            Enumeration<NameClassPair> e = namingContext.list("rmi://localhost");//subject to change the IP of the server, currently IP of Henk's laptop but yeah they change.
             while (e.hasMoreElements()) {
                 System.out.println(e.nextElement().getName());
             }
-            String url = "rmi://145.93.232.92/ATCServer";
+            String url = "rmi://localhost/ATCServer";
             System.out.println(namingContext.lookup(url).toString());
             iAirspace = (IAirspace) namingContext.lookup(url);
             System.out.println("Loaded airspace");
