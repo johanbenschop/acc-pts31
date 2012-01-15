@@ -3,6 +3,7 @@ package atc.logic;
 import atc.interfaces.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.naming.*;
@@ -15,19 +16,45 @@ import java.util.Enumeration;
 public class FlightController implements IFC, Serializable {
 
     private int ID;
-    
     private IAirspace iAirspace;
-   
-    
     /**
      * The last ID that was given to a flightcontroller (+1 = next free ID) 
+     * Note method wont work anymore because its on the client side abd each
+     * client will start at 1 so has to be smth saved at the server. 
      */
     private static int lastID;
-    
     /**
-     * Arraylist of lightplans assigned to the flightcontroller
+     * Arraylist of flightplans assigned to the flightcontroller
      */
     private ArrayList<IFlightplan> flights;
+    private ArrayList<IAirplane> airplane;
+
+    public class AirplaneListener extends UnicastRemoteObject implements RemoteListener, Serializable {
+
+        public AirplaneListener() throws RemoteException {
+        }
+
+        /**
+         * Method to send out the new airplane locations to the client. Something
+         * to check do we want to extract the airplanes from the flightplans
+         * in that case each controller will need all flightplans or are we just
+         * gonne send a list of all airplanes seperatly.
+         * @param ap list of airplanes to extract there location from
+         */
+        @Override
+        public void newAirplaneLocation(ArrayList<IAirplane> ap) throws RemoteException {
+            airplane = ap;
+        }
+        
+        /**
+         * Method to send a new flightplan out
+         * @param fp flightplan that has to be added to the flights under control of this flightcontroller. 
+         */
+        @Override
+        public void newFlightplan(IFlightplan fp) throws RemoteException {
+                flights.add(fp);
+        }
+    }
 
     /***************Constructor**********/
     /**
@@ -53,13 +80,13 @@ public class FlightController implements IFC, Serializable {
         }
         ID = lastID++;
         flights = new ArrayList<>();
+        airplane = new ArrayList<>();
     }
-    
-    public IAirspace getAirspace(){
+
+    public IAirspace getAirspace() {
         return iAirspace;
     }
 
-    
     /**
      * Assigns a flightcontroller to an flighplan and adds add to a list
      * @param flightplan 
@@ -68,7 +95,7 @@ public class FlightController implements IFC, Serializable {
     public void assignFlight(IFlightplan flightplan) throws RemoteException {
         if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
             flights.add(flightplan);
-            flightplan.setAssignedController((IFC)this);
+            flightplan.setAssignedController((IFC) this);
         }
     }
 
