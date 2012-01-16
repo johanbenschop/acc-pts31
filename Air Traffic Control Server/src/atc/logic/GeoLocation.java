@@ -81,19 +81,19 @@ public class GeoLocation extends UnicastRemoteObject implements IGeoLoc, Seriali
      * @return A LatLon value in degrees.
      * @deprecated 
      */
-    @Override
-    public LatLon toLatLon() {
-        return LatLon.fromDegrees(Latitude, Longitude);
-    }
+//    @Override
+//    public LatLon toLatLon() {
+//        return LatLon.fromDegrees(Latitude, Longitude);
+//    }
 
     /**
      *Converts the geolocation to the location used in WWJ. 
      * @return position.
      */
-    @Override
-    public Position toPosition() {
-        return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
-    }
+//    @Override
+//    public Position toPosition() {
+//        return Position.fromDegrees(Latitude, Longitude, (double) Altitude);
+//    }
 
     /**
      * Method to return a double value of the direction calculated between Airport a and Airport b.
