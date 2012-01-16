@@ -4,7 +4,7 @@
  */
 package atc.logic;
 
-import atc.interfaces.IAirplane;
+import atc.interfaces.IFlightplan;
 import atc.interfaces.RemoteListener;
 import atc.interfaces.RemotePublisher;
 import java.rmi.RemoteException;
@@ -24,10 +24,10 @@ public class Publisher extends UnicastRemoteObject implements RemotePublisher {
         listeners = new ArrayList<>();
     }
     
-    public void publishAirplane(ArrayList<IAirplane> ap) throws RemoteException {
+    public void publishAirplane(ArrayList<IFlightplan> fp) throws RemoteException {
         synchronized (lockListener) {
             for (RemoteListener listener : listeners) {
-                listener.newAirplaneLocation(ap);
+                listener.newAirplaneLocation(fp);
             }
         }
     }

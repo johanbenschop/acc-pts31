@@ -184,6 +184,7 @@ public class Airplane extends UnicastRemoteObject implements IAirplane, Serializ
     public void run() {
         double SIM_SPEED = prefs.getDouble("SIM_SPEED", 1);
         try {
+            System.out.println("hello");
             Thread.sleep(1000); // I need this to let the plane leave...wierd...
         } catch (InterruptedException ex) {
             ex.printStackTrace();

@@ -67,8 +67,8 @@ public class Flightplan extends UnicastRemoteObject implements IFlightplan, Seri
      * 
      * @return A string value of the Flightplan with its Flightnumber, takeoffAirport and destinationAirport
      */
-    @Override
-    public String toString() {
+//    @Override
+    public String ToString() {
         try {
             return "[" + Flightnumber + "] " + takeoffAirport.getIATA_FAA() + "- " + destinationAirport.getIATA_FAA();
         } catch (RemoteException ex) {
