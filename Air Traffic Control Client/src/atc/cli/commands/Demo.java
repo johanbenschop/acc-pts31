@@ -98,7 +98,7 @@ public class Demo {
         // We put the airport ID's in an ArrayList so we can get the airport
         // randomly, since not all airports might be availeble and an iterator
         // can not get a random index, only next, next, next, hence the name iterator.
-        for (Iterator<IAirport> it = atc2.airspace.getCurrentACC().GetCTA().GetAirports(); it.hasNext();) {
+        for (Iterator<IAirport> it = atc2.airspace.getCurrentACC().GetCTA().GetAirports().iterator(); it.hasNext();) {
             airportIDs.add(it.next().getAirportID());
         }
 
