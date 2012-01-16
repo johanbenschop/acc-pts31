@@ -28,7 +28,7 @@ public interface ICTA extends Remote{
      * Turns the airport list into a Iterator
      * @return Iterator airportList
      */
-    ListIterator<IAirport> GetAirports() throws RemoteException;
+    ArrayList<IAirport> GetAirports() throws RemoteException;
 
     /**
      * Adds a airplane to the airplaneList
