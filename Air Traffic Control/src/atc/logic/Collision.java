@@ -103,7 +103,7 @@ public class Collision {
                         
                         crashobject.setStatus(Airplane.Statusses.CRASHED);
                         try{
-                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashed" );
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashed" );
                         }
                         catch(Exception e){
                             System.out.println("logging failed");
@@ -113,7 +113,7 @@ public class Collision {
                         target.setStatus(Airplane.Statusses.CRASHING2);
                         crashobject.setStatus(Airplane.Statusses.CRASHING2);
                         try{
-                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashing 2" );
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 2" );
                         }
                         catch(Exception e){
                             System.out.println("logging failed");
@@ -123,7 +123,7 @@ public class Collision {
                         target.setStatus(Airplane.Statusses.CRASHING1);
                         crashobject.setStatus(Airplane.Statusses.CRASHING1);
                         try{
-                        logging.WriteCollision(target.getId(), crashobject.getId(), "sab", "crashing 1" );
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 1" );
                         }
                         catch(Exception e){
                             System.out.println("logging failed");
