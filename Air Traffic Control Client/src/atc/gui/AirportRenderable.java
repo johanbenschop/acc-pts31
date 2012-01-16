@@ -19,8 +19,10 @@ public class AirportRenderable extends GlobeAnnotation {
     public IAirport airport;
 
     public AirportRenderable(IAirport airport) throws RemoteException {
-        super("", new Position(Angle.fromDegrees(airport.getLocation().getLatitude()),
-                        Angle.fromDegrees(airport.getLocation().getLongitude()), airport.getLocation().getAltitude()));
+//        super("", new Position(Angle.fromDegrees(airport.getLocation().getLatitude()),
+//                        Angle.fromDegrees(airport.getLocation().getLongitude()), airport.getLocation().getAltitude()));
+                super("", Position.fromDegrees(airport.getLocation().getLatitude(), airport.getLocation().getLongitude(), airport.getLocation().getAltitude()));
+        
         this.airport = airport;
 
         this.getAttributes().setLeader(AVKey.SHAPE_NONE);

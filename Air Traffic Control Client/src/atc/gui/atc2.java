@@ -35,7 +35,7 @@ public final class atc2 extends atc {
     //haal Airspace ergens anders vandaan...
 
     public static IAirspace airspace;
-    public static FlightController FC;
+    public static FlightControllerIF FC;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public static class AppFrame extends atc.AppFrame {
@@ -56,7 +56,7 @@ public final class atc2 extends atc {
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
-        private static FlightController flightController;
+     //   private static FlightControllerIF flightController;
         private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
@@ -184,8 +184,9 @@ public final class atc2 extends atc {
                                         airportLayer.removeAllRenderables();
                                         airplaneLayer.removeAllRenderables();
                                         airplaneLineLayer.removeAllRenderables();
-                                        airspace.getCurrentACC().removeFlightController((IFC)flightController);
+                                        airspace.getCurrentACC().removeFlightController((IFC)FC);
                                         airspace.setCurrentACC(null);
+                                        FC.setChosenACC(null);
                                         airspacesLayer.setEnabled(true);
                                     } catch (RemoteException rex) {
                                         rex.printStackTrace();
@@ -335,11 +336,11 @@ public final class atc2 extends atc {
             this.tooltipAnnotation.getAttributes().setImageScale(.4);
             this.tooltipAnnotation.getAttributes().setVisible(false);
             this.tooltipAnnotation.setAlwaysOnTop(true);
-            try {
-                flightController = new FlightController();
-            } catch (RemoteException rex) {
-                rex.printStackTrace();
-            }
+//            try {
+//                flightController = new FlightControllerIF();
+//            } catch (RemoteException rex) {
+//                rex.printStackTrace();
+//            }
         }
 
         /**
@@ -419,8 +420,8 @@ public final class atc2 extends atc {
          * Static method to get the current flightCntroller object.
          * @return 
          */
-        public static FlightController getFlightController() {
-            return flightController;
+        public static FlightControllerIF getFlightController() {
+            return FC;
         }
 
         /**
@@ -509,21 +510,22 @@ public final class atc2 extends atc {
             SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
                         acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
             ShapeAttributes attributesSector = new BasicShapeAttributes();
-            attributesSector.setOutlineMaterial(Material.RED);
+            attributesSector.setOutlineMaterial(Material.PINK);
             attributesSector.setInteriorOpacity(0);
-            attributesSector.setOutlineOpacity(0.7);
+            attributesSector.setOutlineOpacity(0.8);
             attributesSector.setOutlineWidth(3);
             attributesSector.setEnableAntialiasing(true);
             surfaceSector.setAttributes(attributesSector);
             surfaceSector.setPathType(AVKey.RHUMB_LINE);
 
             // Set the attributes for the greater surfaceSector and instanciate the objects.
-            SurfaceSector surfaceSectorGreater = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
-                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
+            IGeoSec greSec = acc.GetCTA().getGreaterSector();
+            SurfaceSector surfaceSectorGreater = new SurfaceSector(Sector.fromDegrees(greSec.getMinLatitude(), 
+                        greSec.getMaxLatitude(), greSec.getMinLongitude(), greSec.getMaxLongitude()));
             ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
-            attributesGreaterSector.setOutlineMaterial(Material.GREEN);
+            attributesGreaterSector.setOutlineMaterial(Material.ORANGE);
             attributesGreaterSector.setInteriorOpacity(0);
-            attributesGreaterSector.setOutlineOpacity(0.7);
+            attributesGreaterSector.setOutlineOpacity(0.8);
             attributesGreaterSector.setOutlineWidth(3);
             attributesGreaterSector.setEnableAntialiasing(true);
             surfaceSectorGreater.setAttributes(attributesGreaterSector);
@@ -534,10 +536,11 @@ public final class atc2 extends atc {
             airspaceLayer.addRenderable(surfaceSectorGreater);
 
             // Set the current ACC to the selected one.
-            airspace.setCurrentACC(acc);
+            //airspace.setCurrentACC(acc);
+            FC.setChosenACC(acc);
 
             // We register the controller to this ACC.
-            airspace.getCurrentACC().addFlightController((IFC)flightController);
+            FC.getChosenACC().addFlightController(FC.GetFlightController());
 
             // Playing the boss here. We limit the users ability to go outside of their job area.
             // We don't want any FlightControllers spending time on useless stuff.
@@ -592,8 +595,10 @@ public final class atc2 extends atc {
 
             IACC acc = airspace.getCurrentACC();
             ICTA cta = acc.GetCTA();
-            if (cta.GetAirports() != null) {
-                ListIterator<IAirport> litr = cta.GetAirports();
+            
+            ListIterator<IAirport> litr = cta.GetAirports().listIterator();
+            
+            if (litr != null) {
                 while (litr.hasNext()) {
                     IAirport airport = litr.next();
                     addAirportToLayer(airportLayer, airport);
@@ -847,7 +852,7 @@ public final class atc2 extends atc {
 
     public static void main(String[] args) {
         try {
-            FC = new FlightController();
+            FC = new FlightControllerIF();
             airspace = FC.getAirspace();
         } catch (RemoteException ex) {
             Logger.getLogger(atc2.class.getName()).log(Level.SEVERE, null, ex);

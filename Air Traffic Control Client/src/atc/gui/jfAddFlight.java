@@ -340,11 +340,12 @@ public class jfAddFlight extends javax.swing.JDialog {
                     (int) spMinutesDep.getValue(),
                     (int) spSecondsDep.getValue());
             try {
-                atc2.airspace.getCurrentACC().CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
+                atc2.FC.getChosenACC().CreateFlight(airplane, departureAirport, arrivalAirport, arrivalDate, departureDate);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Not all fields have been satisfied.");
         }
 

@@ -2,6 +2,7 @@ package atc.logic;
 
 import atc.interfaces.*;
 import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -13,22 +14,17 @@ import java.util.Enumeration;
  *
  * @author Johan Benschop & Jeanique van der Sanden
  */
-public class FlightController implements IFC, Serializable {
+public class FlightControllerIF implements IFC, Serializable {
 
     private int ID;
     private IAirspace iAirspace;
-    /**
-     * The last ID that was given to a flightcontroller (+1 = next free ID) 
-     * Note method wont work anymore because its on the client side abd each
-     * client will start at 1 so has to be smth saved at the server. 
-     */
-    private static int lastID;
-    /**
-     * Arraylist of flightplans assigned to the flightcontroller
-     */
-    private ArrayList<IFlightplan> flights;
-    private ArrayList<IAirplane> airplane;
+    private IACC acc;
+    private IFC flightController;
+    private int ACCID;
 
+    private ArrayList<IFlightplan> flights;
+
+    
     public class AirplaneListener extends UnicastRemoteObject implements RemoteListener, Serializable {
 
         public AirplaneListener() throws RemoteException {
@@ -42,8 +38,8 @@ public class FlightController implements IFC, Serializable {
          * @param ap list of airplanes to extract there location from
          */
         @Override
-        public void newAirplaneLocation(ArrayList<IAirplane> ap) throws RemoteException {
-            airplane = ap;
+        public void newAirplaneLocation(ArrayList<IFlightplan> fp) throws RemoteException {
+            flights = fp;
         }
         
         /**
@@ -62,7 +58,7 @@ public class FlightController implements IFC, Serializable {
      * an ID and creates a new Arraylist to contain flightplans
      * 
      */
-    public FlightController() throws RemoteException {
+    public FlightControllerIF() throws RemoteException {
         try {
             Context namingContext = new InitialContext();
 
@@ -78,63 +74,63 @@ public class FlightController implements IFC, Serializable {
         } catch (NamingException ex) {
             System.out.println(ex.toString());
         }
-        ID = lastID++;
-        flights = new ArrayList<>();
-        airplane = new ArrayList<>();
-    }
+        ID = iAirspace.makeNewFlightController();
+        ACCID = 0;
+        }
 
     public IAirspace getAirspace() {
         return iAirspace;
     }
 
-    /**
-     * Assigns a flightcontroller to an flighplan and adds add to a list
-     * @param flightplan 
-     */
+//    public Iterator<IFlightplan> getFlights() throws RemoteException {
+//        return flightController.getFlights().iterator();
+//    }
+    
+    public IFC GetFlightController()
+    {
+        return flightController;
+    }
+    
+    public IACC getChosenACC() {
+        return acc;
+    }
+    
+    public void setChosenACC(IACC acc) throws RemoteException {
+        this.acc = acc;
+        this.ACCID = acc.GetID();
+    }
+    
     @Override
     public void assignFlight(IFlightplan flightplan) throws RemoteException {
-        if (flightplan.getAssignedController() == null || flightplan.getAssignedController() != this) {
-            flights.add(flightplan);
-            flightplan.setAssignedController((IFC) this);
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /**
-     * Method to unassign a flightplan from this Flightcontroller
-     * 
-     */
     @Override
-    public void unassignFlight(IFlightplan flightplan) throws RemoteException {
-        flights.remove(flightplan);
-        flightplan.setAssignedController(null);
+    public ArrayList<IFlightplan> getFlights() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /**
-     * Method to unassign all flightplan from this Flightcontroller
-     */
+    @Override
+    public int getID() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getNumberAssignedFlights() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @Override
     public void unassignAllFlights() throws RemoteException {
-        for (IFlightplan flightplan : flights) {
-            flightplan.setAssignedController(null);
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void unassignFlight(IFlightplan flightplan) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     /**
-     * Gets the amount of flights from the Flightcontroller.
-     * @return 
+     * Arraylist of flightplans assigned to the flightcontroller
      */
-    @Override
-    public int getNumberAssignedFlights() {
-        return flights.size();
-    }
 
-    @Override
-    public int getID() {
-        return ID;
-    }
-
-    @Override
-    public Iterator<IFlightplan> getFlights() {
-        return flights.iterator();
-    }
 }

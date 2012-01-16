@@ -5,11 +5,12 @@
  */
 package atc.gui;
 
-import atc.interfaces.*;
+import atc.interfaces.IAirport;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.ArrayList;
 import javax.swing.table.*;
 
 /**
@@ -17,7 +18,7 @@ import javax.swing.table.*;
  * @author Johan & Mateusz
  */
 public class jfSelectAirport extends javax.swing.JDialog {
-
+    private ArrayList<IAirport> airportsList;
     private IAirport airport;
     private ListIterator<IAirport> airports;
     private ListIterator<IAirport> airports2;
@@ -29,8 +30,9 @@ public class jfSelectAirport extends javax.swing.JDialog {
     public jfSelectAirport(java.awt.Frame parent, boolean modal) throws RemoteException {
         super(parent, modal);
         initComponents();
-        airports = atc2.airspace.GetAirports();
-        airports2 = atc2.airspace.GetAirports();
+        airportsList = (ArrayList<IAirport>)atc2.airspace.GetAirports().clone();
+        airports = airportsList.listIterator();
+        airports2 = airportsList.listIterator();
         createAirportList();
 
         columnNames.addElement("Airport ID");
@@ -306,11 +308,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
         data.clear(); // Empty the data so we can get the limited results in.
-        try {
-            airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
-        } catch (RemoteException ex) {
-            ex.printStackTrace();
-        }
+            airports = airportsList.listIterator(); // we must get an new iterator, since the previus one is empty.
         airports2 = null;
         try {
             createAirportList();
