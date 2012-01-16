@@ -2,11 +2,13 @@ package atc.logic;
 
 import atc.interfaces.*;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * @author Robbert
  */
-public class AirplaneFactory implements IAirplaneFactory, Serializable {
+public class AirplaneFactory extends UnicastRemoteObject implements IAirplaneFactory, Serializable {
 
     /**************Datafields***********/
     private int Id, nr = 1;
@@ -37,7 +39,7 @@ public class AirplaneFactory implements IAirplaneFactory, Serializable {
      * @param Weight: This is they weight of the airplane.
      * @param Type: This is the type of tof fuel of the airplane
      */
-    public AirplaneFactory(int maxSpeed, int minSpeed, int weight, String type, String manufacturer, int planeHeight, int planeWidth, int planeLength, int maxFuel, int fuelUsage) {
+    public AirplaneFactory(int maxSpeed, int minSpeed, int weight, String type, String manufacturer, int planeHeight, int planeWidth, int planeLength, int maxFuel, int fuelUsage) throws RemoteException {
 
         Id = nr;
         this.MaxSpeed = maxSpeed;

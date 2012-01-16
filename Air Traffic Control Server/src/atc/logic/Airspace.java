@@ -34,6 +34,8 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
      */
     private IACC currentACC;
     private boolean onlyOneACC;
+    private ArrayList<IFC> flightcontroller;
+    private int FCLastID;
 
     /***************Constructor**********/
     /**
@@ -41,8 +43,10 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
      * 
      */
     public Airspace() throws RemoteException {
-        airportList = new ArrayList<IAirport>();
-        ACCs = new ArrayList<IACC>();
+        flightcontroller = new ArrayList<>();
+        airportList = new ArrayList<>();
+        ACCs = new ArrayList<>();
+        FCLastID = 0;
         try {
             loadAirportList();
         } catch (FileNotFoundException ex) {
@@ -61,7 +65,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
             }
             IDStart += 100;
         }
-        currentACC = ACCs.get(35);
+        currentACC = ACCs.get(50);
         System.err.println(currentACC.GetID());
         System.err.println(currentACC.GetCTA().getSector().getMaxLatitude());
 //
@@ -228,8 +232,8 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
     }
 
     @Override
-    public ListIterator<IAirport> GetAirports() {
-        return airportList.listIterator();
+    public ArrayList<IAirport> GetAirports() {
+        return airportList;
     }
 
     @Override
@@ -254,22 +258,30 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
 
     /**************Setters**************/
     @Override
-    public void setCurrentACC(IACC currentACC) {
+    public IACC setCurrentACC(IACC currentACC) {
         this.currentACC = currentACC;
+        return currentACC;
     }
 
     @Override
-    public void setCurrentACC(int ID) throws RemoteException {
+    public IACC setCurrentACC(int ID) throws RemoteException {
         for (IACC acc : ACCs) {
             if (acc.GetID() == ID) {
                 this.currentACC = acc;
+                return acc;
             }
         }
-        this.currentACC = null;
+        return null;
     }
 
     @Override
     public void setOnlyOneACC(boolean onlyOneAcc) {
         onlyOneACC = onlyOneAcc;
+    }
+
+    @Override
+    public int makeNewFlightController() throws RemoteException {
+        FCLastID++;
+        return FCLastID;
     }
 }

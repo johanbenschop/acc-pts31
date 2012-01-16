@@ -360,7 +360,6 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
         fp.add(flightplan);
         flightnumber++;
         cta.addAirplane(ap);
-        new Thread(ap).start();
         addRunwayTimer(start, ap);
         assignFlightToController(flightplan);
     }
