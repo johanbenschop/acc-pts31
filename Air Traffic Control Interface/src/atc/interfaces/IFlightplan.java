@@ -36,5 +36,5 @@ public interface IFlightplan extends Remote {
      *
      * @return A string value of the Flightplan with its Flightnumber, takeoffAirport and destinationAirport
      */
-    String toString();    
+//    String ToString();    
 }

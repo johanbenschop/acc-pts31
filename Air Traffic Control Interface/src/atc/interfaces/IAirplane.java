@@ -7,7 +7,7 @@ import java.rmi.*;
  * @author Henk
  */
 //zet extends Remote op een of andere manier erbij...
-public interface IAirplane extends Remote, Runnable {
+public interface IAirplane extends Remote {
 
     public abstract void ChangeSpeed() throws RemoteException;
     

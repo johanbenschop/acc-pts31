@@ -24,7 +24,7 @@ public interface IAirspace extends Remote{
      */
     IAirport GetAirport(int AirportID) throws NullPointerException, RemoteException;
 
-    ListIterator<IAirport> GetAirports() throws RemoteException;
+    ArrayList<IAirport> GetAirports() throws RemoteException;
 
     /**
      * A method to get the ACC with the given ID
@@ -60,9 +60,11 @@ public interface IAirspace extends Remote{
     /**
      * Setters
      */
-    void setCurrentACC(IACC currentACC) throws RemoteException;
+    IACC setCurrentACC(IACC currentACC) throws RemoteException;
 
-    void setCurrentACC(int ID) throws RemoteException;
+    IACC setCurrentACC(int ID) throws RemoteException;
 
     void setOnlyOneACC(boolean onlyOneAcc) throws RemoteException;    
+    
+    int makeNewFlightController() throws RemoteException;
 }

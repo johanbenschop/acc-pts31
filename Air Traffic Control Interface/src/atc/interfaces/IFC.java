@@ -1,6 +1,7 @@
 package atc.interfaces;
 
 import java.rmi.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -15,7 +16,7 @@ public interface IFC extends Remote {
      */
     void assignFlight(IFlightplan flightplan) throws RemoteException;
 
-    Iterator<IFlightplan> getFlights() throws RemoteException;
+    ArrayList<IFlightplan> getFlights() throws RemoteException;
 
     int getID() throws RemoteException;
 
