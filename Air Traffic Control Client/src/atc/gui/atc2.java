@@ -8,6 +8,7 @@ import atc.logic.*;
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.event.*;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.globes.Globe;
@@ -144,7 +145,8 @@ public final class atc2 extends atc {
 
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null && goToAirport != null) {
-                                            Position targetPos = goToAirport.getLocation().toPosition();
+                                            Position targetPos = new Position(Angle.fromDegrees(goToAirport.getLocation().getLatitude()),
+                        Angle.fromDegrees(goToAirport.getLocation().getLongitude()), goToAirport.getLocation().getAltitude());
                                             // The elevation component of 'targetPos' here is not the surface elevation,
                                             // so we ignore it when specifying the view center position.
                                             view.goTo(new Position(targetPos, 0),
@@ -211,7 +213,10 @@ public final class atc2 extends atc {
 
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null && plan != null) {
-                                            Position targetPos = plan.getAirplane().getLocation().toPosition();
+                                            Position targetPos = new Position(Angle.fromDegrees(plan.getAirplane().getLocation().getLatitude()),
+                        Angle.fromDegrees(plan.getAirplane().getLocation().getLongitude()), plan.getAirplane().getLocation().getAltitude());
+                                            
+                                            
                                             // The elevation component of 'targetPos' here is not the surface elevation,
                                             // so we ignore it when specifying the view center position.
                                             view.goTo(new Position(targetPos, 0),
@@ -357,8 +362,8 @@ public final class atc2 extends atc {
                                     try {
                                         //.goTo(Position position, double distance);
                                         // This object class we handle and we have an orbit view
-                                        Position targetPos = p.getLocation().toPosition();
-
+                                        Position targetPos =  new Position(Angle.fromDegrees( p.getLocation().getLatitude()),
+                        Angle.fromDegrees( p.getLocation().getLongitude()),  p.getLocation().getAltitude());
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null) {
                                             // The elevation component of 'targetPos' here is not the surface elevation,
@@ -381,7 +386,8 @@ public final class atc2 extends atc {
                                     try {
                                         //.goTo(Position position, double distance);
                                         // This object class we handle and we have an orbit view
-                                        Position targetPos = p.getLocation().toPosition();
+                                        Position targetPos = new Position(Angle.fromDegrees( p.getLocation().getLatitude()),
+                        Angle.fromDegrees( p.getLocation().getLongitude()),  p.getLocation().getAltitude());
 
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null) {
@@ -622,7 +628,8 @@ public final class atc2 extends atc {
                 currentAirportAnnotation = (AirportRenderable) o;
                 currentAirportAnnotation.getAttributes().setHighlighted(true);
                 tooltipAnnotation.setText(currentAirportAnnotation.getAnnotationText());
-                tooltipAnnotation.setPosition(currentAirportAnnotation.airport.getLocation().toPosition());
+                tooltipAnnotation.setPosition(new Position(Angle.fromDegrees(currentAirportAnnotation.airport.getLocation().getLatitude()),
+                        Angle.fromDegrees(currentAirportAnnotation.airport.getLocation().getLongitude()), currentAirportAnnotation.airport.getLocation().getAltitude()));
                 tooltipAnnotation.getAttributes().setVisible(true);
                 this.getWwd().repaint();
             }

@@ -3,6 +3,8 @@ package atc.gui;
 import atc.interfaces.*;
 import atc.logic.GeoLocation;
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.*;
 import java.awt.*;
@@ -31,7 +33,9 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
 
     public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) throws RemoteException {
-        super("", flightplan.getAirplane().getLocation().toPosition());
+        super("", new Position(Angle.fromDegrees(flightplan.getAirplane().getLocation().getLatitude()),
+                        Angle.fromDegrees(flightplan.getAirplane().getLocation().getLongitude()), flightplan.getAirplane().getLocation().getAltitude()));
+        
 
         if (originalImage == null) {
             try {
@@ -75,7 +79,8 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 }
 
                 double direction = airplane.getDirection();
-                Position position = airplane.getLocation().toPosition();
+                Position position = new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
+                        Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude());
                 IGeoSec sector = atc2.airspace.getCurrentACC().GetCTA().getSector();
                 IGeoSec greaterSector = atc2.airspace.getCurrentACC().GetCTA().getGreaterSector();
 
@@ -197,7 +202,8 @@ public class AirplaneRenderable extends GlobeAnnotation {
         if (this.tooltip != null) {
 
             this.tooltip.setText(updateText());
-            this.tooltip.moveTo(airplane.getLocation().toPosition());
+            this.tooltip.moveTo(new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
+                        Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude()));
         }
     }
 

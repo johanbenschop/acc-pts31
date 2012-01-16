@@ -2,6 +2,8 @@ package atc.gui;
 
 import atc.interfaces.*;
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +19,8 @@ public class AirportRenderable extends GlobeAnnotation {
     public IAirport airport;
 
     public AirportRenderable(IAirport airport) throws RemoteException {
-        super("", airport.getLocation().toPosition());
+        super("", new Position(Angle.fromDegrees(airport.getLocation().getLatitude()),
+                        Angle.fromDegrees(airport.getLocation().getLongitude()), airport.getLocation().getAltitude()));
         this.airport = airport;
 
         this.getAttributes().setLeader(AVKey.SHAPE_NONE);
