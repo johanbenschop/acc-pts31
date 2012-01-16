@@ -1,6 +1,5 @@
 package atc.interfaces;
 
-import gov.nasa.worldwind.geom.*;
 import java.rmi.*;
 
 /**
@@ -47,11 +46,11 @@ public interface IGeoLoc extends Remote {
      * @return A LatLon value in degrees.
      * @deprecated
      */
-    LatLon toLatLon() throws RemoteException;
+//    LatLon toLatLon() throws RemoteException;
 
     /**
      * Converts the geolocation to the location used in WWJ.
      * @return position.
      */
-    Position toPosition() throws RemoteException;    
+//    Position toPosition() throws RemoteException;    
 }
