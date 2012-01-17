@@ -1,8 +1,6 @@
 package atc.logic;
 
 import atc.interfaces.IGeoLoc;
-import gov.nasa.worldwind.geom.LatLon;
-import gov.nasa.worldwind.geom.Position;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
