@@ -2,7 +2,6 @@ package atc.logic;
 
 import atc.interfaces.IGeoLoc;
 import atc.interfaces.IGeoSec;
-import gov.nasa.worldwind.geom.Sector;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -146,19 +145,12 @@ public class GeoSector extends UnicastRemoteObject implements IGeoSec, Serializa
     }
 
     /**
-     * Convets this GeoSector to an Sector for World Wind.
-     * @return World Wind Sector
-     */
-    public Sector toSector() {
-        return Sector.fromDegrees(minLatitude, maxLatitude, minLongitude, maxLongitude);
-    }
-
-    /**
      * Due to minimal importance of an unit test for this method there is none.
      * 
      * Returns a string indicating the sector's angles.
      *
      * @return A string indicating the sector's angles.
+     * @deprecated It's never been used (yet)...
      */
     public String toString() {
         StringBuilder sb = new StringBuilder();
