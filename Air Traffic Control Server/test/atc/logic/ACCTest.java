@@ -76,7 +76,7 @@ public class ACCTest {
             }
 
             @Override
-            public Iterator<IFlightplan> getFlights() throws RemoteException {
+            public ArrayList<IFlightplan> getFlights() throws RemoteException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
