@@ -1,9 +1,8 @@
 package atc.logic;
 
-import atc.interfaces.IAirspace;
-import atc.interfaces.IFlightplan;
+import java.util.ArrayList;
+import atc.interfaces.*;
 import java.rmi.RemoteException;
-import java.util.Iterator;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -38,7 +37,7 @@ public class FlightControllerTest {
     @Test
     public void testGetAirspace() throws RemoteException {
         System.out.println("getAirspace");
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         IAirspace expResult = null;
         IAirspace result = instance.getAirspace();
         assertEquals(expResult, result);
@@ -53,7 +52,7 @@ public class FlightControllerTest {
     public void testAssignFlight() throws RemoteException {
         System.out.println("assignFlight");
         IFlightplan flightplan = null;
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         instance.assignFlight(flightplan);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -66,7 +65,7 @@ public class FlightControllerTest {
     public void testUnassignFlight() throws RemoteException {
         System.out.println("unassignFlight");
         IFlightplan flightplan = null;
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         instance.unassignFlight(flightplan);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -78,7 +77,7 @@ public class FlightControllerTest {
     @Test
     public void testUnassignAllFlights() throws RemoteException {
         System.out.println("unassignAllFlights");
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         instance.unassignAllFlights();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -90,7 +89,7 @@ public class FlightControllerTest {
     @Test
     public void testGetNumberAssignedFlights() throws RemoteException {
         System.out.println("getNumberAssignedFlights");
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         int expResult = 0;
         int result = instance.getNumberAssignedFlights();
         assertEquals(expResult, result);
@@ -104,7 +103,7 @@ public class FlightControllerTest {
     @Test
     public void testGetID() throws RemoteException {
         System.out.println("getID");
-        FlightController instance = new FlightController();
+        FlightControllerIF instance = new FlightControllerIF();
         int expResult = 0;
         int result = instance.getID();
         assertEquals(expResult, result);
@@ -118,9 +117,9 @@ public class FlightControllerTest {
     @Test
     public void testGetFlights() throws RemoteException {
         System.out.println("getFlights");
-        FlightController instance = new FlightController();
-        Iterator expResult = null;
-        Iterator result = instance.getFlights();
+        FlightControllerIF instance = new FlightControllerIF();
+        ArrayList expResult = null;
+        ArrayList result = instance.getFlights();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
