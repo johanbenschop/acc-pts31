@@ -66,6 +66,7 @@ public class jfSelectAirplane extends javax.swing.JDialog {
         tfManafacturer = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select Airplane");
@@ -143,6 +144,13 @@ public class jfSelectAirplane extends javax.swing.JDialog {
 
         jLabel3.setText("Airliner");
 
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -150,19 +158,22 @@ public class jfSelectAirplane extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(154, 154, 154)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(tfAirliner, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfType, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tfManafacturer, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(154, 154, 154)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(tfAirliner, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnSearch))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -178,7 +189,8 @@ public class jfSelectAirplane extends javax.swing.JDialog {
                     .addComponent(tfType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfAirliner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfManafacturer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSearch))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -225,20 +237,28 @@ public class jfSelectAirplane extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSelectActionPerformed
 
 private void tfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTypeKeyReleased
-        try {
-            search();
-        } catch (RemoteException ex) {
-            ex.printStackTrace();
-        }
+//    try {
+//        search();
+//    } catch (RemoteException ex) {
+//        ex.printStackTrace();
+//    }
 }//GEN-LAST:event_tfTypeKeyReleased
 
 private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfManafacturerKeyReleased
+//    try {
+//        search();
+//    } catch (RemoteException ex) {
+//        ex.printStackTrace();
+//    }
+}//GEN-LAST:event_tfManafacturerKeyReleased
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         try {
             search();
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
-}//GEN-LAST:event_tfManafacturerKeyReleased
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     public void fillVector(IAirplaneFactory iter) throws RemoteException {
         Vector<String> row = new Vector<>();
@@ -328,38 +348,43 @@ private void tfManafacturerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST
         while (airplanes.hasNext()) {
             IAirplaneFactory iter = airplanes.next();
 
-            if (!tfType.getText().equals("") && tfManafacturer.getText().equals("")) {
-                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-                if (!iter.getType().contains(tfType.getText())) {
-                    continue;
-                }
 
-            } else if (!tfManafacturer.getText().equals("") && tfType.getText().equals("")) {
-                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-                if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
-                    continue;
-                }
-
-            } else if (tfType.getText().equals("") && tfManafacturer.getText().equals("")) {
-                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-                if ((!iter.getType().contains(tfType.getText())) && (!iter.getManufacturer().contains(tfManafacturer.getText()))) {
-                    continue;
-                }
-            } else if (!tfType.getText().equals("") && !tfManafacturer.getText().equals("")) {
-                tfType.setText(tfType.getText().substring(0, tfType.getText().length()));
-                tfManafacturer.setText(tfManafacturer.getText().substring(0, tfManafacturer.getText().length()));
-                if ((!iter.getType().contains(tfType.getText())) || (!iter.getManufacturer().contains(tfManafacturer.getText()))) {
-                    continue;
+            if (!tfType.getText().equals("")) {
+                try {
+                    if (!iter.getType().contains(tfType.getText())) {
+                        continue;
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
                 }
             }
-            fillVector(iter);
+            if (!tfManafacturer.getText().equals("")) {
+                try {
+                    if (!iter.getManufacturer().contains(tfManafacturer.getText())) {
+                        continue;
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            //Is Airliner al geïmplementeerd?
+//            if (tfAirliner.getText().equals("")){
+//                if ((!iter.getType().contains(tfAirliner.getText()))) {
+//                    continue;
+//                }
+//            }
+            try {
+                fillVector(iter);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         }
 
         fillTable();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSelect;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
