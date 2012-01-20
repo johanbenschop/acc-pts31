@@ -68,6 +68,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         tfDepartureDate = new org.jdesktop.swingx.JXDatePicker();
         tfArrivalDate = new org.jdesktop.swingx.JXDatePicker();
+        btnSearch = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
@@ -123,6 +124,13 @@ public class jfSelectFlight extends javax.swing.JDialog {
             }
         });
 
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,36 +139,45 @@ public class jfSelectFlight extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(47, 47, 47))
-                    .addComponent(tfAirliner, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(tfFlightnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(jLabel1))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
+                            .addComponent(tfFlightnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSelectAirplame))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel5))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel2))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(tfAirliner, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfArrivalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSelectAirplame)
+                        .addGap(6, 6, 6))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSearch)
+                        .addContainerGap(530, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
+                .addGap(13, 13, 13)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -168,18 +185,19 @@ public class jfSelectFlight extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfFlightnumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfArrivalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfArrivalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfDepartureDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfAirliner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfAirplaneFlying, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSelectAirplame)
-                    .addComponent(tfAirliner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnSelectAirplame))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSearch))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(" Search results (0 flights found) "));
@@ -285,64 +303,64 @@ public class jfSelectFlight extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void tfDepartureDateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDepartureDateKeyTyped
-        // TODO add your handling code here:
-        data.clear(); // Empty the data so we can get the limited results in.
-        try {
-            flightplans = atc2.airspace.getCurrentACC().getFlightplans().listIterator(); // we must get an new iterator, since the previus one is empty.
-        } catch (RemoteException ex) {
-            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        bufFlightplans.clear();
-
-        while (flightplans.hasNext()) {
-            IFlightplan iter = flightplans.next();
-            bufFlightplans.add(iter);
-
-            try {
-                if (evt.getComponent() == tfFlightnumber) {
-                    if (evt.getKeyChar() == '\b') {
-                        tfFlightnumber.setText(tfFlightnumber.getText().substring(0, tfFlightnumber.getText().length()));
-                        try {
-                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
-                                continue;
-                            }
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        try {
-                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText() + evt.getKeyChar())) {
-                                continue;
-                            }
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            } catch (NumberFormatException e) {
-                tfFlightnumber.setText("");
-            }
-            try {
-                // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
-                //We don't have the airliner stuff implemented yet so we can't actually searh it.
-    //        if (evt.getComponent() == tfAirliner) {
-    //            if (evt.getKeyChar() == '\b') {
-    //                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
-    //                if (!iter.getAirliner().contains(tfAirliner.getText())) {
-    //                    continue;
-    //                }
-    //            } else {
-    //                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
-    //                    continue;
-    //                }
-    //            }
-    //        }
-                fillVector(iter);
-            } catch (RemoteException ex) {
-                Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        fillTable();
+//        // TODO add your handling code here:
+//        data.clear(); // Empty the data so we can get the limited results in.
+//        try {
+//            flightplans = atc2.airspace.getCurrentACC().getFlightplans().listIterator(); // we must get an new iterator, since the previus one is empty.
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        bufFlightplans.clear();
+//
+//        while (flightplans.hasNext()) {
+//            IFlightplan iter = flightplans.next();
+//            bufFlightplans.add(iter);
+//
+//            try {
+//                if (evt.getComponent() == tfFlightnumber) {
+//                    if (evt.getKeyChar() == '\b') {
+//                        tfFlightnumber.setText(tfFlightnumber.getText().substring(0, tfFlightnumber.getText().length()));
+//                        try {
+//                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+//                                continue;
+//                            }
+//                        } catch (RemoteException ex) {
+//                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    } else {
+//                        try {
+//                            if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText() + evt.getKeyChar())) {
+//                                continue;
+//                            }
+//                        } catch (RemoteException ex) {
+//                            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                }
+//            } catch (NumberFormatException e) {
+//                tfFlightnumber.setText("");
+//            }
+//            try {
+//                // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
+//                //We don't have the airliner stuff implemented yet so we can't actually searh it.
+//    //        if (evt.getComponent() == tfAirliner) {
+//    //            if (evt.getKeyChar() == '\b') {
+//    //                tfAirliner.setText(tfAirliner.getText().substring(0, tfAirliner.getText().length()));
+//    //                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+//    //                    continue;
+//    //                }
+//    //            } else {
+//    //                if (!iter.getAirliner().contains(tfAirliner.getText() + evt.getKeyChar())) {
+//    //                    continue;
+//    //                }
+//    //            }
+//    //        }
+//                fillVector(iter);
+//            } catch (RemoteException ex) {
+//                Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        fillTable();
     }//GEN-LAST:event_tfDepartureDateKeyTyped
 
 private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dpSearchDateChanged
@@ -392,6 +410,49 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
 ////                continue;
 ////            }
 }//GEN-LAST:event_dpSearchDateChanged
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        data.clear(); // Empty the data so we can get the limited results in.
+        try {
+            flightplans = atc2.airspace.getCurrentACC().getFlightplans().listIterator(); // we must get an new iterator, since the previus one is empty.
+        } catch (RemoteException ex) {
+            Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        bufFlightplans.clear();
+
+        while (flightplans.hasNext()) {
+            IFlightplan iter = flightplans.next();
+            bufFlightplans.add(iter);
+
+            try {
+                if (!tfFlightnumber.getText().equals("")) {
+                    try {
+                        if (iter.getFlightnumber() != Integer.parseInt(tfFlightnumber.getText())) {
+                            continue;
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                tfFlightnumber.setText("");
+            }
+            try {
+                // BELOW CODE SHOULD WORK WHEN getAirliner METHOD IS IMPLEMENTED DONT DELETE!
+                //We don't have the airliner stuff implemented yet so we can't actually searh it.
+                //        if (!tfAirliner.getText().equals("")) {
+                //                if (!iter.getAirliner().contains(tfAirliner.getText())) {
+                //                    continue;
+                //                }
+                //        }
+                fillVector(iter);
+            } catch (RemoteException ex) {
+                Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        fillTable();
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     public void fillVector(IFlightplan iter) throws RemoteException {
         Vector<String> row = new Vector<>();
@@ -468,6 +529,7 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSelect;
     private javax.swing.JButton btnSelectAirplame;
     private javax.swing.JLabel jLabel1;
