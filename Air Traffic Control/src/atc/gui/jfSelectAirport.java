@@ -79,7 +79,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
         tfIATA_FAA = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         tfICAO = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
@@ -141,13 +140,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
             }
         });
 
-        btnSearch.setText("Search");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanelSearchForLayout = new javax.swing.GroupLayout(jPanelSearchFor);
         jPanelSearchFor.setLayout(jPanelSearchForLayout);
         jPanelSearchForLayout.setHorizontalGroup(
@@ -156,37 +148,34 @@ public class jfSelectAirport extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelSearchForLayout.createSequentialGroup()
+                        .addComponent(tfAirportName, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanelSearchForLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(165, 165, 165))
+                    .addGroup(jPanelSearchForLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(118, 118, 118))
+                    .addGroup(jPanelSearchForLayout.createSequentialGroup()
+                        .addComponent(tfCountry, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanelSearchForLayout.createSequentialGroup()
                         .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelSearchForLayout.createSequentialGroup()
-                                .addComponent(tfAirportName, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(jPanelSearchForLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(165, 165, 165))
-                            .addGroup(jPanelSearchForLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(118, 118, 118))
-                            .addGroup(jPanelSearchForLayout.createSequentialGroup()
-                                .addComponent(tfCountry, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(tfIATA_FAA, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfICAO, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSearchForLayout.createSequentialGroup()
+                        .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfCity, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelSearchForLayout.createSequentialGroup()
-                                .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfIATA_FAA, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfICAO, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSearchForLayout.createSequentialGroup()
-                                .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfCity, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanelSearchForLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addComponent(tfAirportID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(btnSearch))
+                            .addComponent(jLabel2)
+                            .addComponent(tfAirportID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanelSearchForLayout.setVerticalGroup(
@@ -217,8 +206,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfIATA_FAA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(tfICAO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSearch)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -260,7 +247,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -292,7 +279,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelSearchFor, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+                    .addComponent(jPanelSearchFor, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancel)
@@ -329,105 +316,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void tfSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyTyped
-//        data.clear(); // Empty the data so we can get the limited results in.
-//        airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
-//        airports2 = null;
-//        createAirportList();
-//
-//        while (airports.hasNext()) {
-//            Airport iter = airports.next();
-//
-//            // Filter results bases on Airport ID
-//            try {
-//                if (evt.getComponent() == tfAirportID) {
-//                    if (evt.getKeyChar() == '\b') {
-//                        tfAirportID.setText(tfAirportID.getText().substring(0, tfAirportID.getText().length()));
-//                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
-//                            continue;
-//                        }
-//                    } else {
-//                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
-//                            continue;
-//                        }
-//                    }
-//                }
-//            } catch (NumberFormatException e) {
-//                tfAirportID.setText("");
-//            }
-//
-//            if (evt.getComponent() == tfAirportName) {
-//                if (evt.getKeyChar() == '\b') {
-//                    tfAirportName.setText(tfAirportName.getText().substring(0, tfAirportName.getText().length()));
-//                    if (!iter.getAirportName().contains(tfAirportName.getText())) {
-//                        continue;
-//
-//                    }
-//                } else {
-//                    if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
-//                        continue;
-//                    }
-//                }
-//            }
-//
-//            if (evt.getComponent() == tfCountry) {
-//
-//                if (evt.getKeyChar() == '\b') {
-//                    tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
-//                    if (!iter.getCountry().contains(tfCountry.getText())) {
-//                        continue;
-//                    }
-//                } else {
-//                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
-//                        continue;
-//                    }
-//                }
-//            }
-//
-//            if (evt.getComponent() == tfCity) {
-//                if (evt.getKeyChar() == '\b') {
-//                    tfCity.setText(tfCity.getText().substring(0, tfCity.getText().length()));
-//                    if (!iter.getCity().contains(tfCity.getText())) {
-//                        continue;
-//                    }
-//                } else {
-//                    if (!iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
-//                        continue;
-//                    }
-//                }
-//            }
-//
-//
-//            if (evt.getComponent() == tfIATA_FAA) {
-//                if (evt.getKeyChar() == '\b') {
-//                    tfIATA_FAA.setText(tfIATA_FAA.getText().substring(0, tfIATA_FAA.getText().length()));
-//                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
-//                        continue;
-//                    }
-//                } else {
-//                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
-//                        continue;
-//                    }
-//                }
-//            }
-//
-//            if (evt.getComponent() == tfICAO) {
-//                if (evt.getKeyChar() == '\b') {
-//                    tfICAO.setText(tfICAO.getText().substring(0, tfICAO.getText().length()));
-//                    if (!iter.getICAO().contains(tfICAO.getText())) {
-//                        continue;
-//                    }
-//                } else {
-//                    if (!iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
-//                        continue;
-//                    }
-//                }
-//            }
-//            fillVector(iter);
-//        }
-//        fillTable();
-    }//GEN-LAST:event_tfSearchKeyTyped
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         data.clear(); // Empty the data so we can get the limited results in.
         airports = atc2.airspace.GetAirports(); // we must get an new iterator, since the previus one is empty.
         airports2 = null;
@@ -438,50 +326,93 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
             // Filter results bases on Airport ID
             try {
-                if (!tfAirportID.getText().equals(""))
-               {
+                if (evt.getComponent() == tfAirportID) {
+                    if (evt.getKeyChar() == '\b') {
+                        tfAirportID.setText(tfAirportID.getText().substring(0, tfAirportID.getText().length()));
                         if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText())) {
                             continue;
                         }
+                    } else {
+                        if (iter.getAirportID() != Integer.parseInt(tfAirportID.getText() + evt.getKeyChar())) {
+                            continue;
+                        }
+                    }
                 }
             } catch (NumberFormatException e) {
                 tfAirportID.setText("");
             }
 
-            if (!tfAirportName.getText().equals("")) {
+            if (evt.getComponent() == tfAirportName) {
+                if (evt.getKeyChar() == '\b') {
+                    tfAirportName.setText(tfAirportName.getText().substring(0, tfAirportName.getText().length()));
                     if (!iter.getAirportName().contains(tfAirportName.getText())) {
                         continue;
+
                     }
+                } else {
+                    if (!iter.getAirportName().contains(tfAirportName.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
-            if (!tfCountry.getText().equals("")) {
+            if (evt.getComponent() == tfCountry) {
+
+                if (evt.getKeyChar() == '\b') {
+                    tfCountry.setText(tfCountry.getText().substring(0, tfCountry.getText().length()));
                     if (!iter.getCountry().contains(tfCountry.getText())) {
                         continue;
                     }
+                } else {
+                    if (!iter.getCountry().contains(tfCountry.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
-            if (!tfCity.getText().equals("")) {
+            if (evt.getComponent() == tfCity) {
+                if (evt.getKeyChar() == '\b') {
+                    tfCity.setText(tfCity.getText().substring(0, tfCity.getText().length()));
                     if (!iter.getCity().contains(tfCity.getText())) {
                         continue;
                     }
+                } else {
+                    if (!iter.getCity().contains(tfCity.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
 
-            if (!tfIATA_FAA.getText().equals("")) {
+            if (evt.getComponent() == tfIATA_FAA) {
+                if (evt.getKeyChar() == '\b') {
+                    tfIATA_FAA.setText(tfIATA_FAA.getText().substring(0, tfIATA_FAA.getText().length()));
                     if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText())) {
                         continue;
                     }
+                } else {
+                    if (!iter.getIATA_FAA().contains(tfIATA_FAA.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
 
-            if (!tfICAO.getText().equals("")) {
+            if (evt.getComponent() == tfICAO) {
+                if (evt.getKeyChar() == '\b') {
+                    tfICAO.setText(tfICAO.getText().substring(0, tfICAO.getText().length()));
                     if (!iter.getICAO().contains(tfICAO.getText())) {
                         continue;
                     }
+                } else {
+                    if (!iter.getICAO().contains(tfICAO.getText() + evt.getKeyChar())) {
+                        continue;
+                    }
+                }
             }
             fillVector(iter);
         }
         fillTable();
-    }//GEN-LAST:event_btnSearchActionPerformed
+    }//GEN-LAST:event_tfSearchKeyTyped
 
     public void fillVector(Airport iter) {
         Vector<String> row = new Vector<>();
@@ -578,7 +509,6 @@ public class jfSelectAirport extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSelect;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
