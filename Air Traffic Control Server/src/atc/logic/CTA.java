@@ -159,7 +159,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     @Override
     public void addAirplane(IAirplane a) {
         airplaneList.add(a);
-        pool.submit(a);
+        pool.submit((Airplane)a);
         for (IAirplane crashobject : airplaneList) {
             if (crashobject != a) {
                 collision.add(new Collision(a, crashobject));
