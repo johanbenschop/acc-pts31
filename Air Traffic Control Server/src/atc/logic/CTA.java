@@ -20,6 +20,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     public IGeoSec sectorGreater;
     /**
      * A airplane used for getting focus of a selected airplane within the CTA
+     * another useless yet needed comment.
      */
     private IAirplane airplane;
     /**
