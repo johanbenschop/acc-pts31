@@ -56,7 +56,6 @@ public class FlightControllerIF implements IFC, Serializable {
     /**
      * This is a constructor used for making a Flightcontroller it assigns it
      * an ID and creates a new Arraylist to contain flightplans
-     * so i can commit ffs
      */
     public FlightControllerIF() throws RemoteException {
         try {
