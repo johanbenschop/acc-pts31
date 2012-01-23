@@ -199,20 +199,11 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
                             for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
                                 IACC receivingACC = itra.next();
                                 if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
-                                        //leavingACC.unassignFlightFromController(flightplan);  // TODO
-                                        System.out.println("Wil flightplann verwijderen");
-                                        leavingACC.removeFlightPlan(flightplan);
-                                        leavingACC.GetCTA().deleteAirplane(flightplan.getAirplane().getAirplaneNumber());
-                                        //leavingACC.GetCTA().removeAirplane(flightplan.getAirplane());
-                                    }
+                                    System.out.println("Wil flightplann verwijderen");
                                     leavingACC.removeFlightPlan(flightplan);
-                                    if (!receivingACC.getfc().isEmpty()) {
-                                        //receivingACC.assignFlightToController(flightplan); // TODO
-                                        receivingACC.addFlightPlan(flightplan);
-                                        receivingACC.GetCTA().addAirplane(flightplan.getAirplane());
-                                    }
+                                    leavingACC.GetCTA().deleteAirplane(flightplan.getAirplane().getAirplaneNumber());
                                     receivingACC.addFlightPlan(flightplan);
+                                    receivingACC.GetCTA().addAirplane(flightplan.getAirplane());
                                 }
                             }
                         }
@@ -224,7 +215,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
             ex.printStackTrace();
         }
     }
-        
+
     /**************Getters**************/
     @Override
     public ArrayList<IACC> GetACCs() {
@@ -235,7 +226,6 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
 //    public IACC getCurrentACC() {
 //        return currentACC;
 //    }
-
     @Override
     public ArrayList<IAirport> GetAirports() {
         return airportList;
@@ -257,7 +247,6 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
     }
 
     /**************Setters**************/
-
     @Override
     public int makeNewFlightController() throws RemoteException {
         FCLastID++;
