@@ -59,7 +59,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
             ID = IDStart;
             for (int verti = -180; verti < 180; verti += 20) {
                 sector = new GeoSector(hori, hori + 20, verti, verti + 20);
-                ICTA cta = new CTA(sector, getAirportCTA(sector));
+                ICTA cta = new CTA(sector, getAirportCTA(sector), ID);
                 ACCs.add(new ACC(ID, cta));
                 ID++;
             }
@@ -198,19 +198,19 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
                     if (leavingACC.GetCTA().getGreaterSector() != null) {
                         if (leavingACC.GetCTA().getGreaterSector().containsGeoLocation(flightplan.getAirplane().getLocation())
                                 && !leavingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                            for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
-                                IACC receivingACC = itra.next();
-                                if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
-                                        leavingACC.unassignFlightFromController(flightplan);
-                                    }
-                                    leavingACC.removeFlightPlan(flightplan);
-                                    if (!receivingACC.getfc().isEmpty()) {
-                                        receivingACC.assignFlightToController(flightplan);
-                                    }
-                                    receivingACC.addFlightPlan(flightplan);
-                                }
-                            }
+//                            for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
+//                                IACC receivingACC = itra.next();
+//                                if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
+//                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
+//                                        leavingACC.unassignFlightFromController(flightplan);
+//                                    }
+//                                    leavingACC.removeFlightPlan(flightplan);
+//                                    if (!receivingACC.getfc().isEmpty()) {
+//                                        receivingACC.assignFlightToController(flightplan);
+//                                    }
+//                                    receivingACC.addFlightPlan(flightplan);
+//                                }
+//                            }
                         }
                     }
                 }

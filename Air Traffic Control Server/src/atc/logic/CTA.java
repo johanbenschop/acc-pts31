@@ -90,7 +90,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
      * @param Width is the width of the CTA
      * @param Length is the length of the CTA
      */
-    public CTA(IGeoSec location, ArrayList<IAirport> airportlist) throws RemoteException {
+    public CTA(IGeoSec location, ArrayList<IAirport> airportlist, int ACCID) throws RemoteException {
         this.sector = location;
         CreateGreaterSector();
         airplaneList = new ArrayList<>();
@@ -99,6 +99,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         timer = new Timer();
         timer.schedule(new collisionTimer(), 0, 1000);
         pool = Executors.newCachedThreadPool();
+        this.AccID = ACCID;
 
 //        try {
 //            loadAirportList(sector);
@@ -209,12 +210,6 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 500)).getLatitude();
         double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 500)).getLatitude();
         sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
-    }
-    
-    
-    @Override
-    public void setAccID(int accID){
-        this.AccID = accID;
     }
     
     @Override

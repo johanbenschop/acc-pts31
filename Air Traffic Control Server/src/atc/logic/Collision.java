@@ -26,32 +26,35 @@ public class Collision {
                 || target.getStatus().equals(Airplane.Statusses.CRASHING2) || crashobject.getStatus().equals(Airplane.Statusses.CRASHING2)) {
             double distance = distFrom(Math.toRadians(target.getLocation().getLatitude()), Math.toRadians(target.getLocation().getLongitude()), Math.toRadians(crashobject.getLocation().getLatitude()), Math.toRadians(crashobject.getLocation().getLongitude()));
             System.out.println(distance);
-            if (distance <= 1 && target.getStatus() != Airplane.Statusses.CRASHED) {
-                target.setStatus(Airplane.Statusses.CRASHED);
-                crashobject.setStatus(Airplane.Statusses.CRASHED);
-                try{
-                    logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashed" );
+            if (distance <= 1) {
+                if (target.getStatus() != Airplane.Statusses.CRASHED) {
+                    target.setStatus(Airplane.Statusses.CRASHED);
+                    crashobject.setStatus(Airplane.Statusses.CRASHED);
+                    try {
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashed");
+                    } catch (Exception e) {
+                        System.out.println("logging failed");
+                    }
                 }
-                catch(Exception e){
-                    System.out.println("logging failed");
+            } else if (distance <= 5) {
+                if (target.getStatus() != Airplane.Statusses.CRASHING2) {
+                    target.setStatus(Airplane.Statusses.CRASHING2);
+                    crashobject.setStatus(Airplane.Statusses.CRASHING2);
+                    try {
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 2");
+                    } catch (Exception e) {
+                        System.out.println("logging failed");
+                    }
                 }
-            } else if (distance <= 5 && target.getStatus() != Airplane.Statusses.CRASHING2) {
-                target.setStatus(Airplane.Statusses.CRASHING2);
-                crashobject.setStatus(Airplane.Statusses.CRASHING2);
-                try{
-                    logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 2" );
-                }
-                catch(Exception e){
-                    System.out.println("logging failed");
-                }
-            } else if (distance <= 10 && target.getStatus() != Airplane.Statusses.CRASHING1) {
-                target.setStatus(Airplane.Statusses.CRASHING1);
-                crashobject.setStatus(Airplane.Statusses.CRASHING1);
-                try{
-                    logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 1" );
-                }
-                catch(Exception e){
-                    System.out.println("logging failed");
+            } else if (distance <= 10) {
+                if (target.getStatus() != Airplane.Statusses.CRASHING1) {
+                    target.setStatus(Airplane.Statusses.CRASHING1);
+                    crashobject.setStatus(Airplane.Statusses.CRASHING1);
+                    try {
+                        logging.WriteCollision(target.getAirplaneNumber(), crashobject.getAirplaneNumber(), "sab", "crashing 1");
+                    } catch (Exception e) {
+                        System.out.println("logging failed");
+                    }
                 }
             }
         }
