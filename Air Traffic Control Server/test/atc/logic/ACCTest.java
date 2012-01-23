@@ -62,7 +62,6 @@ public class ACCTest {
         airplane = new Airplane(600, 400, 10000, "", "", 10, 10, 10, 10000, 500, 0, 0, 10000, 0 , loc, loc2, 9999);
         acc = new ACC(2, null);
         airspace = new Airspace();
-        airspace.setCurrentACC(acc);
         airport1 = new Airport(1,"bla", "bla", "bla", "bla", "bla",loc, 1000, 10.0, "EU");
         airport2 = new Airport(2,"bla", "bla", "bla", "bla", "bla",loc, 1000, 10.0, "EU");
         airplaneFactory = new AirplaneFactory(900, 500, 100, "bla" , "bla", 20, 20, 50, 10000, 500);
@@ -465,31 +464,5 @@ public class ACCTest {
               //junit.framework.Assert.assertEquals("Flightplan is created", fp.getFlightnumber(), flightPlan.getFlightnumber());
             //}
         //}
-    }
-
-    /**
-     * Test of addListener method, of class ACC.
-     */
-    @Test
-    public void testAddListener() throws Exception {
-        System.out.println("addListener");
-        RemoteListener listener = null;
-        ACC instance = null;
-        instance.addListener(listener);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removeListener method, of class ACC.
-     */
-    @Test
-    public void testRemoveListener() throws Exception {
-        System.out.println("removeListener");
-        RemoteListener listener = null;
-        ACC instance = null;
-        instance.removeListener(listener);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }
