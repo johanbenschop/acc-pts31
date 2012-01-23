@@ -206,4 +206,6 @@ public interface IACC extends Remote {
      * @param flightplan
      */
     void unassignFlightFromController(IFlightplan flightplan) throws RemoteException;
+    
+    RemotePublisher getPublisher() throws RemoteException;
 }
