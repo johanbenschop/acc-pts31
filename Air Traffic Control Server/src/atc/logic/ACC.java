@@ -13,9 +13,9 @@ import javax.swing.Timer;
  * 
  * @author Henk
  */
-public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
+public class ACC extends UnicastRemoteObject implements IACC {
 
-    /**************Datafields***********/    
+    /**************Datafields***********/
     private ArrayList<RemoteListener> listeners;
     private final Object lockListener = new Object();
     /**
@@ -49,6 +49,8 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
     private IFC flightcontroller;
     private ArrayList<IFC> flightControllers;
     private ArrayList<IACC> adjacentACCList;
+    private Publisher publisher;
+    private Timer publishtimer;
 
     /***************Constructor**********/
     /** 
@@ -64,6 +66,8 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
         fp = new ArrayList<>();
         airplaneFactoryList = new ArrayList<>();
         flightControllers = new ArrayList<>();
+        publisher = new Publisher();
+
         try {
             loadAirplaneFactoryList();
         } catch (FileNotFoundException ex) {
@@ -72,6 +76,18 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
             ex.printStackTrace();
         }
         logging = new Logging(ID);
+        publishtimer = new Timer(300, null);
+        publishtimer.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                try {
+                publisher.publishFlightplans(fp);
+                } catch (RemoteException re) {
+                    re.printStackTrace();
+                }
+            }
+        });
+        publishtimer.start();
     }
 
     /**************Getters**************/
@@ -360,6 +376,7 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
         fp.add(flightplan);
         flightnumber++;
         cta.addAirplane(ap);
+        publisher.publishFlightplan(flightplan);
         addRunwayTimer(start, ap);
 //        assignFlightToController(flightplan);
     }
@@ -482,19 +499,7 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
     }
 
     @Override
-    public void addListener(RemoteListener listener) throws RemoteException {
-        synchronized (lockListener) {
-            listeners.add(listener);
-            //listener.someNewKoers(koers);
-            System.out.println("Listener added");
-        }
-    }
-
-    @Override
-    public void removeListener(RemoteListener listener) throws RemoteException {
-        synchronized (lockListener) {
-            listeners.remove(listener);
-            System.out.println("Listener removed");
-        }
+    public RemotePublisher getPublisher() {
+        return publisher;
     }
 }

@@ -32,7 +32,7 @@ public class Publisher extends UnicastRemoteObject implements RemotePublisher {
         }
     }
     
-    public void publishFlightplan(Flightplan fp) throws RemoteException {
+    public void publishFlightplan(IFlightplan fp) throws RemoteException {
         synchronized (lockListener) {
             for (RemoteListener listener : listeners) {
                 listener.newFlightplan(fp);
