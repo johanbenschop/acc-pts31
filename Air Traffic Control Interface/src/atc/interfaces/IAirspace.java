@@ -47,9 +47,6 @@ public interface IAirspace extends Remote{
      */
     ArrayList<IAirport> getAirportCTA(IGeoSec sector) throws RemoteException;
 
-    IACC getCurrentACC() throws RemoteException;
-
-    boolean getOnlyOneACC() throws RemoteException;
 
     /**
      * A method to load the list with all the airports in the airports.dat file
@@ -59,12 +56,7 @@ public interface IAirspace extends Remote{
 
     /**
      * Setters
-     */
-    IACC setCurrentACC(IACC currentACC) throws RemoteException;
-
-    IACC setCurrentACC(int ID) throws RemoteException;
-
-    void setOnlyOneACC(boolean onlyOneAcc) throws RemoteException;    
+     */ 
     
     int makeNewFlightController() throws RemoteException;
 }
