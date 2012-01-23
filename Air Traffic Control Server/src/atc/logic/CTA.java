@@ -34,7 +34,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     /**
      * A list used for collecting all the airports within the CTA
      */
-    private ArrayList<IAirport> airportList = new ArrayList<IAirport>();
+    private ArrayList<IAirport> airportList = new ArrayList<>();
     /**
      * A class used to determine the status of an airplane for possible collision danger
      */
@@ -90,7 +90,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         collision = new ArrayList<>();
         this.airportList = airportlist;
         timer = new Timer();
-        timer.schedule(new collisionTimer(), 0, 100);
+        timer.schedule(new collisionTimer(), 0, 1000);
         pool = Executors.newCachedThreadPool();
 
 //        try {
@@ -161,8 +161,9 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         airplaneList.add(a);
         pool.submit((Airplane)a);
         for (IAirplane crashobject : airplaneList) {
-            if (crashobject != a) {
-                collision.add(new Collision(a, crashobject));
+            if (crashobject != (IAirplane)a) {
+                collision.add(new Collision((Airplane)a, (Airplane)crashobject));
+                System.out.println("added");
             }
         }
     }
