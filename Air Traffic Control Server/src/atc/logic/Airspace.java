@@ -199,7 +199,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
                             for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
                                 IACC receivingACC = itra.next();
                                 if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-                                    System.out.println("Wil flightplann verwijderen");
+                                    System.out.println("Wil flightplan verwijderen");
                                     leavingACC.removeFlightPlan(flightplan);
                                     leavingACC.GetCTA().deleteAirplane(flightplan.getAirplane().getAirplaneNumber());
                                     receivingACC.addFlightPlan(flightplan);
