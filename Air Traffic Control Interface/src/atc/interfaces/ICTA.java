@@ -43,11 +43,6 @@ public interface ICTA extends Remote{
     void addAirport(IAirport a) throws RemoteException;
 
     /**
-     * sets AccID
-     * @return
-     */
-    void setAccID(int AccID);
-    /**
      * TODO...is dit niet dubbel met de methode die eronder staat??
      * Deletes the airplane with the corresponding AirplaneNumber from the airplaneList
      * @return
