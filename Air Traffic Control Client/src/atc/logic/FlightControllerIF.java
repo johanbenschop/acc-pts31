@@ -95,9 +95,15 @@ public class FlightControllerIF implements IFC, Serializable {
     }
     
     public void setChosenACC(IACC acc) throws RemoteException {
-        this.acc = acc;
-        this.ACCID = acc.GetID();
-        this.acc.getPublisher().addListener(listener);
+        if (acc != null) {
+            this.acc = acc;
+            this.ACCID = acc.GetID();
+            this.acc.getPublisher().addListener(listener);
+        } else {
+            this.acc.getPublisher().removeListener(listener);
+            this.acc = null;
+            this.ACCID = 0;
+        }
     }
     
     public ArrayList<IFlightplan> getFlightplans() {
