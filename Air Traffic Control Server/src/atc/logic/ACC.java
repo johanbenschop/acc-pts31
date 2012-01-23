@@ -61,6 +61,7 @@ public class ACC extends UnicastRemoteObject implements IACC, RemotePublisher {
     public ACC(int ID, ICTA CTA) throws RemoteException {
         this.ID = ID;
         cta = CTA;
+        cta.setAccID(ID);
         fp = new ArrayList<>();
         airplaneFactoryList = new ArrayList<>();
         flightControllers = new ArrayList<>();
