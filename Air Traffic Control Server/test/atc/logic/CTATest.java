@@ -68,16 +68,6 @@ public class CTATest {
         Assert.assertEquals("Active Airplane has been set.", airplane, cta.getAirplane());
     }
 
-    /** 
-     * Test of distFrom method, of class CTA.
-     */
-    @Test
-    public void testDistFrom() {
-        System.out.println("distFrom");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
     /**                           TODO in deze methode wordt vliegtuig ook aan de collisionlist toegevoegd, dit moet nog worden getest!!
      * Test of addAirplane method, of class CTA.
      */

@@ -42,16 +42,6 @@ public class AirspaceTest {
     }
 
     /**
-     * Test of the Airspace constructor, of class Airspace.
-     */
-    @Test
-    public void testAirspace() {
-        System.out.println("Airspace");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of the loadAirportList method, of class Airspace.
      */
     @Test
@@ -66,53 +56,15 @@ public class AirspaceTest {
         Assert.assertEquals("Airportname should be Goraka", "Goroka", airspace.GetAirport(1).getAirportName());
     }
 
-    /**
-     * Test of the getAirportCTA method, of the class Airspace.
-     */
-    @Test
-    public void testGetAirportCTA() {
-        System.out.println("getAirportCTA");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of the getAirport method, of the class Airspace.
-     */
-    @Test
-    public void testGetAirport() {
-        System.out.println("getAirport");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of the getAdjacentACCs method, of the class Airspace.
-     */
-    @Test
-    public void testGetAdjacentACCs() {
-        System.out.println("getAdjacentACCs");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     /**
      * Test of the BorderControl method, of the class Airspace.
      */
     @Test
-    public void testBorderControl2() {
+    public void testBorderControl() {
         System.out.println("BorderControl2");
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
-    /**                                             DEPRECATED methode, is misschien geen unittest voor nodig
-     * Test of the BorderControl method, of the class Airspace.
-     */
-    @Test
-    public void testBorderControl() {
-        System.out.println("BorderControl");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 }
