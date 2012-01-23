@@ -205,10 +205,10 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     }
 
     public void CreateGreaterSector() throws RemoteException {
-        double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 1000)).getLongitude();
-        double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 1000)).getLongitude();
-        double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 500)).getLatitude();
-        double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 500)).getLatitude();
+        double maxLatitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 0, 100)).getLongitude();
+        double minLatitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), 180, 100)).getLongitude();
+        double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 100)).getLatitude();
+        double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
         sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
     }
     
