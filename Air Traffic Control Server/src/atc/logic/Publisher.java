@@ -24,10 +24,10 @@ public class Publisher extends UnicastRemoteObject implements RemotePublisher {
         listeners = new ArrayList<>();
     }
     
-    public void publishAirplane(ArrayList<IFlightplan> fp) throws RemoteException {
+    public void publishFlightplans(ArrayList<IFlightplan> fp) throws RemoteException {
         synchronized (lockListener) {
             for (RemoteListener listener : listeners) {
-                listener.newAirplaneLocation(fp);
+                listener.newFlightplanLocation(fp);
             }
         }
     }
