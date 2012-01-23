@@ -527,7 +527,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeSpeedTo.getText())) {
             try {
                 try {
-                    atc2.airspace.getCurrentACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
+                    atc2.FC.getChosenACC().ChangeSpeed(Double.parseDouble(txtChangeSpeedTo.getText()), flightplan.getAirplane());
                 } catch (RemoteException ex) {
                     Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -539,7 +539,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(txtChangeDirectionTo.getText())) {
             try {
                 try {
-                    atc2.airspace.getCurrentACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
+                    atc2.FC.getChosenACC().ChangeDirection(Double.parseDouble(txtChangeDirectionTo.getText()), flightplan.getAirplane());
                 } catch (RemoteException ex) {
                     Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -551,7 +551,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
         if (!"".equals(tfFlightlevel.getSelectedItem())) {
             try {
                 try {
-                    atc2.airspace.getCurrentACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
+                    atc2.FC.getChosenACC().ChangeHeight(tfFlightlevel.getSelectedIndex() + 1, flightplan.getAirplane());
                 } catch (RemoteException ex) {
                     Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -569,7 +569,7 @@ public class jfCommandFlight extends javax.swing.JDialog {
 
         try {
             try {
-                atc2.airspace.getCurrentACC().LandFlight(flightplan);
+                atc2.FC.getChosenACC().LandFlight(flightplan);
             } catch (RemoteException ex) {
                 Logger.getLogger(jfCommandFlight.class.getName()).log(Level.SEVERE, null, ex);
             }
