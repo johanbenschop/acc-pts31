@@ -55,6 +55,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     
     ExecutorService pool;
     
+    
     private Timer timer;
 
     private class collisionTimer extends TimerTask {
@@ -195,13 +196,16 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneNumber) {
                 airplaneList.remove(a);
+                pool.submit((Airplane)a);
+                return;
             }
+            
         }
     }
 
     @Override
     public void removeAirplane(IAirplane airplane) {
-        airplaneList.remove((Airplane)airplane);
+        airplaneList.remove(airplane);
     }
 
     public void CreateGreaterSector() throws RemoteException {

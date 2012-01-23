@@ -32,7 +32,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
     /**
      * Contains the selection of the ACC for the instance of this program.
      */
-    private IACC currentACC;
+//    private IACC currentACC;
     private boolean onlyOneACC;
     private ArrayList<IFC> flightcontroller;
     private int FCLastID;
@@ -65,9 +65,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
             }
             IDStart += 100;
         }
-        currentACC = ACCs.get(50);
-        System.err.println(currentACC.GetID());
-        System.err.println(currentACC.GetCTA().getSector().getMaxLatitude());
+
 //
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(40, 60, -10, 10))));
 //        ACCs.add(new ACC(ID++, new CTA(new GeoSector(e, e+20, -160, -140))));
@@ -190,7 +188,7 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
 
     @Override
     public synchronized void BorderControl() {
-        try {
+        try {//this.GetACCs().list
             for (Iterator<IACC> itla = this.GetACCs().listIterator(); itla.hasNext();) {
                 IACC leavingACC = itla.next();
                 for (Iterator<IFlightplan> itfp = leavingACC.getFlightplans().listIterator(); itfp.hasNext();) {
@@ -198,20 +196,27 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
                     if (leavingACC.GetCTA().getGreaterSector() != null) {
                         if (leavingACC.GetCTA().getGreaterSector().containsGeoLocation(flightplan.getAirplane().getLocation())
                                 && !leavingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-//                            for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
-//                                IACC receivingACC = itra.next();
-//                                if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
-//                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
-//                                        leavingACC.unassignFlightFromController(flightplan);
-//                                    }
-//                                    leavingACC.removeFlightPlan(flightplan);
-//                                    if (!receivingACC.getfc().isEmpty()) {
-//                                        receivingACC.assignFlightToController(flightplan);
-//                                    }
-//                                    receivingACC.addFlightPlan(flightplan);
-//                                }
-//                            }
+                            for (Iterator<IACC> itra = this.getAdjacentACCs(leavingACC.GetID()).iterator(); itra.hasNext();) {
+                                IACC receivingACC = itra.next();
+                                if (receivingACC.GetCTA().getSector().containsGeoLocation(flightplan.getAirplane().getLocation())) {
+                                    if (!leavingACC.getfc().isEmpty()) {// && flightplan.getAssignedController() != null) {
+                                        //leavingACC.unassignFlightFromController(flightplan);  // TODO
+                                        System.out.println("Wil flightplann verwijderen");
+                                        leavingACC.removeFlightPlan(flightplan);
+                                        leavingACC.GetCTA().deleteAirplane(flightplan.getAirplane().getAirplaneNumber());
+                                        //leavingACC.GetCTA().removeAirplane(flightplan.getAirplane());
+                                    }
+                                    leavingACC.removeFlightPlan(flightplan);
+                                    if (!receivingACC.getfc().isEmpty()) {
+                                        //receivingACC.assignFlightToController(flightplan); // TODO
+                                        receivingACC.addFlightPlan(flightplan);
+                                        receivingACC.GetCTA().addAirplane(flightplan.getAirplane());
+                                    }
+                                    receivingACC.addFlightPlan(flightplan);
+                                }
+                            }
                         }
+                        return;
                     }
                 }
             }
@@ -226,19 +231,14 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
         return ACCs;
     }
 
-    @Override
-    public IACC getCurrentACC() {
-        return currentACC;
-    }
+//    @Override
+//    public IACC getCurrentACC() {
+//        return currentACC;
+//    }
 
     @Override
     public ArrayList<IAirport> GetAirports() {
         return airportList;
-    }
-
-    @Override
-    public boolean getOnlyOneACC() {
-        return onlyOneACC;
     }
 
     /**
@@ -257,27 +257,6 @@ public class Airspace extends UnicastRemoteObject implements IAirspace, Serializ
     }
 
     /**************Setters**************/
-    @Override
-    public IACC setCurrentACC(IACC currentACC) {
-        this.currentACC = currentACC;
-        return currentACC;
-    }
-
-    @Override
-    public IACC setCurrentACC(int ID) throws RemoteException {
-        for (IACC acc : ACCs) {
-            if (acc.GetID() == ID) {
-                this.currentACC = acc;
-                return acc;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void setOnlyOneACC(boolean onlyOneAcc) {
-        onlyOneACC = onlyOneAcc;
-    }
 
     @Override
     public int makeNewFlightController() throws RemoteException {

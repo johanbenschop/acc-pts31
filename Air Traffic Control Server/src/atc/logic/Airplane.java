@@ -218,9 +218,6 @@ public class Airplane extends UnicastRemoteObject implements IAirplane, Serializ
             this.Status = Statusses.INLANDINGQUEUE;
             Circling();
             Land();
-//            ChangeSpeed();
-//            ChangeAltitude();
-//            ChangeGeoLocation();
         } else {
             ChangeSpeed();
             ChangeDirection();
@@ -477,7 +474,6 @@ public class Airplane extends UnicastRemoteObject implements IAirplane, Serializ
 
     @Override
     public double getSpeed() {
-        //return 15000;
         return Speed;
     }
 

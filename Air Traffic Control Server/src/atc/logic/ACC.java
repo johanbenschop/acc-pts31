@@ -378,7 +378,7 @@ public class ACC extends UnicastRemoteObject implements IACC {
         cta.addAirplane(ap);
         publisher.publishFlightplan(flightplan);
         addRunwayTimer(start, ap);
-//        assignFlightToController(flightplan);
+        //assignFlightToController(flightplan);  // TODO Fix it someday
     }
 
     /**
@@ -398,7 +398,10 @@ public class ACC extends UnicastRemoteObject implements IACC {
                 assignedController = flightController;
             }
         }
-        assignedController.assignFlight(flightplan);
+        if (true) {
+            assignedController.assignFlight(flightplan);
+        }
+        
     }
 
     /**
