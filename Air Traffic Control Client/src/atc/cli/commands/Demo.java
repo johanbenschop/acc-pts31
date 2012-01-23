@@ -3,11 +3,14 @@ package atc.cli.commands;
 import atc.cli.CommandLine;
 import atc.gui.atc2;
 import atc.interfaces.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Random;
+import javax.swing.Timer;
 
 /**
  *
@@ -27,6 +30,24 @@ public class Demo {
         return "Adding stuff....";
     }
 
+    public static String Main() throws RemoteException {
+        CommandLine.println("Adding a random flight every 15 seconds.");
+        
+        
+        new Timer(15000, new ActionListener() {
+
+                public void actionPerformed(ActionEvent event) {
+                try {
+                    addRandomFlights(1);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+                }
+            }).start();
+        
+        return "Adding stuff....";
+    }
+    
     public static String addFlightSchipholEindhoven() throws RemoteException {
         CommandLine.println("Adding flight: Schiphol - Eindhoven");
         IAirplaneFactory af = atc2.FC.getChosenACC().GetAirplaneFactory(1);
@@ -119,7 +140,6 @@ public class Demo {
 
             atc2.FC.getChosenACC().CreateFlight(af, ap_dept, ap_dest, cal, cal);
         }
-
         return "Added " + amount + " of random flights.";
     }
     
