@@ -43,9 +43,16 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
      * logging file to write all the events that happen into a file
      */
     private Logging logging;
+    
+    /**
+     * ID of corresponding ACC
+     */
+    private int AccID;
     /**
      * Timer used to calculate the collision status every xx miliseconds
      */
+    
+    
     ExecutorService pool;
     
     private Timer timer;
@@ -162,7 +169,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         pool.submit((Airplane)a);
         for (IAirplane crashobject : airplaneList) {
             if (crashobject != (IAirplane)a) {
-                collision.add(new Collision((Airplane)a, (Airplane)crashobject));
+                collision.add(new Collision((Airplane)a, (Airplane)crashobject, AccID));
                 System.out.println("added");
             }
         }
@@ -202,6 +209,12 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         double maxLongitude = (GeoLocation.CalcPosition(sector.getMaxLongitude(), sector.getMaxLatitude(), 90, 500)).getLatitude();
         double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 500)).getLatitude();
         sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
+    }
+    
+    
+    @Override
+    public void setAccID(int accID){
+        this.AccID = accID;
     }
     
     @Override
