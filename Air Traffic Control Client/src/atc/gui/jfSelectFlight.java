@@ -35,7 +35,7 @@ public class jfSelectFlight extends javax.swing.JDialog {
         initComponents();
         bufFlightplans = new ArrayList<>();
 
-        flightplans = atc2.airspace.getCurrentACC().getFlightplans().listIterator();
+        flightplans = atc2.FC.getChosenACC().getFlightplans().listIterator();
 
         columnNames.addElement("Flightnumber");
         columnNames.addElement("Airliner");
@@ -415,7 +415,7 @@ private void dpSearchDateChanged(java.beans.PropertyChangeEvent evt) {//GEN-FIRS
         // TODO add your handling code here:
         data.clear(); // Empty the data so we can get the limited results in.
         try {
-            flightplans = atc2.airspace.getCurrentACC().getFlightplans().listIterator(); // we must get an new iterator, since the previus one is empty.
+            flightplans = atc2.FC.getChosenACC().getFlightplans().listIterator(); // we must get an new iterator, since the previus one is empty.
         } catch (RemoteException ex) {
             Logger.getLogger(jfSelectFlight.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -153,7 +153,7 @@ public final class atc2 extends atc {
                                 @Override
                                 public void run() {
                                     try {
-                                        IAirport goToAirport = new jfSelectAirport(null, true).getValue();
+                                        IAirport goToAirport = new jfSelectAirport(null, true, false).getValue();
 
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null && goToAirport != null) {
@@ -196,8 +196,7 @@ public final class atc2 extends atc {
                                         airportLayer.removeAllRenderables();
                                         airplaneLayer.removeAllRenderables();
                                         airplaneLineLayer.removeAllRenderables();
-                                        airspace.getCurrentACC().removeFlightController((IFC) FC);
-                                        airspace.setCurrentACC(null);
+                                        //FC.getChosenACC().removeFlightController((IFC) FC); // TODO
                                         FC.setChosenACC(null);
                                         airspacesLayer.setEnabled(true);
                                     } catch (RemoteException rex) {
@@ -293,8 +292,13 @@ public final class atc2 extends atc {
                 public void actionPerformed(ActionEvent event) {
                     try {
                         // TODO fix this bug so all airplanes will die when crashed or haslanded...
-                        IACC acc = airspace.getCurrentACC();
+                        IACC acc = FC.getChosenACC();
                         IFlightplan temp = null;
+                        
+                        if (acc == null) {
+                            return;
+                        }
+                        
                         for (Iterator<IFlightplan> it = acc.getFlightplans().listIterator(); it.hasNext();) {
                             IFlightplan fp = it.next();
                             IAirplane ap = fp.getAirplane();
@@ -482,7 +486,7 @@ public final class atc2 extends atc {
                                 IACC acc = (IACC) o2;
                                 try {
                                     buildAirspaceLayer(acc);
-                                    airspace.setCurrentACC(acc);
+                                    //airspace.setCurrentACC(acc);
                                     atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
 
                                     // Since the user has selected his or hers CTA we don't need to show this layer anymore.
@@ -605,7 +609,7 @@ public final class atc2 extends atc {
 
             airportLayer.addRenderable(this.tooltipAnnotation);
 
-            IACC acc = airspace.getCurrentACC();
+            IACC acc = FC.getChosenACC();
             ICTA cta = acc.GetCTA();
 
             ListIterator<IAirport> litr = cta.GetAirports().listIterator();
@@ -697,7 +701,7 @@ public final class atc2 extends atc {
 
                     public synchronized void actionPerformed(ActionEvent event) {
                         try {
-                            if (airspace.getCurrentACC() != null && airspace.getCurrentACC().GetID() != 1000) {
+                            if (FC.getChosenACC() != null && FC.getChosenACC().GetID() != 1000) {
                                 try {
                                     airspace.BorderControl();
                                 } catch (Exception e) {
@@ -752,14 +756,14 @@ public final class atc2 extends atc {
                 for (Renderable renderable : airplaneLayer.getRenderables()) {
                     AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
 
-                    if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
-                        if (!airspace.getCurrentACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
+                    //if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
+                        if (!FC.getChosenACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
                             System.out.println("Found one to remove!");
                             airplaneLayer.removeRenderable(renderable);
                         }
 
                         return;
-                    }
+                   // }
 
                 }
 

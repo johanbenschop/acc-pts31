@@ -26,11 +26,13 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private Vector<String> columnNames = new Vector<>(); // Sigh to using an obsolite collection
     private Vector<Vector> data = new Vector<>();
     private boolean closed;
+    private boolean showOnlyLocal;
 
     /** Creates new form jfSearchAirport */
-    public jfSelectAirport(java.awt.Frame parent, boolean modal) throws RemoteException {
+    public jfSelectAirport(java.awt.Frame parent, boolean modal, boolean showOnlyLocal) throws RemoteException {
         super(parent, modal);
         initComponents();
+        this.showOnlyLocal = showOnlyLocal;
         airportsList = (ArrayList<IAirport>) atc2.airspace.GetAirports().clone();
         airports = airportsList.listIterator();
         airports2 = airportsList.listIterator();
@@ -601,10 +603,10 @@ public class jfSelectAirport extends javax.swing.JDialog {
     }
 
     private ListIterator<IAirport> createAirportList() throws RemoteException {
-        if (atc2.airspace.getOnlyOneACC() == true) {
-            airports2 = atc2.airspace.getAirportCTA(atc2.airspace.getCurrentACC().GetCTA().getSector()).listIterator();
+        if (showOnlyLocal) {
+            airports2 = atc2.airspace.getAirportCTA(atc2.FC.getChosenACC().GetCTA().getSector()).listIterator();
             airports = airports2;
-        } else if (atc2.airspace.getOnlyOneACC() == false) {
+        } else {
             return airports;
         }
         return airports;
@@ -646,7 +648,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
             public void run() {
                 try {
-                    jfSelectAirport dialog = new jfSelectAirport(new javax.swing.JFrame(), true);
+                    jfSelectAirport dialog = new jfSelectAirport(new javax.swing.JFrame(), true, false);
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                         @Override

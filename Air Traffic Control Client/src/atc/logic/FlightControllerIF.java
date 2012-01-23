@@ -60,7 +60,7 @@ public class FlightControllerIF implements IFC, Serializable {
         try {
             Context namingContext = new InitialContext();
 
-            System.out.print("RMI registry bindings: ");
+            System.out.print("RMI registry bindings: ");//Henk: 145.93.232.132
             Enumeration<NameClassPair> e = namingContext.list("rmi://localhost");//subject to change the IP of the server, currently IP of Henk's laptop but yeah they change.
             while (e.hasMoreElements()) {
                 System.out.println(e.nextElement().getName());

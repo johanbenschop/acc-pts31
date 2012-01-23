@@ -74,15 +74,15 @@ public class AirplaneRenderable extends GlobeAnnotation {
             @Override
             public void run() {
                 try {
-                if (atc2.airspace.getCurrentACC() == null) {
+                if (atc2.FC.getChosenACC() == null) {
                     return;
                 }
 
                 double direction = airplane.getDirection();
                 Position position = new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
                         Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude());
-                IGeoSec sector = atc2.airspace.getCurrentACC().GetCTA().getSector();
-                IGeoSec greaterSector = atc2.airspace.getCurrentACC().GetCTA().getGreaterSector();
+                IGeoSec sector = atc2.FC.getChosenACC().GetCTA().getSector();
+                IGeoSec greaterSector = atc2.FC.getChosenACC().GetCTA().getGreaterSector();
 
                 try {
                     // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.

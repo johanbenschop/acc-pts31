@@ -287,9 +287,8 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirportDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportDepActionPerformed
         try {
-            // TODO add your handling code here:           
-            atc2.airspace.setOnlyOneACC(true);
-            this.departureAirport = new jfSelectAirport(null, true).getValue();
+            // TODO add your handling code here:
+            this.departureAirport = new jfSelectAirport(null, true, true).getValue();
             if (departureAirport != null) {
                 tfDepartureAirport.setText(departureAirport.ToString());
             } else {
@@ -302,13 +301,7 @@ public class jfAddFlight extends javax.swing.JDialog {
 
     private void btnSelectAirportArrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAirportArrActionPerformed
         try {
-            // TODO add your handling code here:
-            atc2.airspace.setOnlyOneACC(false);
-        } catch (RemoteException ex) {
-            ex.printStackTrace();
-        }
-        try {
-            this.arrivalAirport = new jfSelectAirport(null, true).getValue();
+            this.arrivalAirport = new jfSelectAirport(null, true, false).getValue();
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
