@@ -136,7 +136,7 @@ public class Demo {
             }
 
             IAirport ap_dept = atc2.FC.getChosenACC().GetCTA().GetAirport(airportIDs.get(dept_id));
-            IAirport ap_dest = atc2.FC.getChosenACC().GetCTA().GetAirport(airportIDs.get(dest_id));
+            IAirport ap_dest = atc2.airspace.GetAirport(airportIDs.get(dest_id));
 
             atc2.FC.getChosenACC().CreateFlight(af, ap_dept, ap_dest, cal, cal);
         }
