@@ -294,11 +294,11 @@ public final class atc2 extends atc {
                         // TODO fix this bug so all airplanes will die when crashed or haslanded...
                         IACC acc = FC.getChosenACC();
                         IFlightplan temp = null;
-                        
+
                         if (acc == null) {
                             return;
                         }
-                        
+
                         for (Iterator<IFlightplan> it = acc.getFlightplans().listIterator(); it.hasNext();) {
                             IFlightplan fp = it.next();
                             IAirplane ap = fp.getAirplane();
@@ -715,6 +715,22 @@ public final class atc2 extends atc {
                             for (Iterator<IFlightplan> it = FC.getFlightplans().listIterator(); it.hasNext();) {
                                 addAirplaneToLayer(airplaneLayer, it.next());
                             }
+                            
+                            // Remove renderebles when they are not needed anymore...
+                            for (Renderable renderable : airplaneLayer.getRenderables()) {
+                                AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
+
+                                //if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
+                                if (!FC.getChosenACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
+                                    System.out.println("Found one to remove!");
+                                    airplaneLayer.removeRenderable(renderable);
+                                }
+
+                                return;
+                                // }
+
+                            }
+
                         } catch (RemoteException rex) {
                             rex.printStackTrace();
                         }
@@ -751,21 +767,8 @@ public final class atc2 extends atc {
                 airplaneLineLayer.addRenderable(path);
 
                 layer.addRenderable(new AirplaneRenderable(flightplan, path));
-            } else if (true) {
+            }
 
-                for (Renderable renderable : airplaneLayer.getRenderables()) {
-                    AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
-
-                    //if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
-                        if (!FC.getChosenACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
-                            System.out.println("Found one to remove!");
-                            airplaneLayer.removeRenderable(renderable);
-                        }
-
-                        return;
-                   // }
-
-                }
 
 //                for (Airplane airplane1 : addedAirplanes) {
 //                    if (!airspace.getCurrentACC().GetCTA().sectorGreater.containsGeoLocation(airplane1.getLocation())) {
@@ -785,7 +788,7 @@ public final class atc2 extends atc {
 //                        System.out.println("No one found!!!");
 //                    }
 //                }
-            }
+
         }
 
         /**
