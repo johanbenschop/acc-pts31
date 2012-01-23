@@ -30,11 +30,11 @@ public class Demo {
         return "Adding stuff....";
     }
 
-    public static String Main() throws RemoteException {
-        CommandLine.println("Adding a random flight every 15 seconds.");
+    public static String timed(int seconds) throws RemoteException {
+        CommandLine.println("Adding a random flight every " + seconds + " seconds.");
         
         
-        new Timer(15000, new ActionListener() {
+        new Timer(seconds * 100, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
                 try {
