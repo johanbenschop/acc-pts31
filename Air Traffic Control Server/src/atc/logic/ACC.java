@@ -155,10 +155,10 @@ public class ACC extends UnicastRemoteObject implements IACC {
     public IAirplaneFactory GetAirplaneFactory(int AirplaneFactoryID) throws RemoteException {
         for (IAirplaneFactory a : airplaneFactoryList) {
             if (a.getID() == AirplaneFactoryID) {
-                airplaneFactory = a;
+                return a;
             }
         }
-        return airplaneFactory;
+        return null;
     }
 
     /**
@@ -236,7 +236,6 @@ public class ACC extends UnicastRemoteObject implements IACC {
             } catch (IOException e) {
                 System.out.println("logging failed");
             }
-            cta.resetCollision(a);
         } else {
             throw new AssignmentException("The speed given is too low or high.");
         }
@@ -270,7 +269,6 @@ public class ACC extends UnicastRemoteObject implements IACC {
             } catch (IOException e) {
                 System.out.println("logging failed");
             }
-            cta.resetCollision(a);
         } else {
             throw new AssignmentException("The given direction is not possible.");
         }
@@ -297,13 +295,10 @@ public class ACC extends UnicastRemoteObject implements IACC {
     public void ChangeHeight(int flightlevel, IAirplane a) throws AssignmentException, RemoteException {
         if (flightlevel == 1) {
             a.setAimedAltitude(1000);
-            cta.resetCollision(a);
         } else if (flightlevel == 2) {
             a.setAimedAltitude(2000);
-            cta.resetCollision(a);
         } else if (flightlevel == 3) {
             a.setAimedAltitude(3000);
-            cta.resetCollision(a);
         } else {
             throw new AssignmentException();
         }

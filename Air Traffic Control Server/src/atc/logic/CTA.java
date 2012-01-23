@@ -43,7 +43,6 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
      * logging file to write all the events that happen into a file
      */
     private Logging logging;
-    
     /**
      * ID of corresponding ACC
      */
@@ -51,11 +50,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     /**
      * Timer used to calculate the collision status every xx miliseconds
      */
-    
-    
     ExecutorService pool;
-    
-    
     private Timer timer;
 
     private class collisionTimer extends TimerTask {
@@ -65,6 +60,13 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
             if (!collision.isEmpty()) {
                 for (Collision coll : collision) {
                     try {
+                        if (coll.getCrashobject().getStatus().equals(IAirplane.Statusses.CRASHING1)
+                                || coll.getCrashobject().getStatus().equals(IAirplane.Statusses.CRASHING2)
+                                || coll.getTarget().getStatus().equals(IAirplane.Statusses.CRASHING1)
+                                || coll.getTarget().getStatus().equals(IAirplane.Statusses.CRASHING1)) {
+                            coll.getCrashobject().setStatus(IAirplane.Statusses.INFLIGHT);
+                            coll.getTarget().setStatus(IAirplane.Statusses.INFLIGHT);
+                        }
                         coll.colldetect();
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
@@ -98,7 +100,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         collision = new ArrayList<>();
         this.airportList = airportlist;
         timer = new Timer();
-        timer.schedule(new collisionTimer(), 0, 1000);
+        timer.schedule(new collisionTimer(), 0, 5000);
         pool = Executors.newCachedThreadPool();
         this.AccID = ACCID;
 
@@ -110,7 +112,6 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
 //            ex.printStackTrace();
 //        }
     }
-
 
     /**                                                                       TODO moet hier een unittest voor? nee toch?
      * Returns the airport with the given AirportID
@@ -168,11 +169,10 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     @Override
     public void addAirplane(IAirplane a) {
         airplaneList.add(a);
-        pool.submit((Airplane)a);
+        pool.submit((Airplane) a);
         for (IAirplane crashobject : airplaneList) {
-            if (crashobject != (IAirplane)a) {
-                collision.add(new Collision((Airplane)a, (Airplane)crashobject, AccID));
-                System.out.println("added");
+            if (crashobject != (IAirplane) a) {
+                collision.add(new Collision(a, crashobject, AccID));
             }
         }
     }
@@ -196,10 +196,10 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         for (IAirplane a : airplaneList) {
             if (a.getAirplaneNumber() == AirplaneNumber) {
                 airplaneList.remove(a);
-                pool.submit((Airplane)a);
+                pool.submit((Airplane) a);
                 return;
             }
-            
+
         }
     }
 
@@ -215,11 +215,11 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         double minLongitude = (GeoLocation.CalcPosition(sector.getMinLongitude(), sector.getMinLatitude(), -90, 100)).getLatitude();
         sectorGreater = new GeoSector(minLatitude, maxLatitude, minLongitude, maxLongitude);
     }
-    
+
     @Override
     public void resetCollision(IAirplane airplane) throws RemoteException {
         for (Collision coll : collision) {
-            if (coll.getTarget() == (Airplane)airplane || coll.getCrashobject() == (Airplane)airplane) {
+            if (coll.getTarget() == airplane || coll.getCrashobject() == airplane) {
                 coll.getCrashobject().setStatus(Airplane.Statusses.INFLIGHT);
                 coll.getTarget().setStatus(Airplane.Statusses.INFLIGHT);
             }
@@ -266,7 +266,7 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
     public IGeoSec getGreaterSector() {
         return sectorGreater;
     }
-    
+
     /**
      * Turns the airport list into a Iterator
      * @return Iterator airportList
@@ -276,7 +276,6 @@ public class CTA extends UnicastRemoteObject implements ICTA, Serializable {
         return airportList;
     }
 
-    
     /**
      * 
      * @return 
