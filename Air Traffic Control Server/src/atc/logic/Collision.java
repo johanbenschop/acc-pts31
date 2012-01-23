@@ -1,5 +1,6 @@
 package atc.logic;
 
+import atc.interfaces.ICollision;
 import atc.interfaces.IAirplane;
 import java.rmi.RemoteException;
 
@@ -13,9 +14,9 @@ public class Collision {
     private Airplane crashobject;
     private Logging logging;
 
-    public Collision(Airplane target, Airplane crashobject, int AccID) {
-        this.target = target;
-        this.crashobject = crashobject;
+    public Collision(IAirplane target, IAirplane crashobject, int AccID) {
+        this.target = (Airplane)target;
+        this.crashobject = (Airplane)crashobject;
         logging = new Logging(AccID);
     }
 
@@ -25,7 +26,6 @@ public class Collision {
                 || target.getStatus().equals(Airplane.Statusses.CRASHING1) || crashobject.getStatus().equals(Airplane.Statusses.CRASHING1)
                 || target.getStatus().equals(Airplane.Statusses.CRASHING2) || crashobject.getStatus().equals(Airplane.Statusses.CRASHING2)) {
             double distance = distFrom(Math.toRadians(target.getLocation().getLatitude()), Math.toRadians(target.getLocation().getLongitude()), Math.toRadians(crashobject.getLocation().getLatitude()), Math.toRadians(crashobject.getLocation().getLongitude()));
-            System.out.println(distance);
             if (distance <= 1) {
                 if (target.getStatus() != Airplane.Statusses.CRASHED) {
                     target.setStatus(Airplane.Statusses.CRASHED);
@@ -78,11 +78,12 @@ public class Collision {
         return distance;
     }
 
+
     public IAirplane getCrashobject() {
-        return crashobject;
+        return (IAirplane)crashobject;
     }
 
     public IAirplane getTarget() {
-        return target;
+        return (IAirplane)target;
     }
 }
