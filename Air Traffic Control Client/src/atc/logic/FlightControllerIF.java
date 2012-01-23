@@ -36,7 +36,7 @@ public class FlightControllerIF implements IFC, Serializable {
          * @param ap list of airplanes to extract there location from
          */
         @Override
-        public void newAirplaneLocation(ArrayList<IFlightplan> fp) throws RemoteException {
+        public void newFlightplanLocation(ArrayList<IFlightplan> fp) throws RemoteException {
             flights = fp;
         }
         
@@ -95,6 +95,10 @@ public class FlightControllerIF implements IFC, Serializable {
     public void setChosenACC(IACC acc) throws RemoteException {
         this.acc = acc;
         this.ACCID = acc.GetID();
+    }
+    
+    public ArrayList<IFlightplan> getFlightplans() {
+        return flights;
     }
     
     @Override
