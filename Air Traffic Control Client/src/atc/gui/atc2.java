@@ -397,7 +397,6 @@ public final class atc2 extends atc {
                     //          Audio.play(Sound.ALARM4, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
-
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     try {
