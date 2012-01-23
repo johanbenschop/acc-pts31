@@ -19,6 +19,7 @@ public class FlightControllerIF implements IFC, Serializable {
     private IACC acc;
     private IFC flightController;
     private int ACCID;
+    private AirplaneListener listener;
 
     private ArrayList<IFlightplan> flights;
 
@@ -73,6 +74,7 @@ public class FlightControllerIF implements IFC, Serializable {
         }
         ID = iAirspace.makeNewFlightController();
         ACCID = 0;
+        listener = new AirplaneListener();
         }
 
     public IAirspace getAirspace() {
@@ -95,6 +97,7 @@ public class FlightControllerIF implements IFC, Serializable {
     public void setChosenACC(IACC acc) throws RemoteException {
         this.acc = acc;
         this.ACCID = acc.GetID();
+        this.acc.getPublisher().addListener(listener);
     }
     
     public ArrayList<IFlightplan> getFlightplans() {
@@ -129,6 +132,10 @@ public class FlightControllerIF implements IFC, Serializable {
     @Override
     public void unassignFlight(IFlightplan flightplan) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public void exit() throws RemoteException {
+        acc.getPublisher().removeListener(listener);
     }
     /**
      * Arraylist of flightplans assigned to the flightcontroller

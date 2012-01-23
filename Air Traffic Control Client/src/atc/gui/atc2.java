@@ -56,7 +56,7 @@ public final class atc2 extends atc {
         private boolean initDoneAirportLayer;
         private boolean initDoneAirplaneLayer;
         private boolean initDoneAirspaceLayer;
-     //   private static FlightControllerIF flightController;
+        //   private static FlightControllerIF flightController;
         private ReentrantLock lock = new ReentrantLock();
 
         public AppFrame() {
@@ -64,6 +64,18 @@ public final class atc2 extends atc {
             if (prefs.getBoolean("APP_START-MAXIMIZED", false)) {
                 this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
             }
+
+            this.addWindowListener(new java.awt.event.WindowAdapter() {
+
+                public void windowClosing(WindowEvent winEvt) {
+                    try {
+                        FC.exit();
+                    } catch (RemoteException re) {
+                        re.printStackTrace();
+                    }
+                    System.exit(0);
+                }
+            });
 
             final jpTerminal cli = new jpTerminal();
             cli.setVisible(prefs.getBoolean("CLI_VISIBLE", false));
@@ -146,7 +158,7 @@ public final class atc2 extends atc {
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null && goToAirport != null) {
                                             Position targetPos = new Position(Angle.fromDegrees(goToAirport.getLocation().getLatitude()),
-                        Angle.fromDegrees(goToAirport.getLocation().getLongitude()), goToAirport.getLocation().getAltitude());
+                                                    Angle.fromDegrees(goToAirport.getLocation().getLongitude()), goToAirport.getLocation().getAltitude());
                                             // The elevation component of 'targetPos' here is not the surface elevation,
                                             // so we ignore it when specifying the view center position.
                                             view.goTo(new Position(targetPos, 0),
@@ -184,7 +196,7 @@ public final class atc2 extends atc {
                                         airportLayer.removeAllRenderables();
                                         airplaneLayer.removeAllRenderables();
                                         airplaneLineLayer.removeAllRenderables();
-                                        airspace.getCurrentACC().removeFlightController((IFC)FC);
+                                        airspace.getCurrentACC().removeFlightController((IFC) FC);
                                         airspace.setCurrentACC(null);
                                         FC.setChosenACC(null);
                                         airspacesLayer.setEnabled(true);
@@ -215,9 +227,9 @@ public final class atc2 extends atc {
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null && plan != null) {
                                             Position targetPos = new Position(Angle.fromDegrees(plan.getAirplane().getLocation().getLatitude()),
-                        Angle.fromDegrees(plan.getAirplane().getLocation().getLongitude()), plan.getAirplane().getLocation().getAltitude());
-                                            
-                                            
+                                                    Angle.fromDegrees(plan.getAirplane().getLocation().getLongitude()), plan.getAirplane().getLocation().getAltitude());
+
+
                                             // The elevation component of 'targetPos' here is not the surface elevation,
                                             // so we ignore it when specifying the view center position.
                                             view.goTo(new Position(targetPos, 0),
@@ -245,11 +257,11 @@ public final class atc2 extends atc {
 
                                 @Override
                                 public void run() {
-                            try {
-                                new jfSelectAirplane(null, true).setVisible(true);
-                            } catch (RemoteException ex) {
-                                ex.printStackTrace();
-                            }
+                                    try {
+                                        new jfSelectAirplane(null, true).setVisible(true);
+                                    } catch (RemoteException ex) {
+                                        ex.printStackTrace();
+                                    }
                                     uiInFlight.setActive(false);
                                 }
                             });
@@ -354,7 +366,7 @@ public final class atc2 extends atc {
             menuBar.clearAlerts();
             for (final IAirplane p : addedAirplanes) {
                 if (p.getStatus() == IAirplane.Statusses.CRASHING2) {
-              //      Audio.play(Sound.ALARM5, 3);
+                    //      Audio.play(Sound.ALARM5, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Mayor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -363,8 +375,8 @@ public final class atc2 extends atc {
                                     try {
                                         //.goTo(Position position, double distance);
                                         // This object class we handle and we have an orbit view
-                                        Position targetPos =  new Position(Angle.fromDegrees( p.getLocation().getLatitude()),
-                        Angle.fromDegrees( p.getLocation().getLongitude()),  p.getLocation().getAltitude());
+                                        Position targetPos = new Position(Angle.fromDegrees(p.getLocation().getLatitude()),
+                                                Angle.fromDegrees(p.getLocation().getLongitude()), p.getLocation().getAltitude());
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null) {
                                             // The elevation component of 'targetPos' here is not the surface elevation,
@@ -378,7 +390,7 @@ public final class atc2 extends atc {
                                 }
                             });
                 } else if (p.getStatus() == IAirplane.Statusses.CRASHING1) {
-          //          Audio.play(Sound.ALARM4, 3);
+                    //          Audio.play(Sound.ALARM4, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
 
@@ -387,8 +399,8 @@ public final class atc2 extends atc {
                                     try {
                                         //.goTo(Position position, double distance);
                                         // This object class we handle and we have an orbit view
-                                        Position targetPos = new Position(Angle.fromDegrees( p.getLocation().getLatitude()),
-                        Angle.fromDegrees( p.getLocation().getLongitude()),  p.getLocation().getAltitude());
+                                        Position targetPos = new Position(Angle.fromDegrees(p.getLocation().getLatitude()),
+                                                Angle.fromDegrees(p.getLocation().getLongitude()), p.getLocation().getAltitude());
 
                                         // Use a PanToIterator to iterate view to target position
                                         if (view != null) {
@@ -403,7 +415,7 @@ public final class atc2 extends atc {
                                 }
                             });
                 } else if (p.getStatus() == IAirplane.Statusses.CRASHED) {
-               //     Audio.play(Sound.ALARM3, 3);
+                    //     Audio.play(Sound.ALARM3, 3);
                 }
             }
         }
@@ -447,8 +459,8 @@ public final class atc2 extends atc {
             for (Iterator<IACC> it = airspace.GetACCs().listIterator(); it.hasNext();) {
                 IACC acc = it.next();
 
-                SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
-                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()) );
+                SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(),
+                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
                 surfaceSector.setAttributes(attr);
                 surfaceSector.setPathType(AVKey.RHUMB_LINE);
                 surfaceSector.setValue("IACC", acc); // We bind the surfaceSector and it's ACC together.
@@ -507,8 +519,8 @@ public final class atc2 extends atc {
             }
 
             // Set the attributes for the surfaceSector and instanciate the objects.
-            SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
-                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
+            SurfaceSector surfaceSector = new SurfaceSector(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(),
+                    acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
             ShapeAttributes attributesSector = new BasicShapeAttributes();
             attributesSector.setOutlineMaterial(Material.PINK);
             attributesSector.setInteriorOpacity(0);
@@ -520,8 +532,8 @@ public final class atc2 extends atc {
 
             // Set the attributes for the greater surfaceSector and instanciate the objects.
             IGeoSec greSec = acc.GetCTA().getGreaterSector();
-            SurfaceSector surfaceSectorGreater = new SurfaceSector(Sector.fromDegrees(greSec.getMinLatitude(), 
-                        greSec.getMaxLatitude(), greSec.getMinLongitude(), greSec.getMaxLongitude()));
+            SurfaceSector surfaceSectorGreater = new SurfaceSector(Sector.fromDegrees(greSec.getMinLatitude(),
+                    greSec.getMaxLatitude(), greSec.getMinLongitude(), greSec.getMaxLongitude()));
             ShapeAttributes attributesGreaterSector = new BasicShapeAttributes();
             attributesGreaterSector.setOutlineMaterial(Material.ORANGE);
             attributesGreaterSector.setInteriorOpacity(0);
@@ -550,8 +562,8 @@ public final class atc2 extends atc {
                 if (limits != null) {
                     Globe globe = this.getWwd().getModel().getGlobe();
 
-                    limits.setCenterLocationLimits(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(), 
-                        acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
+                    limits.setCenterLocationLimits(Sector.fromDegrees(acc.GetCTA().getSector().getMinLatitude(),
+                            acc.GetCTA().getSector().getMaxLatitude(), acc.GetCTA().getSector().getMinLongitude(), acc.GetCTA().getSector().getMaxLongitude()));
                     limits.setZoomLimits(10000, 5000000);
                     BasicOrbitViewLimits.applyLimits(view, limits);
                 }
@@ -595,9 +607,9 @@ public final class atc2 extends atc {
 
             IACC acc = airspace.getCurrentACC();
             ICTA cta = acc.GetCTA();
-            
+
             ListIterator<IAirport> litr = cta.GetAirports().listIterator();
-            
+
             if (litr != null) {
                 while (litr.hasNext()) {
                     IAirport airport = litr.next();
@@ -692,7 +704,11 @@ public final class atc2 extends atc {
                                     System.err.println(e);
                                 }
                             }
-                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans().listIterator(); it.hasNext();) {
+//                             pull method as a safety backup
+//                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans().listIterator(); it.hasNext();) {
+//                                addAirplaneToLayer(airplaneLayer, it.next());
+//                            }
+                            for (Iterator<IFlightplan> it = FC.getFlightplans().listIterator(); it.hasNext();) {
                                 addAirplaneToLayer(airplaneLayer, it.next());
                             }
                         } catch (RemoteException rex) {
