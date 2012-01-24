@@ -34,7 +34,7 @@ public class Demo {
         CommandLine.println("Adding a random flight every " + seconds + " seconds.");
         
         
-        new Timer(seconds * 100, new ActionListener() {
+        new Timer(seconds * 1000, new ActionListener() {
 
                 public void actionPerformed(ActionEvent event) {
                 try {
@@ -113,30 +113,37 @@ public class Demo {
     public static String addRandomFlights(int amount) throws RemoteException {
         Random random = new Random();
         ArrayList<Integer> airportIDs = new ArrayList<>();
+        ArrayList<Integer> airportsIDs = new ArrayList<>();
         IAirplaneFactory af = atc2.FC.getChosenACC().GetAirplaneFactory(1);
         GregorianCalendar cal = new GregorianCalendar();
 
         // We put the airport ID's in an ArrayList so we can get the airport
         // randomly, since not all airports might be availeble and an iterator
         // can not get a random index, only next, next, next, hence the name iterator.
-        for (Iterator<IAirport> it = atc2.FC.getChosenACC().GetCTA().GetAirports().iterator(); it.hasNext();) {
+        for (Iterator<IAirport> it = atc2.FC.getAirports().iterator();it.hasNext();)
+        {
             airportIDs.add(it.next().getAirportID());
+        }
+        for(Iterator<IAirport> it = atc2.FC.getAirportsInACC().iterator();it.hasNext();)
+        {
+            airportsIDs.add(it.next().getAirportID());
         }
 
         int airports = airportIDs.size();
+        int airports2 = airportsIDs.size();
 
         for (int i = 0; i < amount; i++) {
-            int dept_id = random.nextInt(airports);
+            int dept_id = random.nextInt(airports2);
             int dest_id = random.nextInt(airports);
 
             // We need to be not sure that the flight doesn't go anywhere (reread that sentence)
             while (dept_id == dest_id) {
-                dept_id = random.nextInt(airports);
+                dept_id = random.nextInt(airports2);
                 dest_id = random.nextInt(airports);
             }
 
-            IAirport ap_dept = atc2.FC.getChosenACC().GetCTA().GetAirport(airportIDs.get(dept_id));
-            IAirport ap_dest = atc2.airspace.GetAirport(airportIDs.get(dest_id));
+            IAirport ap_dept = (IAirport) atc2.FC.getAirportsInACC().get(dept_id);
+            IAirport ap_dest = (IAirport) atc2.FC.getAirports().get(dest_id);
 
             atc2.FC.getChosenACC().CreateFlight(af, ap_dept, ap_dest, cal, cal);
         }
