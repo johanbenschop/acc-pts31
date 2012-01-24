@@ -1,5 +1,6 @@
 package atc.logic;
 
+import atc.gui.atc2;
 import atc.interfaces.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -22,6 +23,8 @@ public class FlightControllerIF implements IFC, Serializable {
     private AirplaneListener listener;
 
     private ArrayList<IFlightplan> flights;
+    private ArrayList<IAirport> airports;
+    private ArrayList<IAirport> airportsInACC;
 
     
     public class AirplaneListener extends UnicastRemoteObject implements RemoteListener, Serializable {
@@ -61,11 +64,11 @@ public class FlightControllerIF implements IFC, Serializable {
             Context namingContext = new InitialContext();
 
             System.out.print("RMI registry bindings: ");//Henk: 145.93.232.132
-            Enumeration<NameClassPair> e = namingContext.list("rmi://192.168.0.2");//subject to change the IP of the server, currently IP of Henk's laptop but yeah they change.
+            Enumeration<NameClassPair> e = namingContext.list("rmi://localhost");//subject to change the IP of the server, currently IP of Henk's laptop but yeah they change.
             while (e.hasMoreElements()) {
                 System.out.println(e.nextElement().getName());
             }
-            String url = "rmi://192.168.0.2/ATCServer";
+            String url = "rmi://localhost/ATCServer";
             System.out.println(namingContext.lookup(url).toString());
             iAirspace = (IAirspace) namingContext.lookup(url);
             System.out.println("Loaded airspace");
@@ -108,6 +111,26 @@ public class FlightControllerIF implements IFC, Serializable {
     
     public ArrayList<IFlightplan> getFlightplans() {
         return flights;
+    }
+    
+    public void loadAirportsEverywhere() throws RemoteException
+    {
+        airports = iAirspace.GetAirports();
+    }
+    
+    public void loadAirportsInACC() throws RemoteException
+    {
+        airportsInACC = ((ArrayList)iAirspace.getAirportCTA(this.getChosenACC().GetCTA().getSector()).clone());
+    }//((ArrayList)atc2.airspace.getAirportCTA(atc2.FC.getChosenACC().GetCTA().getSector()).clone()).listIterator();
+    
+    public ArrayList<IAirport> getAirports()
+    {
+        return this.airports;
+    }
+    
+    public ArrayList<IAirport> getAirportsInACC()
+    {
+        return this.airportsInACC;
     }
     
     @Override

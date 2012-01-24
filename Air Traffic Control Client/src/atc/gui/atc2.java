@@ -488,6 +488,7 @@ public final class atc2 extends atc {
                                     //airspace.setCurrentACC(acc);
                                     atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
 
+                                  
                                     // Since the user has selected his or hers CTA we don't need to show this layer anymore.
                                     buildAirportLayer();
                                     buildAirplaneLayer();
@@ -572,6 +573,9 @@ public final class atc2 extends atc {
                 }
                 surfaceSectorGreater.setSector(limits.getCenterLocationLimits());
             }
+            // Loads the airports into an ArrayList;
+                FC.loadAirportsInACC();
+                FC.loadAirportsEverywhere();
         }
 
         /**
