@@ -20,6 +20,7 @@ import javax.swing.table.*;
 public class jfSelectAirport extends javax.swing.JDialog {
 
     private ArrayList<IAirport> airportsList;
+    private ArrayList<IAirport> airportsList2;
     private IAirport airport;
     private ListIterator<IAirport> airports;
     private ListIterator<IAirport> airports2;
@@ -33,9 +34,11 @@ public class jfSelectAirport extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.showOnlyLocal = showOnlyLocal;
-        airportsList = (ArrayList<IAirport>) atc2.airspace.GetAirports().clone();
+       // airportsList = atc2.FC.getAirports();//atc2.airspace.GetAirports().clone(); //        
+        airportsList = atc2.FC.getAirports();
+        airportsList2 = atc2.FC.getAirportsInACC();
         airports = airportsList.listIterator();
-        airports2 = airportsList.listIterator();
+        airports2 = airportsList2.listIterator();
         createAirportList();
 
         columnNames.addElement("Airport ID");
@@ -482,7 +485,7 @@ public class jfSelectAirport extends javax.swing.JDialog {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         data.clear(); // Empty the data so we can get the limited results in.
         airports = airportsList.listIterator(); // we must get an new iterator, since the previus one is empty.
-        airports2 = null;
+        airports2 = airportsList2.listIterator();
         try {
             createAirportList();
         } catch (RemoteException ex) {
@@ -604,12 +607,16 @@ public class jfSelectAirport extends javax.swing.JDialog {
 
     private ListIterator<IAirport> createAirportList() throws RemoteException {
         if (showOnlyLocal) {
-            airports2 = atc2.airspace.getAirportCTA(atc2.FC.getChosenACC().GetCTA().getSector()).listIterator();
+           // airports2 = ((ArrayList)atc2.airspace.getAirportCTA(atc2.FC.getChosenACC().GetCTA().getSector()).clone()).listIterator();
+           // airports = airports2;
+            //return airports;
             airports = airports2;
+            return airports;
         } else {
+            //return airports;
             return airports;
         }
-        return airports;
+       // return airports;
     }
 
     /**

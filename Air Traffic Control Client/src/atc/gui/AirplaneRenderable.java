@@ -31,11 +31,13 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private boolean mayControl;
     private final SurfacePolyline path;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
+    private String lastStatusIconed;
+    private String tempPath;
 
     public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) throws RemoteException {
         super("", new Position(Angle.fromDegrees(flightplan.getAirplane().getLocation().getLatitude()),
-                        Angle.fromDegrees(flightplan.getAirplane().getLocation().getLongitude()), flightplan.getAirplane().getLocation().getAltitude()));
-        
+                Angle.fromDegrees(flightplan.getAirplane().getLocation().getLongitude()), flightplan.getAirplane().getLocation().getAltitude()));
+
 
         if (originalImage == null) {
             try {
@@ -66,6 +68,10 @@ public class AirplaneRenderable extends GlobeAnnotation {
         this.getAttributes().setTextColor(Color.WHITE);
         this.getAttributes().setTextAlign(AVKey.LEFT);
         //this.getAttributes().setDrawOffset(new Point(this.getAttributes().getSize().width / 2 , this.getAttributes().getSize().height / 2));
+
+        final IGeoSec sector = atc2.FC.getChosenACC().GetCTA().getSector();
+        final IGeoSec greaterSector = atc2.FC.getChosenACC().GetCTA().getGreaterSector();
+
         // We update the icons position every 300 milisecond.
         locationUpdateTimer.schedule(new TimerTask() {
 
@@ -74,101 +80,105 @@ public class AirplaneRenderable extends GlobeAnnotation {
             @Override
             public void run() {
                 try {
-                if (atc2.FC.getChosenACC() == null) {
-                    return;
-                }
-
-                double direction = airplane.getDirection();
-                Position position = new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
-                        Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude());
-                IGeoSec sector = atc2.FC.getChosenACC().GetCTA().getSector();
-                IGeoSec greaterSector = atc2.FC.getChosenACC().GetCTA().getGreaterSector();
-
-                try {
-                    // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
-                    if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
-                        originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
-                        if (flightplan.getAssignedController() != atc2.AppFrame.getFlightController()) {
-                            mayControl = false;
-                        } else {
-                            mayControl = true;
-                        }
-
-                    } else if (!sector.containsGeoLocation(airplane.getLocation()) && !greaterSector.containsGeoLocation(airplane.getLocation())) {
-                        // The airplane is at a place where we don't care molucules about it, remove it.
-                        dispose(); // (Not sure what this does)
-                    } else {
-                        switch (airplane.getStatus()) {
-                            default:
-                                originalImage = ImageIO.read(new File("src/atc/gui/resources/airplane.png"));
-                                break;
-                            case CRASHING1:
-                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineyellow.png"));
-                                break;
-                            case CRASHING2:
-                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plaineorange.png"));
-                                break;
-                            case CRASHED:
-                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plainered.png"));
-                                break;
-                            case HASLANDED:
-                                originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
-                                break;
-                        }
+                    if (atc2.FC.getChosenACC() == null) {
+                        return;
                     }
-                    getAttributes().setImageSource(drawHeading());
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
 
-                if (direction != lastDirection) {
-                    getAttributes().setImageSource(drawHeading());
-                    lastDirection = direction;
-                }
-                moveTo(position);
-                if (tooltip != null && tooltip.getAttributes().isVisible()) {
-                    tooltip.moveTo(position);
-                    tooltip.setText(updateText());
-                }
-                if (airplane.getStatus().equals(IAirplane.Statusses.HASLANDED)) {
-                    // TODO
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException ex) {
-//                        ex.printStackTrace();
+                    double direction = airplane.getDirection();
+                    Position position = new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
+                            Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude());
+
+                    try {
+                        // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
+                        if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
+                            originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
+                            if (flightplan.getAssignedController() != atc2.AppFrame.getFlightController()) {
+                                mayControl = false;
+                            } else {
+                                mayControl = true;
+                            }
+                        } //else if (!sector.containsGeoLocation(airplane.getLocation()) && !greaterSector.containsGeoLocation(airplane.getLocation())) {
+                        // The airplane is at a place where we don't care molucules about it, remove it.
+                        // dispose(); // (Not sure what this does)
+                        //} 
+                        else {
+                            tempPath = "";
+                            switch (airplane.getStatus()) {
+                                default:
+                                    tempPath = "src/atc/gui/resources/airplane.png";
+                                    break;
+                                case CRASHING1:
+                                    tempPath = "src/atc/gui/resources/plaineyellow.png";
+                                    break;
+                                case CRASHING2:
+                                    tempPath = "src/atc/gui/resources/plaineorange.png";
+                                    break;
+                                case CRASHED:
+                                    tempPath = "src/atc/gui/resources/plainered.png";
+                                    break;
+                                case HASLANDED:
+                                    tempPath = "src/atc/gui/resources/plainegrey.png";
+                                    break;
+                            }
+                        }
+
+                        if (lastStatusIconed != tempPath) {
+                            originalImage = ImageIO.read(new File(tempPath));
+                            lastStatusIconed = tempPath;
+                        }
+
+                        getAttributes().setImageSource(drawHeading());
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+
+                    if (direction != lastDirection) {
+                        getAttributes().setImageSource(drawHeading());
+                        lastDirection = direction;
+                    }
+                    moveTo(position);
+                    if (tooltip != null && tooltip.getAttributes().isVisible()) {
+                        tooltip.moveTo(position);
+                        tooltip.setText(updateText());
+                    }
+//                    if (airplane.getStatus().equals(IAirplane.Statusses.HASLANDED)) {
+//                        // TODO
+////                    try {
+////                        Thread.sleep(500);
+////                    } catch (InterruptedException ex) {
+////                        ex.printStackTrace();
+////                    }
+////                    airplane.interrupt();
 //                    }
-//                    airplane.interrupt();
+
+                    Object o = getValue("TRUE_DRAW_LINE");
+                    if (o != null && (boolean) o) {
+                        ArrayList<Position> pathPositions = new ArrayList<>();
+                        pathPositions.add(Position.fromDegrees(flightplan.getAirplane().getLocation().getLatitude(), flightplan.getAirplane().getLocation().getLongitude()));
+
+                        double d = (flightplan.getAirplane().getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
+                        double θ = flightplan.getAirplane().getDirection() / 180d * Math.PI;
+                        double R = 6371; // Mean radius / radius of the Earh
+
+                        double lat = flightplan.getAirplane().getLocation().getLatitude() / 180d * Math.PI;
+                        double lon = flightplan.getAirplane().getLocation().getLongitude() / 180d * Math.PI;
+
+                        double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
+                                + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
+                        double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
+                                Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
+                        pathPositions.add(new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI)).toPosition());
+
+                        path.setLocations(pathPositions);
+                        path.setVisible(true);
+                    } else {
+                        path.setVisible(false);
+                    }
+                } catch (RemoteException rex) {
+                    rex.printStackTrace();
                 }
-
-                Object o = getValue("TRUE_DRAW_LINE");
-                if (o != null && (boolean) o) {
-                    ArrayList<Position> pathPositions = new ArrayList<>();
-                    pathPositions.add(Position.fromDegrees(flightplan.getAirplane().getLocation().getLatitude(), flightplan.getAirplane().getLocation().getLongitude()));
-
-                    double d = (flightplan.getAirplane().getSpeed() / 60) * prefs.getDouble("APP_TIME_LINE", 5);
-                    double θ = flightplan.getAirplane().getDirection() / 180d * Math.PI;
-                    double R = 6371; // Mean radius / radius of the Earh
-
-                    double lat = flightplan.getAirplane().getLocation().getLatitude() / 180d * Math.PI;
-                    double lon = flightplan.getAirplane().getLocation().getLongitude() / 180d * Math.PI;
-
-                    double destLat = Math.asin(Math.sin(lat) * Math.cos(d / R)
-                            + Math.cos(lat) * Math.sin(d / R) * Math.cos(θ));
-                    double destLon = lon + Math.atan2(Math.sin(θ) * Math.sin(d / R) * Math.cos(lat),
-                            Math.cos(d / R) - Math.sin(lat) * Math.sin(destLat));
-                    pathPositions.add(new GeoLocation((destLat * 180 / Math.PI), (destLon * 180 / Math.PI)).toPosition());
-
-                    path.setLocations(pathPositions);
-                    path.setVisible(true);
-                }
-                else {
-                    path.setVisible(false);
-                }
-            } catch (RemoteException rex) {
-                rex.printStackTrace();
             }
-            }
-        }, 10, 300);
+        }, 50, 400);
     }
 
     public IAirplane getAirplane() {
@@ -203,7 +213,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
 
             this.tooltip.setText(updateText());
             this.tooltip.moveTo(new Position(Angle.fromDegrees(airplane.getLocation().getLatitude()),
-                        Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude()));
+                    Angle.fromDegrees(airplane.getLocation().getLongitude()), airplane.getLocation().getAltitude()));
         }
     }
 
@@ -234,7 +244,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
                 + "<br />[Direction: " + DF.format(airplane.getDirection()) + "°]"
                 + "<br />[Model: " + airplane.getManufacturer() + ", " + airplane.getType() + "]"
                 + "<br >[Current state: " + airplane.getStatus() + "]"
-                + "<br> [Lat/lon: (" + DF.format(airplane.getLocation().getLatitude()) + ", " 
+                + "<br> [Lat/lon: (" + DF.format(airplane.getLocation().getLatitude()) + ", "
                 + DF.format(airplane.getLocation().getLongitude()) + ")]"
                 + "</p>";
     }
