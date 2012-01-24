@@ -397,6 +397,7 @@ public final class atc2 extends atc {
                     //          Audio.play(Sound.ALARM4, 3);
                     menuBar.addItem(new UnityItem("Collision detected! Minor!", Color.RED, 0, "src/atc/gui/resources/collision.png", UnityBar.Type.ALERT)).addActionListener(
                             new java.awt.event.ActionListener() {
+
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     try {
@@ -488,7 +489,7 @@ public final class atc2 extends atc {
                                     //airspace.setCurrentACC(acc);
                                     atc2.airspace.getACC(acc.GetID()).setAdjacentACCList(airspace.getAdjacentACCs(acc.GetID()));
 
-                                  
+
                                     // Since the user has selected his or hers CTA we don't need to show this layer anymore.
                                     buildAirportLayer();
                                     buildAirplaneLayer();
@@ -574,8 +575,8 @@ public final class atc2 extends atc {
                 surfaceSectorGreater.setSector(limits.getCenterLocationLimits());
             }
             // Loads the airports into an ArrayList;
-                FC.loadAirportsInACC();
-                FC.loadAirportsEverywhere();
+            FC.loadAirportsInACC();
+            FC.loadAirportsEverywhere();
         }
 
         /**
@@ -700,7 +701,7 @@ public final class atc2 extends atc {
                     }
                 });
 
-                this.timerAirplane = new Timer(1000, new ActionListener() {
+                this.timerAirplane = new Timer(2000, new ActionListener() {
 
                     public synchronized void actionPerformed(ActionEvent event) {
                         try {
@@ -715,8 +716,12 @@ public final class atc2 extends atc {
 //                            for (Iterator<IFlightplan> it = airspace.getCurrentACC().getFlightplans().listIterator(); it.hasNext();) {
 //                                addAirplaneToLayer(airplaneLayer, it.next());
 //                            }
-                            for (Iterator<IFlightplan> it = FC.getFlightplans().listIterator(); it.hasNext();) {
-                                addAirplaneToLayer(airplaneLayer, it.next());
+                            try {
+                                for (Iterator<IFlightplan> it = FC.getFlightplans().listIterator(); it.hasNext();) {
+                                    addAirplaneToLayer(airplaneLayer, it.next());
+                                }
+                            } catch (ConcurrentModificationException e) {
+//                                // swallow it!
                             }
 
                             // Remove renderebles when they are not needed anymore...
