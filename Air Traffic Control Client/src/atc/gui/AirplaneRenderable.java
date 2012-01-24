@@ -4,7 +4,6 @@ import atc.interfaces.*;
 import atc.logic.GeoLocation;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Angle;
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.*;
 import java.awt.*;
