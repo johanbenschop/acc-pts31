@@ -870,7 +870,7 @@ public final class atc2 extends atc {
             }
             AirplaneRenderable rend = (AirplaneRenderable) o;
             //Has to be !rend.isMayControl otherwise it can't have control....
-            if (!rend.isMayControl()) {
+            if (rend.isMayControl()) {
                 // The user may control this airplane.
                 IFlightplan flightplan = rend.getFlightplan();
                 new jfCommandFlight(this, true).setFlightplan(flightplan);
