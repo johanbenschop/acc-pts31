@@ -718,15 +718,32 @@ public final class atc2 extends atc {
                             for (Iterator<IFlightplan> it = FC.getFlightplans().listIterator(); it.hasNext();) {
                                 addAirplaneToLayer(airplaneLayer, it.next());
                             }
-                            
+
                             // Remove renderebles when they are not needed anymore...
-                            for (Renderable renderable : airplaneLayer.getRenderables()) {
+                            for (final Renderable renderable : airplaneLayer.getRenderables()) {
                                 AirplaneRenderable airplaneRendereble = (AirplaneRenderable) renderable;
 
                                 //if (addedAirplanes.contains(airplaneRendereble.getAirplane())) {
                                 if (!FC.getChosenACC().GetCTA().getGreaterSector().containsGeoLocation(airplaneRendereble.getAirplane().getLocation())) {
                                     System.out.println("Found one to remove!");
                                     airplaneLayer.removeRenderable(renderable);
+                                    return;
+                                }
+                                else if (airplaneRendereble.getAirplane().getStatus() == IAirplane.Statusses.CRASHED
+                                        || airplaneRendereble.getAirplane().getStatus() == IAirplane.Statusses.HASLANDED) {
+                                    if (!airplaneRendereble.isScheduledForDeletion()) {
+
+                                        new Timer(10000, new ActionListener() {
+                                            final Renderable render = renderable;
+                                            
+                                            public void actionPerformed(ActionEvent event) {
+                                                airplaneLayer.removeRenderable(renderable);
+                                            }
+                                        }).start();
+
+                                        airplaneRendereble.setScheduledForDeletion(true);
+                                    }
+                                    return;
                                 }
 
                                 return;

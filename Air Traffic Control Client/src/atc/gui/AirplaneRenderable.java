@@ -33,6 +33,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
     private String lastStatusIconed;
     private String tempPath;
+    private boolean scheduledForDeletion = false;
 
     public AirplaneRenderable(final IFlightplan flightplan, SurfacePolyline path2) throws RemoteException {
         super("", new Position(Angle.fromDegrees(flightplan.getAirplane().getLocation().getLatitude()),
@@ -219,6 +220,14 @@ public class AirplaneRenderable extends GlobeAnnotation {
 
     public void unsetHoverAnnotation() {
         this.tooltip = null;
+    }
+
+    public boolean isScheduledForDeletion() {
+        return scheduledForDeletion;
+    }
+
+    public void setScheduledForDeletion(boolean scheduledForDeletion) {
+        this.scheduledForDeletion = scheduledForDeletion;
     }
 
     private String updateText() throws RemoteException {
