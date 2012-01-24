@@ -9,6 +9,7 @@ import atc.interfaces.*;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -29,6 +30,8 @@ public class jfAddFlight extends javax.swing.JDialog {
     public jfAddFlight(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        dpDateArr.setDate(new Date());
+        dpDateDep.setDate(new Date());
     }
 
     /** This method is called from within the constructor to
