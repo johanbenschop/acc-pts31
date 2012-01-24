@@ -28,7 +28,7 @@ public class AirplaneRenderable extends GlobeAnnotation {
     private final IFlightplan flightplan;
     private BufferedImage originalImage;
     private GlobeAnnotation tooltip;
-    private boolean mayControl;
+    private boolean mayControl = true;
     private final SurfacePolyline path;
     private static Preferences prefs = Preferences.userRoot().node("/atc/gui");
     private String lastStatusIconed;
@@ -93,11 +93,12 @@ public class AirplaneRenderable extends GlobeAnnotation {
                         // If the airplane is not in the sector but is in the greater sector it must be in the 100 km buffer area.
                         if (!sector.containsGeoLocation(airplane.getLocation()) && greaterSector.containsGeoLocation(airplane.getLocation())) {
                             originalImage = ImageIO.read(new File("src/atc/gui/resources/plainegrey.png"));
-                            if (flightplan.getAssignedController() != atc2.AppFrame.getFlightController()) {
-                                mayControl = false;
-                            } else {
-                                mayControl = true;
-                            }
+                            mayControl = false;
+//                            if (flightplan.getAssignedController() != atc2.AppFrame.getFlightController()) {
+//                                mayControl = false;
+//                            } else {
+//                                mayControl = true;
+//                            }
                         } //else if (!sector.containsGeoLocation(airplane.getLocation()) && !greaterSector.containsGeoLocation(airplane.getLocation())) {
                         // The airplane is at a place where we don't care molucules about it, remove it.
                         // dispose(); // (Not sure what this does)
